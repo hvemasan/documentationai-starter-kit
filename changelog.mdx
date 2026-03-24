@@ -1,0 +1,145 @@
+---
+title: Changelog
+description: Stay updated with the latest releases, new features, and improvements in ProductBridge.
+---
+
+## Recent Changes
+
+Keep track of ProductBridge's evolution with these release highlights. Each version includes new features, performance improvements, bug fixes, and occasional breaking changes.
+
+<Update label="2024-10-15" description="v1.2.0" tags={["feature", "improvement"]}>
+## New Features
+
+- Added real-time collaboration for documentation pages, allowing multiple users to edit simultaneously.
+- Introduced webhook support for custom integrations with external services like Slack and Discord.
+
+## Improvements
+
+- Enhanced search functionality with fuzzy matching and advanced filters.
+- Optimized page load times by 40% through improved caching mechanisms.
+
+## Bug Fixes
+
+- Fixed issue where embedded images failed to load in preview mode.
+- Resolved synchronization errors during offline edits.
+</Update>
+
+<Update label="2024-09-20" description="v1.1.0" tags={["feature", "bugfix"]}>
+## New Features
+
+- New analytics dashboard to track page views, edit history, and user engagement.
+- Support for custom CSS themes and brand colors directly in the editor.
+
+## Improvements
+
+- Streamlined navigation with a revamped sidebar and quick search.
+
+## Bug Fixes
+
+- Corrected export to PDF functionality that was truncating long pages.
+- Patched security vulnerability in public page sharing (CVE-2024-XXXX).
+</Update>
+
+<Update label="2024-08-10" description="v1.0.0" tags={["feature", "breaking"]}>
+## New Features
+
+- Core documentation workspace with page organization, version history, and role-based access.
+- Integrated Markdown and MDX editor with live preview.
+
+## Breaking Changes
+
+- Updated API authentication to use JWT tokens instead of API keys. Migrate using the guide below.
+
+## Initial Setup
+
+- Full user authentication system with SSO support.
+</Update>
+
+## Quick Release Overview
+
+<Columns cols={3}>
+  <Card title="v1.2.0" icon="zap" href="#recent-changes">
+    Collaboration and webhooks.
+  </Card>
+  <Card title="v1.1.0" icon="bar-chart-3" href="#recent-changes">
+    Analytics and themes.
+  </Card>
+  <Card title="v1.0.0" icon="rocket" href="#recent-changes">
+    Initial release.
+  </Card>
+</Columns>
+
+## How to Update ProductBridge
+
+Follow these steps to upgrade to the latest version safely.
+
+<Steps>
+  <Step title="Backup Your Data" icon="database">
+    Export all workspaces via the dashboard at `https://dashboard.productbridge.com/export`.
+  </Step>
+  <Step title="Check Release Notes" icon="book-open">
+    Review changes in this changelog, focusing on breaking changes.
+  </Step>
+  <Step title="Run the Update" icon="download">
+    <CodeGroup tabs="Docker,CLI">
+      ````bash
+      docker pull productbridge:latest
+      docker-compose up -d
+      ````
+
+      ````bash
+      npm update productbridge
+      productbridge migrate
+      ````
+    </CodeGroup>
+  </Step>
+  <Step title="Verify Installation" icon="check-circle">
+    Test core features like editing and sharing.
+  </Step>
+</Steps>
+
+<Callout kind="tip">
+Subscribe to the ProductBridge GitHub repository or RSS feed for instant notifications on new releases.
+</Callout>
+
+## Migration Notes
+
+For major updates, review these version-specific instructions.
+
+<Tabs>
+  <Tab title="v1.2.0 to Latest" icon="arrow-up">
+    No breaking changes. Run `productbridge migrate` to apply schema updates.
+
+    <ParamField path="webhookUrl" param-type="string" required="true">
+      Your endpoint for receiving events, e.g., `https://your-webhook-url.com/webhook`.
+    </ParamField>
+  </Tab>
+  <Tab title="v1.0.0 to v1.1.0" icon="settings">
+    Update authentication:
+
+    ````javascript
+    // Old API key
+    const config = { apiKey: 'YOUR_API_KEY' };
+
+    // New JWT
+    const config = { 
+      token: 'YOUR_JWT_TOKEN',
+      authUrl: 'https://auth.productbridge.com/token'
+    };
+    ````
+  </Tab>
+</Tabs>
+
+<Expandable title="Advanced Migration for Enterprise" default-open="false">
+If using custom integrations, update your `config.json`:
+
+````json
+{
+  "database": "postgres://user:pass@localhost:5432/productbridge",
+  "features": {
+    "collaboration": true,
+    "analytics": true
+  }
+}
+````
+</Expandable>
