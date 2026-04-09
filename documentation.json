@@ -169,14 +169,17 @@
                 ]
               },
               {
-                "title": "Automations",
+                "group": "Automations",
+                "icon": "workflow",
+                "expandable": true,
                 "path": "integrations/automations",
-                "icon": "workflow"
-              },
-              {
-                "title": "Zapier",
-                "path": "integrations/zapier",
-                "icon": "zap"
+                "pages": [
+                  {
+                    "title": "Zapier",
+                    "path": "integrations/automations/zapier",
+                    "icon": "zap"
+                  }
+                ]
               }
             ]
           }
