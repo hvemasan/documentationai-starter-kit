@@ -1,0 +1,130 @@
+---
+title: Jira Integration
+description: Connect ProductBridge with Atlassian Jira to sync documentation tasks, link pages to issues, and streamline your project management workflow.
+---
+
+## Overview
+
+The Jira integration lets you connect ProductBridge to your Atlassian Jira instance so you can link documentation pages to Jira issues, track doc tasks alongside development work, and receive updates when linked issues change status.
+
+<Callout kind="info">
+  You need a Jira Cloud or Jira Data Center instance with admin permissions to set up this integration.
+</Callout>
+
+## Setup
+
+<Steps>
+  <Step title="Connect your Jira account" icon="link">
+    Navigate to **Settings > Integrations > Jira** in your ProductBridge dashboard.
+
+    Click **Connect Jira** and authorize ProductBridge to access your Jira instance.
+
+    <Callout kind="tip">
+      Use a service account rather than a personal account so the connection persists if team members leave.
+    </Callout>
+  </Step>
+
+  <Step title="Select your Jira project" icon="folder">
+    Choose the Jira project you want to link with ProductBridge.
+
+    You can connect multiple projects and map each to a specific documentation section.
+
+    ```json
+    {
+      "jira_project": "DOC",
+      "doc_section": "getting-started",
+      "sync_enabled": true
+    }
+    ```
+  </Step>
+
+  <Step title="Configure sync settings" icon="settings">
+    Choose which events trigger syncs between ProductBridge and Jira.
+
+    | Event | Direction | Description |
+    |-------|-----------|-------------|
+    | Issue created | Jira → ProductBridge | Creates a linked doc task |
+    | Doc published | ProductBridge → Jira | Updates the linked issue status |
+    | Comment added | Bidirectional | Syncs comments between platforms |
+  </Step>
+</Steps>
+
+## Linking docs to Jira issues
+
+You can link any documentation page to one or more Jira issues. Linked issues appear in the page sidebar and update automatically.
+
+<Tabs>
+  <Tab title="From ProductBridge" icon="file-text">
+    Open a documentation page and click **Link Issue** in the sidebar.
+
+    Search for the Jira issue by key (e.g., `DOC-142`) or summary text.
+
+    ```
+    Linked: DOC-142 — Update API authentication guide
+    Status: In Progress
+    Assignee: jane@example.com
+    ```
+  </Tab>
+
+  <Tab title="From Jira" icon="ticket">
+    In any Jira issue, use the **ProductBridge** panel to link an existing doc page or create a new one.
+
+    The linked page URL appears in the issue details automatically.
+  </Tab>
+</Tabs>
+
+## Webhook events
+
+ProductBridge sends webhook payloads for Jira-related events.
+
+<Request tabs="cURL" show-lines="true">
+```bash
+curl -X POST https://api.example.com/integrations/jira/webhook \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "event": "issue.linked",
+    "issue_key": "DOC-142",
+    "doc_id": "doc_456",
+    "timestamp": "2025-03-10T14:00:00Z"
+  }'
+```
+</Request>
+
+<Response tabs="200,400">
+```json
+{
+  "status": "ok",
+  "message": "Webhook received",
+  "linked": true
+}
+```
+
+```json
+{
+  "error": "Invalid issue key",
+  "code": "JIRA_ISSUE_NOT_FOUND"
+}
+```
+</Response>
+
+<ExpandableGroup>
+  <Expandable title="Supported Jira issue types" default-open="false">
+    - Task
+    - Story
+    - Bug
+    - Epic
+    - Sub-task
+    - Custom issue types configured in your Jira project
+  </Expandable>
+
+  <Expandable title="Troubleshooting connection issues" default-open="false">
+    - Verify your Jira instance URL is correct and accessible
+
+    - Ensure the authorized account has read/write permissions on the target project
+
+    - Check that your firewall allows outbound connections to `api.atlassian.com`
+
+    - Revoke and re-authorize the connection if tokens have expired
+  </Expandable>
+</ExpandableGroup>

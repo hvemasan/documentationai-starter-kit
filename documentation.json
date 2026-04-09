@@ -38,11 +38,27 @@
                 "title": "Features",
                 "path": "features",
                 "icon": "file-text"
-              },
+              }
+            ]
+          },
+          {
+            "group": "Integrations",
+            "icon": "plug",
+            "pages": [
               {
-                "title": "Integrations",
+                "title": "Overview",
                 "path": "integrations",
                 "icon": "plug"
+              },
+              {
+                "title": "Jira",
+                "path": "integrations/jira",
+                "icon": "ticket"
+              },
+              {
+                "title": "Linear",
+                "path": "integrations/linear",
+                "icon": "layout"
               }
             ]
           }
