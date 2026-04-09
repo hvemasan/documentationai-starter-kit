@@ -1,0 +1,119 @@
+---
+title: Notifications
+description: Learn how the ProductBridge notification system keeps your team informed with real-time in-app notifications and email alerts for feedback activity, comments, and assignments.
+---
+
+## Stay on Top of Everything
+
+ProductBridge provides a real-time notification inbox for both admin users and public (end) users. Notifications are generated automatically when actions occur across the platform — new posts, comments, assignment changes, roadmap status updates, and vote milestones — so you never miss what matters.
+
+## Notification Inbox
+
+The notification inbox is organized into three tabs, each showing a specific category of activity:
+
+<Columns cols={3}>
+  <Card title="Posts" icon="file-text" href="#posts-notifications">
+    New feedback posts, roadmap links, status changes, and vote milestones.
+  </Card>
+  <Card title="Comments" icon="message-circle" href="#comments-notifications">
+    Comments on your posts and replies to your comments.
+  </Card>
+  <Card title="Assignments" icon="user-check" href="#assignments-notifications">
+    Posts assigned or unassigned to you (admin only).
+  </Card>
+</Columns>
+
+Each tab displays an unread badge count so you can see at a glance which categories need your attention.
+
+## Notification Categories
+
+### Posts Notifications
+
+Post notifications keep you informed about activity on feedback items across your project:
+
+| Event | When It Fires |
+|-------|--------------|
+| New feedback post | A new feedback post is created in your project |
+| Feedback linked to roadmap | A feedback post is linked to a roadmap item |
+| Roadmap status changed | A roadmap item's status is updated (e.g., Planned → In Progress) |
+| Vote milestone | A feedback post reaches 5, 10, 25, 50, 100, 250, 500, or 1,000 votes |
+
+<Callout kind="tip">
+  Vote milestone notifications help you spot trending feedback early. When a post hits a milestone, it is a signal that users care deeply about that request.
+</Callout>
+
+### Comments Notifications
+
+Comment notifications fire when someone engages with your content:
+
+| Event | When It Fires |
+|-------|--------------|
+| Comment on post | Someone comments on a post you created or are following |
+| Comment reply | Someone replies to a comment you left |
+
+### Assignments Notifications
+
+Assignment notifications are available for admin users only:
+
+| Event | When It Fires |
+|-------|--------------|
+| Post assigned | A feedback post is assigned to you by an admin |
+| Post unassigned | You are unassigned from a feedback post |
+
+<Callout kind="info">
+  When a post is assigned to a team member, they also receive an **email notification** with the post details and a direct link — so they can take action even when they are not in the app.
+</Callout>
+
+## Email Notifications
+
+In addition to in-app notifications, ProductBridge sends email alerts for critical events:
+
+- **Assignment emails** — When an admin assigns a feedback post to a team member, the assignee receives an email with the post title, description, board, and a direct link to the post. This ensures team members are aware of new assignments immediately, even if they are not actively using ProductBridge.
+
+<Callout kind="tip">
+  Email notification preferences can be managed in **Account Settings > Notifications**. Team members can choose which events trigger emails and which are in-app only.
+</Callout>
+
+## Managing Notifications
+
+### Mark as Read
+
+You can manage your notification state in several ways:
+
+<Steps>
+  <Step title="Mark individual notifications" icon="check">
+    Click on any notification to mark it as read. The unread badge count updates automatically.
+  </Step>
+  <Step title="Mark all as read" icon="check-check">
+    Click **Mark All as Read** at the top of any tab to clear all unread notifications in that category. You can also mark all notifications across all categories at once.
+  </Step>
+</Steps>
+
+### Filtering
+
+Use the inbox tabs and filters to focus on what matters:
+
+- **Tab filtering** — Switch between Posts, Comments, and Assignments tabs to see only that category
+- **Read state** — Filter by unread only to see notifications that need your attention
+- **All notifications** — View everything in a single chronological feed
+
+### Notification Details
+
+Each notification includes:
+
+- **Title** — A human-readable summary of what happened (e.g., "John commented on your post")
+- **Body** — A preview of the content (e.g., the first line of a comment)
+- **Actor** — The user who triggered the action, with their name and avatar
+- **Timestamp** — When the event occurred
+- **Link** — Click through to the relevant feedback post, comment, or roadmap item
+
+## Admin vs. Public User Notifications
+
+<Tabs>
+  <Tab title="Admin Users" icon="shield">
+    Admin users receive all notification types, including assignment notifications. Admins can also delete notifications from their inbox to keep it clean.
+  </Tab>
+  <Tab title="Public Users" icon="user">
+    Public (end) users receive notifications for posts and comments relevant to their activity — such as comments on feedback they submitted or status updates on posts they voted for. Assignment notifications and delete functionality are not available to public users.
+  </Tab>
+</Tabs>

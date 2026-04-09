@@ -87,6 +87,11 @@
                 "title": "Users",
                 "path": "platform-features/users",
                 "icon": "users"
+              },
+              {
+                "title": "Notifications",
+                "path": "platform-features/notifications",
+                "icon": "bell"
               }
             ]
           },
