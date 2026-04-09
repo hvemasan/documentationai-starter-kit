@@ -1,0 +1,64 @@
+---
+title: Capterra Integration
+description: Connect ProductBridge to Capterra to import and analyze reviews from your Capterra product listing.
+---
+
+## Overview
+
+The Capterra integration imports reviews from your Capterra product listing into ProductBridge. Star ratings are automatically converted to sentiment scores, and review text is categorized by topic — so you can track public perception alongside your direct feedback.
+
+## Prerequisites
+
+<Callout kind="info" title="Before you start">
+- A published Capterra product listing with at least one review
+- Your Capterra listing URL
+- A ProductBridge project to receive imported reviews
+</Callout>
+
+## Connect Capterra
+
+<Steps>
+  <Step title="Open Integration Settings" icon="settings">
+    Navigate to **Settings > Integrations > Capterra** in your ProductBridge dashboard and click **Connect**.
+  </Step>
+  <Step title="Enter Listing URL" icon="link">
+    Provide your Capterra listing URL (e.g., `https://www.capterra.com/p/your-product`). ProductBridge validates the URL and displays your listing details.
+  </Step>
+  <Step title="Configure Import Settings" icon="sliders">
+    Choose your sync frequency (daily or weekly) and whether to backfill existing reviews or start fresh.
+  </Step>
+  <Step title="Activate" icon="check">
+    Click **Enable** to start importing. ProductBridge begins pulling reviews immediately.
+  </Step>
+</Steps>
+
+## Configure Settings
+
+Customize how Capterra reviews are processed:
+
+| Setting | Options | Description |
+|---------|---------|-------------|
+| Sync frequency | Daily, Weekly | How often new reviews are pulled |
+| Backfill | On, Off | Import historical reviews on first sync |
+| Sentiment mapping | Auto, Manual | How star ratings map to sentiment scores |
+| Category filter | All, Specific | Import all reviews or only specific star ratings |
+
+<Callout kind="tip">
+  Enable backfill on your first sync to get a historical baseline, then switch to daily imports for ongoing monitoring.
+</Callout>
+
+## How It Works
+
+Once connected:
+
+1. Capterra reviews are imported on your configured schedule and tagged with "via Capterra"
+2. Star ratings (1-5) are converted to sentiment scores: 4-5 = positive, 3 = neutral, 1-2 = negative
+3. Review text is analyzed by AI to extract specific topics and feature mentions
+4. All imported reviews flow into [Feedback Intelligence](/core-concepts/feedback-intelligence) for analysis
+5. You can compare Capterra sentiment with other review platforms and direct feedback channels
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **No reviews importing** — Verify your Capterra listing URL is correct and publicly accessible
+  - **Duplicate reviews** — ProductBridge deduplicates by review ID; duplicates across sources are grouped automatically
+  - **Incorrect sentiment** — Adjust sentiment mapping in settings if the default star-to-sentiment conversion does not match your expectations
+</Expandable>

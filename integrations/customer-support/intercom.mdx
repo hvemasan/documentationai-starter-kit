@@ -1,0 +1,92 @@
+---
+title: Intercom Integration
+description: Connect ProductBridge to Intercom to automatically import feedback from conversations, notes, and messages into your feedback inbox.
+---
+
+## Overview
+
+The Intercom integration connects your Intercom workspace to ProductBridge so you can automatically import feedback from support conversations. Instead of manually copying insights from chat logs, ProductBridge extracts and categorizes feedback in real time.
+
+## Prerequisites
+
+<Callout kind="info" title="Before you start">
+- An active Intercom workspace with admin or app management permissions
+- A ProductBridge project with at least one feedback channel enabled
+- OAuth authorization (ProductBridge handles this during setup)
+</Callout>
+
+## Connect Intercom
+
+<Steps>
+  <Step title="Open Integration Settings" icon="settings">
+    Navigate to **Settings > Integrations > Intercom** in your ProductBridge dashboard and click **Connect**.
+  </Step>
+  <Step title="Authorize Access" icon="shield">
+    You are redirected to Intercom's OAuth flow. Grant ProductBridge access to your workspace. ProductBridge only requests permissions for conversations, contacts, and tags.
+
+    <Callout kind="tip">
+      Use a service account rather than a personal account so the connection persists if team members leave.
+    </Callout>
+  </Step>
+  <Step title="Select Workspace" icon="building">
+    If you have multiple Intercom workspaces, choose the one you want to connect. You can connect additional workspaces later from the same settings page.
+  </Step>
+</Steps>
+
+## Configure Import Rules
+
+Choose how feedback gets imported from Intercom into ProductBridge:
+
+<Tabs>
+  <Tab title="Tagged Conversations" icon="tag">
+    Import only conversations tagged with specific labels (e.g., "feedback", "feature-request"). This gives you full control over what gets imported.
+
+    Navigate to **Integration Settings > Import Rules** and add the Intercom tags you want to monitor.
+
+    <Callout kind="tip">
+      Start with tagged conversations to control the flow, then expand to AI-detected feedback once you are comfortable with the quality.
+    </Callout>
+  </Tab>
+  <Tab title="Internal Notes" icon="file-text">
+    Import internal notes that your support agents tag as feedback. This is useful when agents summarize user requests in their own words.
+
+    Enable **Import Notes** in the integration settings and specify which note tags to watch.
+  </Tab>
+  <Tab title="AI Detection" icon="sparkles">
+    Let ProductBridge AI automatically detect and extract feedback from every conversation — no manual tagging required. The AI identifies feature requests, bug reports, and improvement suggestions.
+
+    Enable **AI Auto-Detection** in the integration settings. You can set a confidence threshold to control sensitivity.
+  </Tab>
+</Tabs>
+
+## Map Fields
+
+Map Intercom fields to ProductBridge attributes so imported feedback is structured correctly:
+
+| Intercom Field | ProductBridge Field | Description |
+|---------------|-------------------|-------------|
+| Contact email | User identity | Links feedback to user profiles |
+| Conversation subject | Feedback title | Used as the feedback headline |
+| Conversation body | Feedback content | The full feedback text |
+| Tags | Categories | Maps to ProductBridge categories |
+| Contact company | User segment | Enables segment-based analysis |
+
+## How It Works
+
+Once connected, the integration runs continuously:
+
+1. New conversations matching your rules appear in your ProductBridge feedback inbox within minutes
+2. Each item is tagged with "via Intercom" so you can filter by source
+3. User identity is matched automatically — if the Intercom contact exists in ProductBridge, feedback is linked to their profile
+4. All imported feedback flows into [Feedback Intelligence](/core-concepts/feedback-intelligence) for automatic categorization and sentiment analysis
+
+<Callout kind="info">
+  The Intercom integration syncs in near real-time. New matching conversations typically appear in ProductBridge within 2-5 minutes.
+</Callout>
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **Conversations not importing** — Verify your import rules match the correct tags and that the OAuth token is still valid
+  - **Duplicate feedback** — ProductBridge deduplicates by default, but check that the same conversation is not matched by multiple rules
+  - **Missing user data** — Ensure the Intercom contact has an email address; anonymous conversations are imported without user linking
+  - **Re-authorize** — If the connection stops working, revoke and reconnect from **Settings > Integrations > Intercom**
+</Expandable>

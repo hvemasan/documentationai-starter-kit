@@ -1,0 +1,70 @@
+---
+title: G2 Integration
+description: Connect ProductBridge to G2 to automatically import and analyze reviews from your G2 product profile.
+---
+
+## Overview
+
+The G2 integration imports reviews from your G2 product listing into ProductBridge. Each review — including star ratings, pros, cons, and reviewer segments — is captured and analyzed alongside your other feedback, giving you a complete picture of public sentiment.
+
+## Prerequisites
+
+<Callout kind="info" title="Before you start">
+- A published G2 product profile with at least one review
+- Your G2 product URL or G2 API credentials
+- A ProductBridge project to receive imported reviews
+</Callout>
+
+## Connect G2
+
+<Steps>
+  <Step title="Open Integration Settings" icon="settings">
+    Navigate to **Settings > Integrations > G2** in your ProductBridge dashboard and click **Connect**.
+  </Step>
+  <Step title="Enter Product Details" icon="link">
+    Provide your G2 product URL (e.g., `https://www.g2.com/products/your-product`) or enter your G2 API credentials for direct API access.
+  </Step>
+  <Step title="Configure Sync Frequency" icon="calendar">
+    Choose how often ProductBridge pulls new reviews:
+
+    - **Daily** — New reviews are imported every 24 hours
+    - **Weekly** — Reviews are batched and imported once per week
+
+    Select whether to backfill historical reviews or start with new ones only.
+  </Step>
+  <Step title="Activate" icon="check">
+    Click **Enable** to start the integration. ProductBridge begins importing reviews immediately based on your settings.
+  </Step>
+</Steps>
+
+## Configure Settings
+
+Customize how G2 reviews are mapped and processed:
+
+| G2 Field | ProductBridge Field | Description |
+|----------|-------------------|-------------|
+| Star rating | Sentiment score | Converted to positive/neutral/negative |
+| Review title | Feedback title | Used as the headline |
+| Pros | Feedback content (positive) | Extracted as positive feedback |
+| Cons | Feedback content (negative) | Extracted as improvement requests |
+| Reviewer segment | User segment | Maps to industry, company size, etc. |
+
+<Callout kind="tip">
+  G2 reviews often contain both praise and criticism. ProductBridge splits "Pros" and "Cons" into separate feedback items so each insight is categorized and tracked independently.
+</Callout>
+
+## How It Works
+
+Once connected:
+
+1. G2 reviews are imported on your configured schedule and tagged with "via G2"
+2. Star ratings are converted to sentiment scores and combined with AI-analyzed text sentiment
+3. Reviewer attributes (industry, company size, role) are mapped to user segments
+4. All imported reviews flow into [Feedback Intelligence](/core-concepts/feedback-intelligence) for categorization and trend analysis
+5. You can compare G2 sentiment trends with feedback from other channels on the Intelligence Dashboard
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **No reviews importing** — Verify your G2 product URL is correct and the profile is publicly accessible
+  - **Missing reviewer data** — Some G2 reviewers post anonymously; these reviews are imported without segment data
+  - **Stale data** — Check your sync frequency setting. Daily sync picks up new reviews within 24 hours
+</Expandable>

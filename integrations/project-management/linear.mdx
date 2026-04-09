@@ -1,0 +1,166 @@
+---
+title: Linear Integration
+description: Connect ProductBridge with Linear to track documentation tasks, link pages to issues, and keep your docs in sync with your development workflow.
+---
+
+## Overview
+
+The Linear integration connects ProductBridge to your Linear workspace so you can link documentation pages to Linear issues, automate doc task creation, and keep your team aligned across both platforms.
+
+<Callout kind="info">
+  You need workspace admin access in Linear to configure this integration.
+</Callout>
+
+## Setup
+
+<Steps>
+  <Step title="Connect your Linear workspace" icon="link">
+    Navigate to **Settings > Integrations > Linear** in your ProductBridge dashboard.
+
+    Click **Connect Linear** and authorize ProductBridge via OAuth.
+
+    <Callout kind="tip">
+      Linear's OAuth flow grants scoped access. ProductBridge only requests permissions for issues, comments, and webhooks.
+    </Callout>
+  </Step>
+
+  <Step title="Select your team" icon="users">
+    Choose the Linear team you want to sync with ProductBridge.
+
+    You can connect multiple teams and map each to a specific documentation section.
+
+    ```json
+    {
+      "linear_team": "Documentation",
+      "doc_section": "getting-started",
+      "sync_enabled": true,
+      "auto_create_issues": false
+    }
+    ```
+  </Step>
+
+  <Step title="Configure sync settings" icon="settings">
+    Choose which events trigger syncs between ProductBridge and Linear.
+
+    | Event | Direction | Description |
+    |-------|-----------|-------------|
+    | Issue created | Linear → ProductBridge | Creates a linked doc task |
+    | Doc published | ProductBridge → Linear | Moves the linked issue to Done |
+    | Status changed | Linear → ProductBridge | Updates the doc task status |
+    | Comment added | Bidirectional | Syncs comments between platforms |
+  </Step>
+</Steps>
+
+## Linking docs to Linear issues
+
+Link documentation pages to Linear issues for full traceability between your docs and development work.
+
+<Tabs>
+  <Tab title="From ProductBridge" icon="file-text">
+    Open a documentation page and click **Link Issue** in the sidebar.
+
+    Search by issue identifier (e.g., `DOC-42`) or title.
+
+    ```
+    Linked: DOC-42 — Write onboarding guide
+    Status: In Progress
+    Assignee: Alex
+    Priority: High
+    ```
+  </Tab>
+
+  <Tab title="From Linear" icon="layout">
+    Install the ProductBridge integration from the Linear settings page.
+
+    In any issue, use the **ProductBridge** attachment to link or create a doc page directly.
+  </Tab>
+</Tabs>
+
+## Automations
+
+Set up automations to reduce manual work when managing docs alongside Linear issues.
+
+<CodeGroup tabs="Auto-create issue,Auto-update status">
+```json
+{
+  "trigger": "doc.published",
+  "action": "linear.create_issue",
+  "config": {
+    "team": "Documentation",
+    "title": "Review: {doc_title}",
+    "label": "review",
+    "priority": 2
+  }
+}
+```
+
+```json
+{
+  "trigger": "linear.issue.completed",
+  "action": "doc.update_status",
+  "config": {
+    "set_status": "reviewed",
+    "add_label": "approved"
+  }
+}
+```
+</CodeGroup>
+
+## Webhook events
+
+ProductBridge sends webhook payloads for Linear-related events.
+
+<Request tabs="cURL" show-lines="true">
+```bash
+curl -X POST https://api.productbridge.com/integrations/linear/webhook \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "event": "issue.linked",
+    "issue_id": "DOC-42",
+    "doc_id": "doc_789",
+    "timestamp": "2025-03-10T14:00:00Z"
+  }'
+```
+</Request>
+
+<Response tabs="200,400">
+```json
+{
+  "status": "ok",
+  "message": "Webhook received",
+  "linked": true
+}
+```
+
+```json
+{
+  "error": "Issue not found",
+  "code": "LINEAR_ISSUE_NOT_FOUND"
+}
+```
+</Response>
+
+<ExpandableGroup>
+  <Expandable title="Supported Linear features" default-open="false">
+    - Issues and sub-issues
+
+    - Labels and priorities
+
+    - Cycles and projects
+
+    - Comments and reactions
+
+    - Custom views and filters
+  </Expandable>
+
+  <Expandable title="Troubleshooting connection issues" default-open="false">
+    - Verify your Linear workspace URL and that the OAuth token is still valid
+
+    - Ensure the authorized account has member-level access or higher
+
+    - Check that webhook delivery is not paused in Linear's settings
+
+    - Revoke and re-authorize the connection if you see authentication errors
+  </Expandable>
+</ExpandableGroup>

@@ -1,0 +1,77 @@
+---
+title: Play Store Integration
+description: Connect ProductBridge to the Google Play Store to import and analyze Android app reviews automatically.
+---
+
+## Overview
+
+The Play Store integration imports Android app reviews from the Google Play Store into ProductBridge. Monitor user sentiment, track rating changes after releases, and analyze feedback from mobile users alongside all your other feedback channels.
+
+## Prerequisites
+
+<Callout kind="info" title="Before you start">
+- An Android app published on the Google Play Store
+- A Google Play Developer account with access to your app
+- A Google Cloud service account with the Google Play Developer API enabled (set up in the [Google Cloud Console](https://console.cloud.google.com))
+</Callout>
+
+## Connect Play Store
+
+<Steps>
+  <Step title="Create a Service Account" icon="key">
+    In the Google Cloud Console:
+
+    1. Create a new project (or use an existing one)
+    2. Enable the **Google Play Developer API**
+    3. Create a service account and download the JSON key file
+    4. In the Google Play Console, navigate to **Settings > API Access** and grant the service account access to your app with **View app information and download bulk reports** permission
+  </Step>
+  <Step title="Open Integration Settings" icon="settings">
+    Navigate to **Settings > Integrations > Play Store** in your ProductBridge dashboard and click **Connect**.
+  </Step>
+  <Step title="Enter Credentials" icon="shield">
+    Provide your:
+
+    - **Package name** — Your app's package name (e.g., `com.yourcompany.app`)
+    - **Service account key** — Upload the JSON key file from Google Cloud
+
+    ProductBridge validates the connection and confirms access to your app's reviews.
+  </Step>
+  <Step title="Activate" icon="check">
+    Click **Enable** to start importing reviews. ProductBridge begins pulling reviews daily.
+  </Step>
+</Steps>
+
+## Configure Settings
+
+| Setting | Options | Description |
+|---------|---------|-------------|
+| Sync frequency | Daily | Reviews are imported once per day |
+| Languages | All, Specific | Import from all languages or select specific ones |
+| Minimum rating | 1-5 | Only import reviews at or below a specific star rating |
+| Backfill | On, Off | Import historical reviews on first sync |
+
+<Callout kind="tip">
+  Use the language filter to focus on reviews in languages your team can act on. You can always expand later as you add multilingual support.
+</Callout>
+
+## How It Works
+
+Once connected:
+
+1. Play Store reviews are imported daily and tagged with "via Play Store"
+2. Star ratings are mapped to sentiment scores, enhanced by AI text analysis
+3. Review language is detected automatically; reviews can be filtered by language in the dashboard
+4. Developer replies (if any) are captured alongside the original review
+5. All imported reviews flow into [Feedback Intelligence](/core-concepts/feedback-intelligence) for analysis
+
+<Callout kind="info">
+  Play Store reviews are pulled once daily due to Google API quotas. New reviews typically appear in ProductBridge within 24 hours.
+</Callout>
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **No reviews importing** — Verify the service account has the correct permissions in Google Play Console and that your app has published reviews
+  - **Authentication errors** — Ensure the JSON key file is valid and the Google Play Developer API is enabled in your Cloud project
+  - **Permission denied** — The service account must be granted access in Google Play Console under **Settings > API Access**, not just in Google Cloud
+  - **Missing reviews** — Some reviews may be filtered by Google. Check your language and rating filter settings
+</Expandable>

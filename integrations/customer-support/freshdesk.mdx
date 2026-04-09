@@ -1,0 +1,75 @@
+---
+title: Freshdesk Integration
+description: Connect ProductBridge to Freshdesk to import feedback from support tickets filtered by category, tags, or priority.
+---
+
+## Overview
+
+The Freshdesk integration imports feedback from your Freshdesk support tickets into ProductBridge. Filter by category, tags, or custom fields to capture the feedback that matters most. Freshdesk groups and companies are mapped to ProductBridge user segments automatically.
+
+## Prerequisites
+
+<Callout kind="info" title="Before you start">
+- A Freshdesk account with admin permissions
+- Your Freshdesk domain (e.g., `yourcompany.freshdesk.com`)
+- A Freshdesk API key (found in Profile Settings > API Key)
+</Callout>
+
+## Connect Freshdesk
+
+<Steps>
+  <Step title="Open Integration Settings" icon="settings">
+    Navigate to **Settings > Integrations > Freshdesk** in your ProductBridge dashboard and click **Connect**.
+  </Step>
+  <Step title="Enter Credentials" icon="key">
+    Enter your Freshdesk domain and API key. ProductBridge validates the connection and displays your available ticket categories.
+  </Step>
+  <Step title="Select Scope" icon="layers">
+    Choose which Freshdesk groups, products, or categories to monitor. You can connect multiple scopes and map each to different ProductBridge projects.
+  </Step>
+</Steps>
+
+## Configure Filters
+
+Control which Freshdesk tickets get imported as feedback:
+
+<Tabs>
+  <Tab title="By Category" icon="folder">
+    Select specific ticket categories to import. For example, import only tickets categorized as "Feature Request" or "Product Feedback".
+
+    Navigate to **Integration Settings > Freshdesk > Categories** and toggle on the categories you want to monitor.
+  </Tab>
+  <Tab title="By Tags" icon="tag">
+    Import tickets that match specific tags. You can combine multiple tags with AND or OR logic.
+
+    Add tags in **Integration Settings > Freshdesk > Tag Filters**.
+  </Tab>
+  <Tab title="By Custom Fields" icon="sliders">
+    Filter by any custom ticket field defined in your Freshdesk account. This is useful if you have a dedicated "Feedback Type" dropdown or similar field.
+  </Tab>
+</Tabs>
+
+<Callout kind="tip">
+  Freshdesk groups and companies are automatically mapped to ProductBridge user segments. This means you can filter and analyze feedback by customer segment without additional setup.
+</Callout>
+
+## How It Works
+
+Once connected:
+
+1. Freshdesk tickets matching your filters are imported into your ProductBridge feedback inbox
+2. Each item is tagged with "via Freshdesk" and includes the original ticket ID
+3. Requester information (email, company, group) is linked to ProductBridge user profiles
+4. Historical tickets are backfilled based on your configured time range
+5. All imported feedback flows into [Feedback Intelligence](/core-concepts/feedback-intelligence) for automatic categorization and analysis
+
+<Callout kind="info">
+  The Freshdesk integration supports continuous sync. New matching tickets are imported within minutes of creation in Freshdesk.
+</Callout>
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **Tickets not importing** — Verify your API key is valid and that the selected categories contain matching tickets
+  - **Missing company data** — Ensure companies are associated with contacts in Freshdesk for segment mapping to work
+  - **Slow backfill** — Large historical imports may take up to an hour. Check the sync status in **Settings > Integrations > Freshdesk > Status**
+  - **API key expired** — Regenerate your API key in Freshdesk Profile Settings and update it in ProductBridge
+</Expandable>

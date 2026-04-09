@@ -1,0 +1,76 @@
+---
+title: App Store Integration
+description: Connect ProductBridge to the Apple App Store to import and analyze iOS app reviews automatically.
+---
+
+## Overview
+
+The App Store integration imports iOS app reviews from the Apple App Store into ProductBridge. Track what users say about your app, monitor rating trends, and analyze feedback alongside your other channels — all without manually checking the App Store.
+
+## Prerequisites
+
+<Callout kind="info" title="Before you start">
+- An iOS app published on the Apple App Store
+- An App Store Connect account with access to your app
+- An App Store Connect API key with read access to Customer Reviews (generate one at [App Store Connect](https://appstoreconnect.apple.com))
+</Callout>
+
+## Connect App Store
+
+<Steps>
+  <Step title="Generate an API Key" icon="key">
+    In App Store Connect, navigate to **Users and Access > Integrations > App Store Connect API**. Create a new key with the **App Manager** or **Developer** role. Download the private key file — you can only download it once.
+  </Step>
+  <Step title="Open Integration Settings" icon="settings">
+    Navigate to **Settings > Integrations > App Store** in your ProductBridge dashboard and click **Connect**.
+  </Step>
+  <Step title="Enter Credentials" icon="shield">
+    Provide your:
+
+    - **Issuer ID** — Found on the API Keys page in App Store Connect
+    - **Key ID** — The identifier of your generated API key
+    - **Private Key** — Upload the `.p8` file you downloaded
+
+    ProductBridge validates the connection and displays your available apps.
+  </Step>
+  <Step title="Select Your App" icon="smartphone">
+    Choose the app you want to monitor from the list. If you have multiple apps, you can connect each to a different ProductBridge project.
+  </Step>
+  <Step title="Activate" icon="check">
+    Click **Enable** to start importing reviews. ProductBridge begins pulling reviews daily.
+  </Step>
+</Steps>
+
+## Configure Settings
+
+| Setting | Options | Description |
+|---------|---------|-------------|
+| Sync frequency | Daily | Reviews are imported once per day |
+| Territories | All, Specific | Import from all App Store regions or select specific ones |
+| Minimum rating | 1-5 | Only import reviews at or below a specific star rating |
+| Backfill | On, Off | Import historical reviews on first sync |
+
+<Callout kind="tip">
+  Filter by territory if your product serves specific markets. This helps you analyze regional feedback patterns separately.
+</Callout>
+
+## How It Works
+
+Once connected:
+
+1. App Store reviews are imported daily and tagged with "via App Store"
+2. Star ratings are mapped to sentiment scores, supplemented by AI text analysis
+3. Review language is detected automatically for multilingual support
+4. All imported reviews flow into [Feedback Intelligence](/core-concepts/feedback-intelligence) for categorization and trend detection
+5. You can track rating trends over time and correlate them with releases
+
+<Callout kind="info">
+  App Store reviews are pulled once daily due to Apple API rate limits. New reviews typically appear in ProductBridge within 24 hours of being posted.
+</Callout>
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **No reviews importing** — Verify your API key has the correct role and that your app has published reviews
+  - **Authentication errors** — Ensure the Issuer ID, Key ID, and private key match. Regenerate the key if needed
+  - **Missing territories** — Check your territory filter settings. Some apps may not have reviews in all regions
+  - **Rate limit errors** — Apple enforces strict API rate limits. ProductBridge handles this automatically with retry logic
+</Expandable>

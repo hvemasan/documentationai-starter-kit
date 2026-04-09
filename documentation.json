@@ -96,12 +96,51 @@
               {
                 "title": "Customer Support",
                 "path": "integrations/customer-support",
-                "icon": "headphones"
+                "icon": "headphones",
+                "pages": [
+                  {
+                    "title": "Intercom",
+                    "path": "integrations/customer-support/intercom",
+                    "icon": "message-circle"
+                  },
+                  {
+                    "title": "Zendesk",
+                    "path": "integrations/customer-support/zendesk",
+                    "icon": "headphones"
+                  },
+                  {
+                    "title": "Freshdesk",
+                    "path": "integrations/customer-support/freshdesk",
+                    "icon": "inbox"
+                  }
+                ]
               },
               {
                 "title": "Public Reviews",
                 "path": "integrations/public-reviews",
-                "icon": "star"
+                "icon": "star",
+                "pages": [
+                  {
+                    "title": "G2",
+                    "path": "integrations/public-reviews/g2",
+                    "icon": "star"
+                  },
+                  {
+                    "title": "Capterra",
+                    "path": "integrations/public-reviews/capterra",
+                    "icon": "award"
+                  },
+                  {
+                    "title": "App Store",
+                    "path": "integrations/public-reviews/app-store",
+                    "icon": "smartphone"
+                  },
+                  {
+                    "title": "Play Store",
+                    "path": "integrations/public-reviews/play-store",
+                    "icon": "smartphone"
+                  }
+                ]
               },
               {
                 "title": "Project Management",
@@ -110,13 +149,18 @@
                 "pages": [
                   {
                     "title": "Jira",
-                    "path": "integrations/jira",
+                    "path": "integrations/project-management/jira",
                     "icon": "ticket"
                   },
                   {
                     "title": "Linear",
-                    "path": "integrations/linear",
+                    "path": "integrations/project-management/linear",
                     "icon": "layout"
+                  },
+                  {
+                    "title": "Asana",
+                    "path": "integrations/project-management/asana",
+                    "icon": "check-square"
                   }
                 ]
               },

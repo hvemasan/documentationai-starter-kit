@@ -1,0 +1,86 @@
+---
+title: Zendesk Integration
+description: Connect ProductBridge to Zendesk to import feedback from support tickets based on tags, custom fields, or ticket types.
+---
+
+## Overview
+
+The Zendesk integration imports feedback from your Zendesk tickets into ProductBridge automatically. Filter by tags, custom fields, or priority levels to control exactly which tickets are captured as product feedback.
+
+## Prerequisites
+
+<Callout kind="info" title="Before you start">
+- A Zendesk account with admin permissions
+- Your Zendesk subdomain (e.g., `yourcompany.zendesk.com`)
+- An API token or OAuth credentials for authentication
+</Callout>
+
+## Connect Zendesk
+
+<Steps>
+  <Step title="Open Integration Settings" icon="settings">
+    Navigate to **Settings > Integrations > Zendesk** in your ProductBridge dashboard and click **Connect**.
+  </Step>
+  <Step title="Enter Your Subdomain" icon="globe">
+    Enter your Zendesk subdomain (e.g., `yourcompany`). ProductBridge constructs the full URL automatically.
+  </Step>
+  <Step title="Authorize Access" icon="shield">
+    Choose your authentication method:
+
+    - **API Token** — Enter your Zendesk email and API token (generated in Zendesk Admin > APIs > Zendesk API)
+    - **OAuth** — Authorize via Zendesk's OAuth flow for scoped, revocable access
+
+    <Callout kind="tip">
+      OAuth is recommended for production use. API tokens grant broader access and cannot be scoped to specific resources.
+    </Callout>
+  </Step>
+</Steps>
+
+## Configure Filters
+
+Define which Zendesk tickets get imported as feedback. You can combine multiple filters:
+
+| Filter Type | Example | Description |
+|------------|---------|-------------|
+| Tags | `feedback`, `feature-request` | Import tickets with specific tags |
+| Custom Field | Type = "Feature Request" | Filter by any custom field value |
+| Priority | High, Urgent | Import only high-priority tickets |
+| Group | Product Feedback | Import tickets assigned to a specific group |
+| Status | Open, Pending | Filter by ticket status |
+
+<Steps>
+  <Step title="Add Filters" icon="filter">
+    Navigate to **Integration Settings > Zendesk > Filters** and define your import rules. Combine multiple filters with AND/OR logic.
+  </Step>
+  <Step title="Set Backfill Range" icon="calendar">
+    Choose whether to import only new tickets or backfill historical data. Set a date range for backfill (e.g., last 90 days).
+  </Step>
+  <Step title="Enable Continuous Sync" icon="refresh-cw">
+    Toggle on continuous sync. New matching tickets are imported within minutes. Existing tickets matching your filters are backfilled on first sync.
+  </Step>
+</Steps>
+
+<Callout kind="tip">
+  Start with a narrow filter (e.g., tickets tagged "feedback") and expand gradually. This helps you validate the quality of imports before scaling up.
+</Callout>
+
+## How It Works
+
+Once connected and filtered:
+
+1. Zendesk tickets matching your rules are imported into your ProductBridge feedback inbox
+2. Each item is tagged with "via Zendesk" and includes the original ticket number for reference
+3. Ticket requester email is matched to ProductBridge user profiles automatically
+4. Star ratings or satisfaction scores (if available) are mapped to sentiment
+5. All imported feedback flows into [Feedback Intelligence](/core-concepts/feedback-intelligence) for analysis
+
+<Callout kind="info">
+  You can enable bidirectional sync to push status updates back to Zendesk. When a linked roadmap item ships, the original ticket is updated with a comment or status change.
+</Callout>
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **Tickets not importing** — Verify your filters match existing tickets and that your API token has not expired
+  - **Authentication errors** — Regenerate your API token in Zendesk Admin or re-authorize via OAuth
+  - **Missing fields** — Ensure your custom fields are accessible to the API. Some Zendesk field types require additional permissions
+  - **Rate limits** — Zendesk enforces API rate limits. If you see throttling errors, reduce the backfill date range or contact support
+</Expandable>
