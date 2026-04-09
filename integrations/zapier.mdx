@@ -1,0 +1,282 @@
+---
+title: Zapier Integration
+description: Connect ProductBridge to 7,000+ apps using Zapier. Automate feedback workflows with triggers for new posts, comments, votes, status changes, and more.
+---
+
+## Overview
+
+The ProductBridge Zapier integration lets you connect your feedback workflows to 7,000+ apps without writing code. Automatically create posts from form submissions, notify your team in Slack when feedback arrives, sync status changes to your project tracker, and much more.
+
+<Columns cols={3}>
+  <Card title="5 Triggers" icon="bell" href="#triggers">
+    React to new posts, comments, votes, status changes, and tag additions in real time.
+  </Card>
+  <Card title="4 Actions" icon="play" href="#actions">
+    Create posts, add comments, change statuses, and manage users from any connected app.
+  </Card>
+  <Card title="1 Search" icon="search" href="#searches">
+    Look up existing posts by ID to use their data in subsequent Zap steps.
+  </Card>
+</Columns>
+
+## Prerequisites
+
+<Callout kind="info" title="Before you start">
+- A ProductBridge account with an active project
+- A Zapier account (free or paid)
+- Your ProductBridge Zapier API key
+</Callout>
+
+## Connect ProductBridge to Zapier
+
+<Steps>
+  <Step title="Get your API key" icon="key">
+    In ProductBridge, navigate to **Settings > Integrations > Zapier** and copy your Zapier API key.
+
+    Each API key is scoped to your organization and grants access to all projects within it.
+
+    <Callout kind="alert">
+      Keep your API key secure. Do not share it publicly or commit it to version control. You can regenerate it at any time from the settings page, but existing Zaps will need to be reconnected.
+    </Callout>
+  </Step>
+  <Step title="Add ProductBridge in Zapier" icon="plus">
+    In Zapier, create a new Zap and search for **ProductBridge** when selecting a trigger or action app.
+
+    When prompted, enter your API key. Zapier validates it against your ProductBridge organization and displays your organization name as the connection label.
+  </Step>
+  <Step title="Build your Zap" icon="workflow">
+    Choose a trigger or action from the lists below, configure the fields, and turn on your Zap. ProductBridge uses webhooks for triggers, so events fire in real time.
+  </Step>
+</Steps>
+
+## Triggers
+
+Triggers fire automatically when something happens in ProductBridge. All triggers are webhook-based for real-time delivery and support optional board filtering.
+
+### New Post
+
+Triggers when a new feedback post is created.
+
+| Output Field | Type | Description |
+|-------------|------|-------------|
+| `id` | string | Unique post identifier |
+| `title` | string | Post title |
+| `details` | string | Post description |
+| `board.name` | string | Board the post belongs to |
+| `status.name` | string | Current status (e.g., Open, In Progress) |
+| `vote_count` | number | Number of votes |
+| `comment_count` | number | Number of comments |
+| `tags` | array | Tags assigned to the post |
+| `author.name` | string | Author display name |
+| `author.email` | string | Author email address |
+| `created_at` | string | ISO 8601 timestamp |
+
+<Callout kind="tip">
+  Use the optional **Board** filter to trigger only for posts on a specific board (e.g., "Feature Requests" or "Bug Reports").
+</Callout>
+
+### New Comment
+
+Triggers when a new comment is added to a post. Includes both public comments and internal notes.
+
+| Output Field | Type | Description |
+|-------------|------|-------------|
+| `id` | string | Comment identifier |
+| `post_id` | string | Parent post identifier |
+| `post_title` | string | Parent post title |
+| `content` | string | Comment text |
+| `is_internal` | boolean | Whether the comment is an internal note |
+| `author.name` | string | Comment author name |
+| `author.email` | string | Comment author email |
+| `board.name` | string | Board name |
+| `created_at` | string | ISO 8601 timestamp |
+
+### New Vote
+
+Triggers when a user votes on a post.
+
+| Output Field | Type | Description |
+|-------------|------|-------------|
+| `id` | string | Vote identifier |
+| `post_id` | string | Voted post identifier |
+| `post_title` | string | Voted post title |
+| `voter.name` | string | Voter display name |
+| `voter.email` | string | Voter email address |
+| `board.name` | string | Board name |
+| `created_at` | string | ISO 8601 timestamp |
+
+### Post Status Changed
+
+Triggers when a post's status changes (e.g., from "Open" to "In Progress").
+
+| Output Field | Type | Description |
+|-------------|------|-------------|
+| `id` | string | Event identifier |
+| `post_id` | string | Post identifier |
+| `post_title` | string | Post title |
+| `old_status` | string | Previous status name |
+| `new_status` | string | New status name |
+| `board.name` | string | Board name |
+| `changed_at` | string | ISO 8601 timestamp |
+
+### Tag Added to Post
+
+Triggers when a tag is added to a post.
+
+| Output Field | Type | Description |
+|-------------|------|-------------|
+| `id` | string | Event identifier |
+| `post_id` | string | Post identifier |
+| `post_title` | string | Post title |
+| `tag.name` | string | Tag name |
+| `tag.color` | string | Tag hex color |
+| `board.name` | string | Board name |
+| `added_at` | string | ISO 8601 timestamp |
+
+## Actions
+
+Actions let you create or update data in ProductBridge from any connected app.
+
+### Create Post
+
+Creates a new feedback post on a specified board.
+
+| Input Field | Required | Description |
+|------------|----------|-------------|
+| `board_id` | Yes | Board to create the post on (dropdown) |
+| `title` | Yes | Title of the feedback post |
+| `details` | No | Detailed description of the feedback |
+| `author_email` | No | Email of the post author. Creates a new user if not found. |
+| `author_name` | No | Display name of the author (used when creating a new user) |
+
+<Callout kind="tip">
+  Use this action to turn form submissions, emails, or support tickets from other apps into ProductBridge feedback posts automatically.
+</Callout>
+
+### Comment on Post
+
+Creates a public or internal comment on an existing post.
+
+| Input Field | Required | Description |
+|------------|----------|-------------|
+| `post_id` | Yes | Post to comment on (dropdown) |
+| `content` | Yes | Comment text |
+| `author_email` | No | Email of the comment author |
+| `is_internal` | No | If true, the comment is an internal note not visible to end users |
+
+### Change Post Status
+
+Updates the status of an existing post.
+
+| Input Field | Required | Description |
+|------------|----------|-------------|
+| `post_id` | Yes | Post to update (dropdown) |
+| `status_id` | Yes | New status (dropdown) |
+| `changer_email` | No | Email of the person changing the status |
+| `notify_voters` | No | If true, voters are notified of the status change |
+
+### Create or Update User
+
+Creates a new user or updates an existing one (upsert). Useful for syncing user data from CRMs or other tools.
+
+| Input Field | Required | Description |
+|------------|----------|-------------|
+| `email` | Yes | User email address (used as the unique identifier) |
+| `name` | Yes | User display name |
+| `avatar_url` | No | URL of the user's avatar image |
+
+## Searches
+
+### Find Post
+
+Finds an existing post by its ID. Use this in multi-step Zaps to look up a post before updating it.
+
+| Input Field | Required | Description |
+|------------|----------|-------------|
+| `post_id` | Yes | Post to find (dropdown) |
+
+Returns the full post object including title, details, board, status, vote count, comment count, tags, and author.
+
+## Example Zaps
+
+<Tabs>
+  <Tab title="Slack Notification" icon="message-circle">
+    **Trigger:** New Post (ProductBridge)
+    **Action:** Send Channel Message (Slack)
+
+    Notify your product team in Slack whenever a new feedback post is submitted. Include the post title, author, and board name in the message.
+  </Tab>
+  <Tab title="Intercom to Post" icon="inbox">
+    **Trigger:** New Conversation (Intercom)
+    **Action:** Create Post (ProductBridge)
+
+    Automatically turn Intercom conversations tagged as feedback into ProductBridge posts. Map the conversation subject to the post title and the customer email to the author.
+  </Tab>
+  <Tab title="Status to Jira" icon="ticket">
+    **Trigger:** Post Status Changed (ProductBridge)
+    **Action:** Update Issue (Jira)
+
+    When a post moves to "In Progress" in ProductBridge, update the linked Jira issue status. Use the Find Post search to get additional context.
+  </Tab>
+  <Tab title="Spreadsheet Logging" icon="table">
+    **Trigger:** New Vote (ProductBridge)
+    **Action:** Create Spreadsheet Row (Google Sheets)
+
+    Log every vote to a Google Sheet for custom analytics. Track which posts gain traction and who is voting.
+  </Tab>
+</Tabs>
+
+## API Details
+
+The Zapier integration communicates with the ProductBridge API at `https://api.productbridge.io/api/v1/zapier`.
+
+<ExpandableGroup>
+  <Expandable title="Authentication" default-open="false">
+    The integration uses API key authentication. Your key is sent as the `x-api-key` header on every request. The API validates the key and returns your organization context.
+
+    - **Header:** `x-api-key: YOUR_API_KEY`
+    - **Content-Type:** `application/json`
+    - **Test endpoint:** `GET /api/v1/zapier/auth/test`
+  </Expandable>
+
+  <Expandable title="Webhook lifecycle" default-open="false">
+    All triggers use Zapier's REST Hook model:
+
+    1. **Subscribe:** When a Zap is turned on, Zapier sends a `POST /api/v1/zapier/hooks` request with the target URL and event type
+    2. **Receive:** ProductBridge sends webhook payloads to the registered URL when events occur
+    3. **Unsubscribe:** When a Zap is turned off, Zapier sends a `DELETE /api/v1/zapier/hooks/{id}` request to stop deliveries
+  </Expandable>
+
+  <Expandable title="Error handling" default-open="false">
+    The integration handles errors with specific HTTP status codes:
+
+    | Status | Meaning | Zapier Behavior |
+    |--------|---------|-----------------|
+    | 401 | API key invalid or expired | Prompts user to reconnect |
+    | 400+ | Invalid request data | Shows error message from API response |
+    | 200 | Success | Continues Zap execution |
+  </Expandable>
+</ExpandableGroup>
+
+## Troubleshooting
+
+<ExpandableGroup>
+  <Expandable title="Zap not triggering" default-open="false">
+    - Verify your Zap is turned **on** in the Zapier dashboard
+    - Check that the event type matches your trigger (e.g., creating a post fires "New Post", not "New Comment")
+    - If using a board filter, ensure the event occurs on the selected board
+    - Check the Zapier task history for errors or skipped runs
+  </Expandable>
+
+  <Expandable title="Authentication errors" default-open="false">
+    - Regenerate your API key in **ProductBridge > Settings > Integrations > Zapier**
+    - Reconnect your ProductBridge account in Zapier by clicking **Reconnect** on the connection
+    - Ensure your ProductBridge subscription includes API access
+  </Expandable>
+
+  <Expandable title="Missing dropdown options" default-open="false">
+    - Boards, statuses, and tags are loaded dynamically from your ProductBridge account
+    - If a board or status was recently created, click **Load More** in the Zapier dropdown to refresh
+    - Ensure your API key has access to the project containing the boards you expect to see
+  </Expandable>
+</ExpandableGroup>

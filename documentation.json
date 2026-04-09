@@ -172,6 +172,11 @@
                 "title": "Automations",
                 "path": "integrations/automations",
                 "icon": "workflow"
+              },
+              {
+                "title": "Zapier",
+                "path": "integrations/zapier",
+                "icon": "zap"
               }
             ]
           }
