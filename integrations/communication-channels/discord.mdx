@@ -1,0 +1,73 @@
+---
+title: Discord Integration
+description: Connect ProductBridge to Discord to capture feedback from server channels and community discussions automatically.
+---
+
+## Overview
+
+The Discord integration connects ProductBridge to your Discord server so you can collect feedback from community channels. Whether your users discuss features in a feedback channel or report bugs in a support forum, ProductBridge captures it all and brings it into your feedback workflow.
+
+## Prerequisites
+
+<Callout kind="info" title="Before you start">
+- A Discord server where you have administrator or manage server permissions
+- A ProductBridge project with at least one feedback channel enabled
+- One or more Discord channels designated for feedback collection
+</Callout>
+
+## Connect Discord
+
+<Steps>
+  <Step title="Open Integration Settings" icon="settings">
+    Navigate to **Settings > Integrations > Discord** in your ProductBridge dashboard and click **Connect**.
+  </Step>
+  <Step title="Add the Bot" icon="bot">
+    You are redirected to Discord's OAuth flow. Select the server you want to connect and grant the ProductBridge bot access. The bot requests permissions to read messages and send replies in selected channels.
+  </Step>
+  <Step title="Select Channels" icon="hash">
+    Choose which Discord channels ProductBridge should monitor. You can select text channels and forum channels. Map each to a specific ProductBridge board.
+
+    Common setups include:
+    - `#feedback` — General feedback channel
+    - `#feature-requests` — Forum channel for feature discussions
+    - `#bugs` — Bug reporting channel
+  </Step>
+</Steps>
+
+## Configure Collection Rules
+
+<Tabs>
+  <Tab title="All Messages" icon="message-circle">
+    Import every message posted in the selected channels. Best for channels dedicated entirely to feedback.
+  </Tab>
+  <Tab title="Emoji Reactions" icon="smile">
+    Only import messages that receive a specific emoji reaction from moderators or community managers. This lets your team curate which community messages become feedback items.
+  </Tab>
+  <Tab title="Bot Command" icon="terminal">
+    Users submit feedback with a bot command: `!feedback Dark mode would be amazing`. The command creates a feedback post in ProductBridge and sends a confirmation message in the channel.
+  </Tab>
+  <Tab title="Forum Posts" icon="layout">
+    For Discord forum channels, each new forum post is imported as a separate feedback item. Replies to the forum post are captured as comments.
+  </Tab>
+</Tabs>
+
+## How It Works
+
+Once connected:
+
+1. Messages matching your collection rules are imported into your ProductBridge feedback inbox
+2. Each item is tagged with "via Discord" and includes the server name, channel name, and message link
+3. The Discord username is captured and linked to ProductBridge user profiles where possible
+4. Thread replies and forum post replies can optionally be synced as comments
+5. All imported feedback flows into [Feedback Intelligence](/core-concepts/feedback-intelligence) for analysis
+
+<Callout kind="tip">
+  Discord forum channels work especially well with ProductBridge — each forum post maps naturally to a feedback item, and community voting on forum posts can be synced as votes in ProductBridge.
+</Callout>
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **Bot not responding** — Verify the ProductBridge bot has the correct channel permissions (Read Messages, Send Messages, Read Message History)
+  - **Missing messages** — Ensure the bot is added to the specific channels you want to monitor, not just the server
+  - **Rate limits** — Discord enforces rate limits on bots. High-traffic channels may experience slight import delays during spikes
+  - **Re-authorize** — If the bot disconnects, re-add it from **Settings > Integrations > Discord**
+</Expandable>

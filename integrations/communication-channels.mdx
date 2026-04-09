@@ -1,0 +1,44 @@
+---
+title: Communication Channels
+description: Connect ProductBridge to communication tools like Intercom, Zendesk, Freshdesk, Slack, and Discord to automatically capture feedback from conversations and messages.
+---
+
+## Capture Feedback from Every Conversation
+
+Your team communicates with users across multiple channels every day — support tickets, chat messages, community servers. ProductBridge integrates with popular communication platforms to automatically extract and import feedback, so nothing gets lost.
+
+## Supported Channels
+
+<Columns cols={3}>
+  <Card title="Intercom" icon="message-circle" href="/integrations/communication-channels/intercom">
+    Import feedback from Intercom conversations and notes automatically.
+  </Card>
+  <Card title="Zendesk" icon="headphones" href="/integrations/communication-channels/zendesk">
+    Pull feedback from Zendesk tickets based on tags or custom fields.
+  </Card>
+  <Card title="Freshdesk" icon="inbox" href="/integrations/communication-channels/freshdesk">
+    Sync feedback from Freshdesk tickets filtered by category or priority.
+  </Card>
+</Columns>
+
+<Columns cols={2}>
+  <Card title="Slack" icon="hash" href="/integrations/communication-channels/slack">
+    Collect feedback from designated Slack channels and threads.
+  </Card>
+  <Card title="Discord" icon="message-square" href="/integrations/communication-channels/discord">
+    Capture feedback from Discord server channels and community discussions.
+  </Card>
+</Columns>
+
+## How Imported Feedback Works
+
+All feedback imported from communication channels is:
+
+- **Tagged with its source** — You always know where feedback came from (e.g., "via Intercom", "via Slack")
+- **Linked to a user** — If the message has a user email or identity, ProductBridge matches it to an existing user profile or creates a new one
+- **Deduplicated** — If the same user submits similar feedback across multiple channels, ProductBridge groups them together
+- **Available in Intelligence** — Imported feedback flows into [Feedback Intelligence](/core-concepts/feedback-intelligence) for automatic categorization and analysis
+
+<Callout kind="info">
+  Communication channel integrations are one-way by default — feedback flows from your tools into ProductBridge. You can enable bidirectional sync to push status updates back when a linked roadmap item ships.
+</Callout>

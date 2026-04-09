@@ -1,0 +1,84 @@
+---
+title: Chrome Extension
+description: Capture feedback from any webpage using the ProductBridge Chrome Extension. Highlight text, annotate screenshots, and submit feedback directly to your project.
+---
+
+## Overview
+
+The ProductBridge Chrome Extension lets you capture feedback from any webpage — competitor reviews, social media posts, support forums, or internal tools. Highlight text, take annotated screenshots, and submit feedback to ProductBridge without switching tabs.
+
+## Prerequisites
+
+<Callout kind="info" title="Before you start">
+- Google Chrome or a Chromium-based browser (Edge, Brave, Arc)
+- A ProductBridge account with at least one project
+</Callout>
+
+## Install the Extension
+
+<Steps>
+  <Step title="Download from Chrome Web Store" icon="download">
+    Visit the [ProductBridge Chrome Extension](https://chrome.google.com/webstore) page and click **Add to Chrome**. Confirm the permissions when prompted.
+  </Step>
+  <Step title="Sign In" icon="log-in">
+    Click the ProductBridge icon in your browser toolbar and sign in with your ProductBridge account credentials. The extension connects to your workspace automatically.
+  </Step>
+  <Step title="Select a Project" icon="folder">
+    Choose the default project where captured feedback should be sent. You can change this per submission.
+  </Step>
+</Steps>
+
+## Capture Feedback
+
+<Tabs>
+  <Tab title="Text Selection" icon="type">
+    Highlight any text on a webpage, right-click, and select **Send to ProductBridge**. The selected text becomes the feedback content, and the page URL is attached automatically.
+
+    You can add a title, select a board, and add tags before submitting.
+  </Tab>
+  <Tab title="Screenshot" icon="camera">
+    Click the ProductBridge extension icon and select **Capture Screenshot**. Annotate the screenshot with arrows, highlights, or text notes. The annotated image is attached to the feedback post.
+
+    Screenshots are useful for capturing visual bugs, competitor UI patterns, or social media mentions.
+  </Tab>
+  <Tab title="Quick Submit" icon="zap">
+    Click the extension icon, type your feedback directly, and hit **Submit**. The current page URL is attached automatically. Use this for quick notes while browsing.
+  </Tab>
+</Tabs>
+
+## Configure Settings
+
+Access extension settings by clicking the ProductBridge icon and selecting the gear icon:
+
+| Setting | Description |
+|---------|-------------|
+| Default project | The project where feedback is sent by default |
+| Default board | The board to pre-select when submitting feedback |
+| Include page URL | Automatically attach the current page URL to submissions |
+| Include page title | Automatically use the page title as the feedback title |
+| Keyboard shortcut | Set a custom shortcut for quick capture (default: `Ctrl+Shift+F`) |
+
+<Callout kind="tip">
+  Set up a keyboard shortcut for quick capture. Press `Ctrl+Shift+F` (customizable) to open the feedback form instantly from any page.
+</Callout>
+
+## How It Works
+
+Once installed:
+
+1. Feedback captured via the extension is sent to your ProductBridge project immediately
+2. Each item is tagged with "via Chrome Extension" and includes the source URL
+3. Screenshots are stored in your ProductBridge media storage and linked to the feedback post
+4. All captured feedback flows into [Feedback Intelligence](/core-concepts/feedback-intelligence) for analysis
+5. You can filter by source in the feedback inbox to see all extension-captured items
+
+<Callout kind="info">
+  The Chrome Extension works on any webpage, including pages behind authentication. No data is sent to ProductBridge until you explicitly submit feedback.
+</Callout>
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **Extension not appearing** — Check that the extension is enabled in `chrome://extensions`. Pin it to the toolbar for easy access.
+  - **Sign-in issues** — Ensure you are using the same email address as your ProductBridge account. Try signing out and back in.
+  - **Screenshots not capturing** — Some pages block screenshot APIs. Try using the text selection method instead.
+  - **Submissions failing** — Check your internet connection and verify the extension is signed in. Clear the extension cache if issues persist.
+</Expandable>

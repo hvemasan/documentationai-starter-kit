@@ -1,0 +1,78 @@
+---
+title: Slack Integration
+description: Connect ProductBridge to Slack to collect feedback from designated channels, threads, and reactions automatically.
+---
+
+## Overview
+
+The Slack integration connects ProductBridge to your Slack workspace so you can capture feedback from designated channels without leaving the tools your team already uses. Users post feedback in Slack, and ProductBridge imports it automatically — tagged, categorized, and ready for analysis.
+
+## Prerequisites
+
+<Callout kind="info" title="Before you start">
+- A Slack workspace with admin permissions to install apps
+- A ProductBridge project with at least one feedback channel enabled
+- One or more Slack channels designated for feedback collection
+</Callout>
+
+## Connect Slack
+
+<Steps>
+  <Step title="Open Integration Settings" icon="settings">
+    Navigate to **Settings > Integrations > Slack** in your ProductBridge dashboard and click **Connect**.
+  </Step>
+  <Step title="Authorize Access" icon="shield">
+    You are redirected to Slack's OAuth flow. Grant ProductBridge access to your workspace. ProductBridge requests permissions to read messages in selected channels and post replies.
+
+    <Callout kind="tip">
+      Install the ProductBridge Slack app from your workspace admin panel for organization-wide access, or install it individually for personal use.
+    </Callout>
+  </Step>
+  <Step title="Select Channels" icon="hash">
+    Choose which Slack channels ProductBridge should monitor for feedback. You can select multiple channels and map each to a different ProductBridge board.
+
+    Common setups include:
+    - `#product-feedback` — General feedback channel
+    - `#feature-requests` — Dedicated feature request channel
+    - `#bug-reports` — Bug reporting channel
+  </Step>
+</Steps>
+
+## Configure Collection Rules
+
+<Tabs>
+  <Tab title="All Messages" icon="message-circle">
+    Import every message posted in the selected channels as feedback. Best for channels dedicated entirely to feedback collection.
+  </Tab>
+  <Tab title="Emoji Reactions" icon="smile">
+    Only import messages that receive a specific emoji reaction (e.g., `:feedback:` or `:bulb:`). This lets your team curate which messages become feedback items.
+
+    Configure the trigger emoji in **Integration Settings > Slack > Reaction Filter**.
+  </Tab>
+  <Tab title="Slash Command" icon="terminal">
+    Users submit feedback with a slash command: `/feedback Dark mode would be great for night sessions`. The command creates a feedback post directly in ProductBridge.
+
+    The slash command is available in all channels where the ProductBridge app is installed.
+  </Tab>
+</Tabs>
+
+## How It Works
+
+Once connected:
+
+1. Messages matching your collection rules are imported into your ProductBridge feedback inbox
+2. Each item is tagged with "via Slack" and includes the channel name and message link
+3. The Slack user's display name and email are matched to ProductBridge user profiles
+4. Thread replies on imported messages can optionally be synced as comments
+5. All imported feedback flows into [Feedback Intelligence](/core-concepts/feedback-intelligence) for analysis
+
+<Callout kind="info">
+  ProductBridge can post a confirmation reply in the Slack thread when feedback is captured, so users know their input was recorded.
+</Callout>
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **Messages not importing** — Verify the ProductBridge app is added to the target channel (use `/invite @ProductBridge`)
+  - **Missing user emails** — Slack display names are always captured, but emails require the `users:read.email` scope. Re-authorize if emails are missing.
+  - **Duplicate feedback** — ProductBridge deduplicates by Slack message ID. If the same message is posted in multiple monitored channels, only one feedback item is created.
+  - **Re-authorize** — If the connection stops working, revoke and reconnect from **Settings > Integrations > Slack**
+</Expandable>

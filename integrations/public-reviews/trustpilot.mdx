@@ -1,0 +1,67 @@
+---
+title: TrustPilot Integration
+description: Connect ProductBridge to TrustPilot to import and analyze customer reviews from your TrustPilot business profile.
+---
+
+## Overview
+
+The TrustPilot integration imports reviews from your TrustPilot business profile into ProductBridge. Monitor customer trust signals, track sentiment trends, and analyze TrustPilot feedback alongside all your other feedback channels in one place.
+
+## Prerequisites
+
+<Callout kind="info" title="Before you start">
+- A TrustPilot business profile with at least one review
+- TrustPilot Business API access (available on TrustPilot paid plans)
+- A ProductBridge project to receive imported reviews
+</Callout>
+
+## Connect TrustPilot
+
+<Steps>
+  <Step title="Open Integration Settings" icon="settings">
+    Navigate to **Settings > Integrations > TrustPilot** in your ProductBridge dashboard and click **Connect**.
+  </Step>
+  <Step title="Enter API Credentials" icon="key">
+    Provide your TrustPilot Business API key and business unit ID. You can find these in your TrustPilot Business dashboard under **Integrations > API**.
+  </Step>
+  <Step title="Configure Sync" icon="calendar">
+    Choose your sync frequency (daily or weekly) and whether to backfill existing reviews or start with new ones only.
+  </Step>
+  <Step title="Activate" icon="check">
+    Click **Enable** to start importing reviews. ProductBridge begins pulling reviews immediately.
+  </Step>
+</Steps>
+
+## Configure Settings
+
+| Setting | Options | Description |
+|---------|---------|-------------|
+| Sync frequency | Daily, Weekly | How often new reviews are pulled |
+| Backfill | On, Off | Import historical reviews on first sync |
+| Minimum stars | 1-5 | Only import reviews at or below a specific star rating |
+| Language filter | All, Specific | Import reviews in all languages or select specific ones |
+
+<Callout kind="tip">
+  TrustPilot reviews are highly visible to potential customers. Monitor negative reviews closely and use ProductBridge to track whether reported issues are addressed in your roadmap.
+</Callout>
+
+## How It Works
+
+Once connected:
+
+1. TrustPilot reviews are imported on your configured schedule and tagged with "via TrustPilot"
+2. Star ratings (1-5) are converted to sentiment scores: 4-5 = positive, 3 = neutral, 1-2 = negative
+3. Review text is analyzed by AI to extract specific topics, complaints, and feature mentions
+4. Reviewer information (where available) is linked to ProductBridge user profiles
+5. All imported reviews flow into [Feedback Intelligence](/core-concepts/feedback-intelligence) for analysis
+
+<Callout kind="info">
+  TrustPilot reviews are public and often influence purchasing decisions. Use the Intelligence Dashboard to compare TrustPilot sentiment with private feedback to identify gaps between public perception and internal product priorities.
+</Callout>
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **No reviews importing** — Verify your Business API key is valid and the business unit ID is correct
+  - **API access denied** — TrustPilot Business API requires a paid plan. Check your TrustPilot subscription level
+  - **Missing reviews** — Some reviews may be flagged or removed by TrustPilot moderation. These are excluded from API responses
+  - **Rate limits** — TrustPilot enforces API rate limits. ProductBridge handles retries automatically
+</Expandable>

@@ -1,0 +1,61 @@
+---
+title: AppSumo Integration
+description: Connect ProductBridge to AppSumo to import and analyze product reviews from your AppSumo listing.
+---
+
+## Overview
+
+The AppSumo integration imports reviews from your AppSumo product listing into ProductBridge. Track what lifetime deal customers say about your product, monitor sentiment after launches, and analyze AppSumo feedback alongside your other channels.
+
+## Prerequisites
+
+<Callout kind="info" title="Before you start">
+- An active AppSumo product listing with at least one review
+- Your AppSumo listing URL or API credentials
+- A ProductBridge project to receive imported reviews
+</Callout>
+
+## Connect AppSumo
+
+<Steps>
+  <Step title="Open Integration Settings" icon="settings">
+    Navigate to **Settings > Integrations > AppSumo** in your ProductBridge dashboard and click **Connect**.
+  </Step>
+  <Step title="Enter Listing Details" icon="link">
+    Provide your AppSumo product URL or enter your AppSumo partner API credentials. ProductBridge validates the connection and displays your listing details.
+  </Step>
+  <Step title="Configure Sync" icon="calendar">
+    Choose your sync frequency (daily or weekly) and whether to backfill existing reviews or start with new ones only.
+  </Step>
+  <Step title="Activate" icon="check">
+    Click **Enable** to start importing reviews. ProductBridge begins pulling reviews immediately based on your settings.
+  </Step>
+</Steps>
+
+## Configure Settings
+
+| Setting | Options | Description |
+|---------|---------|-------------|
+| Sync frequency | Daily, Weekly | How often new reviews are pulled |
+| Backfill | On, Off | Import historical reviews on first sync |
+| Minimum rating | 1-5 | Only import reviews at or below a specific taco rating |
+
+<Callout kind="tip">
+  AppSumo reviews often come in waves after deal launches. Enable daily sync during launch periods to capture feedback in real time.
+</Callout>
+
+## How It Works
+
+Once connected:
+
+1. AppSumo reviews are imported on your configured schedule and tagged with "via AppSumo"
+2. Taco ratings are converted to sentiment scores (4-5 = positive, 3 = neutral, 1-2 = negative)
+3. Review text is analyzed by AI to extract specific topics and feature mentions
+4. All imported reviews flow into [Feedback Intelligence](/core-concepts/feedback-intelligence) for categorization and trend analysis
+5. You can compare AppSumo sentiment with other review platforms and direct feedback channels
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **No reviews importing** — Verify your AppSumo listing URL is correct and the product has published reviews
+  - **Authentication errors** — Regenerate your AppSumo partner API credentials and update them in ProductBridge
+  - **Duplicate reviews** — ProductBridge deduplicates by review ID automatically
+</Expandable>

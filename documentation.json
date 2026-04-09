@@ -95,25 +95,35 @@
             "icon": "plug",
             "pages": [
               {
-                "group": "Customer Support",
-                "icon": "headphones",
+                "group": "Communication Channels",
+                "icon": "message-circle",
                 "expandable": true,
-                "path": "integrations/customer-support",
+                "path": "integrations/communication-channels",
                 "pages": [
                   {
                     "title": "Intercom",
-                    "path": "integrations/customer-support/intercom",
+                    "path": "integrations/communication-channels/intercom",
                     "icon": "message-circle"
                   },
                   {
                     "title": "Zendesk",
-                    "path": "integrations/customer-support/zendesk",
+                    "path": "integrations/communication-channels/zendesk",
                     "icon": "headphones"
                   },
                   {
                     "title": "Freshdesk",
-                    "path": "integrations/customer-support/freshdesk",
+                    "path": "integrations/communication-channels/freshdesk",
                     "icon": "inbox"
+                  },
+                  {
+                    "title": "Slack",
+                    "path": "integrations/communication-channels/slack",
+                    "icon": "hash"
+                  },
+                  {
+                    "title": "Discord",
+                    "path": "integrations/communication-channels/discord",
+                    "icon": "message-square"
                   }
                 ]
               },
@@ -142,6 +152,16 @@
                     "title": "Play Store",
                     "path": "integrations/public-reviews/play-store",
                     "icon": "smartphone"
+                  },
+                  {
+                    "title": "AppSumo",
+                    "path": "integrations/public-reviews/appsumo",
+                    "icon": "shopping-bag"
+                  },
+                  {
+                    "title": "TrustPilot",
+                    "path": "integrations/public-reviews/trustpilot",
+                    "icon": "shield-check"
                   }
                 ]
               },
@@ -160,11 +180,19 @@
                     "title": "Linear",
                     "path": "integrations/project-management/linear",
                     "icon": "layout"
-                  },
+                  }
+                ]
+              },
+              {
+                "group": "Data & Enrichment",
+                "icon": "database",
+                "expandable": true,
+                "path": "integrations/data-and-enrichment",
+                "pages": [
                   {
-                    "title": "Asana",
-                    "path": "integrations/project-management/asana",
-                    "icon": "check-square"
+                    "title": "Chrome Extension",
+                    "path": "integrations/data-and-enrichment/chrome-extension",
+                    "icon": "chrome"
                   }
                 ]
               },
