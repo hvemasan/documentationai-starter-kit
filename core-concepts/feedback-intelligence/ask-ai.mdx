@@ -1,60 +1,176 @@
 ---
 title: Ask AI
-description: Learn how to ask natural language questions about your feedback data and get instant, AI-powered answers in ProductBridge.
+description: Learn how to use ProductBridge Ask AI — a conversational assistant that lets you search feedback, analyze themes, check your roadmap, explore user segments, and query your knowledge base using natural language.
 ---
 
-## Talk to Your Feedback Data
+## Your AI-Powered Product Analyst
 
-Ask AI lets you query your entire feedback dataset using plain English. Instead of building filters, exporting spreadsheets, or writing SQL, you type a question and get an answer in seconds.
+Ask AI is a ChatGPT-like conversational interface built into ProductBridge. Ask natural language questions about your feedback, themes, roadmap, user segments, and knowledge base — and get instant, data-backed answers with rich visualizations.
 
-Ask AI understands context, handles follow-up questions, and can summarize, compare, and quantify feedback across any dimension.
+Ask AI understands context, handles follow-up questions, and can autonomously call up to 9 specialized tools to find the information you need.
 
-## How to Use Ask AI
+## Getting Started
 
 <Steps>
   <Step title="Open Ask AI" icon="sparkles">
-    Navigate to your project and click **Ask AI** in the sidebar, or use the keyboard shortcut `Cmd+K` (Mac) / `Ctrl+K` (Windows).
+    Click **Ask AI** in the sidebar to open the full-page conversational interface. Your conversation history is saved automatically — you can return to any thread at any time.
   </Step>
-  <Step title="Type Your Question" icon="message-square">
-    Enter a question in natural language. For example:
-
-    - "What are the top 5 feature requests this month?"
-    - "How has sentiment around onboarding changed over the last 90 days?"
-    - "Which customer segment submits the most negative feedback?"
-    - "Summarize all feedback related to mobile performance"
+  <Step title="Ask a Question" icon="message-square">
+    Type a question in natural language. Ask AI determines which tools to use and returns structured answers with supporting data, feedback cards, charts, and links.
   </Step>
-  <Step title="Review the Answer" icon="check">
-    Ask AI returns a structured answer with supporting data — charts, feedback excerpts, and links to the original items. You can drill down into any result or ask a follow-up question to refine your query.
+  <Step title="Drill Deeper" icon="layers">
+    Ask follow-up questions in the same thread. Ask AI retains context from previous messages, so you can refine, compare, and dig into specifics without restating your query.
   </Step>
 </Steps>
+
+## Available Tools
+
+Ask AI has access to 9 specialized tools it calls automatically based on your question:
+
+### Search Feedback
+
+Search and filter feedback posts using semantic search and advanced filters.
+
+<Callout kind="tip">
+  You can combine natural language queries with filters. For example: "Show me Intercom feedback about pricing from the last 30 days, sorted by top votes."
+</Callout>
+
+**What you can ask:**
+- "What feedback came in last week?"
+- "Show me all bug reports from Intercom"
+- "Top voted feature requests this quarter"
+- "Feedback about onboarding from enterprise users"
+
+**Filters available:** time range, status, board, source (Intercom, Slack, Jira, etc.), source type (manual or integration), user segment
+
+**Sorting:** relevance, newest, oldest, top upvotes, top discussions
+
+### Analyze Themes
+
+AI-powered theme extraction that identifies patterns, pain points, and trends across your feedback.
+
+**What you can ask:**
+- "What are users complaining about this month?"
+- "Top themes from Intercom conversations"
+- "Compare themes in Q1 vs Q2"
+- "What patterns do you see in negative feedback?"
+
+Returns theme names, mention counts, descriptions, and a summary of the overall analysis.
+
+### Check Roadmap
+
+Search your product roadmap to check if features are planned, in progress, or completed.
+
+**What you can ask:**
+- "Is dark mode on the roadmap?"
+- "What features are currently in progress?"
+- "When is the API v2 shipping?"
+
+Returns roadmap items with title, status, description, and ETA.
+
+### Search Knowledge Base
+
+RAG-powered search over your uploaded documents — PDFs, guides, internal docs, and help articles.
+
+**What you can ask:**
+- "What does our API rate limit policy say?"
+- "How do I configure SSO according to our docs?"
+- "What's in the onboarding guide?"
+
+Returns an AI-generated answer with source citations (filename, page number, relevance score).
+
+### Get Feedback Stats
+
+Aggregate statistics and metrics about your feedback volume, distribution, and trends.
+
+**What you can ask:**
+- "Give me an overview of feedback this month"
+- "How much feedback did we receive in the last 7 days?"
+- "Breakdown by status and board"
+
+Returns total counts, 7-day and 30-day volumes, breakdowns by status, board, and source, plus top-voted posts.
+
+### Find Similar Posts
+
+Find duplicate or related feedback posts for a specific item.
+
+**What you can ask:**
+- "Find posts similar to this one: [post ID]"
+- "Are there duplicates of the dark mode request?"
+
+Returns related posts ranked by similarity score.
+
+### Get Post Details
+
+Get full details about a specific feedback post including vote count, comments, status, board, and timestamps.
+
+### List User Segments
+
+Browse all available user segments (e.g., "Enterprise", "Pro Plan", "Trial Users") with their descriptions and matched user counts.
+
+**What you can ask:**
+- "What user segments do we have?"
+- "Show me the enterprise segment"
+
+<Callout kind="info">
+  Ask AI calls this tool automatically before filtering other tools by segment. When you ask "What are enterprise users saying?", it first finds the segment, then searches feedback filtered to that segment.
+</Callout>
+
+### Get Segment Users
+
+View the actual users within a segment — their names, emails, companies, and how much feedback each has submitted.
+
+**What you can ask:**
+- "Who are the users in the Pro Plan segment?"
+- "Show me enterprise users with the most feedback"
 
 ## Example Queries
 
 <Tabs>
-  <Tab title="Trend Analysis" icon="trending-up">
-    **Question:** "What topics are trending up this quarter compared to last?"
+  <Tab title="Feedback Search" icon="search">
+    **"Show me the top 10 most-voted feature requests from this month"**
 
-    Ask AI compares category volumes across time periods and highlights topics with significant growth. You see both the percentage change and representative feedback items for each trend.
+    Ask AI calls `search_feedback` with a 30-day time range, sorted by top upvotes. Returns feedback cards with vote counts, statuses, and board names — each clickable to view the full post.
   </Tab>
-  <Tab title="Segment Comparison" icon="users">
-    **Question:** "How does feedback from enterprise customers differ from SMB customers?"
+  <Tab title="Theme Analysis" icon="bar-chart-3">
+    **"What are the main pain points users reported via Intercom in the last 90 days?"**
 
-    Ask AI breaks down feedback by customer segment, comparing top categories, average sentiment, and volume. This helps you prioritize features for your most valuable segments.
+    Ask AI calls `analyze_themes` filtered to Intercom source with a 90-day range. Returns a list of themes with mention counts, progress bars, and a written summary of the key patterns.
   </Tab>
-  <Tab title="Impact Assessment" icon="target">
-    **Question:** "Which open feature requests would impact the most users?"
+  <Tab title="Segment Analysis" icon="users">
+    **"How does feedback from enterprise users compare to trial users?"**
 
-    Ask AI ranks feature requests by the number of unique users who mentioned or voted for them, weighted by recency. Use this to make data-driven prioritization decisions.
+    Ask AI calls `list_user_segments` to find both segments, then runs `search_feedback` and `analyze_themes` for each. Returns a side-by-side comparison of themes, volume, and sentiment.
+  </Tab>
+  <Tab title="Multi-Step Query" icon="layers">
+    **"Is dark mode on the roadmap? If not, how many people are requesting it?"**
+
+    Ask AI first calls `check_roadmap` to search for dark mode. If not found, it calls `search_feedback` to find related feedback and `get_feedback_stats` to quantify demand. Returns a combined answer with roadmap status and user demand data.
   </Tab>
 </Tabs>
 
-## Tips for Better Results
+## Conversation Management
 
-<Callout kind="tip">
-  Be specific with time ranges and segments for more precise answers. "Feedback about pricing from enterprise users in the last 30 days" returns sharper results than "what do people think about pricing?"
+Ask AI saves your conversations as threads, just like ChatGPT:
+
+- **Create threads** — Each new conversation starts a fresh thread with an auto-generated title
+- **Switch threads** — Browse your conversation history in the sidebar and click to resume any thread
+- **Rename threads** — Edit the thread title to organize your research
+- **Archive threads** — Move old threads to the archive to keep your sidebar clean
+- **Delete threads** — Permanently remove threads you no longer need
+
+<Callout kind="info">
+  Thread titles are generated automatically by AI based on your first message. You can rename them anytime by clicking the thread title.
 </Callout>
 
-- **Use time frames** — "this month", "last quarter", "since January" help scope your query
-- **Name categories** — reference specific topics like "onboarding", "billing", or "API" for focused answers
-- **Ask follow-ups** — Ask AI retains context, so you can drill deeper with "break that down by plan tier" or "show me examples"
-- **Request formats** — Ask for "a summary", "a list", "a comparison", or "a chart" to control the output style
+## Tips for Better Results
+
+- **Be specific with time ranges** — "last 7 days", "this quarter", "between January and March" help scope your query precisely
+- **Name your sources** — "from Intercom", "via Slack", "Zendesk tickets" let Ask AI filter by integration source
+- **Reference segments** — "from enterprise users" or "Pro Plan customers" triggers segment-aware analysis
+- **Ask follow-ups** — Ask AI retains full context within a thread, so you can drill deeper with "break that down by board" or "show me examples"
+- **Try multi-step questions** — Ask AI can chain up to 10 tool calls per message, so complex questions like "Find the top theme, then show me the roadmap status for it" work naturally
+
+<Callout kind="tip">
+  Ask AI uses a low-temperature model (0.1) for focused, deterministic responses. It only states facts from your actual data — no hallucinated statistics or invented feedback.
+</Callout>
