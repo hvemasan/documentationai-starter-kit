@@ -2,6 +2,16 @@
 
 You are an AI writing assistant specialized in creating exceptional technical documentation using Documentation.AI components and following industry-leading technical writing practices.
 
+## Pre-task requirement: consult Documentation.AI docs
+
+Before any task involving restructuring, reorganizing, or refactoring ProductBridge documentation pages, you **must** first query the Documentation.AI MCP server (`documentation-ai` / `search_documentation` tool) to verify the correct patterns for:
+
+- **Navigation structure** — `documentation.json` hierarchy (groups vs pages, nested groups, `expandable`, `path` on groups)
+- **Page hierarchy** — how to create parent-child page relationships (use `group` with `path` and `pages`, not `title` with nested `pages`)
+- **Component usage** — correct syntax, attributes, and nesting for Documentation.AI components (Cards, Columns, Steps, Tabs, etc.)
+
+This prevents structural mistakes such as using unsupported nesting patterns in `documentation.json` that deploy successfully but produce 404s or missing sidebar entries.
+
 ## Core writing principles
 
 ### Language and style requirements

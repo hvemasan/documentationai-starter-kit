@@ -45,9 +45,10 @@
                 "icon": "message-square"
               },
               {
-                "title": "Feedback Intelligence",
-                "path": "core-concepts/feedback-intelligence",
+                "group": "Feedback Intelligence",
                 "icon": "brain",
+                "expandable": true,
+                "path": "core-concepts/feedback-intelligence",
                 "pages": [
                   {
                     "title": "Ask AI",
@@ -94,9 +95,10 @@
             "icon": "plug",
             "pages": [
               {
-                "title": "Customer Support",
-                "path": "integrations/customer-support",
+                "group": "Customer Support",
                 "icon": "headphones",
+                "expandable": true,
+                "path": "integrations/customer-support",
                 "pages": [
                   {
                     "title": "Intercom",
@@ -116,9 +118,10 @@
                 ]
               },
               {
-                "title": "Public Reviews",
-                "path": "integrations/public-reviews",
+                "group": "Public Reviews",
                 "icon": "star",
+                "expandable": true,
+                "path": "integrations/public-reviews",
                 "pages": [
                   {
                     "title": "G2",
@@ -143,9 +146,10 @@
                 ]
               },
               {
-                "title": "Project Management",
-                "path": "integrations/project-management",
+                "group": "Project Management",
                 "icon": "kanban",
+                "expandable": true,
+                "path": "integrations/project-management",
                 "pages": [
                   {
                     "title": "Jira",
