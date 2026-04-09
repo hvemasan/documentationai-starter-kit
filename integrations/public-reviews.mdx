@@ -1,0 +1,85 @@
+---
+title: Public Reviews Integrations
+description: Connect ProductBridge to review platforms like G2, Capterra, App Store, and Play Store to import and analyze public user reviews alongside your feedback.
+---
+
+## Bring Public Reviews into Your Feedback Loop
+
+Public reviews on platforms like G2, Capterra, and app stores contain valuable product insights — but they are often siloed from your internal feedback. ProductBridge integrates with major review platforms to import reviews automatically, so you can analyze them alongside all your other feedback in one place.
+
+## Supported Platforms
+
+<Columns cols={2}>
+  <Card title="G2" icon="star" href="#g2">
+    Import reviews from your G2 product profile automatically.
+  </Card>
+  <Card title="Capterra" icon="star" href="#capterra">
+    Sync reviews from your Capterra listing into ProductBridge.
+  </Card>
+  <Card title="App Store" icon="smartphone" href="#app-store-and-play-store">
+    Import iOS app reviews from the Apple App Store.
+  </Card>
+  <Card title="Play Store" icon="smartphone" href="#app-store-and-play-store">
+    Import Android app reviews from the Google Play Store.
+  </Card>
+</Columns>
+
+## G2
+
+Import reviews from your G2 product listing and analyze them with Feedback Intelligence.
+
+<Steps>
+  <Step title="Connect G2" icon="link">
+    Navigate to **Settings > Integrations > G2** and enter your G2 product URL or API credentials. ProductBridge pulls your public reviews automatically.
+  </Step>
+  <Step title="Configure Sync" icon="settings">
+    Choose the sync frequency (daily or weekly) and whether to import historical reviews or only new ones going forward.
+  </Step>
+</Steps>
+
+Each imported G2 review includes the star rating, review title, pros, cons, and reviewer segment — all mapped to ProductBridge fields for analysis.
+
+## Capterra
+
+<Steps>
+  <Step title="Connect Capterra" icon="link">
+    Navigate to **Settings > Integrations > Capterra** and provide your Capterra listing URL. ProductBridge scrapes and imports your public reviews.
+  </Step>
+  <Step title="Review Imported Data" icon="eye">
+    Imported reviews appear in your feedback inbox tagged with "Capterra" as the source. Star ratings are converted to sentiment scores automatically.
+  </Step>
+</Steps>
+
+## App Store and Play Store
+
+Import mobile app reviews from Apple App Store and Google Play Store.
+
+<Tabs>
+  <Tab title="App Store" icon="smartphone">
+    Navigate to **Settings > Integrations > App Store** and enter your app's App Store ID. ProductBridge connects via the App Store Connect API and imports reviews daily.
+
+    <Callout kind="info">
+      You need an App Store Connect API key with read access to Customer Reviews. Generate one at [App Store Connect](https://appstoreconnect.apple.com).
+    </Callout>
+  </Tab>
+  <Tab title="Play Store" icon="smartphone">
+    Navigate to **Settings > Integrations > Play Store** and enter your app's package name. ProductBridge connects via the Google Play Developer API and imports reviews daily.
+
+    <Callout kind="info">
+      You need a Google Play Developer API service account with access to the Reviews API. Set this up in the [Google Cloud Console](https://console.cloud.google.com).
+    </Callout>
+  </Tab>
+</Tabs>
+
+## Analyzing Public Reviews
+
+Once imported, public reviews are processed by [Feedback Intelligence](/core-concepts/feedback-intelligence) just like any other feedback:
+
+- **Sentiment analysis** — Star ratings are supplemented with AI-generated sentiment from the review text
+- **Categorization** — Reviews are tagged with topics (Performance, UI/UX, Pricing, etc.)
+- **Trend detection** — Spot changes in review sentiment or recurring themes over time
+- **Cross-channel comparison** — Compare what users say publicly on G2 versus what they report through your portal or support channels
+
+<Callout kind="tip">
+  Use the Intelligence Dashboard to compare sentiment across public reviews and private feedback. Discrepancies often reveal issues users share publicly but not through support — or vice versa.
+</Callout>

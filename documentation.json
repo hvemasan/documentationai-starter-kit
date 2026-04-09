@@ -24,7 +24,12 @@
                 "icon": "home"
               },
               {
-                "title": "Quickstart",
+                "title": "Core Concepts",
+                "path": "core-concepts",
+                "icon": "layers"
+              },
+              {
+                "title": "Quick Start",
                 "path": "quickstart",
                 "icon": "zap"
               }
@@ -35,9 +40,52 @@
             "icon": "layers",
             "pages": [
               {
-                "title": "Features",
-                "path": "features",
-                "icon": "file-text"
+                "title": "Feedback Collection",
+                "path": "core-concepts/feedback-collection",
+                "icon": "message-square"
+              },
+              {
+                "title": "Feedback Intelligence",
+                "path": "core-concepts/feedback-intelligence",
+                "icon": "brain",
+                "pages": [
+                  {
+                    "title": "Ask AI",
+                    "path": "core-concepts/feedback-intelligence/ask-ai",
+                    "icon": "sparkles"
+                  },
+                  {
+                    "title": "Intelligence Dashboard",
+                    "path": "core-concepts/feedback-intelligence/dashboard",
+                    "icon": "bar-chart-3"
+                  }
+                ]
+              },
+              {
+                "title": "Product Roadmap",
+                "path": "core-concepts/product-roadmap",
+                "icon": "map"
+              },
+              {
+                "title": "Changelog",
+                "path": "core-concepts/changelog",
+                "icon": "megaphone"
+              }
+            ]
+          },
+          {
+            "group": "Platform Features",
+            "icon": "box",
+            "pages": [
+              {
+                "title": "Knowledgebase",
+                "path": "platform-features/knowledgebase",
+                "icon": "book-open"
+              },
+              {
+                "title": "Users",
+                "path": "platform-features/users",
+                "icon": "users"
               }
             ]
           },
@@ -46,19 +94,36 @@
             "icon": "plug",
             "pages": [
               {
-                "title": "Overview",
-                "path": "integrations",
-                "icon": "plug"
+                "title": "Customer Support",
+                "path": "integrations/customer-support",
+                "icon": "headphones"
               },
               {
-                "title": "Jira",
-                "path": "integrations/jira",
-                "icon": "ticket"
+                "title": "Public Reviews",
+                "path": "integrations/public-reviews",
+                "icon": "star"
               },
               {
-                "title": "Linear",
-                "path": "integrations/linear",
-                "icon": "layout"
+                "title": "Project Management",
+                "path": "integrations/project-management",
+                "icon": "kanban",
+                "pages": [
+                  {
+                    "title": "Jira",
+                    "path": "integrations/jira",
+                    "icon": "ticket"
+                  },
+                  {
+                    "title": "Linear",
+                    "path": "integrations/linear",
+                    "icon": "layout"
+                  }
+                ]
+              },
+              {
+                "title": "Automations",
+                "path": "integrations/automations",
+                "icon": "workflow"
               }
             ]
           }

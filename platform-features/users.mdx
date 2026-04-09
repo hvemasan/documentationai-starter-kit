@@ -1,0 +1,93 @@
+---
+title: Users
+description: Learn how to manage users, roles, permissions, and team members in ProductBridge to control access and collaboration across your projects.
+---
+
+## Manage Your Team and Users
+
+ProductBridge provides user management tools to control who can access your projects, what they can do, and how they collaborate. You invite team members, assign roles with specific permissions, and manage user profiles — all from a single settings page.
+
+## Roles and Permissions
+
+ProductBridge uses role-based access control (RBAC) to manage what each team member can do:
+
+| Role | Permissions |
+|------|------------|
+| Owner | Full access to all settings, billing, and member management. Cannot be removed. |
+| Admin | Manage projects, integrations, and team members. Cannot modify billing. |
+| Editor | Create and edit feedback, roadmap items, changelog entries, and knowledgebase articles. |
+| Viewer | Read-only access to all project data. Cannot create or modify content. |
+
+<Callout kind="info">
+  Each project can have its own role assignments. A user can be an Admin on one project and a Viewer on another.
+</Callout>
+
+## Inviting Team Members
+
+<Steps>
+  <Step title="Open Team Settings" icon="users">
+    Navigate to **Settings > Team Members** in your workspace or project.
+  </Step>
+  <Step title="Send an Invitation" icon="mail">
+    Click **Invite Member**, enter their email address, and select a role. You can invite multiple people at once by entering comma-separated emails.
+  </Step>
+  <Step title="Manage Pending Invites" icon="clock">
+    Track pending invitations in the **Invitations** tab. Resend or revoke invitations as needed. Invitations expire after 7 days.
+  </Step>
+</Steps>
+
+<Callout kind="tip">
+  Use the **Bulk Invite** option to add your entire team at once. Upload a CSV file with email addresses and role assignments.
+</Callout>
+
+## User Profiles
+
+Every user has a profile that includes:
+
+- **Display name and avatar** — Shown across all project activity
+- **Email address** — Used for login and notifications
+- **Timezone** — Ensures timestamps and scheduled actions display correctly
+- **Notification preferences** — Control which events trigger email or in-app notifications
+
+Users manage their own profiles from **Account Settings > Profile**. Admins and Owners can view (but not edit) other members' profiles.
+
+## End-User Identification
+
+ProductBridge also tracks the end users who submit feedback through your portals and widgets. These are separate from team members:
+
+- **Identified users** — Logged-in users whose email or user ID is passed via the widget or API. Their feedback is linked to a persistent profile.
+- **Anonymous users** — Visitors who submit feedback without identification. Their submissions are tracked by session but not linked to a profile.
+
+<Tabs>
+  <Tab title="Widget Identification" icon="code">
+    Pass user identity to the feedback widget:
+
+    ```html
+    <script
+      src="https://widget.productbridge.com/v1/widget.js"
+      data-project="YOUR_PROJECT_ID"
+      data-user-email="user@example.com"
+      data-user-name="Jane Doe"
+      data-user-id="usr_12345"
+      async>
+    </script>
+    ```
+  </Tab>
+  <Tab title="API Identification" icon="terminal">
+    Include user context in API submissions:
+
+    ```json
+    {
+      "feedback": "I'd love a dark mode option",
+      "user": {
+        "email": "user@example.com",
+        "name": "Jane Doe",
+        "id": "usr_12345",
+        "plan": "enterprise"
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+Identified users can be segmented and filtered in [Feedback Intelligence](/core-concepts/feedback-intelligence) to analyze feedback by customer tier, plan, or any custom attribute you provide.

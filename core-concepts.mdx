@@ -1,0 +1,67 @@
+---
+title: Core Concepts
+description: Understand the four pillars of ProductBridge — Feedback Collection, Feedback Intelligence, Product Roadmap, and Changelog — and how they work together to drive product decisions.
+---
+
+## The Four Pillars of ProductBridge
+
+ProductBridge is built around four interconnected pillars that form a complete product management workflow. Each pillar handles a specific stage of the feedback-to-feature lifecycle, and together they give you a continuous loop from user input to product output.
+
+```mermaid
+graph LR
+    A[Feedback Collection] --> B[Feedback Intelligence]
+    B --> C[Product Roadmap]
+    C --> D[Changelog]
+    D -->|Informs users| A
+```
+
+## Feedback Collection
+
+Feedback Collection is your single inbox for every piece of user input. ProductBridge gathers feedback from a public portal, in-app widgets, and automatic ingestion from third-party tools — so nothing falls through the cracks.
+
+You stop juggling spreadsheets, emails, and Slack threads. Every request, complaint, and suggestion lives in one place, tagged and searchable.
+
+<Card title="Feedback Collection" icon="message-square" href="/core-concepts/feedback-collection">
+  Learn about the three feedback channels: Public Portal, In-App Widgets, and Auto-Ingestion.
+</Card>
+
+## Feedback Intelligence
+
+Raw feedback is only useful if you can make sense of it. Feedback Intelligence uses AI to automatically categorize feedback, detect sentiment, identify trends, and surface patterns you would otherwise miss.
+
+You can also ask natural language questions about your data and get instant, actionable answers.
+
+<Columns cols={2}>
+  <Card title="Ask AI" icon="sparkles" href="/core-concepts/feedback-intelligence/ask-ai">
+    Ask questions about your feedback in plain English and get AI-powered answers.
+  </Card>
+  <Card title="Intelligence Dashboard" icon="bar-chart-3" href="/core-concepts/feedback-intelligence/dashboard">
+    Explore trends, sentiment analysis, and categorization across all your feedback.
+  </Card>
+</Columns>
+
+## Product Roadmap
+
+The Product Roadmap turns insights into plans. Link feedback directly to roadmap items so every feature you build is backed by real user demand. Share your roadmap publicly to build trust, or keep it internal for team alignment.
+
+Prioritize with confidence — you always know which features matter most to your users.
+
+<Card title="Product Roadmap" icon="map" href="/core-concepts/product-roadmap">
+  Learn how to plan, prioritize, and share your product roadmap.
+</Card>
+
+## Changelog
+
+The Changelog closes the loop between you and your users. Publish product updates, announce new features, and document fixes so your users always know what is new and what is coming.
+
+A transparent changelog builds trust and reduces support volume by proactively answering "when will this be fixed?"
+
+<Card title="Changelog" icon="megaphone" href="/core-concepts/changelog">
+  Learn how to publish product updates and release notes.
+</Card>
+
+## How the Pillars Work Together
+
+<Callout kind="info">
+  The four pillars are not isolated features — they form a continuous cycle. Feedback flows into Intelligence, which informs your Roadmap, which gets communicated through the Changelog, which drives new feedback. This loop ensures your product decisions are always grounded in what users actually need.
+</Callout>

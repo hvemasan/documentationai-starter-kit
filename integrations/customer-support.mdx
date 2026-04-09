@@ -1,0 +1,97 @@
+---
+title: Customer Support Integrations
+description: Connect ProductBridge to customer support tools like Intercom, Zendesk, and Freshdesk to automatically import feedback from support conversations.
+---
+
+## Capture Feedback from Support Channels
+
+Your support team talks to users every day — and those conversations are full of product feedback. ProductBridge integrates with popular customer support platforms to automatically extract and import feedback from support tickets and conversations, so nothing gets lost.
+
+## Supported Platforms
+
+<Columns cols={3}>
+  <Card title="Intercom" icon="message-circle" href="#intercom">
+    Import feedback from Intercom conversations and notes automatically.
+  </Card>
+  <Card title="Zendesk" icon="headphones" href="#zendesk">
+    Pull feedback from Zendesk tickets based on tags or custom fields.
+  </Card>
+  <Card title="Freshdesk" icon="inbox" href="#freshdesk">
+    Sync feedback from Freshdesk tickets filtered by category or priority.
+  </Card>
+</Columns>
+
+## Intercom
+
+Connect your Intercom workspace to ProductBridge and import feedback from conversations automatically.
+
+<Steps>
+  <Step title="Connect Intercom" icon="link">
+    Navigate to **Settings > Integrations > Intercom** and click **Connect**. Authorize ProductBridge to access your Intercom workspace via OAuth.
+  </Step>
+  <Step title="Configure Import Rules" icon="settings">
+    Choose how feedback gets imported:
+
+    - **Tagged conversations** — Import conversations tagged with a specific label (e.g., "feedback", "feature-request")
+    - **Notes** — Import internal notes that your agents tag as feedback
+    - **All conversations** — Let AI automatically detect and extract feedback from every conversation
+
+    <Callout kind="tip">
+      Start with tagged conversations to control the flow, then expand to AI-detected feedback once you are comfortable with the quality.
+    </Callout>
+  </Step>
+  <Step title="Map Fields" icon="columns">
+    Map Intercom fields to ProductBridge attributes. For example, map the Intercom user email to the ProductBridge user identity, and the conversation subject to the feedback title.
+  </Step>
+</Steps>
+
+## Zendesk
+
+Import feedback from Zendesk tickets based on tags, custom fields, or ticket types.
+
+<Steps>
+  <Step title="Connect Zendesk" icon="link">
+    Navigate to **Settings > Integrations > Zendesk** and enter your Zendesk subdomain. Authorize via API token or OAuth.
+  </Step>
+  <Step title="Set Up Filters" icon="filter">
+    Define which tickets get imported as feedback:
+
+    | Filter Type | Example |
+    |------------|---------|
+    | Tags | Tickets tagged "feedback" or "feature-request" |
+    | Custom Field | Tickets where "Type" equals "Feature Request" |
+    | Priority | Only high and urgent priority tickets |
+  </Step>
+  <Step title="Enable Sync" icon="refresh-cw">
+    Toggle on continuous sync. New matching tickets are imported within minutes. Existing tickets matching your filters are backfilled on first sync.
+  </Step>
+</Steps>
+
+## Freshdesk
+
+Connect Freshdesk to import feedback from support tickets automatically.
+
+<Steps>
+  <Step title="Connect Freshdesk" icon="link">
+    Navigate to **Settings > Integrations > Freshdesk** and enter your Freshdesk domain and API key.
+  </Step>
+  <Step title="Configure Filters" icon="filter">
+    Choose which tickets to import based on category, tags, or custom fields. Freshdesk groups and companies are mapped to ProductBridge user segments automatically.
+  </Step>
+  <Step title="Start Importing" icon="play">
+    Enable the integration and ProductBridge begins importing matching tickets. Historical data is backfilled based on your configured time range.
+  </Step>
+</Steps>
+
+## How Imported Feedback Works
+
+All feedback imported from support tools is:
+
+- **Tagged with its source** — You always know where feedback came from (e.g., "via Intercom", "via Zendesk")
+- **Linked to a user** — If the support ticket has a user email, ProductBridge matches it to an existing user profile or creates a new one
+- **Deduplicated** — If the same user submits similar feedback across multiple channels, ProductBridge groups them together
+- **Available in Intelligence** — Imported feedback flows into [Feedback Intelligence](/core-concepts/feedback-intelligence) for automatic categorization and analysis
+
+<Callout kind="info">
+  Support integrations are one-way by default — feedback flows from support tools into ProductBridge. You can enable bidirectional sync to push status updates back to the support platform when a linked roadmap item ships.
+</Callout>

@@ -1,0 +1,76 @@
+---
+title: Knowledgebase
+description: Learn how to use the ProductBridge Knowledgebase to create help articles, FAQs, and self-serve support content that reduces ticket volume.
+---
+
+## Self-Serve Support for Your Users
+
+The Knowledgebase in ProductBridge is a built-in help center where you publish articles, FAQs, and guides. Users find answers on their own, reducing support ticket volume and freeing your team to focus on complex issues.
+
+Your knowledgebase is searchable, categorizable, and accessible from your public portal or embedded directly inside your product.
+
+## Creating Articles
+
+<Steps>
+  <Step title="Open the Knowledgebase" icon="book-open">
+    Navigate to the **Knowledgebase** tab in your project. You see all published and draft articles organized by category.
+  </Step>
+  <Step title="Create a New Article" icon="plus">
+    Click **New Article**, enter a title, and select a category (e.g., Getting Started, Billing, Troubleshooting). Write your content using the rich text editor — markdown, images, videos, and code blocks are all supported.
+  </Step>
+  <Step title="Publish or Save as Draft" icon="send">
+    Click **Publish** to make the article live, or **Save Draft** to continue editing later. Published articles appear immediately on your public knowledgebase page.
+  </Step>
+</Steps>
+
+## Organizing Content
+
+Structure your knowledgebase with categories and subcategories so users find what they need quickly:
+
+| Category | Example Articles |
+|----------|-----------------|
+| Getting Started | Account setup, First project, Inviting team members |
+| Billing | Subscription plans, Payment methods, Invoices |
+| Integrations | Connecting Intercom, Setting up Slack, Jira sync |
+| Troubleshooting | Login issues, Widget not loading, API errors |
+
+<Callout kind="tip">
+  Pin high-traffic articles to the top of their category. Navigate to the article settings and toggle **Pin to Top** to keep it visible.
+</Callout>
+
+## Search and Discovery
+
+The knowledgebase includes full-text search powered by AI. Users type a question in natural language and get relevant articles ranked by relevance — not just keyword matching.
+
+Search results include:
+- **Article snippets** with the matching section highlighted
+- **Related articles** suggested alongside the primary result
+- **Feedback prompt** asking "Was this helpful?" to continuously improve content quality
+
+## Embedding in Your Product
+
+You can embed the knowledgebase directly inside your application using the ProductBridge widget:
+
+```html
+<script
+  src="https://widget.productbridge.com/v1/kb.js"
+  data-project="YOUR_PROJECT_ID"
+  data-mode="knowledgebase"
+  async>
+</script>
+```
+
+The embedded knowledgebase opens as a panel inside your app, keeping users in context while they find answers.
+
+<Callout kind="info">
+  The knowledgebase widget shares the same configuration as the feedback widget. If you already have the feedback widget installed, you can enable the knowledgebase tab from **Project Settings > Widget > Tabs**.
+</Callout>
+
+## Analytics
+
+Track how your knowledgebase performs:
+
+- **Article views** — See which articles get the most traffic
+- **Search queries** — Identify what users search for but cannot find (content gap detection)
+- **Helpfulness ratings** — Monitor "Was this helpful?" feedback to improve underperforming articles
+- **Deflection rate** — Measure how many users found their answer without opening a support ticket
