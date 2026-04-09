@@ -9,84 +9,24 @@ ProductBridge centralizes feedback from every channel into a single, searchable 
 
 You configure the channels that fit your workflow, and ProductBridge handles the rest.
 
-## Public Portal
+## Collection Channels
 
-The Public Portal is a dedicated, branded page where anyone can submit feedback, vote on existing requests, and leave comments.
-
-<Steps>
-  <Step title="Activate the Portal" icon="globe">
-    Navigate to **Project Settings > Feedback Channels > Public Portal** and click **Enable**.
-
-    ProductBridge generates a unique URL like `https://feedback.productbridge.com/your-project`.
-  </Step>
-  <Step title="Customize the Portal" icon="palette">
-    Add your logo, brand colors, and a welcome message. Configure categories so users can tag their feedback (e.g., Bug, Feature Request, Improvement).
-  </Step>
-  <Step title="Share with Users" icon="share-2">
-    Embed the link in your app, website footer, or email signatures. Users can submit feedback without creating an account.
-  </Step>
-</Steps>
-
-<Callout kind="tip">
-  Enable voting on the portal to let your community prioritize requests organically. The most-requested features rise to the top automatically.
-</Callout>
-
-## In-App Widgets
-
-In-App Widgets let users submit feedback without leaving your product. A lightweight widget appears as a floating button or embedded panel inside your application.
-
-<Tabs>
-  <Tab title="Script Tag" icon="code">
-    Add a single script tag to your HTML:
-
-    ```html
-    <script
-      src="https://widget.productbridge.com/v1/widget.js"
-      data-project="YOUR_PROJECT_ID"
-      data-position="bottom-right"
-      async>
-    </script>
-    ```
-  </Tab>
-  <Tab title="React Component" icon="component">
-    Use the React SDK for tighter integration:
-
-    ```jsx
-    import { FeedbackWidget } from '@productbridge/react';
-
-    function App() {
-      return (
-        <FeedbackWidget
-          projectId="YOUR_PROJECT_ID"
-          position="bottom-right"
-          user={{ email: currentUser.email }}
-        />
-      );
-    }
-    ```
-  </Tab>
-</Tabs>
-
-The widget automatically attaches user context (browser, page URL, user identity) to each submission so you get richer feedback without asking users to fill out extra fields.
-
-## Auto-Ingestion
-
-Auto-Ingestion connects ProductBridge to tools your team already uses and imports feedback automatically. Supported sources include:
-
-| Source | What Gets Imported |
-|--------|-------------------|
-| Intercom | Conversation excerpts tagged as feedback |
-| Slack | Messages from designated feedback channels |
-| Zendesk | Tickets tagged with a feedback label |
-| Jira | Issues matching specific filters or labels |
-| Email | Forwarded emails to your project inbox |
-
-<Callout kind="info">
-  Auto-Ingestion runs continuously. New feedback from connected tools appears in your inbox within minutes, deduplicated and tagged with its source.
-</Callout>
-
-Configure ingestion rules in **Project Settings > Integrations** to control which messages get imported and how they are categorized.
+<Columns cols={3}>
+  <Card title="Public Portal" icon="globe" href="/core-concepts/feedback-collection/public-portal">
+    A branded, public-facing page where users submit feedback, vote on requests, and leave comments — no account required.
+  </Card>
+  <Card title="Integrations" icon="plug" href="/core-concepts/feedback-collection/integrations">
+    Automatically import feedback from third-party tools like Intercom, Slack, Zendesk, and more.
+  </Card>
+  <Card title="Widgets" icon="code" href="/core-concepts/feedback-collection/widgets">
+    Embed feedback widgets directly inside your website or application with multiple layout options.
+  </Card>
+</Columns>
 
 ## What Happens Next
 
-Once feedback is collected, ProductBridge passes it to [Feedback Intelligence](/core-concepts/feedback-intelligence) for automated analysis. Every item is categorized, scored for sentiment, and linked to emerging trends — so you can move from raw input to actionable insight without manual triage.
+Once feedback is collected from any channel, ProductBridge passes it to [Feedback Intelligence](/core-concepts/feedback-intelligence) for automated analysis. Every item is categorized, scored for sentiment, and linked to emerging trends — so you can move from raw input to actionable insight without manual triage.
+
+<Callout kind="info">
+  All feedback sources flow into the same unified inbox. You can filter by source, category, sentiment, or user segment to focus on what matters most.
+</Callout>

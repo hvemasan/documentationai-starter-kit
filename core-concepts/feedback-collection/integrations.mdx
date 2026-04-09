@@ -1,0 +1,85 @@
+---
+title: Collecting Feedback from Integrations
+description: Learn how ProductBridge automatically imports feedback from third-party tools like Intercom, Slack, Zendesk, Discord, and more through auto-ingestion.
+---
+
+## Import Feedback from the Tools You Already Use
+
+Your team and users communicate across many platforms — support tools, messaging apps, review sites, and project trackers. ProductBridge connects to these tools and automatically imports feedback so you do not have to copy and paste between systems.
+
+Auto-ingestion runs continuously. New feedback from connected tools appears in your inbox within minutes, deduplicated and tagged with its source.
+
+## Supported Integrations
+
+<Columns cols={3}>
+  <Card title="Intercom" icon="message-circle" href="/integrations/communication-channels/intercom">
+    Import conversations and notes tagged as feedback.
+  </Card>
+  <Card title="Slack" icon="hash" href="/integrations/communication-channels/slack">
+    Collect feedback from designated Slack channels.
+  </Card>
+  <Card title="Zendesk" icon="headphones" href="/integrations/communication-channels/zendesk">
+    Import tickets tagged with feedback labels.
+  </Card>
+  <Card title="Discord" icon="message-square" href="/integrations/communication-channels/discord">
+    Capture feedback from Discord server channels.
+  </Card>
+  <Card title="Freshdesk" icon="inbox" href="/integrations/communication-channels/freshdesk">
+    Import tickets filtered by category or priority.
+  </Card>
+</Columns>
+
+### Review Platforms
+
+<Columns cols={3}>
+  <Card title="G2" icon="star" href="/integrations/public-reviews/g2">
+    Import reviews from your G2 product profile.
+  </Card>
+  <Card title="Capterra" icon="award" href="/integrations/public-reviews/capterra">
+    Sync reviews from your Capterra listing.
+  </Card>
+  <Card title="TrustPilot" icon="shield-check" href="/integrations/public-reviews/trustpilot">
+    Import reviews from your TrustPilot business profile.
+  </Card>
+  <Card title="AppSumo" icon="shopping-bag" href="/integrations/public-reviews/appsumo">
+    Import reviews from your AppSumo listing.
+  </Card>
+  <Card title="App Store" icon="smartphone" href="/integrations/public-reviews/app-store">
+    Import iOS app reviews.
+  </Card>
+  <Card title="Play Store" icon="smartphone" href="/integrations/public-reviews/play-store">
+    Import Android app reviews.
+  </Card>
+</Columns>
+
+## How Auto-Ingestion Works
+
+<Steps>
+  <Step title="Connect a tool" icon="plug">
+    Navigate to **Settings > Integrations** and connect the tools you want to import feedback from. Each integration has its own setup guide with authentication and configuration steps.
+  </Step>
+  <Step title="Configure import rules" icon="filter">
+    Define which messages, tickets, or reviews get imported as feedback. Use tags, categories, channels, or AI-based detection to control the flow.
+  </Step>
+  <Step title="Feedback flows in automatically" icon="inbox">
+    Once configured, feedback is imported continuously. Each item is tagged with its source (e.g., "via Intercom", "via G2") and linked to a user profile when possible.
+  </Step>
+</Steps>
+
+## What Gets Imported
+
+| Data | Description |
+|------|-------------|
+| Feedback content | The message, ticket body, or review text |
+| Source tag | Which tool the feedback came from |
+| User identity | Email, name, or profile linked when available |
+| Metadata | Timestamps, star ratings, tags, or categories from the source |
+
+<Callout kind="info">
+  All imported feedback is deduplicated automatically. If the same user submits similar feedback across multiple channels, ProductBridge groups them together so you see consolidated demand, not noise.
+</Callout>
+
+## Next Steps
+
+- Browse the full list of available integrations under [Integrations](/integrations/communication-channels)
+- Learn how imported feedback is analyzed by [Feedback Intelligence](/core-concepts/feedback-intelligence)

@@ -40,9 +40,27 @@
             "icon": "layers",
             "pages": [
               {
-                "title": "Feedback Collection",
+                "group": "Feedback Collection",
+                "icon": "message-square",
+                "expandable": true,
                 "path": "core-concepts/feedback-collection",
-                "icon": "message-square"
+                "pages": [
+                  {
+                    "title": "Public Portal",
+                    "path": "core-concepts/feedback-collection/public-portal",
+                    "icon": "globe"
+                  },
+                  {
+                    "title": "Integrations",
+                    "path": "core-concepts/feedback-collection/integrations",
+                    "icon": "plug"
+                  },
+                  {
+                    "title": "Widgets",
+                    "path": "core-concepts/feedback-collection/widgets",
+                    "icon": "code"
+                  }
+                ]
               },
               {
                 "group": "Feedback Intelligence",
