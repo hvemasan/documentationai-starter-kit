@@ -304,5 +304,13 @@
       }
     ]
   },
-  "favicon": "https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1775803605932-s14fvpey7ie-productbridge-favicon.png?fm=auto&auto=compress%2Cformat"
+  "favicon": "https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1775803605932-s14fvpey7ie-productbridge-favicon.png?fm=auto&auto=compress%2Cformat",
+  "navbar": {
+    "actions": {
+      "primary": {
+        "title": "Get Started",
+        "link": ""
+      }
+    }
+  }
 }
