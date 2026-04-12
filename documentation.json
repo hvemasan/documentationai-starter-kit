@@ -141,12 +141,12 @@
                   {
                     "title": "Slack",
                     "path": "integrations/communication-channels/slack",
-                    "icon": "hash"
+                    "icon": "slack"
                   },
                   {
                     "title": "Discord",
                     "path": "integrations/communication-channels/discord",
-                    "icon": "message-square"
+                    "icon": "discord"
                   }
                 ]
               },
@@ -169,7 +169,7 @@
                   {
                     "title": "App Store",
                     "path": "integrations/public-reviews/app-store",
-                    "icon": "smartphone"
+                    "icon": "apple"
                   },
                   {
                     "title": "Play Store",
