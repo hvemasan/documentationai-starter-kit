@@ -1,94 +1,161 @@
 ---
 title: Intercom Integration
-description: Connect ProductBridge to Intercom to automatically import feedback from conversations, notes, and messages into your feedback inbox.
+description: Connect ProductBridge to Intercom to automatically capture feedback from support conversations and let your team submit feedback directly from the Intercom sidebar.
 ---
 
-<img src="https://cdn.simpleicons.org/intercom" width="80" height="80" alt="Intercom" />
+<img src="https://cdn.simpleicons.org/intercom/000000" width="80" height="80" alt="Intercom" />
 
 ## Overview
 
-The Intercom integration connects your Intercom workspace to ProductBridge so you can automatically import feedback from support conversations. Instead of manually copying insights from chat logs, ProductBridge extracts and categorizes feedback in real time.
+The Intercom integration connects your Intercom workspace to ProductBridge so you can capture product feedback at the moment it surfaces — without leaving Intercom. Once installed, the ProductBridge app appears inside Intercom as a sidebar app, and every closed conversation is analyzed by AI to extract feature requests, bug reports, and pain points automatically.
+
+There are two ways feedback flows from Intercom into ProductBridge:
+
+1. **Sidebar App** — Support agents create feedback posts directly from the Intercom conversation panel
+2. **Conversation Analysis** — When a conversation is closed, the entire conversation is sent to ProductBridge, analyzed by AI, and turned into a feedback post if it contains product input
 
 ## Prerequisites
 
 <Callout kind="info" title="Before you start">
-- An active Intercom workspace with admin or app management permissions
-- A ProductBridge project with at least one feedback channel enabled
-- OAuth authorization (ProductBridge handles this during setup)
+- An Intercom workspace with admin or app management permissions
+- A ProductBridge organization with at least one feedback board configured
+- Permission to install apps in your Intercom workspace
 </Callout>
 
 ## Connect Intercom
 
 <Steps>
-  <Step title="Open Integration Settings" icon="settings">
-    Navigate to **Settings > Integrations > Intercom** in your ProductBridge dashboard and click **Connect**.
-  </Step>
-  <Step title="Authorize Access" icon="shield">
-    You are redirected to Intercom's OAuth flow. Grant ProductBridge access to your workspace. ProductBridge only requests permissions for conversations, contacts, and tags.
+  <Step title="Open the Admin Dashboard" icon="layout-dashboard" title-type="p">
+    Sign in to your ProductBridge admin dashboard and navigate to **Settings > Integrations**.
 
-    <Callout kind="tip">
-      Use a service account rather than a personal account so the connection persists if team members leave.
+    <Image src="placeholder-admin-dashboard-integrations.png" width="900" height="500" alt="ProductBridge admin dashboard showing the Integrations settings page" />
+  </Step>
+
+  <Step title="Click on the Intercom Integration" icon="plug" title-type="p">
+    In the integrations list, find the Intercom card and click **Connect**. ProductBridge initiates the Intercom OAuth flow.
+
+    <Image src="placeholder-intercom-card-connect.png" width="900" height="500" alt="Integrations list with the Intercom integration card and Connect button highlighted" />
+  </Step>
+
+  <Step title="Authorize ProductBridge in Intercom" icon="shield" title-type="p">
+    You are redirected to Intercom's OAuth authorization page. Sign in to Intercom (if needed) and review the permissions ProductBridge requests — read access to conversations, contacts, and tags, plus permission to register webhooks.
+
+    Click **Authorize Access** to install the ProductBridge app into your Intercom workspace.
+
+    <Image src="placeholder-intercom-oauth-authorize.png" width="900" height="500" alt="Intercom OAuth authorization screen with ProductBridge app permissions" />
+
+    <Callout kind="tip" collapsed="false">
+      Use a service account rather than a personal Intercom account so the connection persists if team members leave.
     </Callout>
   </Step>
-  <Step title="Select Workspace" icon="building">
-    If you have multiple Intercom workspaces, choose the one you want to connect. You can connect additional workspaces later from the same settings page.
+
+  <Step title="Confirm Connection" icon="check-circle" title-type="p">
+    After authorization, Intercom redirects you back to ProductBridge. The integration status updates to **Connected**, and ProductBridge:
+
+    - Stores your encrypted Intercom credentials
+    - Registers a webhook for the `conversation.admin.closed` event
+    - Backfills conversations from the last 30 days
+    - Installs the ProductBridge sidebar app in your Intercom workspace
+
+    <Image src="placeholder-intercom-connected-status.png" width="900" height="500" alt="ProductBridge integration settings showing Intercom as connected with webhook and backfill status" />
   </Step>
 </Steps>
 
-## Configure Import Rules
+## Submit Feedback from Intercom
 
-Choose how feedback gets imported from Intercom into ProductBridge:
+After installation, your team can capture feedback in two ways.
 
-<Tabs>
-  <Tab title="Tagged Conversations" icon="tag">
-    Import only conversations tagged with specific labels (e.g., "feedback", "feature-request"). This gives you full control over what gets imported.
+### 1. Sidebar App — Create Feedback Manually
 
-    Navigate to **Integration Settings > Import Rules** and add the Intercom tags you want to monitor.
+When the ProductBridge app is installed, it appears in the **conversation details panel** (right sidebar) of every Intercom conversation. Support agents can search existing feedback, vote on posts, or create a new feedback post directly from the conversation they are working on — no context switching.
 
-    <Callout kind="tip">
-      Start with tagged conversations to control the flow, then expand to AI-detected feedback once you are comfortable with the quality.
-    </Callout>
-  </Tab>
-  <Tab title="Internal Notes" icon="file-text">
-    Import internal notes that your support agents tag as feedback. This is useful when agents summarize user requests in their own words.
+<Image src="placeholder-intercom-sidebar-app.png" width="900" height="500" alt="ProductBridge sidebar app inside Intercom showing a list of recent feedback posts and a Create New Post button" />
 
-    Enable **Import Notes** in the integration settings and specify which note tags to watch.
-  </Tab>
-  <Tab title="AI Detection" icon="sparkles">
-    Let ProductBridge AI automatically detect and extract feedback from every conversation — no manual tagging required. The AI identifies feature requests, bug reports, and improvement suggestions.
+**How it works:**
 
-    Enable **AI Auto-Detection** in the integration settings. You can set a confidence threshold to control sensitivity.
-  </Tab>
-</Tabs>
+<Steps>
+  <Step title="Open a Conversation in Intercom" icon="message-circle" title-type="p">
+    Navigate to any conversation in Intercom Inbox. The ProductBridge sidebar app appears in the right panel with your 10 most recent feedback posts.
+  </Step>
 
-## Map Fields
+  <Step title="Search or Create" icon="search" title-type="p">
+    Use the search bar to check whether the user's input is already a known feedback item. If it exists, click the post to view details and add a vote. If not, click **Create New Post**.
 
-Map Intercom fields to ProductBridge attributes so imported feedback is structured correctly:
+    <Image src="placeholder-intercom-sidebar-search.png" width="900" height="500" alt="ProductBridge sidebar showing search input and existing feedback posts list" />
+  </Step>
 
-| Intercom Field | ProductBridge Field | Description |
-|---------------|-------------------|-------------|
-| Contact email | User identity | Links feedback to user profiles |
-| Conversation subject | Feedback title | Used as the feedback headline |
-| Conversation body | Feedback content | The full feedback text |
-| Tags | Categories | Maps to ProductBridge categories |
-| Contact company | User segment | Enables segment-based analysis |
+  <Step title="Fill the Form" icon="edit" title-type="p">
+    Select a target board, enter a title, and add a description. The form pre-fills the customer context from the active Intercom conversation, so authorship and source metadata are linked automatically.
 
-## How It Works
+    <Image src="placeholder-intercom-sidebar-form.png" width="900" height="500" alt="ProductBridge feedback creation form inside Intercom sidebar with board selector, title, and description fields" />
+  </Step>
 
-Once connected, the integration runs continuously:
+  <Step title="Submit" icon="send" title-type="p">
+    Click **Submit**. The post is created instantly with `source: intercom` and `source_type: manual`, and is auto-approved (since a teammate created it). The contact details from Intercom are attached as the post author.
+  </Step>
+</Steps>
 
-1. New conversations matching your rules appear in your ProductBridge feedback inbox within minutes
-2. Each item is tagged with "via Intercom" so you can filter by source
-3. User identity is matched automatically — if the Intercom contact exists in ProductBridge, feedback is linked to their profile
-4. All imported feedback flows into [Feedback Intelligence](/core-concepts/feedback-intelligence) for automatic categorization and sentiment analysis
-
-<Callout kind="info">
-  The Intercom integration syncs in near real-time. New matching conversations typically appear in ProductBridge within 2-5 minutes.
+<Callout kind="tip" collapsed="false">
+  The sidebar app also shows on the **Intercom Messenger home** for end users — but only if an admin enables the Messenger widget and selects a public board to display. End-user submissions are marked `pending` for moderation.
 </Callout>
 
+### 2. Conversation Analysis — Automatic Feedback Capture
+
+When a support conversation is **closed** in Intercom, ProductBridge receives a webhook with the conversation ID, fetches the full conversation, and runs it through an AI pipeline that decides whether the conversation contains product feedback. If it does, a feedback post is created automatically.
+
+<Image src="placeholder-intercom-conversation-flow.png" width="900" height="500" alt="Diagram showing flow from closed Intercom conversation to AI analysis to feedback post creation" />
+
+**The AI pipeline runs five stages:**
+
+| Stage | What Happens |
+|-------|-------------|
+| **Normalize** | Conversation parts, tags, customer info, and rating are combined into a structured format |
+| **Detect** | LLM determines if the conversation contains product feedback. Confidence scores rise for low ratings, multi-turn discussions, escalations, and feedback-related tags |
+| **Extract** | LLM extracts the feedback title, description, sentiment, priority, feature area, and pain points |
+| **Deduplicate** | Semantic search (Qdrant) checks for similar existing posts. If similarity ≥ 0.85, ProductBridge votes on the existing post instead of creating a duplicate |
+| **Organize** | LLM assigns the right board, category, and tags |
+
+<Callout kind="info" collapsed="false">
+  Feedback created via conversation analysis is tagged with `source: intercom` and `source_type: integration`. The original Intercom conversation URL is stored in the post's metadata for traceability.
+</Callout>
+
+**Priority adjustments specific to Intercom:**
+
+- Enterprise customers receive higher priority weighting
+- Conversation ratings of ≤2 stars boost priority
+- Admin-escalated conversations are flagged as urgent
+- Bug reports and performance issues are bumped one tier
+
+<Image src="placeholder-intercom-feedback-post-created.png" width="900" height="500" alt="ProductBridge feedback inbox showing a feedback post created from a closed Intercom conversation with via Intercom source tag" />
+
+## Backfill
+
+When you first connect Intercom, ProductBridge automatically backfills conversations from the **last 30 days**. Each conversation is queued for AI analysis and creates a feedback post if it contains feedback. You see backfill progress in the integration settings page.
+
+<Callout kind="tip" collapsed="false">
+  Backfill runs in the background and can take from a few minutes to several hours depending on conversation volume. New conversations from the moment of connection onward are processed in near real time via webhooks.
+</Callout>
+
+## Disconnect
+
+To disconnect Intercom, navigate to **Settings > Integrations > Intercom** and click **Disconnect**. ProductBridge:
+
+- Removes the registered webhook from Intercom
+- Marks the integration as `disconnected`
+- Stops all ongoing backfill or processing tasks
+
+Existing feedback posts remain in ProductBridge — only the live connection is removed.
+
 <Expandable title="Troubleshooting" default-open="false">
-  - **Conversations not importing** — Verify your import rules match the correct tags and that the OAuth token is still valid
-  - **Duplicate feedback** — ProductBridge deduplicates by default, but check that the same conversation is not matched by multiple rules
-  - **Missing user data** — Ensure the Intercom contact has an email address; anonymous conversations are imported without user linking
-  - **Re-authorize** — If the connection stops working, revoke and reconnect from **Settings > Integrations > Intercom**
+  - **Sidebar app not appearing** — Verify the integration shows as **Connected** in ProductBridge settings. Reload the Intercom Inbox page. If the app is still missing, reinstall it from the Intercom Apps page.
+
+  - **Conversations not creating feedback** — Not every conversation contains feedback. The AI pipeline only creates posts when it detects product input with sufficient confidence. Check the integration logs in **Settings > Integrations > Intercom > Activity** to see which conversations were processed and why.
+
+  - **Duplicate feedback** — ProductBridge deduplicates automatically using semantic search. If a similar post already exists, the new conversation adds a vote to the existing post rather than creating a duplicate.
+
+  - **Missing user data** — End users without an email in Intercom are imported as anonymous. Ensure your Intercom contacts have email addresses for full user linking.
+
+  - **Webhook signature errors** — If you see signature verification failures in logs, your webhook secret may have rotated. Disconnect and reconnect the integration to refresh the secret.
+
+  - **Re-authorize** — If the connection stops working, revoke and reconnect from **Settings > Integrations > Intercom**. This regenerates the OAuth token and webhook subscription.
 </Expandable>
