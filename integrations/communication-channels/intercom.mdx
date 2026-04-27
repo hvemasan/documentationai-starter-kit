@@ -1,10 +1,10 @@
 ---
 title: Intercom Integration
-description: Connect ProductBridge to Intercom to automatically capture feedback from support conversations and let your team submit feedback directly from the Intercom sidebar.
+description: >-
+  Connect ProductBridge to Intercom to automatically capture feedback from
+  support conversations and let your team submit feedback directly from the
+  Intercom sidebar.
 ---
-
-<img src="https://cdn.simpleicons.org/intercom/000000" width="80" height="80" alt="Intercom" />
-
 ## Overview
 
 The Intercom integration connects your Intercom workspace to ProductBridge so you can capture product feedback at the moment it surfaces — without leaving Intercom. Once installed, the ProductBridge app appears inside Intercom as a sidebar app, and every closed conversation is analyzed by AI to extract feature requests, bug reports, and pain points automatically.
@@ -12,14 +12,17 @@ The Intercom integration connects your Intercom workspace to ProductBridge so yo
 There are two ways feedback flows from Intercom into ProductBridge:
 
 1. **Sidebar App** — Support agents create feedback posts directly from the Intercom conversation panel
+
 2. **Conversation Analysis** — When a conversation is closed, the entire conversation is sent to ProductBridge, analyzed by AI, and turned into a feedback post if it contains product input
 
 ## Prerequisites
 
-<Callout kind="info" title="Before you start">
-- An Intercom workspace with admin or app management permissions
-- A ProductBridge organization with at least one feedback board configured
-- Permission to install apps in your Intercom workspace
+<Callout kind="info" collapsed="false">
+  - An Intercom workspace with admin or app management permissions
+
+  - A ProductBridge organization with at least one feedback board configured
+
+  - Permission to install apps in your Intercom workspace
 </Callout>
 
 ## Connect Intercom
@@ -28,13 +31,13 @@ There are two ways feedback flows from Intercom into ProductBridge:
   <Step title="Open the Admin Dashboard" icon="layout-dashboard" title-type="p">
     Sign in to your ProductBridge admin dashboard and navigate to **Settings > Integrations**.
 
-    <Image src="placeholder-admin-dashboard-integrations.png" width="900" height="500" alt="ProductBridge admin dashboard showing the Integrations settings page" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777323403949-yxh7oni4yh9-admin_integration_dashboard_framed.png?fm=auto&auto=compress%2Cformat" width="1352" height="642" alt="" />
   </Step>
 
   <Step title="Click on the Intercom Integration" icon="plug" title-type="p">
     In the integrations list, find the Intercom card and click **Connect**. ProductBridge initiates the Intercom OAuth flow.
 
-    <Image src="placeholder-intercom-card-connect.png" width="900" height="500" alt="Integrations list with the Intercom integration card and Connect button highlighted" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777323462672-cig4un0664t-intercom_intergation_admin_framed.png?fm=auto&auto=compress%2Cformat" width="1368" height="647" alt="" />
   </Step>
 
   <Step title="Authorize ProductBridge in Intercom" icon="shield" title-type="p">
@@ -42,7 +45,7 @@ There are two ways feedback flows from Intercom into ProductBridge:
 
     Click **Authorize Access** to install the ProductBridge app into your Intercom workspace.
 
-    <Image src="placeholder-intercom-oauth-authorize.png" width="900" height="500" alt="Intercom OAuth authorization screen with ProductBridge app permissions" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777323603026-gz3gim8qjmh-intercom_oauth_authorization_framed.png?fm=auto&auto=compress%2Cformat" width="1341" height="626" alt="" />
 
     <Callout kind="tip" collapsed="false">
       Use a service account rather than a personal Intercom account so the connection persists if team members leave.
@@ -53,11 +56,14 @@ There are two ways feedback flows from Intercom into ProductBridge:
     After authorization, Intercom redirects you back to ProductBridge. The integration status updates to **Connected**, and ProductBridge:
 
     - Stores your encrypted Intercom credentials
+
     - Registers a webhook for the `conversation.admin.closed` event
+
     - Backfills conversations from the last 30 days
+
     - Installs the ProductBridge sidebar app in your Intercom workspace
 
-    <Image src="placeholder-intercom-connected-status.png" width="900" height="500" alt="ProductBridge integration settings showing Intercom as connected with webhook and backfill status" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777323681264-rbje26vidc-intercom_after_connection_framed.png?fm=auto&auto=compress%2Cformat" width="1360" height="641" alt="" />
   </Step>
 </Steps>
 
@@ -69,7 +75,7 @@ After installation, your team can capture feedback in two ways.
 
 When the ProductBridge app is installed, it appears in the **conversation details panel** (right sidebar) of every Intercom conversation. Support agents can search existing feedback, vote on posts, or create a new feedback post directly from the conversation they are working on — no context switching.
 
-<Image src="placeholder-intercom-sidebar-app.png" width="900" height="500" alt="ProductBridge sidebar app inside Intercom showing a list of recent feedback posts and a Create New Post button" />
+<Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777323757551-fwbtchxyyis-intercom_sidebar_showing_feedback_list_framed.png?fm=auto&auto=compress%2Cformat" width="1363" height="603" alt="" />
 
 **How it works:**
 
@@ -81,13 +87,13 @@ When the ProductBridge app is installed, it appears in the **conversation detail
   <Step title="Search or Create" icon="search" title-type="p">
     Use the search bar to check whether the user's input is already a known feedback item. If it exists, click the post to view details and add a vote. If not, click **Create New Post**.
 
-    <Image src="placeholder-intercom-sidebar-search.png" width="900" height="500" alt="ProductBridge sidebar showing search input and existing feedback posts list" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777323808106-hbmi2g2tqbt-intercom_sidebar_search_results_showing_framed.png?fm=auto&auto=compress%2Cformat" width="348" height="492" alt="" />
   </Step>
 
   <Step title="Fill the Form" icon="edit" title-type="p">
     Select a target board, enter a title, and add a description. The form pre-fills the customer context from the active Intercom conversation, so authorship and source metadata are linked automatically.
 
-    <Image src="placeholder-intercom-sidebar-form.png" width="900" height="500" alt="ProductBridge feedback creation form inside Intercom sidebar with board selector, title, and description fields" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777323882618-sm5q2d7fg1-intercom_sidebar_post_creation_framed.png?fm=auto&auto=compress%2Cformat" width="367" height="272" alt="" />
   </Step>
 
   <Step title="Submit" icon="send" title-type="p">
@@ -103,17 +109,15 @@ When the ProductBridge app is installed, it appears in the **conversation detail
 
 When a support conversation is **closed** in Intercom, ProductBridge receives a webhook with the conversation ID, fetches the full conversation, and runs it through an AI pipeline that decides whether the conversation contains product feedback. If it does, a feedback post is created automatically.
 
-<Image src="placeholder-intercom-conversation-flow.png" width="900" height="500" alt="Diagram showing flow from closed Intercom conversation to AI analysis to feedback post creation" />
-
 **The AI pipeline runs five stages:**
 
-| Stage | What Happens |
-|-------|-------------|
-| **Normalize** | Conversation parts, tags, customer info, and rating are combined into a structured format |
-| **Detect** | LLM determines if the conversation contains product feedback. Confidence scores rise for low ratings, multi-turn discussions, escalations, and feedback-related tags |
-| **Extract** | LLM extracts the feedback title, description, sentiment, priority, feature area, and pain points |
-| **Deduplicate** | Semantic search (Qdrant) checks for similar existing posts. If similarity ≥ 0.85, ProductBridge votes on the existing post instead of creating a duplicate |
-| **Organize** | LLM assigns the right board, category, and tags |
+| Stage           | What Happens                                                                                                                                                         |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Normalize**   | Conversation parts, tags, customer info, and rating are combined into a structured format                                                                            |
+| **Detect**      | LLM determines if the conversation contains product feedback. Confidence scores rise for low ratings, multi-turn discussions, escalations, and feedback-related tags |
+| **Extract**     | LLM extracts the feedback title, description, sentiment, priority, feature area, and pain points                                                                     |
+| **Deduplicate** | Semantic search (Qdrant) checks for similar existing posts. If similarity ≥ 0.85, ProductBridge votes on the existing post instead of creating a duplicate           |
+| **Organize**    | LLM assigns the right board, category, and tags                                                                                                                      |
 
 <Callout kind="info" collapsed="false">
   Feedback created via conversation analysis is tagged with `source: intercom` and `source_type: integration`. The original Intercom conversation URL is stored in the post's metadata for traceability.
@@ -122,11 +126,12 @@ When a support conversation is **closed** in Intercom, ProductBridge receives a 
 **Priority adjustments specific to Intercom:**
 
 - Enterprise customers receive higher priority weighting
-- Conversation ratings of ≤2 stars boost priority
-- Admin-escalated conversations are flagged as urgent
-- Bug reports and performance issues are bumped one tier
 
-<Image src="placeholder-intercom-feedback-post-created.png" width="900" height="500" alt="ProductBridge feedback inbox showing a feedback post created from a closed Intercom conversation with via Intercom source tag" />
+- Conversation ratings of ≤2 stars boost priority
+
+- Admin-escalated conversations are flagged as urgent
+
+- Bug reports and performance issues are bumped one tier
 
 ## Backfill
 
@@ -141,7 +146,9 @@ When you first connect Intercom, ProductBridge automatically backfills conversat
 To disconnect Intercom, navigate to **Settings > Integrations > Intercom** and click **Disconnect**. ProductBridge:
 
 - Removes the registered webhook from Intercom
+
 - Marks the integration as `disconnected`
+
 - Stops all ongoing backfill or processing tasks
 
 Existing feedback posts remain in ProductBridge — only the live connection is removed.
@@ -159,3 +166,4 @@ Existing feedback posts remain in ProductBridge — only the live connection is 
 
   - **Re-authorize** — If the connection stops working, revoke and reconnect from **Settings > Integrations > Intercom**. This regenerates the OAuth token and webhook subscription.
 </Expandable>
+
