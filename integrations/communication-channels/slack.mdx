@@ -1,6 +1,9 @@
 ---
 title: Slack Integration
-description: Connect ProductBridge to Slack to capture feedback via the /productbridge slash command, @mentions, and AI-powered analysis of channel messages — with optional confirmation replies in the thread.
+description: >-
+  Connect ProductBridge to Slack to capture feedback via the /productbridge
+  slash command, @mentions, and AI-powered analysis of channel messages — with
+  optional confirmation replies in the thread.
 ---
 
 <img src="https://cdn.simpleicons.org/slack" width="80" height="80" alt="" />
@@ -11,7 +14,7 @@ The Slack integration connects ProductBridge to your Slack workspace so your tea
 
 There are three ways feedback flows from Slack into ProductBridge:
 
-1. **Slash command `/productbridge`** — A teammate runs the slash command in any channel, fills out a small modal, and the post is created instantly.
+1. **Slash command&#x20;****`/productbridge`** — A teammate runs the slash command in any channel, fills out a small modal, and the post is created instantly.
 
 2. **@Mention** — A teammate mentions the ProductBridge bot in a channel message to submit feedback explicitly. AI detection is skipped and the message is treated as feedback at high confidence.
 
@@ -35,29 +38,31 @@ After feedback is captured, ProductBridge can post a confirmation reply in the t
   <Step title="Open the Admin Dashboard" icon="layout-dashboard" title-type="p">
     Sign in to your ProductBridge admin dashboard and navigate to **Settings > Integrations > Slack**.
 
-    <Image src="placeholder://Output/slack_integration-admin_framed.png" width="1342" height="608" alt="" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777407774806-o6xmw436fq-admin_integration_page_framed.png?fm=auto&auto=compress%2Cformat" width="1342" height="608" alt="" />
   </Step>
 
   <Step title="Click Add to Slack" icon="plus" title-type="p">
     On the Slack integration page, click the **Add to Slack** button. ProductBridge initiates the Slack OAuth flow and redirects you to Slack's authorization screen.
+
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777417766584-83pcxdiq99n-slack_integration_admin_framed.png?fm=auto&auto=compress%2Cformat" width="1358" height="644" alt="" />
   </Step>
 
   <Step title="Authorize ProductBridge in Slack" icon="shield" title-type="p">
     On Slack's OAuth screen, choose the workspace where you want to install ProductBridge. Review the requested scopes:
 
-    | Scope                  | Used For                                              |
-    | ---------------------- | ----------------------------------------------------- |
-    | `app_mentions:read`    | Detect @mentions of the ProductBridge bot             |
-    | `channels:history`     | Read messages in monitored channels                   |
-    | `channels:read`        | View basic channel info                               |
-    | `chat:write`           | Post auto-reply confirmations                         |
-    | `commands`             | Register the `/productbridge` slash command           |
-    | `users:read`           | Identify message authors                              |
-    | `users:read.email`     | Link Slack users to ProductBridge user profiles       |
+    | Scope               | Used For                                        |
+    | ------------------- | ----------------------------------------------- |
+    | `app_mentions:read` | Detect @mentions of the ProductBridge bot       |
+    | `channels:history`  | Read messages in monitored channels             |
+    | `channels:read`     | View basic channel info                         |
+    | `chat:write`        | Post auto-reply confirmations                   |
+    | `commands`          | Register the `/productbridge` slash command     |
+    | `users:read`        | Identify message authors                        |
+    | `users:read.email`  | Link Slack users to ProductBridge user profiles |
 
     Click **Allow** to install the ProductBridge app into your workspace.
 
-    <Image src="placeholder://Output/slack_oauth_authorization_framed.png" width="1326" height="623" alt="" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777417830737-zhfa91fe10e-slack_oauth_authorization_framed.png?fm=auto&auto=compress%2Cformat" width="1338" height="639" alt="" />
   </Step>
 
   <Step title="Confirm Connection" icon="check-circle" title-type="p">
@@ -71,7 +76,7 @@ After feedback is captured, ProductBridge can post a confirmation reply in the t
 
     - Wires the webhook endpoint so Slack can deliver events
 
-    <Image src="placeholder://Output/slack_after_connection_framed.png" width="1342" height="608" alt="" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777417871743-aqgaeln7g9m-slack_after_connection_framed.png?fm=auto&auto=compress%2Cformat" width="1354" height="649" alt="" />
   </Step>
 </Steps>
 
@@ -81,7 +86,7 @@ Immediately after connection:
 
 - The **ProductBridge bot** appears in your workspace and can be invited to channels
 
-- The **`/productbridge` slash command** is available in every channel where the bot is present
+- The **`/productbridge`****&#x20;slash command** is available in every channel where the bot is present
 
 - The **webhook endpoint** is registered so Slack can deliver messages, mentions, and command interactions in real time
 
@@ -99,7 +104,7 @@ The fastest way to submit feedback. Run the command in any channel, fill in a sh
   <Step title="Run the Slash Command" icon="terminal" title-type="p">
     In any channel where the ProductBridge bot is present, type `/productbridge` and press Enter. Slack shows the registered command as you type.
 
-    <Image src="placeholder://Output/slack_slash_command_showcase_framed.png" width="1004" height="218" alt="" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777417952888-pbrlylqmt3-slack_slash_command_showcase_framed.png?fm=auto&auto=compress%2Cformat" width="979" height="385" alt="" />
   </Step>
 
   <Step title="Fill the Feedback Modal" icon="edit" title-type="p">
@@ -112,7 +117,8 @@ The fastest way to submit feedback. Run the command in any channel, fill in a sh
 
     Write a clear title and detailed description, then click **Submit**.
 
-    <Image src="placeholder://Output/slack_modal_submit_framed.png" width="592" height="492" alt="" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777417994556-bdb382u4oyn-slack_modal_submit_framed.png?fm=auto&auto=compress%2Cformat" width="610" height="556" alt="" />
+
   </Step>
 
   <Step title="Get Confirmation" icon="check" title-type="p">
@@ -132,11 +138,9 @@ Mention the ProductBridge bot in any channel to submit feedback explicitly. AI d
 
 > @ProductBridge The export to CSV button times out for large workspaces. Bug report.
 
-<Image src="placeholder://Output/slack_@mention_productbridge_framed.png" width="1342" height="608" alt="" />
+<Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777418054534-7uokxzc96ke-slack_-mention_productbridge_reply_framed.png?fm=auto&auto=compress%2Cformat" width="992" height="610" alt="" />
 
 ProductBridge captures the message, runs Extract → Deduplicate → Organize, and creates a feedback post. If auto-reply is enabled, ProductBridge replies in the same thread to confirm capture.
-
-<Image src="placeholder://Output/slack_@mention_productbridge_reply_framed.png" width="1342" height="608" alt="" />
 
 ### 3. Passive Channel Monitoring
 
@@ -146,15 +150,15 @@ For channels you designate, ProductBridge listens to every message and uses AI t
 
 A teammate posts a feature request or bug report in a monitored channel.
 
-<Image src="placeholder://Output/slack_normal_message_with_feedback_framed.png" width="1342" height="608" alt="" />
+<Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777418194476-umoiy6ti3q-slack_normal_message_with_feedback_framed.png?fm=auto&auto=compress%2Cformat" width="1363" height="631" alt="" />
 
-ProductBridge classifies it as feedback, creates a post, and (optionally) replies in the thread to confirm.
+ProductBridge classifies it as feedback, creates a post, and replies in the thread to confirm.
 
 **Example — message ignored:**
 
 A teammate posts a casual hello, a meeting note, or anything that is clearly not product feedback.
 
-<Image src="placeholder://Output/slack_normal_message_not_a_feedback_framed.png" width="1342" height="608" alt="" />
+<Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777418260178-psbwramu0f-slack_normal_message_not_a_feedback_framed.png?fm=auto&auto=compress%2Cformat" width="1291" height="222" alt="" />
 
 ProductBridge analyzes the message, decides it is not feedback, and silently discards it. No post is created, and no thread reply is posted.
 
@@ -204,13 +208,13 @@ The reply is posted as a thread reply on the original message, so channels stay 
 
 All Slack feedback (regardless of capture path) flows through ProductBridge's AI pipeline:
 
-| Stage           | What Happens                                                                                                                                               |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Normalize**   | Message, channel info, user info, thread context, and permalink are combined into a structured format                                                      |
-| **Detect**      | LLM classifies as feedback (skipped for slash command and @mention — auto-confirmed at 0.95 confidence)                                                    |
-| **Extract**     | LLM extracts title, description, sentiment, priority, feature area, pain points, and customer impact                                                       |
-| **Deduplicate** | Semantic search (Voyage AI + Qdrant) checks for similar existing posts. If similarity ≥ 0.85, votes on the existing post instead of creating a duplicate   |
-| **Organize**    | LLM assigns the right board, category, and tags                                                                                                            |
+| Stage           | What Happens                                                                                                                                             |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Normalize**   | Message, channel info, user info, thread context, and permalink are combined into a structured format                                                    |
+| **Detect**      | LLM classifies as feedback (skipped for slash command and @mention — auto-confirmed at 0.95 confidence)                                                  |
+| **Extract**     | LLM extracts title, description, sentiment, priority, feature area, pain points, and customer impact                                                     |
+| **Deduplicate** | Semantic search (Voyage AI + Qdrant) checks for similar existing posts. If similarity ≥ 0.85, votes on the existing post instead of creating a duplicate |
+| **Organize**    | LLM assigns the right board, category, and tags                                                                                                          |
 
 <Callout kind="info" collapsed="false">
   Slack feedback is tagged with `source: slack` and `source_type: integration`. The Slack message permalink is stored so you can jump from a feedback post back to the original conversation.
@@ -275,3 +279,4 @@ To fully remove the bot from your workspace, also revoke the app under **Slack W
 
   - **Re-authorize** — If the connection stops working, revoke and reconnect from **Settings > Integrations > Slack**. This regenerates the bot token, re-registers the slash command, and re-establishes the webhook.
 </Expandable>
+
