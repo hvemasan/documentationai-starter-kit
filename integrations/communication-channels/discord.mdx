@@ -1,75 +1,232 @@
 ---
 title: Discord Integration
-description: Connect ProductBridge to Discord to capture feedback from server channels and community discussions automatically.
+description: Connect ProductBridge to Discord to capture feedback via the /productbridge slash command, and send notifications about new feedback, status changes, and vote milestones to designated channels.
 ---
 
 <img src="https://cdn.simpleicons.org/discord" width="80" height="80" alt="Discord" />
 
 ## Overview
 
-The Discord integration connects ProductBridge to your Discord server so you can collect feedback from community channels. Whether your users discuss features in a feedback channel or report bugs in a support forum, ProductBridge captures it all and brings it into your feedback workflow.
+The Discord integration connects ProductBridge to your Discord server so your community can submit feedback directly with a simple slash command — and your team gets real-time notifications about feedback activity in the channels you choose.
+
+Unlike messaging integrations that listen passively, Discord uses an **explicit, opt-in flow**: members run the `/productbridge` slash command, fill in a simple form, and ProductBridge captures the feedback with high confidence. There's no ambient channel monitoring or guesswork.
+
+The integration also supports **outgoing notifications** — pushing updates about new feedback, status changes, vote milestones, comments, and changelog releases into the Discord channels of your choice.
 
 ## Prerequisites
 
 <Callout kind="info" title="Before you start">
-- A Discord server where you have administrator or manage server permissions
-- A ProductBridge project with at least one feedback channel enabled
-- One or more Discord channels designated for feedback collection
+- A Discord server where you have **Manage Server** permission (required to install bots)
+- A ProductBridge organization with at least one feedback board
+- Permission to add a bot with `applications.commands` and basic message scopes to your server
 </Callout>
 
 ## Connect Discord
 
 <Steps>
-  <Step title="Open Integration Settings" icon="settings">
-    Navigate to **Settings > Integrations > Discord** in your ProductBridge dashboard and click **Connect**.
-  </Step>
-  <Step title="Add the Bot" icon="bot">
-    You are redirected to Discord's OAuth flow. Select the server you want to connect and grant the ProductBridge bot access. The bot requests permissions to read messages and send replies in selected channels.
-  </Step>
-  <Step title="Select Channels" icon="hash">
-    Choose which Discord channels ProductBridge should monitor. You can select text channels and forum channels. Map each to a specific ProductBridge board.
+  <Step title="Open the Admin Dashboard" icon="layout-dashboard" title-type="p">
+    Sign in to your ProductBridge admin dashboard and navigate to **Settings > Integrations > Discord**.
 
-    Common setups include:
-    - `#feedback` — General feedback channel
-    - `#feature-requests` — Forum channel for feature discussions
-    - `#bugs` — Bug reporting channel
+    <Image src="placeholder-discord-integrations-page.png" width="900" height="500" alt="ProductBridge admin dashboard showing the Discord integration card" />
+  </Step>
+
+  <Step title="Click Connect Discord" icon="plus" title-type="p">
+    On the Discord integration page, click the **Connect Discord** button. ProductBridge initiates the Discord OAuth flow and redirects you to Discord's authorization screen.
+
+    <Image src="placeholder-discord-connect-button.png" width="900" height="500" alt="Discord integration page with the Connect Discord button highlighted" />
+  </Step>
+
+  <Step title="Authorize ProductBridge in Discord" icon="shield" title-type="p">
+    On Discord's OAuth screen, choose the server where you want to install the ProductBridge bot. Review the requested scopes and permissions:
+
+    | Scope / Permission | Used For |
+    |--------------------|----------|
+    | `bot` | Add the ProductBridge bot to your server |
+    | `applications.commands` | Register the `/productbridge` slash command |
+    | View Channels | List available text channels for notifications |
+    | Send Messages | Post notifications and confirmations |
+    | Embed Links | Render rich embed cards for feedback updates |
+
+    Click **Authorize** to install the bot in your selected server.
+
+    <Image src="placeholder-discord-oauth-authorize.png" width="900" height="500" alt="Discord OAuth authorization screen showing ProductBridge bot permissions" />
+  </Step>
+
+  <Step title="Confirm Installation" icon="check-circle" title-type="p">
+    After authorization, Discord redirects you back to ProductBridge. The integration status updates to **Connected**, and the page now displays your server name, server ID, and the registered application ID.
+
+    Behind the scenes, ProductBridge:
+
+    - Encrypts and stores the bot token
+    - Registers the `/productbridge` slash command on your server
+    - Wires the interaction endpoint so Discord can deliver events
+
+    <Image src="placeholder-discord-connected-status.png" width="900" height="500" alt="ProductBridge integration settings showing Discord as connected with server info" />
   </Step>
 </Steps>
 
-## Configure Collection Rules
+## What Happens After Install
 
-<Tabs>
-  <Tab title="All Messages" icon="message-circle">
-    Import every message posted in the selected channels. Best for channels dedicated entirely to feedback.
-  </Tab>
-  <Tab title="Emoji Reactions" icon="smile">
-    Only import messages that receive a specific emoji reaction from moderators or community managers. This lets your team curate which community messages become feedback items.
-  </Tab>
-  <Tab title="Bot Command" icon="terminal">
-    Users submit feedback with a bot command: `!feedback Dark mode would be amazing`. The command creates a feedback post in ProductBridge and sends a confirmation message in the channel.
-  </Tab>
-  <Tab title="Forum Posts" icon="layout">
-    For Discord forum channels, each new forum post is imported as a separate feedback item. Replies to the forum post are captured as comments.
-  </Tab>
-</Tabs>
+Immediately after connection:
 
-## How It Works
+- The **ProductBridge bot** appears in your server's member list
+- The **`/productbridge` slash command** is available in every channel the bot can see
+- The **interaction endpoint** is registered with Discord — feedback submissions are processed in real time
+- A confirmation appears in the ProductBridge admin UI showing your guild name and member count
 
-Once connected:
+<Image src="placeholder-discord-bot-in-server.png" width="900" height="500" alt="Discord server member list showing the ProductBridge bot online" />
 
-1. Messages matching your collection rules are imported into your ProductBridge feedback inbox
-2. Each item is tagged with "via Discord" and includes the server name, channel name, and message link
-3. The Discord username is captured and linked to ProductBridge user profiles where possible
-4. Thread replies and forum post replies can optionally be synced as comments
-5. All imported feedback flows into [Feedback Intelligence](/core-concepts/feedback-intelligence) for analysis
+## Submit Feedback from Discord
 
-<Callout kind="tip">
-  Discord forum channels work especially well with ProductBridge — each forum post maps naturally to a feedback item, and community voting on forum posts can be synced as votes in ProductBridge.
+ProductBridge uses a **single, explicit feedback path**: the `/productbridge` slash command. There is no ambient channel monitoring, no emoji-reaction capture, and no @mention listener — Discord feedback is always opt-in by the user.
+
+<Steps>
+  <Step title="Run the Slash Command" icon="terminal" title-type="p">
+    In any channel where the ProductBridge bot is present, type `/productbridge` and press Enter.
+
+    Discord shows a small autocomplete preview as you type — the official `/productbridge` command appears with a description.
+
+    <Image src="placeholder-discord-slash-command-autocomplete.png" width="900" height="500" alt="Discord channel showing the /productbridge slash command in the autocomplete dropdown" />
+  </Step>
+
+  <Step title="Fill the Feedback Modal" icon="edit" title-type="p">
+    Discord opens a modal form with two fields:
+
+    | Field | Required | Limit |
+    |-------|----------|-------|
+    | **Title** | Yes | Up to 150 characters |
+    | **Description** | Yes | Up to 3,000 characters (multi-line supported) |
+
+    Write a clear title and detailed description, then click **Submit**.
+
+    <Image src="placeholder-discord-feedback-modal.png" width="900" height="500" alt="Discord modal form with Title and Description fields for submitting feedback" />
+  </Step>
+
+  <Step title="Get Confirmation" icon="check" title-type="p">
+    Discord briefly shows a "thinking" indicator while ProductBridge processes the submission. Once the feedback is captured, Discord replaces the indicator with a confirmation message:
+
+    > Your feedback "Dark mode for the dashboard" has been submitted successfully! We'll review it shortly.
+
+    The confirmation is **ephemeral** — only the submitter sees it, keeping channels clean.
+
+    <Image src="placeholder-discord-feedback-confirmation.png" width="900" height="500" alt="Discord channel showing the confirmation message after a feedback submission" />
+  </Step>
+</Steps>
+
+<Callout kind="info" collapsed="false">
+  Because the slash command captures intent explicitly, ProductBridge skips AI feedback detection for Discord submissions and assigns 95% confidence by default. The submission still flows through the AI pipeline for **extraction, deduplication, and routing** — so duplicates are caught, and posts land in the correct board automatically.
 </Callout>
 
+## Configure Notifications
+
+The Discord integration also pushes outgoing notifications about ProductBridge activity into your server. Configure notification channels in **Settings > Integrations > Discord > Notifications**.
+
+<Image src="placeholder-discord-notifications-settings.png" width="900" height="500" alt="Discord notification settings page with channel and event configuration" />
+
+### Notification Channels
+
+You can map ProductBridge events to one or more Discord channels. For each channel, choose:
+
+- **Channel** — Select any text or announcement channel where the bot has permission to post
+- **Events** — Pick which events trigger notifications in that channel
+- **Board Filter** — Optionally restrict notifications to specific boards (empty = all boards)
+
+<Callout kind="tip" collapsed="false">
+  Send `new_feedback` events to a `#feedback-firehose` channel for product managers, and `changelog_published` events to a `#announcements` channel for the wider team.
+</Callout>
+
+### Supported Events
+
+| Event | Description |
+|-------|-------------|
+| `new_feedback` | Posted when new feedback is submitted (from any source) |
+| `status_change` | Posted when a feedback status changes (e.g., Open → In Progress) |
+| `vote_milestone` | Posted when a feedback post reaches a configured vote threshold |
+| `new_comment` | Posted when a comment is added to a feedback post |
+| `changelog_published` | Posted when a changelog entry is published |
+
+### Notification Format
+
+Notifications are rendered as Discord rich embeds, color-coded by event type:
+
+| Event | Embed Color |
+|-------|-------------|
+| New feedback | Blue |
+| Status change (in progress / generic) | Orange |
+| Status change (completed) | Green |
+| Vote milestone | Purple |
+| New comment | Gray |
+| Changelog published | Dark green |
+
+Each embed includes the relevant title, description preview, board name, and a link back to the feedback post in ProductBridge.
+
+<Image src="placeholder-discord-notification-embed.png" width="900" height="500" alt="Discord channel showing a rich embed notification card for new feedback" />
+
+## How Feedback Is Processed
+
+When a member submits feedback via `/productbridge`, ProductBridge runs the same AI pipeline used by other integrations — minus the detection step (since the user has explicitly submitted feedback):
+
+| Stage | What Happens |
+|-------|--------------|
+| **Normalize** | Modal fields, server/channel info, and submitter identity are combined into a structured format |
+| **Detect** | **Skipped** for slash commands. Confidence is auto-set to 0.95 with `feedback_type = user_submitted` |
+| **Extract** | LLM refines the title and description, extracts sentiment, priority, feature area, pain points, and customer impact |
+| **Deduplicate** | Semantic search (Voyage AI + Qdrant) checks for similar existing posts. If similarity ≥ 0.85, votes on the existing post instead of creating a duplicate |
+| **Organize** | LLM assigns the right board, category, and tags |
+
+<Callout kind="info" collapsed="false">
+  Discord feedback is tagged with `source: discord` and `source_type: integration`. Each post stores the originating server ID, channel ID, and submitter Discord user ID for traceability.
+</Callout>
+
+## Security
+
+The Discord integration verifies every incoming interaction using Discord's official **Ed25519 signature scheme**. Each request from Discord includes:
+
+- `X-Signature-Ed25519` — Cryptographic signature
+- `X-Signature-Timestamp` — Request timestamp
+
+ProductBridge validates both before processing any interaction, rejecting any request that fails signature verification.
+
+Bot tokens, OAuth access tokens, server IDs, and application IDs are all encrypted at rest using Fernet symmetric encryption with a server-managed key.
+
+## Limitations
+
+<Callout kind="alert" collapsed="false">
+  **Slash command only** — Discord feedback can only be submitted through the `/productbridge` slash command. There is no channel monitoring, emoji reactions, @mentions, or DM support.
+</Callout>
+
+- **One server per organization** — Connect a different ProductBridge organization for each Discord server
+- **No historical backfill** — Discord only delivers events in real time. Existing messages cannot be imported retroactively
+- **Forum channels not supported** — Forum posts are not currently captured as feedback
+- **Threads not specially handled** — Slash commands work inside threads, but ProductBridge does not assign threads to feedback posts as comments
+- **No DM support** — The `/productbridge` slash command only works in servers, not direct messages with the bot
+- **Single command, fixed fields** — The modal always asks for Title and Description. Custom fields are not currently configurable
+
+## Disconnect
+
+To disconnect Discord, navigate to **Settings > Integrations > Discord** and click **Disconnect**. ProductBridge:
+
+- Marks the integration as `disconnected`
+- Stops processing incoming Discord interactions
+- Stops sending outgoing notifications to Discord channels
+- Keeps your existing feedback posts intact (only the live connection is removed)
+
+To fully remove the bot from your Discord server, also kick the **ProductBridge** bot from your server's member list.
+
 <Expandable title="Troubleshooting" default-open="false">
-  - **Bot not responding** — Verify the ProductBridge bot has the correct channel permissions (Read Messages, Send Messages, Read Message History)
-  - **Missing messages** — Ensure the bot is added to the specific channels you want to monitor, not just the server
-  - **Rate limits** — Discord enforces rate limits on bots. High-traffic channels may experience slight import delays during spikes
-  - **Re-authorize** — If the bot disconnects, re-add it from **Settings > Integrations > Discord**
+  - **Slash command not appearing** — Discord may take up to a minute to propagate registered commands. Refresh the Discord client (`Ctrl+R` / `Cmd+R`). If still missing, disconnect and reconnect to re-register the command.
+
+  - **Bot can't see a channel** — The bot needs **View Channel** and **Send Messages** permissions on the target channel. Check the channel's permission overwrites and ensure the ProductBridge bot's role has access.
+
+  - **Modal not opening** — Verify the bot is online (green status). If the bot is offline, your interaction endpoint may be misconfigured — try disconnecting and reconnecting.
+
+  - **Submission fails / "thinking" hangs** — Discord requires interaction responses within 3 seconds. Check the Discord integration logs in ProductBridge for signature verification errors or backend errors.
+
+  - **Notifications not posting** — Confirm the notification channel is configured and active. Verify the bot has **Send Messages** and **Embed Links** permissions in that channel. Check the event filter — only enabled event types trigger notifications.
+
+  - **Signature verification errors** — These usually indicate clock drift or a mismatch between the registered public key and the deployed environment. Disconnect and reconnect to refresh credentials.
+
+  - **Cross-server duplicate connection error** — A Discord server can only be connected to one ProductBridge organization at a time. If you see this error, the server is already linked to another org — contact support to migrate the connection.
+
+  - **Re-authorize** — If the connection stops working, revoke and reconnect from **Settings > Integrations > Discord**. This refreshes the bot token, re-registers the slash command, and re-establishes the interaction endpoint.
 </Expandable>
