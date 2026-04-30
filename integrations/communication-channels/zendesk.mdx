@@ -1,88 +1,231 @@
 ---
 title: Zendesk Integration
-description: Connect ProductBridge to Zendesk to import feedback from support tickets based on tags, custom fields, or ticket types.
+description: >-
+  Connect ProductBridge to Zendesk to automatically capture feedback from
+  support tickets and let your agents submit feedback directly from the
+  Zendesk sidebar app.
 ---
 
-<img src="https://cdn.simpleicons.org/zendesk" width="80" height="80" alt="Zendesk" />
+<img src="https://cdn.simpleicons.org/zendesk" width="80" height="80" alt="" />
 
 ## Overview
 
-The Zendesk integration imports feedback from your Zendesk tickets into ProductBridge automatically. Filter by tags, custom fields, or priority levels to control exactly which tickets are captured as product feedback.
+The Zendesk integration connects your Zendesk workspace to ProductBridge so you can capture product feedback the moment it surfaces in support — without leaving Zendesk. Once installed, the ProductBridge app appears inside Zendesk as a sidebar app, and every solved or closed ticket is analyzed by AI to extract feature requests, bug reports, and pain points automatically.
+
+There are two ways feedback flows from Zendesk into ProductBridge:
+
+1. **Sidebar App** — Support agents search existing feedback, vote on posts, or create new feedback posts directly from any Zendesk ticket — no context switching required.
+
+2. **Automatic Ticket Analysis** — When a ticket is marked **solved** or **closed**, ProductBridge receives a webhook event, fetches the full conversation, and runs it through an AI pipeline. Tickets that contain product feedback automatically become posts.
 
 ## Prerequisites
 
-<Callout kind="info" title="Before you start">
-- A Zendesk account with admin permissions
-- Your Zendesk subdomain (e.g., `yourcompany.zendesk.com`)
-- An API token or OAuth credentials for authentication
+<Callout kind="info" collapsed="false">
+  - A Zendesk account with **Admin** access
+
+  - A ProductBridge organization with at least one feedback board configured
+
+  - A Zendesk OAuth access token (personal API token or full OAuth app)
 </Callout>
 
 ## Connect Zendesk
 
 <Steps>
-  <Step title="Open Integration Settings" icon="settings">
-    Navigate to **Settings > Integrations > Zendesk** in your ProductBridge dashboard and click **Connect**.
-  </Step>
-  <Step title="Enter Your Subdomain" icon="globe">
-    Enter your Zendesk subdomain (e.g., `yourcompany`). ProductBridge constructs the full URL automatically.
-  </Step>
-  <Step title="Authorize Access" icon="shield">
-    Choose your authentication method:
+  <Step title="Open the Admin Dashboard" icon="layout-dashboard" title-type="p">
+    Sign in to your ProductBridge admin dashboard and navigate to **Settings > Integrations > Zendesk**.
 
-    - **API Token** — Enter your Zendesk email and API token (generated in Zendesk Admin > APIs > Zendesk API)
-    - **OAuth** — Authorize via Zendesk's OAuth flow for scoped, revocable access
+    <Image src="https://blob-cdn.documentation.ai/PLACEHOLDER/zendesk_before_connection_framed.png" width="1342" height="608" alt="" />
+  </Step>
 
-    <Callout kind="tip">
-      OAuth is recommended for production use. API tokens grant broader access and cannot be scoped to specific resources.
+  <Step title="Enter Your Credentials and Connect" icon="key" title-type="p">
+    On the Zendesk integration page, enter your Zendesk **subdomain** (e.g., `yourcompany` for `yourcompany.zendesk.com`) and your **OAuth access token**, then click **Connect**.
+
+    ProductBridge validates the token by fetching your Zendesk account settings before proceeding.
+
+    <Callout kind="tip" collapsed="false">
+      If your access token supports the `offline_access` scope, also provide the refresh token and expiry value so ProductBridge can renew the token automatically before it expires.
     </Callout>
   </Step>
+
+  <Step title="Authorize in Zendesk" icon="shield" title-type="p">
+    ProductBridge connects to Zendesk using your credentials and automatically sets up:
+
+    - A **"ProductBridge Feedback" webhook** subscribed to all ticket events
+    - A **Zendesk trigger** that fires on ticket Create and Change events
+    - The **ProductBridge sidebar app** installed into your Zendesk workspace
+
+    <Image src="https://blob-cdn.documentation.ai/PLACEHOLDER/zendesk_oauth_authorization_framed.png" width="1342" height="608" alt="" />
+  </Step>
+
+  <Step title="Confirm Connection" icon="check-circle" title-type="p">
+    After setup completes, the integration status updates to **Connected**, and the page displays your Zendesk subdomain, account name, and the registered webhook and trigger IDs.
+
+    ProductBridge immediately begins a 30-day backfill of your solved and closed tickets in the background.
+
+    <Image src="https://blob-cdn.documentation.ai/PLACEHOLDER/zendesk_after_connection_framed.png" width="1342" height="608" alt="" />
+  </Step>
 </Steps>
 
-## Configure Filters
+## What Happens After Install
 
-Define which Zendesk tickets get imported as feedback. You can combine multiple filters:
+Immediately after connection, ProductBridge:
 
-| Filter Type | Example | Description |
-|------------|---------|-------------|
-| Tags | `feedback`, `feature-request` | Import tickets with specific tags |
-| Custom Field | Type = "Feature Request" | Filter by any custom field value |
-| Priority | High, Urgent | Import only high-priority tickets |
-| Group | Product Feedback | Import tickets assigned to a specific group |
-| Status | Open, Pending | Filter by ticket status |
+- Encrypts and stores your access token and credentials
+
+- Creates a **"ProductBridge Feedback"** webhook in Zendesk subscribed to all conditional ticket events
+
+- Registers a **Zendesk trigger** that fires on ticket Create and Change events, delivering ticket ID, subject, status, priority, tags, and requester info
+
+- Installs the **ProductBridge sidebar app** in your Zendesk workspace, visible in every ticket's details panel
+
+- Queues a **30-day backfill** of solved and closed tickets for AI analysis
+
+## Submit Feedback from Zendesk
+
+After installation, your team can capture feedback in two ways.
+
+### 1. Sidebar App
+
+When the ProductBridge app is installed, it appears in the **ticket details panel** (right sidebar) of every Zendesk ticket. Agents can search existing feedback, vote on posts, create new posts, and link tickets — all without leaving Zendesk.
+
+<Image src="https://blob-cdn.documentation.ai/PLACEHOLDER/zendesk_sidebar_productbridge_showing_framed.png" width="1342" height="608" alt="" />
+
+**How it works:**
 
 <Steps>
-  <Step title="Add Filters" icon="filter">
-    Navigate to **Integration Settings > Zendesk > Filters** and define your import rules. Combine multiple filters with AND/OR logic.
+  <Step title="Open a Ticket in Zendesk" icon="ticket" title-type="p">
+    Navigate to any ticket in your Zendesk Inbox. The ProductBridge sidebar app appears in the right panel showing your 10 most recent feedback posts.
   </Step>
-  <Step title="Set Backfill Range" icon="calendar">
-    Choose whether to import only new tickets or backfill historical data. Set a date range for backfill (e.g., last 90 days).
+
+  <Step title="Search Existing Feedback" icon="search" title-type="p">
+    Use the search bar to check whether the user's input already matches a known feedback item. Type a keyword and ProductBridge returns the closest matching posts.
+
+    <Image src="https://blob-cdn.documentation.ai/PLACEHOLDER/zendesk_sidebar_search_result_framed.png" width="1342" height="608" alt="" />
   </Step>
-  <Step title="Enable Continuous Sync" icon="refresh-cw">
-    Toggle on continuous sync. New matching tickets are imported within minutes. Existing tickets matching your filters are backfilled on first sync.
+
+  <Step title="Upvote or Create New" icon="thumbs-up" title-type="p">
+    If an existing post matches, click it to view the details and add a vote. If the feedback is new, click **Create New Post**.
+
+    <Image src="https://blob-cdn.documentation.ai/PLACEHOLDER/zendesk_sidebar_after_searching_upvote_and_link_feedback_post_framed.png" width="1342" height="608" alt="" />
+  </Step>
+
+  <Step title="Fill the Feedback Form" icon="edit" title-type="p">
+    Select a target board, enter a title, and add a description. The form is pre-filled with customer context from the active Zendesk ticket so authorship and source metadata are linked automatically.
+
+    <Image src="https://blob-cdn.documentation.ai/PLACEHOLDER/zendesk_siderbar_create_feedback_post_framed.png" width="1342" height="608" alt="" />
+  </Step>
+
+  <Step title="Submit" icon="send" title-type="p">
+    Click **Submit**. The post is created instantly, tagged `source: zendesk` and `source_type: manual`, linked to the current ticket, and auto-approved since a teammate created it.
+
+    <Image src="https://blob-cdn.documentation.ai/PLACEHOLDER/zendesk_sidebasr_create_feedback_post_submit_button_showing_framed.png" width="1342" height="608" alt="" />
   </Step>
 </Steps>
 
-<Callout kind="tip">
-  Start with a narrow filter (e.g., tickets tagged "feedback") and expand gradually. This helps you validate the quality of imports before scaling up.
+Agents can also link an existing feedback post to the current ticket directly from the sidebar without creating a new post — useful when a customer mentions something already tracked.
+
+<Image src="https://blob-cdn.documentation.ai/PLACEHOLDER/zendesk_upvote_linking_framed.png" width="1342" height="608" alt="" />
+
+### 2. Automatic Ticket Analysis
+
+When a ticket status changes to **solved** or **closed** in Zendesk, ProductBridge receives a webhook event. It fetches the full ticket — including all public comments — and runs it through the AI pipeline to determine whether the ticket contains actionable product feedback.
+
+Tickets with product feedback (feature requests, bug reports, UX complaints, performance issues, integration requests) automatically become feedback posts. Routine support resolutions — password resets, billing inquiries, account questions — are silently discarded.
+
+<Callout kind="info" collapsed="false">
+  Automatic analysis runs on every solved and closed ticket. There are no capture modes or ticket filters — all solved and closed tickets are analyzed uniformly.
 </Callout>
 
-## How It Works
+## Backfill
 
-Once connected and filtered:
+When you first connect Zendesk, ProductBridge automatically backfills tickets from the **last 30 days**. Each solved or closed ticket from that window is queued for AI analysis and becomes a feedback post if it contains feedback.
 
-1. Zendesk tickets matching your rules are imported into your ProductBridge feedback inbox
-2. Each item is tagged with "via Zendesk" and includes the original ticket number for reference
-3. Ticket requester email is matched to ProductBridge user profiles automatically
-4. Star ratings or satisfaction scores (if available) are mapped to sentiment
-5. All imported feedback flows into [Feedback Intelligence](/core-concepts/feedback-intelligence) for analysis
+You can see backfill progress in the integration settings page.
 
-<Callout kind="info">
-  You can enable bidirectional sync to push status updates back to Zendesk. When a linked roadmap item ships, the original ticket is updated with a comment or status change.
+<Callout kind="tip" collapsed="false">
+  Backfill runs in the background and can take from a few minutes to several hours depending on ticket volume. New tickets from the moment of connection onward are processed in near real time via webhooks.
 </Callout>
+
+## How Feedback Is Processed
+
+All Zendesk feedback — whether from the sidebar app or automatic ticket analysis — flows through ProductBridge's AI pipeline:
+
+| Stage           | What Happens                                                                                                                                                                               |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Normalize**   | Ticket subject, description, public comments, requester info, tags, priority, satisfaction rating, and channel (email/web/phone/chat/API) are combined into a structured format           |
+| **Detect**      | LLM determines if the ticket contains product feedback. Confidence rises for low satisfaction ratings, escalated priority, feature-request/bug tags, and multi-comment discussions. Skipped for sidebar app submissions — confidence is auto-set to 0.95 |
+| **Extract**     | LLM extracts title, description, sentiment, priority, feature area, pain points, and customer context (technical level, user role, company tier)                                          |
+| **Deduplicate** | Semantic search (Voyage AI + Qdrant) checks for similar existing posts. If similarity ≥ 0.85, votes on the existing post instead of creating a duplicate                                  |
+| **Organize**    | LLM assigns the right board, category, and tags                                                                                                                                            |
+
+<Callout kind="info" collapsed="false">
+  Zendesk feedback is tagged with `source: zendesk` and `source_type: integration` (or `source_type: manual` for sidebar submissions). The original Zendesk ticket URL is stored in the post's metadata so you can jump from a feedback post back to the source conversation.
+</Callout>
+
+**Priority escalation factors specific to Zendesk:**
+
+- Satisfaction rating of "bad" or low score boosts priority
+- High or urgent ticket priority maps to elevated feedback priority
+- Enterprise organization or paid customer tier adds priority weight
+- Bug reports and performance issues are bumped one tier
+
+## Security
+
+The Zendesk integration verifies every incoming webhook using **HMAC-SHA256 signatures**. Each request from Zendesk includes:
+
+- `X-Zendesk-Webhook-Signature` — Cryptographic signature
+- `X-Zendesk-Webhook-Signature-Timestamp` — Unix timestamp
+
+ProductBridge validates the signature by computing HMAC-SHA256 over the timestamp and raw request body, then comparing against the header value using constant-time comparison. Any request that fails signature verification is rejected before processing.
+
+Access tokens, refresh tokens, and subdomain credentials are all encrypted at rest using Fernet symmetric encryption with a server-managed key. If a refresh token is available, ProductBridge proactively refreshes the access token 5 minutes before expiry so the integration never silently breaks due to token expiration.
+
+## Limitations
+
+<Callout kind="alert" collapsed="false">
+  **Solved and closed tickets only** — ProductBridge captures feedback from tickets in `solved` or `closed` status. Open, pending, and on-hold tickets are not analyzed.
+</Callout>
+
+- **No historical backfill beyond 30 days** — Backfill only covers the 30 days before connection. Older tickets cannot be imported retroactively
+
+- **Public comments only** — Internal notes and private comments are not included in AI analysis
+
+- **Side conversations not supported** — Side conversations within tickets are not captured
+
+- **One Zendesk account per organization** — Connect a different ProductBridge organization for each Zendesk account
+
+- **Forum and community posts not captured** — Only support tickets are analyzed; Zendesk Guide posts and community content are not processed
+
+## Disconnect
+
+To disconnect Zendesk, navigate to **Settings > Integrations > Zendesk** and click **Disconnect**. ProductBridge:
+
+- Deletes the Zendesk trigger registered during setup
+
+- Deletes the "ProductBridge Feedback" webhook from Zendesk
+
+- Uninstalls the ProductBridge sidebar app from your Zendesk workspace
+
+- Marks the integration as `disconnected`
+
+- Stops processing incoming webhook events
+
+Existing feedback posts remain in ProductBridge — only the live connection is removed.
 
 <Expandable title="Troubleshooting" default-open="false">
-  - **Tickets not importing** — Verify your filters match existing tickets and that your API token has not expired
-  - **Authentication errors** — Regenerate your API token in Zendesk Admin or re-authorize via OAuth
-  - **Missing fields** — Ensure your custom fields are accessible to the API. Some Zendesk field types require additional permissions
-  - **Rate limits** — Zendesk enforces API rate limits. If you see throttling errors, reduce the backfill date range or contact support
+  - **Sidebar app not appearing** — Verify the integration shows as **Connected** in ProductBridge settings. Reload the Zendesk page. If the app is still missing, disconnect and reconnect to reinstall it.
+
+  - **Tickets not creating feedback** — Not every ticket contains product feedback. The AI pipeline only creates posts when it detects actionable product input with sufficient confidence. Check the integration logs in **Settings > Integrations > Zendesk > Activity** to see which tickets were processed and why each was accepted or discarded.
+
+  - **Duplicate feedback** — ProductBridge deduplicates automatically using semantic similarity search. If a similar post already exists, the new ticket adds a vote to the existing post rather than creating a duplicate.
+
+  - **Webhook signature errors** — If you see signature verification failures in logs, the signing secret stored by ProductBridge may have rotated. Disconnect and reconnect the integration to refresh the secret.
+
+  - **Missing user data** — Requester details without an email in Zendesk are imported as anonymous. Ensure your Zendesk contacts have email addresses for full user linking.
+
+  - **Backfill taking a long time** — Backfill volume depends on how many tickets were solved or closed in the last 30 days. It runs as a background job and new tickets are processed in real time independently.
+
+  - **Token expiry errors** — If you provided a refresh token, ProductBridge renews the access token automatically. If you did not provide a refresh token, reconnect with a fresh access token. Using the `offline_access` OAuth scope prevents this issue.
+
+  - **Re-authorize** — If the connection stops working, revoke and reconnect from **Settings > Integrations > Zendesk**. This refreshes credentials, re-registers the webhook and trigger, and reinstalls the sidebar app.
 </Expandable>
