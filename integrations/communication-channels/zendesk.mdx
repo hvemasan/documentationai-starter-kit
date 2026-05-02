@@ -7,13 +7,13 @@ description: >-
 ---
 ## Overview
 
-The Zendesk integration connects your Zendesk workspace to ProductBridge so you can capture product feedback the moment it surfaces in support — without leaving Zendesk. Once installed, the ProductBridge app appears inside Zendesk as a sidebar app, and every solved or closed ticket is analyzed by AI to extract feature requests, bug reports, and pain points automatically.
+The Zendesk integration connects your Zendesk workspace to ProductBridge so you can capture product feedback the moment it surfaces in support — without leaving Zendesk. Once installed, the ProductBridge app appears inside Zendesk as a sidebar app, and every ticket which is recently created with status is analyzed by AI to extract feature requests, bug reports, and pain points automatically.
 
 There are two ways feedback flows from Zendesk into ProductBridge:
 
 1. **Sidebar App** — Support agents search existing feedback, vote on posts, or create new feedback posts directly from any Zendesk ticket — no context switching required.
 
-2. **Automatic Ticket Analysis** — When a ticket is marked **solved** or **closed**, ProductBridge receives a webhook event, fetches the full conversation, and runs it through an AI pipeline. Tickets that contain product feedback automatically become posts.
+2. **Automatic Ticket Analysis** — When a ticket is created with any status, ProductBridge receives a webhook event, fetches the full conversation, and runs it through an AI pipeline. Tickets that contain product feedback automatically become posts.
 
 ## Prerequisites
 
@@ -32,8 +32,6 @@ There are two ways feedback flows from Zendesk into ProductBridge:
     Sign in to your ProductBridge admin dashboard and navigate to **Settings > Integrations > Zendesk**
 
     <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777407774806-o6xmw436fq-admin_integration_page_framed.png?fm=auto&auto=compress%2Cformat" width="1342" height="608" alt="" />
-
-    <Image src="https://blob-cdn.documentation.ai/PLACEHOLDER/zendesk_before_connection_framed.png" width="1342" height="608" alt="" />
   </Step>
 
   <Step title="Enter Your Credentials and Connect" icon="key" title-type="p">
@@ -61,7 +59,7 @@ There are two ways feedback flows from Zendesk into ProductBridge:
 
     - The **ProductBridge sidebar app** installed into your Zendesk workspace
 
-    <Image src="https://blob-cdn.documentation.ai/PLACEHOLDER/zendesk_oauth_authorization_framed.png" width="1342" height="608" alt="" />
+ 
   </Step>
 
   <Step title="Confirm Connection" icon="check-circle" title-type="p">
@@ -70,8 +68,6 @@ There are two ways feedback flows from Zendesk into ProductBridge:
     ProductBridge immediately begins a 30-day backfill of your solved and closed tickets in the background.
 
     <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777582848889-1z6x9vmcq4a-zendesk_after_connection_framed.png?fm=auto&auto=compress%2Cformat" width="1349" height="600" alt="" />
-
-    <Image src="https://blob-cdn.documentation.ai/PLACEHOLDER/zendesk_after_connection_framed.png" width="1342" height="608" alt="" />
   </Step>
 </Steps>
 
@@ -97,8 +93,6 @@ After installation, your team can capture feedback in two ways.
 
 When the ProductBridge app is installed, it appears in the **ticket details panel** (right sidebar) of every Zendesk ticket. Agents can search existing feedback, vote on posts, create new posts, and link tickets — all without leaving Zendesk.
 
-<Image src="https://blob-cdn.documentation.ai/PLACEHOLDER/zendesk_sidebar_productbridge_showing_framed.png" width="1342" height="608" alt="" />
-
 **How it works:**
 
 <Steps>
@@ -112,16 +106,12 @@ When the ProductBridge app is installed, it appears in the **ticket details pane
     Use the search bar to check whether the user's input already matches a known feedback item. Type a keyword and ProductBridge returns the closest matching posts.
 
     <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777582973609-pj4f56ttcsg-zendesk_sidebar_search_result_framed.png?fm=auto&auto=compress%2Cformat" width="411" height="443" alt="" />
-
-    <Image src="https://blob-cdn.documentation.ai/PLACEHOLDER/zendesk_sidebar_search_result_framed.png" width="1342" height="608" alt="" />
   </Step>
 
   <Step title="Upvote or Create New" icon="thumbs-up" title-type="p">
     If an existing post matches, click it to view the details and add a vote. If the feedback is new, click **Create New Post**.
 
     <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777583031874-e3f2eoqxsw6-zendesk_sidebar_after_searching_upvote_and_link_feedback_post_framed.png?fm=auto&auto=compress%2Cformat" width="978" height="414" alt="" />
-
-    <Image src="https://blob-cdn.documentation.ai/PLACEHOLDER/zendesk_sidebar_after_searching_upvote_and_link_feedback_post_framed.png" width="1342" height="608" alt="" />
   </Step>
 
   <Step title="Fill the Feedback Form" icon="edit" title-type="p">
@@ -130,16 +120,12 @@ When the ProductBridge app is installed, it appears in the **ticket details pane
 
 
     <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777583103573-naen6f7tglm-zendesk_siderbar_create_feedback_post_framed.png?fm=auto&auto=compress%2Cformat" width="387" height="349" alt="" />
-
-    <Image src="https://blob-cdn.documentation.ai/PLACEHOLDER/zendesk_siderbar_create_feedback_post_framed.png" width="1342" height="608" alt="" />
   </Step>
 
   <Step title="Submit" icon="send" title-type="p">
     Click **Submit**. The post is created instantly, tagged and auto-approved since a teammate created it.
 
     <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777583269940-f49q5wyfxqg-zendesk_sidebasr_create_feedback_post_submit_button_showing_framed.png?fm=auto&auto=compress%2Cformat" width="959" height="414" alt="" />
-
-    <Image src="https://blob-cdn.documentation.ai/PLACEHOLDER/zendesk_sidebasr_create_feedback_post_submit_button_showing_framed.png" width="1342" height="608" alt="" />
   </Step>
 </Steps>
 
