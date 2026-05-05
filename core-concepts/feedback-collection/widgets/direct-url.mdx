@@ -1,0 +1,97 @@
+---
+title: Direct URL
+description: >-
+  Share a direct link to your ProductBridge feedback portal. No code or
+  embeds required — paste the URL in emails, Slack, support tickets, docs,
+  or anywhere a link works.
+---
+
+## Overview
+
+The Direct URL is the simplest way to collect feedback. You get a permanent link to your branded feedback portal that you can share anywhere: in emails, Slack messages, support auto-replies, help docs, or social media. No script tags, no iframes, no SDK.
+
+Users open the link, land on your feedback portal, and submit. That is it.
+
+## Your Portal URL
+
+Your portal URL follows this pattern:
+
+```
+https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID
+```
+
+Find your **Organization ID** in **Settings > Widget & Embeds**.
+
+You can also deep-link directly to a specific tab:
+
+| Tab | URL |
+|---|---|
+| Feedback (default) | `https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID?tab=feedback` |
+| Roadmap | `https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID?tab=roadmap` |
+| Changelog | `https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID?tab=changelog` |
+
+## Where to Use It
+
+### In Emails
+
+Add a feedback link to your onboarding emails, newsletters, or transactional emails:
+
+```
+Have feedback? We'd love to hear from you:
+https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID
+```
+
+### In Slack or Teams
+
+Pin a shortcut to your `#feedback` or `#product` channel:
+
+```
+💬 Share product feedback → https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID
+```
+
+### In Support Auto-Replies
+
+Include the link in Zendesk, Intercom, or Freshdesk canned responses:
+
+```
+Was this helpful? Share feature requests or bug reports here:
+https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID
+```
+
+### In Help Documentation
+
+Add a feedback button at the bottom of help articles:
+
+```markdown
+[Share feedback on this article](https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID)
+```
+
+### In Your App
+
+Use it as a standard HTML anchor — no SDK needed:
+
+```html
+<a href="https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID" target="_blank" rel="noopener">
+  Share Feedback
+</a>
+```
+
+## Limitations
+
+<Callout kind="info" collapsed="false">
+  The Direct URL opens in a new tab or window. If you want the widget to appear **inside** your application without navigation, use the [Floating Button](/core-concepts/feedback-collection/widgets/floating-button), [Inline Embed](/core-concepts/feedback-collection/widgets/inline-embed), or [Custom Trigger](/core-concepts/feedback-collection/widgets/custom-trigger) instead.
+</Callout>
+
+- Users are not automatically identified — they must log in manually at the portal
+- No programmatic control or SDK events
+- Opens as a standalone page, not embedded in your UI
+
+## Identify Users via URL (Optional)
+
+If you generate a short-lived token on your server, you can pre-authenticate users by appending it as a query parameter — saving them the login step:
+
+```
+https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID?token=JWT_FROM_YOUR_SERVER
+```
+
+The token is the same JWT you generate for SDK identity verification. See [Identity Verification](/core-concepts/feedback-collection/widgets/identity-verification) for how to generate it.

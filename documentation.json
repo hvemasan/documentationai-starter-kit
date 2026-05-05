@@ -56,9 +56,42 @@
                     "icon": "plug"
                   },
                   {
-                    "title": "Widgets",
+                    "group": "Widgets & Embeds",
+                    "icon": "code-2",
+                    "expandable": true,
                     "path": "core-concepts/feedback-collection/widgets",
-                    "icon": "code"
+                    "pages": [
+                      {
+                        "title": "Floating Button",
+                        "path": "core-concepts/feedback-collection/widgets/floating-button",
+                        "icon": "message-square"
+                      },
+                      {
+                        "title": "Inline Embed",
+                        "path": "core-concepts/feedback-collection/widgets/inline-embed",
+                        "icon": "app-window"
+                      },
+                      {
+                        "title": "Custom Trigger",
+                        "path": "core-concepts/feedback-collection/widgets/custom-trigger",
+                        "icon": "mouse-pointer-click"
+                      },
+                      {
+                        "title": "iFrame Embed",
+                        "path": "core-concepts/feedback-collection/widgets/iframe-embed",
+                        "icon": "frame"
+                      },
+                      {
+                        "title": "Direct URL",
+                        "path": "core-concepts/feedback-collection/widgets/direct-url",
+                        "icon": "link"
+                      },
+                      {
+                        "title": "Identity Verification",
+                        "path": "core-concepts/feedback-collection/widgets/identity-verification",
+                        "icon": "shield-check"
+                      }
+                    ]
                   }
                 ]
               },

@@ -1,0 +1,324 @@
+---
+title: Floating Button
+description: >-
+  Add a floating feedback button to your website or app. Opens as a popup modal
+  or a full-height sidebar panel. Choose your framework — Vanilla JS, React,
+  Vue, or Angular — and paste in the code.
+---
+
+## Overview
+
+The floating button is the most popular embed type. A small button appears in the corner of every page. When a user clicks it, the widget opens as either a **popup** (modal overlay) or a **sidebar** (full-height slide-in panel). No layout changes required — it works on any page without touching your existing HTML.
+
+<Columns cols="2">
+  <Card title="Popup mode" href="#popup" icon="square" horizontal={false}>
+    Opens as a centered modal overlay. Great for most sites — non-intrusive and always accessible.
+  </Card>
+  <Card title="Sidebar mode" href="#sidebar" icon="panel-right" horizontal={false}>
+    Slides in from the side as a full-height panel. More space for feedback, roadmap, and changelog.
+  </Card>
+</Columns>
+
+## Prerequisites
+
+Before you start, grab your **Organization ID** from **Settings > Widget & Embeds** in your ProductBridge dashboard. It looks like `da10975d-0faf-4c8b-b526-4a5038a4e4d5`.
+
+## Popup Mode {#popup}
+
+A floating button that opens a centered modal popup when clicked.
+
+<CodeGroup tabs="HTML, React, Vue, Angular">
+```html title="index.html"
+<!-- Paste before </body> -->
+<script>
+  (function () {
+    var s = document.createElement('script');
+    s.src = 'https://app.productbridge.io/sdk/pb-widget.js';
+    s.async = true;
+    s.onload = function () {
+      ProductBridge.init({
+        organizationId: 'YOUR_ORGANIZATION_ID',
+        mode: 'popup',           // opens as modal (default)
+        position: 'bottom-right',
+        theme: 'auto',
+        defaultTab: 'feedback',
+        buttonColor: '#3B82F6',
+        buttonText: 'Feedback',
+      });
+    };
+    document.head.appendChild(s);
+  })();
+</script>
+```
+
+```jsx title="ProductBridgeWidget.jsx"
+// Drop this component into your app root (e.g. App.jsx or layout.jsx).
+// It renders nothing visible — the floating button is injected by the SDK.
+import { useEffect } from 'react';
+
+export default function ProductBridgeWidget() {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://app.productbridge.io/sdk/pb-widget.js';
+    script.async = true;
+    script.onload = () => {
+      window.ProductBridge.init({
+        organizationId: 'YOUR_ORGANIZATION_ID',
+        mode: 'popup',
+        position: 'bottom-right',
+        theme: 'auto',
+        defaultTab: 'feedback',
+        buttonColor: '#3B82F6',
+        buttonText: 'Feedback',
+      });
+    };
+    document.head.appendChild(script);
+
+    return () => {
+      window.ProductBridge?.destroy();
+    };
+  }, []);
+
+  return null;
+}
+```
+
+```vue title="ProductBridgeWidget.vue"
+<!-- Add <ProductBridgeWidget /> to your App.vue or root layout. -->
+<script setup>
+import { onMounted, onUnmounted } from 'vue';
+
+onMounted(() => {
+  const script = document.createElement('script');
+  script.src = 'https://app.productbridge.io/sdk/pb-widget.js';
+  script.async = true;
+  script.onload = () => {
+    window.ProductBridge.init({
+      organizationId: 'YOUR_ORGANIZATION_ID',
+      mode: 'popup',
+      position: 'bottom-right',
+      theme: 'auto',
+      defaultTab: 'feedback',
+      buttonColor: '#3B82F6',
+      buttonText: 'Feedback',
+    });
+  };
+  document.head.appendChild(script);
+});
+
+onUnmounted(() => {
+  window.ProductBridge?.destroy();
+});
+</script>
+
+<template><!-- No visible output --></template>
+```
+
+```typescript title="productbridge-widget.component.ts"
+// Add <app-productbridge-widget /> to your root AppComponent template.
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
+@Component({
+  selector: 'app-productbridge-widget',
+  template: '',
+  standalone: true,
+})
+export class ProductBridgeWidgetComponent implements OnInit, OnDestroy {
+  ngOnInit(): void {
+    const script = document.createElement('script');
+    script.src = 'https://app.productbridge.io/sdk/pb-widget.js';
+    script.async = true;
+    script.onload = () => {
+      (window as any).ProductBridge.init({
+        organizationId: 'YOUR_ORGANIZATION_ID',
+        mode: 'popup',
+        position: 'bottom-right',
+        theme: 'auto',
+        defaultTab: 'feedback',
+        buttonColor: '#3B82F6',
+        buttonText: 'Feedback',
+      });
+    };
+    document.head.appendChild(script);
+  }
+
+  ngOnDestroy(): void {
+    (window as any).ProductBridge?.destroy();
+  }
+}
+```
+</CodeGroup>
+
+## Sidebar Mode {#sidebar}
+
+A floating button that slides in a full-height panel from the side when clicked.
+
+<CodeGroup tabs="HTML, React, Vue, Angular">
+```html title="index.html"
+<!-- Paste before </body> -->
+<script>
+  (function () {
+    var s = document.createElement('script');
+    s.src = 'https://app.productbridge.io/sdk/pb-widget.js';
+    s.async = true;
+    s.onload = function () {
+      ProductBridge.init({
+        organizationId: 'YOUR_ORGANIZATION_ID',
+        mode: 'sidebar',         // slides in as a panel
+        position: 'bottom-right',
+        theme: 'auto',
+        defaultTab: 'feedback',
+        buttonColor: '#3B82F6',
+        buttonText: 'Feedback',
+      });
+    };
+    document.head.appendChild(s);
+  })();
+</script>
+```
+
+```jsx title="ProductBridgeWidget.jsx"
+import { useEffect } from 'react';
+
+export default function ProductBridgeWidget() {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://app.productbridge.io/sdk/pb-widget.js';
+    script.async = true;
+    script.onload = () => {
+      window.ProductBridge.init({
+        organizationId: 'YOUR_ORGANIZATION_ID',
+        mode: 'sidebar',
+        position: 'bottom-right',
+        theme: 'auto',
+        defaultTab: 'feedback',
+        buttonColor: '#3B82F6',
+        buttonText: 'Feedback',
+      });
+    };
+    document.head.appendChild(script);
+
+    return () => {
+      window.ProductBridge?.destroy();
+    };
+  }, []);
+
+  return null;
+}
+```
+
+```vue title="ProductBridgeWidget.vue"
+<script setup>
+import { onMounted, onUnmounted } from 'vue';
+
+onMounted(() => {
+  const script = document.createElement('script');
+  script.src = 'https://app.productbridge.io/sdk/pb-widget.js';
+  script.async = true;
+  script.onload = () => {
+    window.ProductBridge.init({
+      organizationId: 'YOUR_ORGANIZATION_ID',
+      mode: 'sidebar',
+      position: 'bottom-right',
+      theme: 'auto',
+      defaultTab: 'feedback',
+      buttonColor: '#3B82F6',
+      buttonText: 'Feedback',
+    });
+  };
+  document.head.appendChild(script);
+});
+
+onUnmounted(() => {
+  window.ProductBridge?.destroy();
+});
+</script>
+
+<template><!-- No visible output --></template>
+```
+
+```typescript title="productbridge-widget.component.ts"
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
+@Component({
+  selector: 'app-productbridge-widget',
+  template: '',
+  standalone: true,
+})
+export class ProductBridgeWidgetComponent implements OnInit, OnDestroy {
+  ngOnInit(): void {
+    const script = document.createElement('script');
+    script.src = 'https://app.productbridge.io/sdk/pb-widget.js';
+    script.async = true;
+    script.onload = () => {
+      (window as any).ProductBridge.init({
+        organizationId: 'YOUR_ORGANIZATION_ID',
+        mode: 'sidebar',
+        position: 'bottom-right',
+        theme: 'auto',
+        defaultTab: 'feedback',
+        buttonColor: '#3B82F6',
+        buttonText: 'Feedback',
+      });
+    };
+    document.head.appendChild(script);
+  }
+
+  ngOnDestroy(): void {
+    (window as any).ProductBridge?.destroy();
+  }
+}
+```
+</CodeGroup>
+
+## Configuration Options
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `organizationId` | string | — | **Required.** Your organization ID |
+| `mode` | string | `popup` | `popup` or `sidebar` |
+| `position` | string | `bottom-right` | `bottom-right`, `bottom-left`, `top-right`, `top-left` |
+| `theme` | string | `auto` | `auto`, `light`, or `dark` |
+| `defaultTab` | string | `feedback` | `feedback`, `roadmap`, or `changelog` |
+| `buttonColor` | string | `#3B82F6` | Hex color for the floating button |
+| `buttonText` | string | `Feedback` | Label on the floating button |
+| `userToken` | string | — | JWT for automatic user identification — see [Identity Verification](/core-concepts/feedback-collection/widgets/identity-verification) |
+| `zIndex` | number | `999999` | CSS z-index for the overlay |
+
+## Programmatic Control
+
+You can open, close, or toggle the widget from your own code at any time:
+
+```javascript
+// Open the widget
+ProductBridge.open();
+
+// Open directly to a specific tab
+ProductBridge.open(); // defaultTab controls which tab shows
+
+// Close the widget
+ProductBridge.close();
+
+// Toggle open / closed
+ProductBridge.toggle();
+
+// Identify a user after init (e.g. after login)
+ProductBridge.identify('YOUR_JWT_TOKEN');
+```
+
+<Callout kind="tip" collapsed="false">
+  Use `ProductBridge.open()` and `ProductBridge.close()` to wire the widget to your own UI controls — header buttons, help menus, keyboard shortcuts, etc.
+</Callout>
+
+## Identify Your Users
+
+To link submitted feedback to your logged-in users, add Identity Verification. Generate a JWT on your backend and pass it as `userToken`:
+
+```javascript
+ProductBridge.init({
+  organizationId: 'YOUR_ORGANIZATION_ID',
+  userToken: 'JWT_FROM_YOUR_SERVER', // signed with your Widget API secret
+});
+```
+
+See the full guide → [Identity Verification](/core-concepts/feedback-collection/widgets/identity-verification)

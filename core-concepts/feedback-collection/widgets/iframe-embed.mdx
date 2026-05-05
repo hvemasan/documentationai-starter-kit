@@ -1,0 +1,188 @@
+---
+title: iFrame Embed
+description: >-
+  Embed the ProductBridge widget using a standard HTML iframe — no SDK or
+  JavaScript required. Works in any CMS, Notion, Webflow, Framer, or static
+  HTML page.
+---
+
+## Overview
+
+The iFrame embed uses a standard `<iframe>` tag to load the ProductBridge widget. There is no SDK to load, no JavaScript to write — just an HTML tag with a URL. This makes it the most compatible option: it works in environments where you cannot run arbitrary JavaScript, such as Notion embeds, Webflow rich text, Framer, CMSs, and static HTML files.
+
+The trade-off is that the iFrame embed does not support programmatic control or JavaScript-based identity verification. If you need to identify users, use the [floating button](/core-concepts/feedback-collection/widgets/floating-button) or [inline embed](/core-concepts/feedback-collection/widgets/inline-embed) with the SDK instead.
+
+## Your iFrame URL
+
+Your widget iFrame URL follows this pattern:
+
+```
+https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID
+```
+
+Find your **Organization ID** in **Settings > Widget & Embeds**.
+
+Optional query parameters let you set the default tab and theme:
+
+```
+https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID?tab=feedback&theme=light
+```
+
+| Parameter | Values | Default | Description |
+|---|---|---|---|
+| `tab` | `feedback`, `roadmap`, `changelog` | `feedback` | Default tab when the widget loads |
+| `theme` | `light`, `dark` | Follows system | Force a specific color theme |
+
+## Installation
+
+<CodeGroup tabs="HTML, React, Vue, Angular">
+```html title="index.html"
+<iframe
+  src="https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID"
+  width="100%"
+  height="650"
+  frameborder="0"
+  style="border: none; border-radius: 12px; display: block;">
+</iframe>
+```
+
+```jsx title="ProductBridgeFrame.jsx"
+// Drop this component anywhere in your page layout.
+export default function ProductBridgeFrame({
+  organizationId = 'YOUR_ORGANIZATION_ID',
+  tab = 'feedback',
+  theme = null,         // null = system default, 'light', or 'dark'
+  height = 650,
+  borderRadius = 12,
+}) {
+  const params = new URLSearchParams({ tab });
+  if (theme) params.set('theme', theme);
+
+  const src = `https://app.productbridge.io/widget/${organizationId}?${params}`;
+
+  return (
+    <iframe
+      src={src}
+      width="100%"
+      height={height}
+      frameBorder="0"
+      style={{ border: 'none', borderRadius, display: 'block' }}
+    />
+  );
+}
+
+// Usage:
+// <ProductBridgeFrame organizationId="YOUR_ID" tab="feedback" height={700} />
+```
+
+```vue title="ProductBridgeFrame.vue"
+<script setup>
+import { computed } from 'vue';
+
+const props = defineProps({
+  organizationId: { type: String, default: 'YOUR_ORGANIZATION_ID' },
+  tab:            { type: String, default: 'feedback' },
+  theme:          { type: String, default: null },
+  height:         { type: Number, default: 650 },
+  borderRadius:   { type: Number, default: 12 },
+});
+
+const src = computed(() => {
+  const params = new URLSearchParams({ tab: props.tab });
+  if (props.theme) params.set('theme', props.theme);
+  return `https://app.productbridge.io/widget/${props.organizationId}?${params}`;
+});
+</script>
+
+<template>
+  <iframe
+    :src="src"
+    width="100%"
+    :height="height"
+    frameborder="0"
+    :style="{ border: 'none', borderRadius: borderRadius + 'px', display: 'block' }"
+  />
+</template>
+
+<!-- Usage: <ProductBridgeFrame organization-id="YOUR_ID" tab="roadmap" /> -->
+```
+
+```typescript title="productbridge-frame.component.ts"
+import { Component, Input, OnChanges } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
+@Component({
+  selector: 'app-productbridge-frame',
+  template: `
+    <iframe
+      [src]="safeUrl"
+      width="100%"
+      [attr.height]="height"
+      frameborder="0"
+      [style.border]="'none'"
+      [style.border-radius]="borderRadius + 'px'"
+      [style.display]="'block'">
+    </iframe>
+  `,
+  standalone: true,
+  imports: [CommonModule],
+})
+export class ProductBridgeFrameComponent implements OnChanges {
+  @Input() organizationId = 'YOUR_ORGANIZATION_ID';
+  @Input() tab = 'feedback';
+  @Input() theme: string | null = null;
+  @Input() height = 650;
+  @Input() borderRadius = 12;
+
+  safeUrl!: SafeResourceUrl;
+
+  constructor(private sanitizer: DomSanitizer) {
+    this.buildUrl();
+  }
+
+  ngOnChanges(): void {
+    this.buildUrl();
+  }
+
+  private buildUrl(): void {
+    const params = new URLSearchParams({ tab: this.tab });
+    if (this.theme) params.set('theme', this.theme);
+    const url = `https://app.productbridge.io/widget/${this.organizationId}?${params}`;
+    this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+}
+
+// Usage in template:
+// <app-productbridge-frame organizationId="YOUR_ID" tab="roadmap"></app-productbridge-frame>
+```
+</CodeGroup>
+
+## Styling Tips
+
+```html
+<!-- Full-width embed with rounded corners and a subtle shadow -->
+<div style="max-width: 960px; margin: 0 auto;">
+  <iframe
+    src="https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID"
+    width="100%"
+    height="700"
+    frameborder="0"
+    style="border: none; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); display: block;">
+  </iframe>
+</div>
+```
+
+<Callout kind="tip" collapsed="false">
+  Set a fixed pixel height on the iframe (e.g. `height="650"`) rather than using CSS `height: 100%`. Percentage heights on iframes require the parent chain to also have explicit heights, which often causes the iframe to collapse to zero.
+</Callout>
+
+## Limitations
+
+<Callout kind="alert" collapsed="false">
+  The iFrame embed does **not** support JavaScript-based Identity Verification. Users will need to log in manually inside the widget. If automatic user identification is important, use the [Floating Button](/core-concepts/feedback-collection/widgets/floating-button) or [Inline Embed](/core-concepts/feedback-collection/widgets/inline-embed) with the SDK and a `userToken`.
+</Callout>
+
+- No `ProductBridge.open()` / `close()` / `toggle()` programmatic control
+- No SDK events (`ready`, `open`, `close`, etc.)
+- User must log in manually inside the widget each session

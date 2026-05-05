@@ -1,0 +1,226 @@
+---
+title: Custom Trigger
+description: >-
+  Attach the ProductBridge widget to any element on your page — your own button,
+  nav item, or menu link. The default floating button is hidden; the widget opens
+  only when your trigger element is clicked.
+---
+
+## Overview
+
+The custom trigger embed hides the default floating button and connects the widget to an element of your choosing. When a user clicks your element — a nav link, a help button, a keyboard shortcut handler — the widget opens. Everything else works the same: popup or sidebar mode, user identification, all tabs.
+
+Use this when you already have a feedback entry point in your UI and don't want two buttons on screen.
+
+## How It Works
+
+1. Add any clickable element to your HTML with a unique ID
+2. Load the SDK and call `ProductBridge.init()` with `trigger` set to that element's CSS selector
+3. The floating button is suppressed — only your element opens the widget
+
+## Installation
+
+<CodeGroup tabs="HTML, React, Vue, Angular">
+```html title="index.html"
+<!-- 1. Your custom trigger element — can be any HTML element -->
+<button id="feedback-btn">Share Feedback</button>
+
+<!-- 2. Paste before </body> -->
+<script>
+  (function () {
+    var s = document.createElement('script');
+    s.src = 'https://app.productbridge.io/sdk/pb-widget.js';
+    s.async = true;
+    s.onload = function () {
+      ProductBridge.init({
+        organizationId: 'YOUR_ORGANIZATION_ID',
+        trigger: '#feedback-btn', // CSS selector of your element
+        mode: 'popup',            // or 'sidebar'
+        theme: 'auto',
+        defaultTab: 'feedback',
+      });
+    };
+    document.head.appendChild(s);
+  })();
+</script>
+```
+
+```jsx title="ProductBridgeCustomTrigger.jsx"
+// This component renders your trigger button and wires up the SDK.
+// Place it wherever you want the trigger to appear.
+import { useEffect, useRef } from 'react';
+
+export default function ProductBridgeCustomTrigger({
+  organizationId = 'YOUR_ORGANIZATION_ID',
+  mode = 'popup',
+  theme = 'auto',
+  defaultTab = 'feedback',
+  userToken = null,
+  children = 'Share Feedback',
+}) {
+  const triggerId = 'pb-custom-trigger';
+  const initialized = useRef(false);
+
+  useEffect(() => {
+    if (initialized.current) return;
+    initialized.current = true;
+
+    const script = document.createElement('script');
+    script.src = 'https://app.productbridge.io/sdk/pb-widget.js';
+    script.async = true;
+    script.onload = () => {
+      window.ProductBridge.init({
+        organizationId,
+        trigger: `#${triggerId}`,
+        mode,
+        theme,
+        defaultTab,
+        ...(userToken && { userToken }),
+      });
+    };
+    document.head.appendChild(script);
+
+    return () => {
+      window.ProductBridge?.destroy();
+    };
+  }, [organizationId, userToken]);
+
+  return (
+    <button id={triggerId}>
+      {children}
+    </button>
+  );
+}
+
+// Usage:
+// <ProductBridgeCustomTrigger organizationId="YOUR_ID">
+//   Share Feedback
+// </ProductBridgeCustomTrigger>
+```
+
+```vue title="ProductBridgeCustomTrigger.vue"
+<!-- Place this component wherever you want the trigger button.
+     You can also pass your own trigger ID and style the button however you like. -->
+<script setup>
+import { onMounted, onUnmounted } from 'vue';
+
+const props = defineProps({
+  organizationId: { type: String, default: 'YOUR_ORGANIZATION_ID' },
+  mode:           { type: String, default: 'popup' },
+  theme:          { type: String, default: 'auto' },
+  defaultTab:     { type: String, default: 'feedback' },
+  userToken:      { type: String, default: null },
+});
+
+const triggerId = 'pb-custom-trigger';
+
+onMounted(() => {
+  const script = document.createElement('script');
+  script.src = 'https://app.productbridge.io/sdk/pb-widget.js';
+  script.async = true;
+  script.onload = () => {
+    window.ProductBridge.init({
+      organizationId: props.organizationId,
+      trigger: `#${triggerId}`,
+      mode: props.mode,
+      theme: props.theme,
+      defaultTab: props.defaultTab,
+      ...(props.userToken && { userToken: props.userToken }),
+    });
+  };
+  document.head.appendChild(script);
+});
+
+onUnmounted(() => {
+  window.ProductBridge?.destroy();
+});
+</script>
+
+<template>
+  <button :id="triggerId">
+    <slot>Share Feedback</slot>
+  </button>
+</template>
+```
+
+```typescript title="productbridge-custom-trigger.component.ts"
+// Place <app-productbridge-trigger>Share Feedback</app-productbridge-trigger>
+// wherever you want the trigger button in your templates.
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+
+@Component({
+  selector: 'app-productbridge-trigger',
+  template: `<button id="pb-custom-trigger"><ng-content></ng-content></button>`,
+  standalone: true,
+})
+export class ProductBridgeTriggerComponent implements OnInit, OnDestroy {
+  @Input() organizationId = 'YOUR_ORGANIZATION_ID';
+  @Input() mode = 'popup';
+  @Input() theme = 'auto';
+  @Input() defaultTab = 'feedback';
+  @Input() userToken?: string;
+
+  ngOnInit(): void {
+    const script = document.createElement('script');
+    script.src = 'https://app.productbridge.io/sdk/pb-widget.js';
+    script.async = true;
+    script.onload = () => {
+      (window as any).ProductBridge.init({
+        organizationId: this.organizationId,
+        trigger: '#pb-custom-trigger',
+        mode: this.mode,
+        theme: this.theme,
+        defaultTab: this.defaultTab,
+        ...(this.userToken && { userToken: this.userToken }),
+      });
+    };
+    document.head.appendChild(script);
+  }
+
+  ngOnDestroy(): void {
+    (window as any).ProductBridge?.destroy();
+  }
+}
+```
+</CodeGroup>
+
+## Trigger Any Element
+
+The `trigger` option accepts any valid CSS selector. You can target an existing element anywhere on the page — you don't need to render a new button:
+
+```html
+<!-- Trigger an existing nav link -->
+<a id="nav-feedback-link" href="#">Feedback</a>
+
+<script>
+  ProductBridge.init({
+    organizationId: 'YOUR_ORGANIZATION_ID',
+    trigger: '#nav-feedback-link',
+  });
+</script>
+```
+
+```javascript
+// Or open programmatically from anywhere — no trigger element needed
+document.getElementById('my-help-menu-item')
+  .addEventListener('click', () => ProductBridge.open());
+```
+
+## Configuration Options
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `organizationId` | string | — | **Required.** Your organization ID |
+| `trigger` | string | — | **Required.** CSS selector of the element that opens the widget |
+| `mode` | string | `popup` | `popup` or `sidebar` |
+| `theme` | string | `auto` | `auto`, `light`, or `dark` |
+| `defaultTab` | string | `feedback` | `feedback`, `roadmap`, or `changelog` |
+| `userToken` | string | — | JWT for automatic user identification — see [Identity Verification](/core-concepts/feedback-collection/widgets/identity-verification) |
+
+<Callout kind="info" collapsed="false">
+  When `trigger` is set, the SDK suppresses the default floating button entirely. The widget only opens when your trigger element is clicked, or when you call `ProductBridge.open()` programmatically.
+</Callout>
+
+## Identify Your Users
+
+To link feedback to your logged-in users, generate a JWT on your backend and pass it as `userToken`. See [Identity Verification](/core-concepts/feedback-collection/widgets/identity-verification) for server-side code in Node.js, Python, PHP, Ruby, and Go.

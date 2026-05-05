@@ -1,0 +1,193 @@
+---
+title: Inline Embed
+description: >-
+  Render the ProductBridge widget directly inside a container element on your
+  page. Perfect for dedicated feedback pages, help centers, or any place where
+  you want the widget as part of your layout rather than an overlay.
+---
+
+## Overview
+
+The inline embed renders the widget inside a `<div>` you place anywhere on your page. There is no floating button, no overlay — the widget becomes part of your page content. Use it for a dedicated `/feedback` page, a help center, or a settings panel.
+
+## How It Works
+
+1. Add an empty `<div>` with a unique ID where you want the widget to appear
+2. Load the SDK and call `ProductBridge.embed()` (not `init()`) pointing at that container
+3. The widget renders inside the container at whatever height you specify
+
+## Installation
+
+<CodeGroup tabs="HTML, React, Vue, Angular">
+```html title="index.html"
+<!-- 1. Place this div where you want the widget to appear -->
+<div id="productbridge-embed"></div>
+
+<!-- 2. Paste this script before </body> -->
+<script>
+  (function () {
+    var s = document.createElement('script');
+    s.src = 'https://app.productbridge.io/sdk/pb-widget.js';
+    s.async = true;
+    s.onload = function () {
+      ProductBridge.embed({
+        organizationId: 'YOUR_ORGANIZATION_ID',
+        containerId: 'productbridge-embed', // ID of the div above
+        height: '600px',
+        theme: 'auto',
+        defaultTab: 'feedback',
+      });
+    };
+    document.head.appendChild(s);
+  })();
+</script>
+```
+
+```jsx title="ProductBridgeEmbed.jsx"
+// Place <ProductBridgeEmbed /> anywhere in your page layout.
+import { useEffect, useRef } from 'react';
+
+export default function ProductBridgeEmbed({
+  organizationId = 'YOUR_ORGANIZATION_ID',
+  height = '600px',
+  theme = 'auto',
+  defaultTab = 'feedback',
+  userToken = null,
+}) {
+  const containerId = 'productbridge-embed';
+  const initialized = useRef(false);
+
+  useEffect(() => {
+    if (initialized.current) return;
+    initialized.current = true;
+
+    const script = document.createElement('script');
+    script.src = 'https://app.productbridge.io/sdk/pb-widget.js';
+    script.async = true;
+    script.onload = () => {
+      window.ProductBridge.embed({
+        organizationId,
+        containerId,
+        height,
+        theme,
+        defaultTab,
+        ...(userToken && { userToken }),
+      });
+    };
+    document.head.appendChild(script);
+
+    return () => {
+      window.ProductBridge?.destroy();
+    };
+  }, [organizationId, userToken]);
+
+  return <div id={containerId} style={{ width: '100%', height }} />;
+}
+```
+
+```vue title="ProductBridgeEmbed.vue"
+<!-- Place <ProductBridgeEmbed /> anywhere in your page. -->
+<script setup>
+import { onMounted, onUnmounted } from 'vue';
+
+const props = defineProps({
+  organizationId: { type: String, default: 'YOUR_ORGANIZATION_ID' },
+  height:         { type: String, default: '600px' },
+  theme:          { type: String, default: 'auto' },
+  defaultTab:     { type: String, default: 'feedback' },
+  userToken:      { type: String, default: null },
+});
+
+const containerId = 'productbridge-embed';
+
+onMounted(() => {
+  const script = document.createElement('script');
+  script.src = 'https://app.productbridge.io/sdk/pb-widget.js';
+  script.async = true;
+  script.onload = () => {
+    window.ProductBridge.embed({
+      organizationId: props.organizationId,
+      containerId,
+      height: props.height,
+      theme: props.theme,
+      defaultTab: props.defaultTab,
+      ...(props.userToken && { userToken: props.userToken }),
+    });
+  };
+  document.head.appendChild(script);
+});
+
+onUnmounted(() => {
+  window.ProductBridge?.destroy();
+});
+</script>
+
+<template>
+  <div :id="containerId" :style="{ width: '100%', height: props.height }" />
+</template>
+```
+
+```typescript title="productbridge-embed.component.ts"
+// Place <app-productbridge-embed /> anywhere in your page template.
+import { Component, Input, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+
+@Component({
+  selector: 'app-productbridge-embed',
+  template: `<div id="productbridge-embed" [style.height]="height" style="width:100%"></div>`,
+  standalone: true,
+})
+export class ProductBridgeEmbedComponent implements OnInit, OnDestroy {
+  @Input() organizationId = 'YOUR_ORGANIZATION_ID';
+  @Input() height = '600px';
+  @Input() theme = 'auto';
+  @Input() defaultTab = 'feedback';
+  @Input() userToken?: string;
+
+  ngOnInit(): void {
+    const script = document.createElement('script');
+    script.src = 'https://app.productbridge.io/sdk/pb-widget.js';
+    script.async = true;
+    script.onload = () => {
+      (window as any).ProductBridge.embed({
+        organizationId: this.organizationId,
+        containerId: 'productbridge-embed',
+        height: this.height,
+        theme: this.theme,
+        defaultTab: this.defaultTab,
+        ...(this.userToken && { userToken: this.userToken }),
+      });
+    };
+    document.head.appendChild(script);
+  }
+
+  ngOnDestroy(): void {
+    (window as any).ProductBridge?.destroy();
+  }
+}
+```
+</CodeGroup>
+
+## Configuration Options
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `organizationId` | string | — | **Required.** Your organization ID |
+| `containerId` | string | — | **Required.** ID of the container `<div>` |
+| `height` | string | `600px` | Height of the embedded widget (any CSS value) |
+| `theme` | string | `auto` | `auto`, `light`, or `dark` |
+| `defaultTab` | string | `feedback` | `feedback`, `roadmap`, or `changelog` |
+| `userToken` | string | — | JWT for automatic user identification — see [Identity Verification](/core-concepts/feedback-collection/widgets/identity-verification) |
+
+## Tips
+
+<Callout kind="tip" collapsed="false">
+  Set the container's width to `100%` and use a fixed `height` (e.g. `700px`) so the widget fills your layout predictably. Avoid `height: auto` — the widget's internal iframe has a fixed size.
+</Callout>
+
+<Callout kind="info" collapsed="false">
+  Use `ProductBridge.embed()` — **not** `ProductBridge.init()` — for inline embeds. `init()` creates the floating button; `embed()` renders into a container.
+</Callout>
+
+## Identify Your Users
+
+To link feedback to your logged-in users, generate a JWT on your backend and pass it as `userToken`. See [Identity Verification](/core-concepts/feedback-collection/widgets/identity-verification) for server-side code in Node.js, Python, PHP, Ruby, and Go.
