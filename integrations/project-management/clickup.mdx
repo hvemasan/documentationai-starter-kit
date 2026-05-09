@@ -5,9 +5,6 @@ description: >-
   ClickUp tasks directly from feedback, and automatically update post status
   when linked tasks move forward in your ClickUp workflow.
 ---
-
-<img src="https://cdn.simpleicons.org/clickup" width="80" height="80" alt="ClickUp" />
-
 ## Overview
 
 The ClickUp integration is a **two-way tracker link** between ProductBridge feedback and ClickUp tasks. It does not import tasks as feedback — instead, it gives your product and engineering teams a clean handoff once a piece of feedback is ready to be acted on.
@@ -15,9 +12,13 @@ The ClickUp integration is a **two-way tracker link** between ProductBridge feed
 Once connected, you can:
 
 - **Search ClickUp tasks** from any feedback post and link them in one click
+
 - **Paste a Task ID** to link an existing ClickUp task without searching
+
 - **Create a new ClickUp task** directly from a feedback post — complete with workspace, list, and status pickers
+
 - **Auto-sync post status** — when a linked task's status changes in ClickUp, ProductBridge updates the corresponding post status based on rules you define
+
 - **Notify voters automatically** when a post status changes because of a linked task update
 
 The sync runs in real time over webhooks. There is nothing to poll, no manual refresh.
@@ -38,13 +39,14 @@ The sync runs in real time over webhooks. There is nothing to poll, no manual re
   <Step title="Open the Integrations page" icon="layout-dashboard" title-type="p">
     Sign in to your ProductBridge dashboard and click **Connect Sources** in the sidebar, then select **ClickUp** from the **Project Management** section.
 
-    <Image src="/images/clickup/clickup-integrations-list_framed.png" width="1940" height="1100" alt="ProductBridge Connect Sources page showing the ClickUp tile under Project Management" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778334061702-yo9pfh9cftr-pasted-image-1778334052488.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
+
   </Step>
 
   <Step title="Click Connect ClickUp" icon="plug" title-type="p">
     On the ClickUp integration page, click **Connect ClickUp**. ProductBridge starts the ClickUp OAuth flow and redirects you to ClickUp's authorization screen.
 
-    <Image src="/images/clickup/clickup-connect-button_framed.png" width="1940" height="1100" alt="ClickUp integration page in ProductBridge with the Connect ClickUp button visible" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778334097872-tywtghrjjqs-pasted-image-1778334089188.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
   </Step>
 
   <Step title="Authorize ProductBridge in ClickUp" icon="shield" title-type="p">
@@ -54,7 +56,7 @@ The sync runs in real time over webhooks. There is nothing to poll, no manual re
       ClickUp grants access at the **workspace level**. You can disconnect at any time from the same page in ProductBridge — there is no scope selection, so review which workspaces you grant access to.
     </Callout>
 
-    <Image src="/images/clickup/clickup-oauth-authorize_framed.png" width="1940" height="1100" alt="ClickUp authorization screen asking to select a workspace" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778334169745-93lqvd8eq1d-pasted-image-1778334160644.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
   </Step>
 
   <Step title="Confirm the connection" icon="check-circle" title-type="p">
@@ -68,7 +70,7 @@ The sync runs in real time over webhooks. There is nothing to poll, no manual re
 
     - Stores each workspace's webhook signing secret so incoming events can be verified
 
-    <Image src="/images/clickup/clickup-connected-state_framed.png" width="1940" height="1100" alt="ClickUp integration page showing the connected state, connection details, sync status, rules, and disconnect option" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778334200847-x06kns1kgpd-pasted-image-1778334191948.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
   </Step>
 </Steps>
 
@@ -80,7 +82,7 @@ Once connected, every feedback post in your dashboard gets a **ClickUp Tasks** s
   <Step title="Open a feedback post" icon="message-square" title-type="p">
     Click any post in the **Feedback** view to open the post detail panel. Scroll the right sidebar to find the **ClickUp Tasks** section.
 
-    <Image src="/images/clickup/clickup-post-detail-empty_framed.png" width="1940" height="1100" alt="Feedback post detail view ready to be linked to a ClickUp task" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778334226879-ytbwrcp53yd-pasted-image-1778334218924.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
   </Step>
 
   <Step title="Click Link" icon="link" title-type="p">
@@ -94,7 +96,7 @@ Once connected, every feedback post in your dashboard gets a **ClickUp Tasks** s
       <Tab title="Search" icon="search">
         Pick a workspace, then type any text to search across tasks in that workspace. Click any result to link it instantly.
 
-        <Image src="/images/clickup/clickup-link-dialog-search_framed.png" width="1940" height="1100" alt="Link dialog Search tab with matching ClickUp tasks listed" />
+        <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778334308638-yow9f6j5aq-pasted-image-1778334299497.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
       </Tab>
 
       <Tab title="Task ID" icon="hash">
@@ -104,13 +106,13 @@ Once connected, every feedback post in your dashboard gets a **ClickUp Tasks** s
           The Task ID is the alphanumeric string in your ClickUp task URL: `https://app.clickup.com/t/9hx2k0p`.
         </Callout>
 
-        <Image src="/images/clickup/clickup-link-dialog-task-id_framed.png" width="1940" height="1100" alt="Link dialog Task ID tab showing a previewed ClickUp task ready to link" />
+        <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778334334242-i8l6oenhtvm-pasted-image-1778334325606.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
       </Tab>
 
       <Tab title="Create" icon="plus">
         Pick a workspace, then a list, optionally a starting status, and fill in a title and description. Click **Create & Link Task** to create the task in ClickUp and link it to the post in one step.
 
-        <Image src="/images/clickup/clickup-link-dialog-create_framed.png" width="1940" height="1100" alt="Link dialog Create tab with workspace, list, status, title, and description form" />
+        <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778334357556-temx9whxavj-pasted-image-1778334348761.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
       </Tab>
     </Tabs>
   </Step>
@@ -118,7 +120,7 @@ Once connected, every feedback post in your dashboard gets a **ClickUp Tasks** s
   <Step title="Verify the link" icon="check" title-type="p">
     The linked task appears in the post's **ClickUp Tasks** section with its current status. Hover any linked task to **open it in ClickUp** or **unlink it**.
 
-    <Image src="/images/clickup/clickup-post-detail-linked_framed.png" width="1940" height="1100" alt="Feedback post detail showing linked ClickUp tasks with their current statuses" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778334399021-wvu02mrwo7-pasted-image-1778334389382.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
   </Step>
 </Steps>
 
@@ -129,7 +131,9 @@ Linking is most powerful when ClickUp status changes flow back into ProductBridg
 A rule answers three questions:
 
 1. **When** a linked ClickUp task changes to status X
+
 2. **Should** the post change to a specific ProductBridge status (for example, *Planned* → *In Progress* → *Complete*)?
+
 3. **And** should we notify everyone who voted for this post?
 
 If a post has multiple linked tasks, you also pick whether the rule fires when **any** task reaches the trigger status, or only when **all** tasks do.
@@ -140,7 +144,7 @@ If a post has multiple linked tasks, you also pick whether the rule fires when *
   <Step title="Open the ClickUp settings page" icon="settings" title-type="p">
     Go back to **Connect Sources > ClickUp**. Below the connection details, you'll see the **Rules** section.
 
-    <Image src="/images/clickup/clickup-connected-state_framed.png" width="1940" height="1100" alt="ClickUp settings page showing the Rules section before any rule has been created" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778334484842-ivqbdmtkp5c-pasted-image-1778334475741.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
   </Step>
 
   <Step title="Click Create New Rule" icon="plus" title-type="p">
@@ -150,24 +154,24 @@ If a post has multiple linked tasks, you also pick whether the rule fires when *
   <Step title="Build the rule" icon="wand-2" title-type="p">
     Pick the values left to right:
 
-    | Field | What it does |
-    |-------|--------------|
-    | **any / all** | Whether the rule fires when *any* linked ClickUp task hits the trigger status, or only when *all* do |
-    | **ClickUp status** | The status name from ClickUp that triggers the rule (e.g. `in progress`, `complete`) — populated from your real workspace statuses |
-    | **Post status** | The ProductBridge feedback status the post should change to |
-    | **Notify / Do not notify voters** | Whether to send in-app and email notifications to voters when the rule fires |
+    | Field                             | What it does                                                                                                                       |
+    | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+    | **any / all**                     | Whether the rule fires when *any* linked ClickUp task hits the trigger status, or only when *all* do                               |
+    | **ClickUp status**                | The status name from ClickUp that triggers the rule (e.g. `in progress`, `complete`) — populated from your real workspace statuses |
+    | **Post status**                   | The ProductBridge feedback status the post should change to                                                                        |
+    | **Notify / Do not notify voters** | Whether to send in-app and email notifications to voters when the rule fires                                                       |
 
     <Callout kind="info" collapsed="false">
       ProductBridge reads statuses from the **Space level** in ClickUp by default (where most workspaces define them) and merges in any per-list custom statuses. If you don't see a status, make sure it exists on at least one Space in your workspace.
     </Callout>
 
-    <Image src="/images/clickup/clickup-rules-create_framed.png" width="1940" height="1100" alt="Create Rule form with the ClickUp status dropdown open showing real workspace statuses" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778334560052-log936co6b-pasted-image-1778334550840.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
   </Step>
 
   <Step title="Save the rule" icon="check-circle" title-type="p">
     Click **Create**. The rule appears in the list and is active immediately. New ClickUp status changes that match it start syncing right away.
 
-    <Image src="/images/clickup/clickup-rules-list_framed.png" width="1940" height="1100" alt="Rules section with a saved rule shown in plain-English form" />
+    <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778334588161-5qa9wgri3um-pasted-image-1778334579390.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
   </Step>
 </Steps>
 
@@ -176,27 +180,31 @@ If a post has multiple linked tasks, you also pick whether the rule fires when *
 When a linked task's status changes in ClickUp:
 
 1. ClickUp sends a `taskStatusUpdated` webhook to ProductBridge
+
 2. ProductBridge verifies the webhook signature using the secret stored at connection time
+
 3. It finds every feedback post that links to that task
+
 4. For each rule on the integration, it checks whether the **any/all** condition is satisfied
+
 5. If a rule matches, the post status is updated and (optionally) voters are notified
 
 Rules are evaluated independently per post, so a single ClickUp status change can update many posts at once.
 
 ## Behavior to expect
 
-| Action in ClickUp | Effect in ProductBridge |
-|-------------------|-------------------------|
+| Action in ClickUp              | Effect in ProductBridge                                                                   |
+| ------------------------------ | ----------------------------------------------------------------------------------------- |
 | Status change on a linked task | Linked task badge on the post updates; rules evaluated; notifications fired if configured |
-| Task renamed | Linked task name updates the next time the post is viewed |
-| Task deleted | The link remains but loses live status (the integration treats it as orphaned) |
-| Task unarchived | Status sync resumes automatically |
+| Task renamed                   | Linked task name updates the next time the post is viewed                                 |
+| Task deleted                   | The link remains but loses live status (the integration treats it as orphaned)            |
+| Task unarchived                | Status sync resumes automatically                                                         |
 
-| Action in ProductBridge | Effect in ClickUp |
-|-------------------------|--------------------|
-| Link an existing task | A reference is stored on the feedback post; nothing changes inside ClickUp |
-| Create a task from a post | A new task appears in the chosen list with the title and description you provided |
-| Unlink a task | The reference is removed; the ClickUp task itself is not deleted or modified |
+| Action in ProductBridge    | Effect in ClickUp                                                                                      |
+| -------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Link an existing task      | A reference is stored on the feedback post; nothing changes inside ClickUp                             |
+| Create a task from a post  | A new task appears in the chosen list with the title and description you provided                      |
+| Unlink a task              | The reference is removed; the ClickUp task itself is not deleted or modified                           |
 | Disconnect the integration | Stored webhooks are deleted from ClickUp; existing post-task links remain on the post but stop syncing |
 
 ## Disconnect ClickUp
@@ -254,3 +262,4 @@ To stop syncing:
     No. The integration is intentionally **link-only**. Tasks already in ClickUp don't appear as posts in ProductBridge — that would clutter your feedback inbox. Linking is initiated from a feedback post.
   </Expandable>
 </ExpandableGroup>
+
