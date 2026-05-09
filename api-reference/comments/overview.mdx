@@ -1,0 +1,82 @@
+---
+title: "Comments"
+description: "Threaded comments attached to feedback posts. Comments are polymorphic — the same shape supports replies and top-level comments."
+---
+
+A comment is a piece of text attached to a feedback post — typically discussion or follow-up from your team or end-users. Comments support a single level of replies (parent_comment_id) and have their own moderation state independent of the parent post.
+
+The API lets you retrieve, list, create, and bulk-delete comments. Updating a single comment's content is dashboard-only in v1.
+
+## The comment object
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  A unique identifier for the comment (UUID).
+</ResponseField>
+
+<ResponseField name="content" field-type="string" required="true" deprecated="false">
+  The comment body.
+</ResponseField>
+
+<ResponseField name="author_id" field-type="string" required="true" deprecated="false">
+  UUID of the user who wrote the comment.
+</ResponseField>
+
+<ResponseField name="parent_comment_id" field-type="string" required="false" deprecated="false">
+  UUID of the parent comment when this is a reply. `null` for top-level comments.
+</ResponseField>
+
+<ResponseField name="feedback_post_id" field-type="string" required="true" deprecated="false">
+  UUID of the [feedback post](/api-reference/feedback-posts/overview) this comment is attached to.
+</ResponseField>
+
+<ResponseField name="visibility_code" field-type="string" required="true" deprecated="false">
+  Visibility level. Defaults to `"public"`. Used to hide internal-only notes from end-users.
+</ResponseField>
+
+<ResponseField name="moderation_status_code" field-type="string" required="true" deprecated="false">
+  Moderation state. Common values: `"accepted"`, `"pending"`, `"rejected"`.
+</ResponseField>
+
+<ResponseField name="created_at" field-type="string" required="true" deprecated="false">
+  ISO 8601 timestamp at which the comment was created.
+</ResponseField>
+
+<ResponseField name="updated_at" field-type="string" required="true" deprecated="false">
+  ISO 8601 timestamp of the most recent update.
+</ResponseField>
+
+## Example comment object
+
+```json
+{
+  "id": "ee3c3ef8-b8cd-cd15-01ba-comment000001",
+  "content": "+1 from the entire data team. We'd use this daily.",
+  "author_id": "bb3c3ef8-b8cd-cd15-01ba-useruser0001",
+  "parent_comment_id": null,
+  "feedback_post_id": "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+  "visibility_code": "public",
+  "moderation_status_code": "accepted",
+  "created_at": "2026-04-16T10:00:00.000Z",
+  "updated_at": "2026-04-16T10:00:00.000Z"
+}
+```
+
+## What you can do
+
+<Columns cols="2">
+  <Card title="Retrieve a comment" href="/api-reference/comments/retrieve" icon="search" horizontal="false">
+    Look up a single comment by its UUID.
+  </Card>
+
+  <Card title="List comments" href="/api-reference/comments/list" icon="list" horizontal="false">
+    Paginated list scoped to a single feedback post.
+  </Card>
+
+  <Card title="Create a comment" href="/api-reference/comments/create" icon="plus" horizontal="false">
+    Post a new comment, optionally as a reply to an existing one.
+  </Card>
+
+  <Card title="Delete by post" href="/api-reference/comments/delete-by-post" icon="trash-2" horizontal="false">
+    Bulk soft-delete every comment on a single post. Destructive.
+  </Card>
+</Columns>

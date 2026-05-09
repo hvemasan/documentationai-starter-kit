@@ -1,0 +1,117 @@
+---
+title: "List labels"
+description: "Return active changelog labels for the authenticated organization, paginated with limit + cursor."
+---
+
+Returns active changelog labels for the authenticated organization. Unlike most metadata endpoints (categories, tags, statuses), this endpoint **is paginated** because labels can grow large in active changelogs.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/labels/list
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="limit" param-type="integer" required="false" deprecated="false">
+  Number of items per page. Min 1, max 100. Defaults to 25.
+</ParamField>
+
+<ParamField body="cursor" param-type="string" required="false" deprecated="false">
+  Opaque pagination cursor returned by the previous page. Omit for the first page.
+</ParamField>
+
+## Returns
+
+The standard cursor-paginated envelope. See [Pagination](/api-reference/pagination) for the loop pattern.
+
+```json
+{
+  "items": [ /* label objects */ ],
+  "has_next_page": true,
+  "cursor": "MjU"
+}
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/labels/list \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "limit": 25
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/labels/list",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        limit: 25,
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { items, has_next_page, cursor } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/labels/list",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "limit": 25,
+      },
+  )
+  resp.raise_for_status()
+  payload = resp.json()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "items": [
+    {
+      "id": "993c3ef8-b8cd-cd15-01ba-label0000001",
+      "name": "Release",
+      "code": "release",
+      "color": "#10B981",
+      "description": "General release notes for new features and improvements.",
+      "created_at": "2026-03-15T09:00:00.000Z"
+    },
+    {
+      "id": "993c3ef8-b8cd-cd15-01ba-label0000002",
+      "name": "Security",
+      "code": "security",
+      "color": "#EF4444",
+      "description": null,
+      "created_at": "2026-04-01T10:00:00.000Z"
+    }
+  ],
+  "has_next_page": false,
+  "cursor": null
+}
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `422` | Validation error envelope | `limit` out of range (must be 1–100). |
+
+See [Errors](/api-reference/errors) for the full envelope shape.

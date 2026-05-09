@@ -1,0 +1,145 @@
+---
+title: "Update a feedback post"
+description: "Patch any combination of fields on an existing feedback post — only present fields are applied."
+---
+
+Updates a feedback post. The endpoint is patch-style: any subset of the optional body fields may be present, and only those fields are applied. Omitted fields keep their current values.
+
+Status changes (passing `status_id`) emit a `post.status_changed` webhook event in addition to `post.edited`. Tag changes (passing `tag_ids`) emit `post.tag_added` or `post.tag_removed` per tag delta.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/feedback-posts/update
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="post_id" param-type="string" required="true" deprecated="false">
+  UUID of the feedback post to update.
+</ParamField>
+
+<ParamField body="user_id" param-type="string" required="true" deprecated="false">
+  UUID of the user performing the update. Recorded for audit and used as the actor on derived events (e.g. `post.status_changed`).
+</ParamField>
+
+<ParamField body="title" param-type="string" required="false" deprecated="false">
+  New title (1–512 chars). Triggers `post.edited` webhook.
+</ParamField>
+
+<ParamField body="details" param-type="string" required="false" deprecated="false">
+  New body / description.
+</ParamField>
+
+<ParamField body="board_id" param-type="string" required="false" deprecated="false">
+  Move the post to a different feedback board. Validated to belong to your organization.
+</ParamField>
+
+<ParamField body="status_id" param-type="string" required="false" deprecated="false">
+  Set the post's status. Validated to belong to your organization. Triggers `post.status_changed` webhook.
+</ParamField>
+
+<ParamField body="category_id" param-type="string" required="false" deprecated="false">
+  Set the post's category. Validated to belong to your organization. Pass an empty / null value to clear.
+</ParamField>
+
+<ParamField body="tag_ids" param-type="array of strings" required="false" deprecated="false">
+  Replace the post's tags with this exact set. Tags not in the new set are removed (`post.tag_removed` per tag); new tags are added (`post.tag_added` per tag).
+</ParamField>
+
+<ParamField body="owner_id" param-type="string" required="false" deprecated="false">
+  Assign an owner. Pass null/empty to clear.
+</ParamField>
+
+<ParamField body="eta" param-type="string" required="false" deprecated="false">
+  Expected ship date as `YYYY-MM-DD`.
+</ParamField>
+
+<ParamField body="moderation_status_code" param-type="string" required="false" deprecated="false">
+  Override the moderation state. Common values: `"accepted"`, `"pending"`, `"rejected"`.
+</ParamField>
+
+<ParamField body="should_notify_voters" param-type="boolean" required="false" deprecated="false">
+  Canny-compatible field for status changes. Currently informational — ProductBridge always emits notifications when status changes.
+</ParamField>
+
+<ParamField body="change_comment" param-type="string" required="false" deprecated="false">
+  Canny-compatible field for status changes. Currently informational only.
+</ParamField>
+
+## Returns
+
+```json
+{ "success": true }
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/feedback-posts/update \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "post_id": "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+      "user_id": "cc3c3ef8-b8cd-cd15-01ba-adminuser001",
+      "status_id": "883c3ef8-b8cd-cd15-01ba-status000002",
+      "eta": "2026-09-01"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/feedback-posts/update",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        post_id: "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+        user_id: "cc3c3ef8-b8cd-cd15-01ba-adminuser001",
+        status_id: "883c3ef8-b8cd-cd15-01ba-status000002",
+        eta: "2026-09-01",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/feedback-posts/update",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "post_id": "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+          "user_id": "cc3c3ef8-b8cd-cd15-01ba-adminuser001",
+          "status_id": "883c3ef8-b8cd-cd15-01ba-status000002",
+          "eta": "2026-09-01",
+      },
+  )
+  resp.raise_for_status()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{ "success": true }
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `400` | `{"detail":{"error":"<resource> not found in this organization"}}` | A referenced `board_id`, `status_id`, or `category_id` doesn't belong to your organization. |
+| `404` | `{"detail":{"error":"feedback post not found"}}` | The `post_id` doesn't exist or belongs to another organization. |
+| `422` | Validation error envelope | Missing required fields, wrong types, `title` length out of bounds. |
+
+See [Errors](/api-reference/errors) for the full envelope shape.

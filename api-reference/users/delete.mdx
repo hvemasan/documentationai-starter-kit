@@ -1,0 +1,94 @@
+---
+title: "Delete a user"
+description: "Soft-delete the user's link to this organization. The user remains in other orgs they belong to."
+---
+
+Soft-deletes the user's link to your organization. After this call:
+
+- The user no longer appears in [Retrieve user](/api-reference/users/retrieve) responses for your org.
+- Their existing posts, comments, and votes remain in your org for audit (they don't cascade-delete).
+- The underlying user record is **untouched** — if the user is linked to other organizations on ProductBridge, those links remain active.
+
+This is the recommended way to handle account closure / GDPR-style "remove this user from our system" requests.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/users/delete
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="user_id" param-type="string" required="true" deprecated="false">
+  UUID of the user to remove from this organization.
+</ParamField>
+
+## Returns
+
+```json
+{ "success": true }
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/users/delete \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "user_id": "bb3c3ef8-b8cd-cd15-01ba-useruser0001"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/users/delete",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        user_id: "bb3c3ef8-b8cd-cd15-01ba-useruser0001",
+      }),
+    }
+  );
+  if (res.status === 404) throw new Error("User not in this org");
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/users/delete",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "user_id": "bb3c3ef8-b8cd-cd15-01ba-useruser0001",
+      },
+  )
+  if resp.status_code == 404:
+      raise LookupError("User not in this org")
+  resp.raise_for_status()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{ "success": true }
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `404` | `{"detail":{"error":"user not found"}}` | The user is not linked to your organization, or the link was already revoked. |
+| `422` | Validation error envelope | Missing `user_id`, or `user_id` is not a UUID. |
+
+See [Errors](/api-reference/errors) for the full envelope shape.

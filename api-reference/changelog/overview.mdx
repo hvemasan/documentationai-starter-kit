@@ -1,0 +1,89 @@
+---
+title: "Changelog entries"
+description: "Public release-note style entries published to the org's customer-facing changelog feed."
+---
+
+A changelog entry is a published release note — typically announcing a new feature, bug fix, or improvement. Entries are visible on your organization's public changelog feed and can be syndicated via webhooks or email subscribers.
+
+The API lets you create and list changelog entries. Updating and deleting individual entries is dashboard-only in v1.
+
+## The changelog entry object
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  A unique identifier for the entry (UUID).
+</ResponseField>
+
+<ResponseField name="title" field-type="string" required="true" deprecated="false">
+  The entry title (1–512 chars).
+</ResponseField>
+
+<ResponseField name="content" field-type="string" required="false" deprecated="false">
+  The entry body — typically markdown or rich-text. May be `null`.
+</ResponseField>
+
+<ResponseField name="slug" field-type="string" required="true" deprecated="false">
+  URL-safe slug derived from the title.
+</ResponseField>
+
+<ResponseField name="status_code" field-type="string" required="true" deprecated="false">
+  Workflow status. Common values: `"draft"`, `"published"`, `"scheduled"`.
+</ResponseField>
+
+<ResponseField name="show_on_portal" field-type="boolean" required="true" deprecated="false">
+  Whether this entry is visible on the public-facing changelog page.
+</ResponseField>
+
+<ResponseField name="featured_image_url" field-type="string" required="false" deprecated="false">
+  URL of the hero image. May be `null`.
+</ResponseField>
+
+<ResponseField name="author_id" field-type="string" required="false" deprecated="false">
+  UUID of the user listed as the entry's author. May be `null`.
+</ResponseField>
+
+<ResponseField name="scheduled_at" field-type="string" required="false" deprecated="false">
+  ISO 8601 timestamp at which this entry will publish (when `status_code = "scheduled"`). May be `null`.
+</ResponseField>
+
+<ResponseField name="published_at" field-type="string" required="false" deprecated="false">
+  ISO 8601 timestamp at which this entry was published. May be `null` for drafts.
+</ResponseField>
+
+<ResponseField name="created_at" field-type="string" required="true" deprecated="false">
+  ISO 8601 timestamp at which the entry was created.
+</ResponseField>
+
+<ResponseField name="updated_at" field-type="string" required="true" deprecated="false">
+  ISO 8601 timestamp of the most recent update.
+</ResponseField>
+
+## Example changelog entry object
+
+```json
+{
+  "id":    "11ab3ef8-b8cd-cd15-01ba-changelog0001",
+  "title": "v1.2 release: dark mode + faster search",
+  "content": "We shipped two of the most-requested features...",
+  "slug": "v1-2-release",
+  "status_code": "published",
+  "show_on_portal": true,
+  "featured_image_url": null,
+  "author_id": "cc3c3ef8-b8cd-cd15-01ba-adminuser001",
+  "scheduled_at": null,
+  "published_at": "2026-05-01T10:00:00.000Z",
+  "created_at":   "2026-04-30T15:30:00.000Z",
+  "updated_at":   "2026-05-01T10:00:00.000Z"
+}
+```
+
+## What you can do
+
+<Columns cols="2">
+  <Card title="Create an entry" href="/api-reference/changelog/create" icon="plus" horizontal="false">
+    Publish a new changelog entry, optionally with type and labels.
+  </Card>
+
+  <Card title="List entries" href="/api-reference/changelog/list" icon="list" horizontal="false">
+    Paginated list with optional type and label filters.
+  </Card>
+</Columns>

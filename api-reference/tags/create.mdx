@@ -1,0 +1,105 @@
+---
+title: "Create a tag"
+description: "Add a new org-scoped tag. Returns the new tag id."
+---
+
+Creates a new tag for the authenticated organization. Tags are org-scoped — every board in the org can use the new tag once it exists.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/tags/create
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="name" param-type="string" required="true" deprecated="false">
+  The display name of the tag. 1–512 characters. Must be unique within the organization.
+</ParamField>
+
+<ParamField body="color" param-type="string" required="false" deprecated="false">
+  Optional hex color string for the tag's badge in the dashboard (e.g. `"#10B981"`). Max 512 characters.
+</ParamField>
+
+<ParamField body="show_on_feedback" param-type="boolean" required="false" deprecated="false">
+  Whether this tag appears in feedback views. Defaults to `true`.
+</ParamField>
+
+<ParamField body="show_on_roadmap" param-type="boolean" required="false" deprecated="false">
+  Whether this tag appears in roadmap views. Defaults to `true`.
+</ParamField>
+
+## Returns
+
+A JSON object with the new tag's `id`.
+
+```json
+{ "id": "773c3ef8-b8cd-cd15-01ba-tag00000003" }
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/tags/create \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "name": "regression",
+      "color": "#EF4444"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/tags/create",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        name: "regression",
+        color: "#EF4444",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { id } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/tags/create",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "name": "regression",
+          "color": "#EF4444",
+      },
+  )
+  resp.raise_for_status()
+  new_id = resp.json()["id"]
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "id": "773c3ef8-b8cd-cd15-01ba-tag00000003"
+}
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `422` | Validation error envelope | Missing `name`, name longer than 512 chars, or another field has the wrong type. |
+
+See [Errors](/api-reference/errors) for the full envelope shape.

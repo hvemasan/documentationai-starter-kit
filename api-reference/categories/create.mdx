@@ -1,0 +1,124 @@
+---
+title: "Create a category"
+description: "Add a new category to the authenticated organization. Returns the new category id."
+---
+
+Creates a new category for the authenticated organization. Categories are org-scoped — every board in the org can use the new category once it exists.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/categories/create
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="name" param-type="string" required="true" deprecated="false">
+  The display name of the category. Must be between 1 and 30 characters. Must be unique within the organization.
+</ParamField>
+
+<ParamField body="description" param-type="string" required="false" deprecated="false">
+  Optional human-readable description shown in the dashboard. Max 512 characters.
+</ParamField>
+
+<ParamField body="color" param-type="string" required="false" deprecated="false">
+  Optional hex color string used as a visual badge in the dashboard (e.g. `"#3B82F6"`). Max 50 characters.
+</ParamField>
+
+<ParamField body="show_on_feedback" param-type="boolean" required="false" deprecated="false">
+  Whether this category should appear in feedback views. Defaults to `true`.
+</ParamField>
+
+<ParamField body="show_on_roadmap" param-type="boolean" required="false" deprecated="false">
+  Whether this category should appear in roadmap views. Defaults to `true`.
+</ParamField>
+
+<Callout kind="info">
+  **Not supported in v1.** Canny's `boardID`, `parentID` (sub-categories), and `subscribeAdmins` parameters have no equivalent here — categories are org-scoped, sub-categories aren't supported, and admin subscription is a dashboard-only setting.
+</Callout>
+
+## Returns
+
+A JSON object with the new category's `id`.
+
+```json
+{ "id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb" }
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/categories/create \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "name": "Performance",
+      "description": "Latency, throughput, and scaling concerns.",
+      "color": "#F59E0B",
+      "show_on_feedback": true,
+      "show_on_roadmap": false
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/categories/create",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        name: "Performance",
+        description: "Latency, throughput, and scaling concerns.",
+        color: "#F59E0B",
+        show_on_feedback: true,
+        show_on_roadmap: false,
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { id } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/categories/create",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "name": "Performance",
+          "description": "Latency, throughput, and scaling concerns.",
+          "color": "#F59E0B",
+          "show_on_feedback": True,
+          "show_on_roadmap": False,
+      },
+  )
+  resp.raise_for_status()
+  new_id = resp.json()["id"]
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "id": "773c3ef8-b8cd-cd15-01ba-99bb99bb99bb"
+}
+```
+
+After creation, fetch the full category object via [Retrieve](/api-reference/categories/retrieve) if you need the auto-generated `code`, `created_at`, and other server-populated fields.
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `422` | Validation error envelope | Missing `name`, name out of length bounds (1–30), or another field has the wrong type. |
+
+See [Errors](/api-reference/errors) for the full envelope shape and a recommended client-side handler.

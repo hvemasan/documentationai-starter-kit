@@ -1,0 +1,132 @@
+---
+title: "Authentication"
+description: "Authenticate every public API request with an organization-scoped api_key sent in the JSON body."
+---
+
+ProductBridge authenticates public API requests using a per-organization secret called the **public API key**. Every request — reads and writes alike — must include this key as an `api_key` field in the JSON body.
+
+<Callout kind="alert">
+  Public API keys grant access to all data in your organization. Treat them like passwords: store them in a secrets manager, never commit them to source control, and rotate them immediately if they leak.
+</Callout>
+
+## Get your API key
+
+<Steps>
+  <Step title="Open the dashboard" icon="settings" titleType="p">
+    Sign in and go to **Settings → API → Public API key**.
+  </Step>
+
+  <Step title="Generate the key" icon="key-round" titleType="p">
+    Click **Generate API key** if you don't have one yet. Each organization holds at most one active public API key — it's shared by every admin in the org.
+  </Step>
+
+  <Step title="Copy the raw key" icon="copy" titleType="p">
+    The key starts with `pb_` followed by ~43 URL-safe characters (e.g. `pb_rcbcKubT0rEilFd9haG5JoPaMwIEx6G9nRjNdTYXSIM`). Copy it into your application's secrets manager — for example as an environment variable named `PRODUCTBRIDGE_API_KEY`.
+
+    <Callout kind="tip">
+      Unlike the webhook signing secret, the public API key is **re-fetchable** from the dashboard at any time. So losing your local copy isn't catastrophic — just open the dashboard and copy it again.
+    </Callout>
+  </Step>
+</Steps>
+
+## Send it on every request
+
+Pass `api_key` as a top-level field in the JSON body. Do not put it in a header, a query string, or a path segment — those forms are not accepted.
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/feedback-posts/list \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "limit": 25
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/feedback-posts/list",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        limit: 25,
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { items, has_next_page, cursor } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/feedback-posts/list",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "limit": 25,
+      },
+  )
+  resp.raise_for_status()
+  payload = resp.json()
+  ```
+</CodeGroup>
+
+## Why the body, not the `Authorization` header?
+
+The public API uses POST with a JSON body for every endpoint. Carrying the key in the same body keeps the contract uniform — every request looks the same, and there are no special "this header is the auth one" conventions to remember. It also matches the model used by Canny, which inspired the public API surface.
+
+For comparison, ProductBridge's other surfaces use different conventions:
+
+| Surface | Auth mechanism |
+|---|---|
+| **Public API** (this doc) | `api_key` in JSON body |
+| MCP server (Claude Desktop, Cursor) | `Authorization: Bearer <key>` header |
+| Webhook deliveries (outbound, ProductBridge → your server) | `X-ProductBridge-Signature` HMAC header — see [webhook signatures](/api-reference/webhooks/signatures) |
+
+## Rotate your key
+
+If you suspect the key has leaked, rotate it from the dashboard:
+
+<Steps>
+  <Step title="Open Settings → API → Public API key" icon="settings" titleType="p">
+    The page shows your current key prefix (`pb_xxxxx`) and a "Rotate" button.
+  </Step>
+
+  <Step title="Click Rotate" icon="refresh-cw" titleType="p">
+    A confirmation dialog warns that the existing key will be invalidated immediately. Confirm.
+  </Step>
+
+  <Step title="Copy the new key" icon="copy" titleType="p">
+    The new raw key is shown in the modal. Update your secrets manager and redeploy any service that calls the API.
+
+    <Callout kind="alert">
+      Rotation is instant and breaks the old key with no grace period. Roll out the new key to every consumer (CI, integrations, internal tools) before you start the rotation if you want zero downtime — or accept brief failures during the rollout window.
+    </Callout>
+  </Step>
+</Steps>
+
+## Common pitfalls
+
+<ExpandableGroup>
+  <Expandable title="`401 invalid api_key` even though the key looks right" default-open="false">
+    The error message is intentionally generic — it covers four cases:
+
+    - Missing `api_key` field in the body
+    - Unknown / typo'd key
+    - Inactive (revoked) key
+    - The key exists but lacks the `public_api` scope (e.g. it's actually an MCP key)
+
+    Check the key's prefix matches the one shown in the dashboard, and confirm the row is active. If you recently rotated, the previous key value is gone — you cannot un-rotate.
+  </Expandable>
+
+  <Expandable title="Trying to send the key in `Authorization: Bearer …`" default-open="false">
+    The public API doesn't read any `Authorization` header. The request will return `401 invalid api_key` with no `api_key` in the body. Move the key into the JSON body.
+  </Expandable>
+
+  <Expandable title="Single key shared by every admin" default-open="false">
+    Public API keys are **per-organization**, not per-user. Two admins in the same org share the same key. This is intentional — the key represents the org's integration with ProductBridge, not a particular human. (Compare with MCP keys, which are per-user because they live on a developer's laptop.)
+  </Expandable>
+</ExpandableGroup>

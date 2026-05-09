@@ -1,0 +1,72 @@
+---
+title: "Tags"
+description: "Lightweight org-scoped labels you can attach to feedback and roadmap posts for filtering and grouping."
+---
+
+Tags are short labels — typically a single word — that you attach to feedback or roadmap posts. They're useful for filtering ("show me everything tagged `mobile`") or for surfacing themes that don't deserve their own [category](/api-reference/categories/overview).
+
+The API lets you list, retrieve, and create tags. To add or remove a tag from a specific post, use the [feedback post update](/api-reference/feedback-posts/update) endpoint.
+
+<Callout kind="info">
+  **Tags vs categories vs labels.** Tags and categories are both for *posts* (feedback or roadmap) and are org-scoped. Tags are typically lightweight ad-hoc keywords; categories are higher-level taxonomies. [Labels](/api-reference/labels/overview) are a separate concept used by [changelog entries](/api-reference/changelog/overview).
+</Callout>
+
+## The tag object
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  A unique identifier for the tag (UUID).
+</ResponseField>
+
+<ResponseField name="name" field-type="string" required="true" deprecated="false">
+  The display name of the tag.
+</ResponseField>
+
+<ResponseField name="code" field-type="string" required="false" deprecated="false">
+  Auto-generated slug-like identifier derived from the name. May be `null`.
+</ResponseField>
+
+<ResponseField name="color" field-type="string" required="false" deprecated="false">
+  Optional hex color string for the tag's visual badge in the dashboard. May be `null`.
+</ResponseField>
+
+<ResponseField name="show_on_feedback" field-type="boolean" required="true" deprecated="false">
+  Whether this tag appears in feedback views.
+</ResponseField>
+
+<ResponseField name="show_on_roadmap" field-type="boolean" required="true" deprecated="false">
+  Whether this tag appears in roadmap views.
+</ResponseField>
+
+<ResponseField name="created_at" field-type="string" required="true" deprecated="false">
+  ISO 8601 timestamp at which the tag was created.
+</ResponseField>
+
+## Example tag object
+
+```json
+{
+  "id": "773c3ef8-b8cd-cd15-01ba-tag00000001",
+  "name": "mobile",
+  "code": "mobile",
+  "color": "#10B981",
+  "show_on_feedback": true,
+  "show_on_roadmap": true,
+  "created_at": "2026-04-12T08:30:11.000Z"
+}
+```
+
+## What you can do
+
+<Columns cols="2">
+  <Card title="Retrieve a tag" href="/api-reference/tags/retrieve" icon="search" horizontal="false">
+    Look up a single tag by its UUID.
+  </Card>
+
+  <Card title="List tags" href="/api-reference/tags/list" icon="list" horizontal="false">
+    Return every active tag for the authenticated organization.
+  </Card>
+
+  <Card title="Create a tag" href="/api-reference/tags/create" icon="plus" horizontal="false">
+    Add a new tag the dashboard and the API can apply to posts.
+  </Card>
+</Columns>

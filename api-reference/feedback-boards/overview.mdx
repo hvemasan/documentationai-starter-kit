@@ -1,0 +1,78 @@
+---
+title: "Feedback boards"
+description: "Containers that group feedback posts. Each organization can have multiple feedback boards (e.g. Feature Requests, Bug Reports)."
+---
+
+A feedback board is a container that groups related feedback posts. Most organizations have a small number of boards — typically one per type of feedback (Feature Requests, Bug Reports, Improvements). Each post belongs to exactly one feedback board.
+
+The API lets you list and retrieve feedback boards. Creating, updating, and deleting boards is dashboard-only in v1.
+
+<Callout kind="info">
+  ProductBridge has **two distinct board types** — feedback boards (this page) and [roadmap boards](/api-reference/roadmap-boards/overview). They have different schemas and live under different endpoint paths.
+</Callout>
+
+## The feedback board object
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  A unique identifier for the board (UUID).
+</ResponseField>
+
+<ResponseField name="name" field-type="string" required="true" deprecated="false">
+  The display name of the board (e.g. `"Feature Requests"`).
+</ResponseField>
+
+<ResponseField name="slug" field-type="string" required="true" deprecated="false">
+  URL-safe slug derived from the name (e.g. `"feature-requests"`).
+</ResponseField>
+
+<ResponseField name="description" field-type="string" required="false" deprecated="false">
+  Optional human-readable description shown in the dashboard. May be `null`.
+</ResponseField>
+
+<ResponseField name="icon_url" field-type="string" required="false" deprecated="false">
+  Optional URL of an icon image displayed alongside the board name. May be `null`.
+</ResponseField>
+
+<ResponseField name="is_voting_enabled" field-type="boolean" required="true" deprecated="false">
+  Whether end-users can vote on posts in this board.
+</ResponseField>
+
+<ResponseField name="is_commenting_enabled" field-type="boolean" required="true" deprecated="false">
+  Whether end-users can leave comments on posts in this board.
+</ResponseField>
+
+<ResponseField name="show_post_dates" field-type="boolean" required="true" deprecated="false">
+  Whether the public-facing portal displays the creation date next to each post.
+</ResponseField>
+
+<ResponseField name="created_at" field-type="string" required="true" deprecated="false">
+  ISO 8601 timestamp at which the board was created.
+</ResponseField>
+
+## Example feedback board object
+
+```json
+{
+  "id": "553c3ef8-b8cd-cd15-01ba-12341234abcd",
+  "name": "Feature Requests",
+  "slug": "feature-requests",
+  "description": "Tell us what you want us to build next.",
+  "icon_url": null,
+  "is_voting_enabled": true,
+  "is_commenting_enabled": true,
+  "show_post_dates": true,
+  "created_at": "2026-04-01T08:00:00.000Z"
+}
+```
+
+## What you can do
+
+<Columns cols="2">
+  <Card title="Retrieve a board" href="/api-reference/feedback-boards/retrieve" icon="search" horizontal="false">
+    Look up a single feedback board by its UUID.
+  </Card>
+
+  <Card title="List boards" href="/api-reference/feedback-boards/list" icon="list" horizontal="false">
+    Return every active feedback board for the authenticated organization.
+  </Card>
+</Columns>

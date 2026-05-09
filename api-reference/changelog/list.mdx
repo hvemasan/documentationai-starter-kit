@@ -1,0 +1,134 @@
+---
+title: "List changelog entries"
+description: "Paginated list of changelog entries with optional type and label filters. Uses skip/limit instead of cursor."
+---
+
+Returns a paginated list of changelog entries for the authenticated organization. Filterable by entry `type` and by one or more `label_ids`.
+
+<Callout kind="info">
+  This endpoint accepts `skip` and `limit` (Canny-compatible offsets) on input but returns the standard cursor-paginated envelope on output. This is the only public API endpoint that uses skip-based input — all others use cursor.
+</Callout>
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/changelog/list
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="type" param-type="string" required="false" deprecated="false">
+  Filter to entries with this single classification. One of `"fixed"`, `"new"`, `"improved"`.
+</ParamField>
+
+<ParamField body="label_ids" param-type="array of strings" required="false" deprecated="false">
+  Filter to entries that have at least one of these [labels](/api-reference/labels/overview). All ids must belong to your organization.
+</ParamField>
+
+<ParamField body="sort" param-type="string" required="false" deprecated="false">
+  Sort order. One of `"newest"` (default), `"oldest"`, `"published"`.
+</ParamField>
+
+<ParamField body="limit" param-type="integer" required="false" deprecated="false">
+  Number of items per page. Min 1, max 100. Defaults to 25.
+</ParamField>
+
+<ParamField body="skip" param-type="integer" required="false" deprecated="false">
+  Number of items to skip from the start of the result set. Defaults to 0. Use this for offset-based pagination.
+</ParamField>
+
+## Returns
+
+The standard cursor-paginated envelope.
+
+```json
+{
+  "items": [ /* changelog entry objects */ ],
+  "has_next_page": true,
+  "cursor": "MjU"
+}
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/changelog/list \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "type":    "new",
+      "limit":   25
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/changelog/list",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        type: "new",
+        limit: 25,
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { items, has_next_page, cursor } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/changelog/list",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "type": "new",
+          "limit": 25,
+      },
+  )
+  resp.raise_for_status()
+  payload = resp.json()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "items": [
+    {
+      "id":    "11ab3ef8-b8cd-cd15-01ba-changelog0001",
+      "title": "v1.2 release: dark mode + faster search",
+      "content": "We shipped two of the most-requested features...",
+      "slug": "v1-2-release",
+      "status_code": "published",
+      "show_on_portal": true,
+      "featured_image_url": null,
+      "author_id": "cc3c3ef8-b8cd-cd15-01ba-adminuser001",
+      "scheduled_at": null,
+      "published_at": "2026-05-01T10:00:00.000Z",
+      "created_at":   "2026-04-30T15:30:00.000Z",
+      "updated_at":   "2026-05-01T10:00:00.000Z"
+    }
+  ],
+  "has_next_page": false,
+  "cursor": null
+}
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `422` | Validation error envelope | `type` not in `{"fixed","new","improved"}`, `limit` out of range, malformed UUIDs in `label_ids`. |
+
+See [Errors](/api-reference/errors) and [Pagination](/api-reference/pagination).

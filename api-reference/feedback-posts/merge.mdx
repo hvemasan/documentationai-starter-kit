@@ -1,0 +1,110 @@
+---
+title: "Merge feedback posts"
+description: "Combine two duplicate posts into one. Votes and comments on the source post move to the target."
+---
+
+Merges one feedback post into another. Use this when two posts cover the same idea and should be combined.
+
+After a successful merge:
+
+- The **source** post (`merge_post_id`) is marked as merged into the target.
+- Votes on the source are reattributed to the target.
+- Comments on the source remain attached to the source for audit, but the merged status is exposed in the dashboard so end-users see "merged into …".
+- Both posts must belong to the same organization.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/feedback-posts/merge
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="merge_post_id" param-type="string" required="true" deprecated="false">
+  UUID of the source post being merged (the duplicate).
+</ParamField>
+
+<ParamField body="into_post_id" param-type="string" required="true" deprecated="false">
+  UUID of the target post the source is being merged into (the canonical version).
+</ParamField>
+
+<ParamField body="merger_id" param-type="string" required="true" deprecated="false">
+  UUID of the user performing the merge. Recorded for audit.
+</ParamField>
+
+<Callout kind="alert">
+  `merge_post_id` must differ from `into_post_id`. Passing the same UUID twice returns a `422` validation error.
+</Callout>
+
+## Returns
+
+```json
+{ "success": true }
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/feedback-posts/merge \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "merge_post_id": "dd3c3ef8-b8cd-cd15-01ba-duplicate001",
+      "into_post_id":  "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+      "merger_id":     "cc3c3ef8-b8cd-cd15-01ba-adminuser001"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/feedback-posts/merge",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        merge_post_id: "dd3c3ef8-b8cd-cd15-01ba-duplicate001",
+        into_post_id: "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+        merger_id: "cc3c3ef8-b8cd-cd15-01ba-adminuser001",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/feedback-posts/merge",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "merge_post_id": "dd3c3ef8-b8cd-cd15-01ba-duplicate001",
+          "into_post_id": "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+          "merger_id": "cc3c3ef8-b8cd-cd15-01ba-adminuser001",
+      },
+  )
+  resp.raise_for_status()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{ "success": true }
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `404` | `{"detail":{"error":"merge_post not found"}}` or `{"detail":{"error":"into_post not found"}}` | Either id doesn't exist, has been deleted, or belongs to another organization. |
+| `422` | Validation error envelope | `merge_post_id` equals `into_post_id`, or required fields missing. |
+
+See [Errors](/api-reference/errors) for the full envelope shape.

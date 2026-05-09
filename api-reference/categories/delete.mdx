@@ -1,0 +1,101 @@
+---
+title: "Delete a category"
+description: "Soft-delete a category. Posts that referenced it have their category cleared automatically."
+---
+
+Soft-deletes a category. After deletion:
+
+- The category no longer appears in [List categories](/api-reference/categories/list) or [Retrieve](/api-reference/categories/retrieve) responses.
+- Any feedback or roadmap post that referenced this category has its `category_id` cleared (set to `null`). Posts are NOT deleted — only their link to this category is removed.
+- The underlying row remains in the database with `is_active = false` for audit; you cannot un-delete via the API.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/categories/delete
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="category_id" param-type="string" required="true" deprecated="false">
+  The UUID of the category to delete. Must belong to the authenticated organization — passing an id from another org returns `404 not found`.
+</ParamField>
+
+## Returns
+
+A JSON object confirming the soft-delete. The HTTP status is `200 OK`.
+
+```json
+{ "success": true }
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/categories/delete \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "category_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/categories/delete",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        category_id: "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+      }),
+    }
+  );
+  if (res.status === 404) throw new Error("Category not found in this organization");
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { success } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/categories/delete",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "category_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+      },
+  )
+  if resp.status_code == 404:
+      raise LookupError("Category not found in this organization")
+  resp.raise_for_status()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "success": true
+}
+```
+
+<Callout kind="alert">
+  Deletion is irreversible via the API. Posts that referenced this category lose the link permanently — re-creating a category with the same name later does not re-attach old posts. If you need to rename, edit the category in the dashboard instead of deleting and re-creating.
+</Callout>
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `404` | `{"detail":{"error":"category not found"}}` | The id doesn't exist, has already been deleted, or belongs to a different organization. |
+| `422` | Validation error envelope | Missing `category_id`, or `category_id` is not a UUID. |
+
+See [Errors](/api-reference/errors) for the full envelope shape and a recommended client-side handler.

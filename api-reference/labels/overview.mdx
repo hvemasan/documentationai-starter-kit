@@ -1,0 +1,57 @@
+---
+title: "Labels"
+description: "Org-scoped labels used to categorize changelog entries (e.g. 'release', 'security', 'performance')."
+---
+
+Labels are short identifiers attached to [changelog entries](/api-reference/changelog/overview). They're useful for filtering the changelog (e.g. show only `security` entries) and for theming the badges your end-users see in the public-facing changelog feed.
+
+The API lets you list labels — use the returned label `id`s when calling [create changelog entry](/api-reference/changelog/create) or filtering [list changelog entries](/api-reference/changelog/list).
+
+<Callout kind="info">
+  Labels are distinct from [tags](/api-reference/tags/overview). Tags apply to feedback and roadmap posts; labels apply only to changelog entries.
+</Callout>
+
+## The label object
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  A unique identifier for the label (UUID).
+</ResponseField>
+
+<ResponseField name="name" field-type="string" required="true" deprecated="false">
+  The display name of the label (e.g. `"Release"`).
+</ResponseField>
+
+<ResponseField name="code" field-type="string" required="true" deprecated="false">
+  Auto-generated slug-like identifier (e.g. `"release"`). Useful for stable references in scripts.
+</ResponseField>
+
+<ResponseField name="color" field-type="string" required="true" deprecated="false">
+  Hex color string used as the visual badge (e.g. `"#10B981"`).
+</ResponseField>
+
+<ResponseField name="description" field-type="string" required="false" deprecated="false">
+  Optional human-readable description shown in the dashboard. May be `null`.
+</ResponseField>
+
+<ResponseField name="created_at" field-type="string" required="true" deprecated="false">
+  ISO 8601 timestamp at which the label was created.
+</ResponseField>
+
+## Example label object
+
+```json
+{
+  "id": "993c3ef8-b8cd-cd15-01ba-label0000001",
+  "name": "Release",
+  "code": "release",
+  "color": "#10B981",
+  "description": "General release notes for new features and improvements.",
+  "created_at": "2026-03-15T09:00:00.000Z"
+}
+```
+
+## What you can do
+
+<Card title="List labels" href="/api-reference/labels/list" icon="list" horizontal="false">
+  Return every active changelog label for the authenticated organization, paginated.
+</Card>

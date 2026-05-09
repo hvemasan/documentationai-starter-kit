@@ -1,0 +1,98 @@
+---
+title: "Retrieve a feedback board"
+description: "Look up the full details of a single feedback board by its id, scoped to the authenticated organization."
+---
+
+Retrieves the details of an existing feedback board, specified by its id. The board must belong to the authenticated organization — passing a UUID that exists in another org returns `404 not found`.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/feedback-boards/retrieve
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="id" param-type="string" required="true" deprecated="false">
+  The feedback board's UUID.
+</ParamField>
+
+## Returns
+
+A [feedback board object](/api-reference/feedback-boards/overview#the-feedback-board-object) on success, or a 404 error envelope when the id doesn't exist for this organization.
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/feedback-boards/retrieve \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "id": "553c3ef8-b8cd-cd15-01ba-12341234abcd"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/feedback-boards/retrieve",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        id: "553c3ef8-b8cd-cd15-01ba-12341234abcd",
+      }),
+    }
+  );
+  if (res.status === 404) throw new Error("Feedback board not found in this organization");
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const board = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/feedback-boards/retrieve",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "id": "553c3ef8-b8cd-cd15-01ba-12341234abcd",
+      },
+  )
+  if resp.status_code == 404:
+      raise LookupError("Feedback board not found in this organization")
+  resp.raise_for_status()
+  board = resp.json()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "id": "553c3ef8-b8cd-cd15-01ba-12341234abcd",
+  "name": "Feature Requests",
+  "slug": "feature-requests",
+  "description": "Tell us what you want us to build next.",
+  "icon_url": null,
+  "is_voting_enabled": true,
+  "is_commenting_enabled": true,
+  "show_post_dates": true,
+  "created_at": "2026-04-01T08:00:00.000Z"
+}
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `404` | `{"detail":{"error":"feedback board not found"}}` | The id doesn't exist, has been deleted, or belongs to a different organization. |
+| `422` | Validation error envelope | Missing `id`, or `id` is not a UUID. |
+
+See [Errors](/api-reference/errors) for the full envelope shape.

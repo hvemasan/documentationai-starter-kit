@@ -1,0 +1,150 @@
+---
+title: "Create a changelog entry"
+description: "Publish a new changelog entry with optional type, labels, and scheduling."
+---
+
+Creates a new changelog entry. Use this to publish release notes, feature announcements, or bug fix summaries from automation (e.g. a CI step that fires after a deploy).
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/changelog/create
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="title" param-type="string" required="true" deprecated="false">
+  The entry's title. 1–512 characters.
+</ParamField>
+
+<ParamField body="details" param-type="string" required="false" deprecated="false">
+  The entry body. Typically markdown or rich-text. May be omitted for title-only release notes.
+</ParamField>
+
+<ParamField body="type" param-type="string" required="false" deprecated="false">
+  Single-valued classification. One of `"fixed"`, `"new"`, or `"improved"`. Maps to a colored badge in the public changelog.
+</ParamField>
+
+<ParamField body="label_ids" param-type="array of strings" required="false" deprecated="false">
+  UUIDs of [labels](/api-reference/labels/overview) to attach. All ids must belong to your organization, or the call returns `400`.
+</ParamField>
+
+<ParamField body="status_code" param-type="string" required="false" deprecated="false">
+  Workflow state. Defaults to `"draft"`. Pass `"published"` to make the entry visible immediately, or `"scheduled"` together with `scheduled_for` to queue it.
+</ParamField>
+
+<ParamField body="published" param-type="boolean" required="false" deprecated="false">
+  Convenience shortcut. When `true`, sets `status_code = "published"` regardless of what's in the `status_code` field.
+</ParamField>
+
+<ParamField body="scheduled_for" param-type="string" required="false" deprecated="false">
+  ISO 8601 timestamp at which the entry should publish. Pair with `status_code = "scheduled"`.
+</ParamField>
+
+<ParamField body="notify" param-type="boolean" required="false" deprecated="false">
+  Whether to send an email notification to subscribed users when the entry publishes. Defaults to `true`.
+</ParamField>
+
+<ParamField body="author_id" param-type="string" required="false" deprecated="false">
+  UUID of the team member listed as the author. May be omitted for system-authored entries.
+</ParamField>
+
+<ParamField body="featured_image_url" param-type="string" required="false" deprecated="false">
+  URL of the hero image displayed atop the entry on the public changelog.
+</ParamField>
+
+<ParamField body="show_on_portal" param-type="boolean" required="false" deprecated="false">
+  Whether the entry should appear on the public-facing changelog page. Defaults to `true`.
+</ParamField>
+
+<Callout kind="info">
+  **Not supported in v1.** Canny's `post_ids` field (linking changelog entries to specific feedback or roadmap posts) is not yet wired through. The post→changelog link table is roadmap-only today; broader linking ships in a future phase.
+</Callout>
+
+## Returns
+
+A JSON object with the new entry's `id`.
+
+```json
+{ "id": "11ab3ef8-b8cd-cd15-01ba-changelog0001" }
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/changelog/create \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key":  "pb_YOUR_PUBLIC_API_KEY",
+      "title":    "v1.2 release: dark mode + faster search",
+      "details":  "We shipped two of the most-requested features...",
+      "type":     "new",
+      "published": true,
+      "notify":    true,
+      "author_id": "cc3c3ef8-b8cd-cd15-01ba-adminuser001"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/changelog/create",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        title: "v1.2 release: dark mode + faster search",
+        details: "We shipped two of the most-requested features...",
+        type: "new",
+        published: true,
+        notify: true,
+        author_id: "cc3c3ef8-b8cd-cd15-01ba-adminuser001",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { id } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/changelog/create",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "title": "v1.2 release: dark mode + faster search",
+          "details": "We shipped two of the most-requested features...",
+          "type": "new",
+          "published": True,
+          "notify": True,
+          "author_id": "cc3c3ef8-b8cd-cd15-01ba-adminuser001",
+      },
+  )
+  resp.raise_for_status()
+  new_id = resp.json()["id"]
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "id": "11ab3ef8-b8cd-cd15-01ba-changelog0001"
+}
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `400` | `{"detail":{"error":"one or more label_ids do not belong to this organization"}}` | At least one `label_ids` entry references a label that doesn't exist for your organization. |
+| `422` | Validation error envelope | Missing `title`, invalid `type` value, malformed `scheduled_for`. |
+
+See [Errors](/api-reference/errors) for the full envelope shape.

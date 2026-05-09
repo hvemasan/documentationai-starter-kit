@@ -1,0 +1,98 @@
+---
+title: "Delete a feedback post"
+description: "Soft-delete a feedback post. The post no longer appears in any list or retrieve response."
+---
+
+Soft-deletes a feedback post. After deletion:
+
+- The post no longer appears in [List feedback posts](/api-reference/feedback-posts/list) or [Retrieve](/api-reference/feedback-posts/retrieve) responses.
+- Comments on the post remain in the database but are unreachable via the post-scoped list endpoint.
+- Votes on the post are no longer counted.
+- The underlying row remains in the database with `is_active = false` for audit; you cannot un-delete via the API.
+- A `post.deleted` webhook fires to all registered org webhooks.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/feedback-posts/delete
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="post_id" param-type="string" required="true" deprecated="false">
+  UUID of the post to delete. Must belong to the authenticated organization.
+</ParamField>
+
+## Returns
+
+```json
+{ "success": true }
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/feedback-posts/delete \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "post_id": "aa3c3ef8-b8cd-cd15-01ba-postpost0001"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/feedback-posts/delete",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        post_id: "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+      }),
+    }
+  );
+  if (res.status === 404) throw new Error("Feedback post not found");
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/feedback-posts/delete",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "post_id": "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+      },
+  )
+  if resp.status_code == 404:
+      raise LookupError("Feedback post not found")
+  resp.raise_for_status()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{ "success": true }
+```
+
+<Callout kind="danger">
+  Deletion is irreversible via the API. The post remains in the database for audit but cannot be un-deleted through any endpoint. If you need to recover a mistakenly-deleted post, contact support.
+</Callout>
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `404` | `{"detail":{"error":"feedback post not found"}}` | Wrong id, already deleted, or different organization. |
+| `422` | Validation error envelope | Missing `post_id`, or `post_id` is not a UUID. |
+
+See [Errors](/api-reference/errors) for the full envelope shape.

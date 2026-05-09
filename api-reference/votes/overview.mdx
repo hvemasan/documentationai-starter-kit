@@ -1,0 +1,29 @@
+---
+title: "Votes"
+description: "Upvotes on feedback or roadmap posts. Toggle votes on behalf of a user, or list every voter on a post."
+---
+
+A vote is an upvote one user gave to one post. ProductBridge votes are **toggle-style** — calling the toggle endpoint twice for the same `(user_id, post_id)` pair adds and then removes the vote.
+
+The API lets you toggle a vote and list all voters on a post. The "voters list" endpoint is paginated; toggle is single-action.
+
+## The vote model
+
+ProductBridge does not return a standalone vote object via the public API — votes are exposed indirectly through:
+
+- **Toggle**: returns whether the user is now voted (`true`) or unvoted (`false`) after the operation.
+- **Voters list**: returns the list of users who currently have an active vote on a post.
+
+If you need vote counts, query [List feedback posts](/api-reference/feedback-posts/list) and inspect each post; counts are computed server-side and surfaced via the dashboard's portal API (a separate, narrower surface).
+
+## What you can do
+
+<Columns cols="2">
+  <Card title="Toggle a vote" href="/api-reference/votes/toggle" icon="toggle-right" horizontal="false">
+    Vote on behalf of a user, or remove an existing vote. The same endpoint handles both cases.
+  </Card>
+
+  <Card title="List voters" href="/api-reference/votes/voters" icon="users" horizontal="false">
+    Paginated list of users who voted on a specific post.
+  </Card>
+</Columns>

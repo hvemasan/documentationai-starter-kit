@@ -1,0 +1,139 @@
+---
+title: "List voters for a post"
+description: "Paginated list of users who currently have an active vote on a feedback or roadmap post."
+---
+
+Returns a paginated list of users who currently have an active vote on a single post. Returned in chronological vote-creation order (oldest votes first).
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/votes/voters
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="post_id" param-type="string" required="true" deprecated="false">
+  UUID of the post. Must belong to your organization.
+</ParamField>
+
+<ParamField body="post_type" param-type="string" required="true" deprecated="false">
+  Polymorphic discriminator. One of `"feedback"` or `"roadmap"`.
+</ParamField>
+
+<ParamField body="limit" param-type="integer" required="false" deprecated="false">
+  Number of items per page. Min 1, max 100. Defaults to 25.
+</ParamField>
+
+<ParamField body="cursor" param-type="string" required="false" deprecated="false">
+  Opaque pagination cursor returned by the previous page. Omit for the first page.
+</ParamField>
+
+## Returns
+
+The standard cursor-paginated envelope. Each `items[i]` is a minimal voter object:
+
+<ResponseField name="user_id" field-type="string" required="true" deprecated="false">
+  UUID of the voting user.
+</ResponseField>
+
+<ResponseField name="name" field-type="string" required="false" deprecated="false">
+  Display name. May be `null` for users without a populated name.
+</ResponseField>
+
+<ResponseField name="email" field-type="string" required="false" deprecated="false">
+  Email address. May be `null`.
+</ResponseField>
+
+```json
+{
+  "items": [ /* voter objects */ ],
+  "has_next_page": false,
+  "cursor": null
+}
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/votes/voters \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key":   "pb_YOUR_PUBLIC_API_KEY",
+      "post_id":   "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+      "post_type": "feedback",
+      "limit":     50
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/votes/voters",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        post_id: "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+        post_type: "feedback",
+        limit: 50,
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { items, has_next_page, cursor } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/votes/voters",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "post_id": "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+          "post_type": "feedback",
+          "limit": 50,
+      },
+  )
+  resp.raise_for_status()
+  payload = resp.json()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "items": [
+    {
+      "user_id": "bb3c3ef8-b8cd-cd15-01ba-useruser0001",
+      "name":    "Sally Doe",
+      "email":   "sally@acme.example.com"
+    },
+    {
+      "user_id": "bb3c3ef8-b8cd-cd15-01ba-useruser0002",
+      "name":    null,
+      "email":   "anon@protonmail.example"
+    }
+  ],
+  "has_next_page": false,
+  "cursor": null
+}
+```
+
+If the post belongs to a different organization, the response is `200 OK` with an empty `items` array — never another org's voters.
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `422` | Validation error envelope | `post_type` not in `{"feedback","roadmap"}`, `limit` out of range, missing fields. |
+
+See [Errors](/api-reference/errors) and [Pagination](/api-reference/pagination).

@@ -1,0 +1,89 @@
+---
+title: "List tags"
+description: "Return every active tag for the authenticated organization as a JSON array."
+---
+
+Returns every active tag for the authenticated organization. The response is a flat JSON array — most organizations have a small bounded number of tags, so this endpoint is intentionally **not paginated**.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/tags/list
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+## Returns
+
+A JSON array of [tag objects](/api-reference/tags/overview#the-tag-object). Empty when the organization has no active tags.
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/tags/list \
+    -H 'Content-Type: application/json' \
+    -d '{ "api_key": "pb_YOUR_PUBLIC_API_KEY" }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/tags/list",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ api_key: process.env.PRODUCTBRIDGE_API_KEY }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const tags = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/tags/list",
+      json={"api_key": os.environ["PRODUCTBRIDGE_API_KEY"]},
+  )
+  resp.raise_for_status()
+  tags = resp.json()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+[
+  {
+    "id": "773c3ef8-b8cd-cd15-01ba-tag00000001",
+    "name": "mobile",
+    "code": "mobile",
+    "color": "#10B981",
+    "show_on_feedback": true,
+    "show_on_roadmap": true,
+    "created_at": "2026-04-12T08:30:11.000Z"
+  },
+  {
+    "id": "773c3ef8-b8cd-cd15-01ba-tag00000002",
+    "name": "regression",
+    "code": "regression",
+    "color": "#EF4444",
+    "show_on_feedback": true,
+    "show_on_roadmap": false,
+    "created_at": "2026-05-01T14:20:00.000Z"
+  }
+]
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+
+See [Errors](/api-reference/errors) for the full envelope shape.

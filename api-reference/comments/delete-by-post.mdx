@@ -1,0 +1,108 @@
+---
+title: "Delete comments by post"
+description: "Bulk soft-delete every comment on a single feedback post. Destructive — use with care."
+---
+
+Bulk soft-deletes every active comment on a single feedback post. After this call:
+
+- Every comment on the post (including replies) has `is_active` set to `false`.
+- The post itself is **not** affected; only its comments.
+- The deletion count is returned so you can verify the operation.
+
+<Callout kind="danger">
+  This is a **destructive bulk operation**. Once executed, individual comments cannot be un-deleted via the API. Use this only when you intentionally want to remove all conversation on a post (e.g. cleaning up a duplicate before merging).
+</Callout>
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/comments/delete-by-post
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="feedback_post_id" param-type="string" required="true" deprecated="false">
+  UUID of the post whose comments should be deleted. Must belong to your organization.
+</ParamField>
+
+## Returns
+
+```json
+{
+  "success": true,
+  "deleted_count": 7
+}
+```
+
+`deleted_count` is the number of comments that were active immediately before the call. A post with no active comments returns `0`.
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/comments/delete-by-post \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "feedback_post_id": "aa3c3ef8-b8cd-cd15-01ba-postpost0001"
+    }'
+  ```
+
+  ```javascript
+  const confirmed = window.confirm(
+    "This permanently soft-deletes every comment on the post. Continue?"
+  );
+  if (!confirmed) return;
+
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/comments/delete-by-post",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        feedback_post_id: "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { deleted_count } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/comments/delete-by-post",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "feedback_post_id": "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+      },
+  )
+  resp.raise_for_status()
+  print("Deleted comments:", resp.json()["deleted_count"])
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "success": true,
+  "deleted_count": 7
+}
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `404` | `{"detail":{"error":"feedback post not found"}}` | The `feedback_post_id` doesn't exist or belongs to another organization. |
+| `422` | Validation error envelope | Missing `feedback_post_id`, or it's not a UUID. |
+
+See [Errors](/api-reference/errors) for the full envelope shape.

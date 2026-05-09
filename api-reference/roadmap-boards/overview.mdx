@@ -1,0 +1,59 @@
+---
+title: "Roadmap boards"
+description: "Containers that group roadmap posts. Each organization can have multiple roadmap boards (e.g. Product, Platform)."
+---
+
+A roadmap board is a container that groups roadmap posts (planned work, in-flight initiatives, shipped milestones). Roadmap boards are distinct from [feedback boards](/api-reference/feedback-boards/overview) — feedback represents user requests, roadmap represents what your team is doing.
+
+The API lets you list and retrieve roadmap boards. Creating, updating, and deleting boards is dashboard-only in v1.
+
+## The roadmap board object
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  A unique identifier for the board (UUID).
+</ResponseField>
+
+<ResponseField name="name" field-type="string" required="true" deprecated="false">
+  The display name of the board (e.g. `"Product Roadmap"`).
+</ResponseField>
+
+<ResponseField name="slug" field-type="string" required="true" deprecated="false">
+  URL-safe slug derived from the name (e.g. `"product-roadmap"`).
+</ResponseField>
+
+<ResponseField name="description" field-type="string" required="false" deprecated="false">
+  Optional human-readable description shown in the dashboard. May be `null`.
+</ResponseField>
+
+<ResponseField name="icon_url" field-type="string" required="false" deprecated="false">
+  Optional URL of an icon image displayed alongside the board name. May be `null`.
+</ResponseField>
+
+<ResponseField name="created_at" field-type="string" required="true" deprecated="false">
+  ISO 8601 timestamp at which the board was created.
+</ResponseField>
+
+## Example roadmap board object
+
+```json
+{
+  "id": "553c3ef8-b8cd-cd15-01ba-roadmap0001",
+  "name": "Product Roadmap",
+  "slug": "product-roadmap",
+  "description": "Public-facing roadmap for our customer-facing product.",
+  "icon_url": null,
+  "created_at": "2026-04-01T08:00:00.000Z"
+}
+```
+
+## What you can do
+
+<Columns cols="2">
+  <Card title="Retrieve a board" href="/api-reference/roadmap-boards/retrieve" icon="search" horizontal="false">
+    Look up a single roadmap board by its UUID.
+  </Card>
+
+  <Card title="List boards" href="/api-reference/roadmap-boards/list" icon="list" horizontal="false">
+    Return every active roadmap board for the authenticated organization.
+  </Card>
+</Columns>

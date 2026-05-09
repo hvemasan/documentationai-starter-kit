@@ -1,0 +1,72 @@
+---
+title: "Statuses"
+description: "Per-organization workflow statuses for feedback and roadmap posts (open, in-progress, completed, closed)."
+---
+
+Statuses represent where a post is in your team's workflow. ProductBridge groups statuses into four standard buckets — `open`, `in-progress`, `completed`, `closed` — and each organization can define one or more named statuses inside each bucket (e.g. "Under review" inside `open`, "Building" inside `in-progress`).
+
+The API lets you list the org's statuses. Use the returned status `id` when calling endpoints that filter by status (such as [list feedback posts](/api-reference/feedback-posts/list)) or set status (such as [update feedback post](/api-reference/feedback-posts/update)).
+
+<Callout kind="info">
+  Creating, renaming, or reordering statuses is dashboard-only in v1 — there is no public API for status mutation.
+</Callout>
+
+## The status object
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  A unique identifier for the status (UUID).
+</ResponseField>
+
+<ResponseField name="name" field-type="string" required="false" deprecated="false">
+  The display name (e.g. `"Under review"`). May be `null`.
+</ResponseField>
+
+<ResponseField name="code" field-type="string" required="false" deprecated="false">
+  Auto-generated slug-like identifier. May be `null`.
+</ResponseField>
+
+<ResponseField name="color" field-type="string" required="false" deprecated="false">
+  Hex color string for the status badge in the dashboard. May be `null`.
+</ResponseField>
+
+<ResponseField name="status_group_code" field-type="string" required="true" deprecated="false">
+  Workflow bucket this status belongs to. One of `"open"`, `"in-progress"`, `"completed"`, `"closed"`.
+</ResponseField>
+
+<ResponseField name="is_default_status" field-type="boolean" required="true" deprecated="false">
+  Whether this status is the default assigned to newly-created posts.
+</ResponseField>
+
+<ResponseField name="show_on_feedback" field-type="boolean" required="true" deprecated="false">
+  Whether this status appears in feedback views.
+</ResponseField>
+
+<ResponseField name="show_on_roadmap" field-type="boolean" required="true" deprecated="false">
+  Whether this status appears in roadmap views.
+</ResponseField>
+
+<ResponseField name="created_at" field-type="string" required="true" deprecated="false">
+  ISO 8601 timestamp at which the status was created.
+</ResponseField>
+
+## Example status object
+
+```json
+{
+  "id": "883c3ef8-b8cd-cd15-01ba-status000001",
+  "name": "Under review",
+  "code": "under-review",
+  "color": "#3B82F6",
+  "status_group_code": "open",
+  "is_default_status": true,
+  "show_on_feedback": true,
+  "show_on_roadmap": true,
+  "created_at": "2026-03-15T09:00:00.000Z"
+}
+```
+
+## What you can do
+
+<Card title="List statuses" href="/api-reference/statuses/list" icon="list" horizontal="false">
+  Return every active status for the authenticated organization, ordered by workflow group.
+</Card>

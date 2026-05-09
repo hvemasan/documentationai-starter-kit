@@ -1,0 +1,95 @@
+---
+title: "List statuses"
+description: "Return every active status for the authenticated organization as a JSON array, ordered by workflow group."
+---
+
+Returns every active status for the authenticated organization. The response is a flat JSON array — the status set per org is small and bounded, so this endpoint is intentionally **not paginated**.
+
+Statuses are returned ordered by `status_group_code` (open → in-progress → completed → closed) then by their internal sequence number, matching the dashboard order.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/statuses/list
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+## Returns
+
+A JSON array of [status objects](/api-reference/statuses/overview#the-status-object).
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/statuses/list \
+    -H 'Content-Type: application/json' \
+    -d '{ "api_key": "pb_YOUR_PUBLIC_API_KEY" }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/statuses/list",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ api_key: process.env.PRODUCTBRIDGE_API_KEY }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const statuses = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/statuses/list",
+      json={"api_key": os.environ["PRODUCTBRIDGE_API_KEY"]},
+  )
+  resp.raise_for_status()
+  statuses = resp.json()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+[
+  {
+    "id": "883c3ef8-b8cd-cd15-01ba-status000001",
+    "name": "Under review",
+    "code": "under-review",
+    "color": "#3B82F6",
+    "status_group_code": "open",
+    "is_default_status": true,
+    "show_on_feedback": true,
+    "show_on_roadmap": true,
+    "created_at": "2026-03-15T09:00:00.000Z"
+  },
+  {
+    "id": "883c3ef8-b8cd-cd15-01ba-status000002",
+    "name": "Building",
+    "code": "building",
+    "color": "#F59E0B",
+    "status_group_code": "in-progress",
+    "is_default_status": false,
+    "show_on_feedback": true,
+    "show_on_roadmap": true,
+    "created_at": "2026-03-15T09:00:00.000Z"
+  }
+]
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+
+See [Errors](/api-reference/errors) for the full envelope shape.

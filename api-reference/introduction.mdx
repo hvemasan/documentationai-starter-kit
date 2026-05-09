@@ -1,0 +1,99 @@
+---
+title: "Introduction"
+description: "ProductBridge's public API lets external systems read and modify feedback, roadmap, comments, votes, and changelog data."
+---
+
+ProductBridge exposes a public REST API that lets your servers, integrations, and automations read and modify the same data your team uses inside the dashboard. Use it to:
+
+- Pull feedback posts into a CRM or analytics warehouse
+- Sync changelog entries into your customer-facing newsletter pipeline
+- Programmatically tag, categorize, or merge posts based on signals from your own systems
+- Vote on posts and post comments on behalf of your end-users
+
+Pair the API with [webhooks](/api-reference/webhooks/overview) to receive push notifications when posts, comments, or votes change — instead of polling.
+
+## Base URL
+
+```
+https://api.productbridge.io/api/external/v1/
+```
+
+Every endpoint lives under this prefix. All traffic is HTTPS only; HTTP requests are rejected.
+
+## Conventions
+
+<Columns cols="2">
+  <Card title="POST for everything" href="/api-reference/authentication" icon="upload" horizontal="false">
+    Every endpoint uses the `POST` method, including reads. The request body is JSON; query strings and path parameters are not used for input.
+  </Card>
+
+  <Card title="JSON in, JSON out" href="/api-reference/errors" icon="code" horizontal="false">
+    Always send `Content-Type: application/json`. Responses are always JSON — even error envelopes.
+  </Card>
+
+  <Card title="Authenticated by api_key in body" href="/api-reference/authentication" icon="lock" horizontal="false">
+    Pass `api_key` as a JSON body field on every request. There is no `Authorization` header, no query-string `apiKey`.
+  </Card>
+
+  <Card title="Cursor pagination on list endpoints" href="/api-reference/pagination" icon="list" horizontal="false">
+    Paginated lists return `{ items, has_next_page, cursor }`. Pass the `cursor` back in the next request to fetch the next page.
+  </Card>
+</Columns>
+
+## Quickstart
+
+Verify your API key works by calling the `/ping` endpoint — it returns the authenticated organization's id and slug.
+
+```bash
+curl -X POST https://api.productbridge.io/api/external/v1/ping \
+  -H 'Content-Type: application/json' \
+  -d '{"api_key": "pb_YOUR_PUBLIC_API_KEY"}'
+```
+
+A successful response:
+
+```json
+{
+  "organization_id": "f5b9b8aa-1b1a-4f1e-9a45-12d8a4a55555",
+  "organization_slug": "acme",
+  "timestamp": "2026-05-09T12:34:56.789Z"
+}
+```
+
+If you get a `401` with `{"detail": {"error": "invalid api_key"}}`, double-check the key in your dashboard's **Settings → API → Public API key** page.
+
+## What's next
+
+<Steps>
+  <Step title="Authenticate" icon="lock" titleType="p">
+    Mint a public API key from the dashboard and learn how to pass it on every request.
+
+    <Card title="Authentication" href="/api-reference/authentication" icon="key-round" horizontal="false">
+      Where to get your key, how to send it, and how to rotate it.
+    </Card>
+  </Step>
+
+  <Step title="Understand pagination" icon="list" titleType="p">
+    List endpoints use a cursor pattern; some return unpaginated arrays. Know which is which before you build.
+
+    <Card title="Pagination" href="/api-reference/pagination" icon="list" horizontal="false">
+      Cursor pattern, `has_next_page`, and which endpoints don't paginate.
+    </Card>
+  </Step>
+
+  <Step title="Handle errors" icon="alert-triangle" titleType="p">
+    The error envelope is consistent across every endpoint — implement it once, use it everywhere.
+
+    <Card title="Errors" href="/api-reference/errors" icon="alert-triangle" horizontal="false">
+      Status codes, the error envelope shape, and a recommended client-side handler.
+    </Card>
+  </Step>
+
+  <Step title="Pick a resource" icon="folder" titleType="p">
+    Start with [Categories](/api-reference/categories/overview) for a complete CRUD walkthrough, or jump straight to a resource group in the sidebar.
+  </Step>
+</Steps>
+
+<Callout kind="tip">
+  Want push notifications instead of polling? Pair the API with [webhooks](/api-reference/webhooks/overview) so ProductBridge calls your server when posts, comments, or votes change.
+</Callout>

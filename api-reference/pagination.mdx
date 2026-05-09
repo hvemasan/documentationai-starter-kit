@@ -1,0 +1,124 @@
+---
+title: "Pagination"
+description: "Cursor-based pagination for list endpoints, with limit, has_next_page, and an opaque cursor token."
+---
+
+ProductBridge's public API uses **cursor-based pagination** for list endpoints that return potentially large result sets. The cursor is opaque — clients should pass it back unchanged without trying to parse or compute it.
+
+Some list endpoints return small, bounded result sets (e.g. categories, tags, statuses, boards) and are **not paginated** — they return a raw JSON array. The per-endpoint reference page calls out which model an endpoint uses.
+
+## How it works
+
+Send `limit` and (on follow-up requests) `cursor` as JSON body fields:
+
+```json
+{
+  "api_key": "pb_YOUR_PUBLIC_API_KEY",
+  "limit": 25,
+  "cursor": null
+}
+```
+
+| Field   | Type    | Default | Description |
+|---------|---------|---------|-------------|
+| `limit` | integer | 25      | How many items to return per page. Min 1, max 100. |
+| `cursor`| string  | `null`  | Opaque token returned by the previous page. Omit or pass `null` to fetch the first page. |
+
+The response wraps the items in a fixed envelope:
+
+```json
+{
+  "items": [ /* per-resource shape */ ],
+  "has_next_page": true,
+  "cursor": "MjU"
+}
+```
+
+| Field           | Type    | Description |
+|-----------------|---------|-------------|
+| `items`         | array   | The page's items. Length is between 0 and `limit`. |
+| `has_next_page` | boolean | `true` if more items exist beyond this page; `false` when you've reached the end. |
+| `cursor`        | string \| null | Pass back as the next request's `cursor` to fetch the next page. `null` when `has_next_page` is `false`. |
+
+<Callout kind="info">
+  The current cursor implementation encodes a base64 offset internally, but treat it as **opaque**. Future versions may switch to a different encoding (e.g. an item id for keyset pagination), and any client that parses the cursor will break.
+</Callout>
+
+## Walking the full list
+
+A typical "fetch everything" loop:
+
+<CodeGroup show-lines="true" tabs="JavaScript,Python">
+  ```javascript
+  async function listAllFeedbackPosts(apiKey) {
+    const all = [];
+    let cursor = null;
+
+    while (true) {
+      const res = await fetch(
+        "https://api.productbridge.io/api/external/v1/feedback-posts/list",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ api_key: apiKey, limit: 100, cursor }),
+        }
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const { items, has_next_page, cursor: nextCursor } = await res.json();
+
+      all.push(...items);
+      if (!has_next_page) break;
+      cursor = nextCursor;
+    }
+
+    return all;
+  }
+  ```
+
+  ```python
+  import httpx
+
+  def list_all_feedback_posts(api_key: str) -> list[dict]:
+      all_items = []
+      cursor = None
+      with httpx.Client() as client:
+          while True:
+              resp = client.post(
+                  "https://api.productbridge.io/api/external/v1/feedback-posts/list",
+                  json={"api_key": api_key, "limit": 100, "cursor": cursor},
+              )
+              resp.raise_for_status()
+              page = resp.json()
+              all_items.extend(page["items"])
+              if not page["has_next_page"]:
+                  break
+              cursor = page["cursor"]
+      return all_items
+  ```
+</CodeGroup>
+
+## Endpoints that paginate
+
+| Endpoint | Notes |
+|---|---|
+| `POST /feedback-posts/list` | Filterable by `board_id`, `status_id`, `search`. |
+| `POST /comments/list` | Scoped to a single `feedback_post_id`. |
+| `POST /votes/voters` | Scoped to a single post. |
+| `POST /labels/list` | Changelog labels. |
+| `POST /changelog/list` | Uses `skip` instead of `cursor` (Canny-compatible). |
+
+## Endpoints that return unpaginated arrays
+
+These endpoints have small, bounded result sets and skip the pagination envelope entirely. Each returns a JSON array:
+
+| Endpoint | Notes |
+|---|---|
+| `POST /feedback-boards/list` | Typically a handful of boards per org. |
+| `POST /roadmap-boards/list` | Same — a handful per org. |
+| `POST /categories/list` | Org-scoped categories. |
+| `POST /tags/list` | Org-scoped tags. |
+| `POST /statuses/list` | Predefined per-org status set (open / in-progress / completed / closed). |
+
+<Callout kind="tip">
+  Paginate from the start. Even if your org currently has only a few feedback posts, traffic grows; building against the cursor shape on day one means no rewrite later. Set `limit` to 100 to minimize round-trips when you genuinely need every item.
+</Callout>

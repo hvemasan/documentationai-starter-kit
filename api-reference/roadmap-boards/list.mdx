@@ -1,0 +1,79 @@
+---
+title: "List roadmap boards"
+description: "Return every active roadmap board for the authenticated organization as a JSON array."
+---
+
+Returns every active roadmap board for the authenticated organization. The response is a flat JSON array — most organizations have a small bounded number of roadmap boards, so this endpoint is intentionally **not paginated**.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/roadmap-boards/list
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+## Returns
+
+A JSON array of [roadmap board objects](/api-reference/roadmap-boards/overview#the-roadmap-board-object). Empty when the organization has no active roadmap boards.
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/roadmap-boards/list \
+    -H 'Content-Type: application/json' \
+    -d '{ "api_key": "pb_YOUR_PUBLIC_API_KEY" }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/roadmap-boards/list",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ api_key: process.env.PRODUCTBRIDGE_API_KEY }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const boards = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/roadmap-boards/list",
+      json={"api_key": os.environ["PRODUCTBRIDGE_API_KEY"]},
+  )
+  resp.raise_for_status()
+  boards = resp.json()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+[
+  {
+    "id": "553c3ef8-b8cd-cd15-01ba-roadmap0001",
+    "name": "Product Roadmap",
+    "slug": "product-roadmap",
+    "description": "Public-facing roadmap for our customer-facing product.",
+    "icon_url": null,
+    "created_at": "2026-04-01T08:00:00.000Z"
+  }
+]
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+
+See [Errors](/api-reference/errors) for the full envelope shape.

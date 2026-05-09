@@ -1,0 +1,81 @@
+---
+title: "Categories"
+description: "Posts can be assigned categories. Use the API to list, retrieve, create, and delete categories for your organization."
+---
+
+Posts can be assigned categories — short labels like "UI", "API", or "Performance" that classify what a feedback or roadmap post is about. Each category belongs to your organization and can be applied to posts on any board.
+
+The API lets you list, retrieve, create, and delete categories. To change the category assigned to a specific post, see the [feedback posts update endpoint](/api-reference) (covered in a future Phase 5d-b page).
+
+<Callout kind="info">
+  **Behavior differences from Canny.** ProductBridge categories are **organization-scoped** — one set of categories applies to every board in the org, instead of being defined per-board. Sub-categories (Canny's `parentID`) are not supported in v1; every category is top-level.
+</Callout>
+
+## The category object
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  A unique identifier for the category (UUID).
+</ResponseField>
+
+<ResponseField name="name" field-type="string" required="false" deprecated="false">
+  The display name of the category. May be `null` for system-managed categories that haven't been renamed.
+</ResponseField>
+
+<ResponseField name="code" field-type="string" required="false" deprecated="false">
+  An auto-generated, slug-like identifier derived from the name (e.g. `"ui"` for `"UI"`). Useful for stable references in scripts. May be `null`.
+</ResponseField>
+
+<ResponseField name="description" field-type="string" required="false" deprecated="false">
+  Optional human-readable description shown in the dashboard. May be `null`.
+</ResponseField>
+
+<ResponseField name="color" field-type="string" required="false" deprecated="false">
+  Optional hex color string (e.g. `"#3B82F6"`) used as a visual badge in the dashboard. May be `null`.
+</ResponseField>
+
+<ResponseField name="show_on_feedback" field-type="boolean" required="true" deprecated="false">
+  Whether this category appears in the dashboard's feedback views.
+</ResponseField>
+
+<ResponseField name="show_on_roadmap" field-type="boolean" required="true" deprecated="false">
+  Whether this category appears in the dashboard's roadmap views.
+</ResponseField>
+
+<ResponseField name="created_at" field-type="string" required="true" deprecated="false">
+  ISO 8601 timestamp at which the category was created.
+</ResponseField>
+
+## Example category object
+
+```json
+{
+  "id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+  "name": "UI",
+  "code": "ui",
+  "description": "User interface and visual design feedback.",
+  "color": "#3B82F6",
+  "show_on_feedback": true,
+  "show_on_roadmap": true,
+  "created_at": "2026-05-09T13:14:22.389Z"
+}
+```
+
+## What you can do
+
+<Columns cols="2">
+  <Card title="Retrieve a category" href="/api-reference/categories/retrieve" icon="search" horizontal="false">
+    Look up the full details of a single category by its UUID.
+  </Card>
+
+  <Card title="List categories" href="/api-reference/categories/list" icon="list" horizontal="false">
+    Return every active category for the authenticated organization.
+  </Card>
+
+  <Card title="Create a category" href="/api-reference/categories/create" icon="plus" horizontal="false">
+    Add a new category. Names are 1–30 characters.
+  </Card>
+
+  <Card title="Delete a category" href="/api-reference/categories/delete" icon="trash-2" horizontal="false">
+    Soft-delete a category. Posts that referenced it have their `category_id` cleared automatically.
+  </Card>
+</Columns>

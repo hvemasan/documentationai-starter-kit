@@ -1,0 +1,113 @@
+---
+title: "Toggle a vote"
+description: "Vote on a post on behalf of a user, or remove an existing vote. The same endpoint handles both directions."
+---
+
+Toggles a vote on a feedback or roadmap post. The endpoint examines the user's current state for the post and flips it:
+
+- If the user has **no active vote** on the post → adds an upvote and returns `{ "voted": true }`. Triggers a `vote.created` webhook.
+- If the user **already has** an active vote → removes it and returns `{ "voted": false }`. Triggers a `vote.deleted` webhook.
+
+Calling toggle twice in succession leaves the user back where they started.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/votes/toggle
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="user_id" param-type="string" required="true" deprecated="false">
+  UUID of the user whose vote is being toggled.
+</ParamField>
+
+<ParamField body="post_id" param-type="string" required="true" deprecated="false">
+  UUID of the post being voted on. Must belong to your organization.
+</ParamField>
+
+<ParamField body="post_type" param-type="string" required="true" deprecated="false">
+  Polymorphic discriminator. One of `"feedback"` or `"roadmap"`. Determines which post table is consulted.
+</ParamField>
+
+<Callout kind="info">
+  Some boards may have voting disabled in their settings. If the post's board has `is_voting_enabled = false`, the toggle returns `403 voting not permitted`. Use [retrieve feedback board](/api-reference/feedback-boards/retrieve) to check before calling.
+</Callout>
+
+## Returns
+
+```json
+{ "voted": true }
+```
+
+`voted: true` means the user now has an active upvote on the post; `voted: false` means the upvote was removed.
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/votes/toggle \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key":   "pb_YOUR_PUBLIC_API_KEY",
+      "user_id":   "bb3c3ef8-b8cd-cd15-01ba-useruser0001",
+      "post_id":   "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+      "post_type": "feedback"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/votes/toggle",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        user_id: "bb3c3ef8-b8cd-cd15-01ba-useruser0001",
+        post_id: "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+        post_type: "feedback",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { voted } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/votes/toggle",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "user_id": "bb3c3ef8-b8cd-cd15-01ba-useruser0001",
+          "post_id": "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+          "post_type": "feedback",
+      },
+  )
+  resp.raise_for_status()
+  voted = resp.json()["voted"]
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{ "voted": true }
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `403` | `{"detail":"Voting is not permitted for this board"}` | The post's board has voting disabled. |
+| `404` | `{"detail":{"error":"post not found"}}` | The post doesn't exist or belongs to another organization. |
+| `422` | Validation error envelope | `post_type` not in `{"feedback","roadmap"}`, missing fields. |
+
+See [Errors](/api-reference/errors) for the full envelope shape.

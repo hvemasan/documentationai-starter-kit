@@ -1,0 +1,138 @@
+---
+title: "List feedback posts"
+description: "Paginated list of feedback posts with optional board, status, and full-text search filters."
+---
+
+Returns a paginated list of feedback posts for the authenticated organization. Filterable by board, status, and a full-text search over title and description.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/feedback-posts/list
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="board_id" param-type="string" required="false" deprecated="false">
+  Filter to posts on a specific [feedback board](/api-reference/feedback-boards/overview). Pass the board's UUID.
+</ParamField>
+
+<ParamField body="status_id" param-type="string" required="false" deprecated="false">
+  Filter to posts in a specific [status](/api-reference/statuses/overview). Pass the status UUID.
+</ParamField>
+
+<ParamField body="search" param-type="string" required="false" deprecated="false">
+  Case-insensitive substring match against post title and description.
+</ParamField>
+
+<ParamField body="limit" param-type="integer" required="false" deprecated="false">
+  Number of items per page. Min 1, max 100. Defaults to 25.
+</ParamField>
+
+<ParamField body="cursor" param-type="string" required="false" deprecated="false">
+  Opaque pagination cursor returned by the previous page. Omit for the first page.
+</ParamField>
+
+<Callout kind="info">
+  **Filter limitations in v1.** Tag and author filters and Canny-style sort options (`newest` / `oldest` / `score` / `status_changed` / `trending`) are not yet supported. The list is always sorted by newest-first. Filter by tag client-side after retrieving the page.
+</Callout>
+
+## Returns
+
+The standard cursor-paginated envelope.
+
+```json
+{
+  "items": [ /* feedback post objects */ ],
+  "has_next_page": true,
+  "cursor": "MjU"
+}
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/feedback-posts/list \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "board_id": "553c3ef8-b8cd-cd15-01ba-12341234abcd",
+      "search": "dark mode",
+      "limit": 25
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/feedback-posts/list",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        board_id: "553c3ef8-b8cd-cd15-01ba-12341234abcd",
+        search: "dark mode",
+        limit: 25,
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { items, has_next_page, cursor } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/feedback-posts/list",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "board_id": "553c3ef8-b8cd-cd15-01ba-12341234abcd",
+          "search": "dark mode",
+          "limit": 25,
+      },
+  )
+  resp.raise_for_status()
+  payload = resp.json()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "items": [
+    {
+      "id": "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+      "title": "Add dark mode to the dashboard",
+      "description": "It would be great to have a dark theme for late-night sessions.",
+      "slug": "add-dark-mode-to-the-dashboard",
+      "board_id": "553c3ef8-b8cd-cd15-01ba-12341234abcd",
+      "author_id": "bb3c3ef8-b8cd-cd15-01ba-useruser0001",
+      "owner_id": null,
+      "status_id": "883c3ef8-b8cd-cd15-01ba-status000001",
+      "category_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+      "eta": null,
+      "moderation_status_code": "accepted",
+      "created_at": "2026-04-15T10:30:00.000Z",
+      "updated_at": "2026-04-20T12:05:11.000Z"
+    }
+  ],
+  "has_next_page": false,
+  "cursor": null
+}
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `422` | Validation error envelope | `limit` out of range (must be 1–100), or non-UUID values for `board_id` / `status_id`. |
+
+See [Errors](/api-reference/errors) and [Pagination](/api-reference/pagination) for the cursor pattern.

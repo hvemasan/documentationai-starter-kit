@@ -1,0 +1,120 @@
+---
+title: "Create a comment"
+description: "Post a new comment on a feedback post, optionally as a reply to an existing comment."
+---
+
+Creates a new comment on a feedback post. If you pass `parent_id`, the new comment is a reply attached to that parent — replies must reference a comment on the same post.
+
+Comments created via the public API are always saved with `moderation_status_code = "accepted"` (i.e. they're not held for moderation).
+
+<Callout kind="info">
+  **Not supported in v1.** Canny's `image_urls` and `internal` flag on comment creation are accepted on the wire (Pydantic ignores extra fields) but are not yet stored. Roll out for these fields is tracked in the schema-change phase of the public API rollout.
+</Callout>
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/comments/create
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="feedback_post_id" param-type="string" required="true" deprecated="false">
+  UUID of the post to comment on. Must belong to your organization.
+</ParamField>
+
+<ParamField body="author_id" param-type="string" required="true" deprecated="false">
+  UUID of the user posting the comment.
+</ParamField>
+
+<ParamField body="value" param-type="string" required="true" deprecated="false">
+  The comment body. 1–2500 characters.
+</ParamField>
+
+<ParamField body="parent_id" param-type="string" required="false" deprecated="false">
+  UUID of an existing comment on the same post, when replying. Validated to belong to the same `feedback_post_id`.
+</ParamField>
+
+<ParamField body="visibility_code" param-type="string" required="false" deprecated="false">
+  Visibility level. Defaults to `"public"`. Use a non-public value to mark internal-only notes.
+</ParamField>
+
+## Returns
+
+A JSON object with the new comment's `id`.
+
+```json
+{ "id": "ee3c3ef8-b8cd-cd15-01ba-comment000099" }
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/comments/create \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "feedback_post_id": "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+      "author_id":        "bb3c3ef8-b8cd-cd15-01ba-useruser0001",
+      "value": "Looking forward to this — quick question, will it work on mobile?"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/comments/create",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        feedback_post_id: "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+        author_id: "bb3c3ef8-b8cd-cd15-01ba-useruser0001",
+        value: "Looking forward to this — quick question, will it work on mobile?",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { id } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/comments/create",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "feedback_post_id": "aa3c3ef8-b8cd-cd15-01ba-postpost0001",
+          "author_id": "bb3c3ef8-b8cd-cd15-01ba-useruser0001",
+          "value": "Looking forward to this — quick question, will it work on mobile?",
+      },
+  )
+  resp.raise_for_status()
+  new_id = resp.json()["id"]
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "id": "ee3c3ef8-b8cd-cd15-01ba-comment000099"
+}
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `400` | `{"detail":{"error":"parent comment must belong to the same post"}}` | `parent_id` references a comment on a different post. |
+| `404` | `{"detail":{"error":"feedback post not found"}}` | The `feedback_post_id` doesn't exist or belongs to another organization. |
+| `422` | Validation error envelope | `value` length out of bounds (1–2500), missing required fields. |
+
+See [Errors](/api-reference/errors) for the full envelope shape.

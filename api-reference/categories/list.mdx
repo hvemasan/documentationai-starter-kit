@@ -1,0 +1,97 @@
+---
+title: "List categories"
+description: "Return every active category for the authenticated organization as a JSON array."
+---
+
+Returns every active category for the authenticated organization. The response is a flat JSON array — categories are a small, bounded set per org, so this endpoint is intentionally **not paginated**.
+
+If you need to filter by which surface a category appears on, do it client-side using the `show_on_feedback` and `show_on_roadmap` fields on each item.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/categories/list
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+## Returns
+
+A JSON array of [category objects](/api-reference/categories/overview#the-category-object). The array is empty when the organization has no active categories.
+
+<Callout kind="info">
+  Unlike `/feedback-posts/list` or `/comments/list`, this endpoint does not return the `{ items, has_next_page, cursor }` envelope. The array is the full response body.
+</Callout>
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/categories/list \
+    -H 'Content-Type: application/json' \
+    -d '{ "api_key": "pb_YOUR_PUBLIC_API_KEY" }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/categories/list",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ api_key: process.env.PRODUCTBRIDGE_API_KEY }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const categories = await res.json();   // Array of category objects.
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/categories/list",
+      json={"api_key": os.environ["PRODUCTBRIDGE_API_KEY"]},
+  )
+  resp.raise_for_status()
+  categories = resp.json()  # list[dict]
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+[
+  {
+    "id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+    "name": "UI",
+    "code": "ui",
+    "description": "User interface and visual design feedback.",
+    "color": "#3B82F6",
+    "show_on_feedback": true,
+    "show_on_roadmap": true,
+    "created_at": "2026-05-09T13:14:22.389Z"
+  },
+  {
+    "id": "663c3ef8-b8cd-cd15-01ba-22bb22bb22bb",
+    "name": "API",
+    "code": "api",
+    "description": null,
+    "color": "#10B981",
+    "show_on_feedback": true,
+    "show_on_roadmap": false,
+    "created_at": "2026-04-12T08:30:11.000Z"
+  }
+]
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+
+A wrong `api_key` from another organization receives an empty array — never another org's categories. See [Errors](/api-reference/errors) for the full envelope shape.

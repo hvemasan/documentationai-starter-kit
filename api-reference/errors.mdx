@@ -1,0 +1,161 @@
+---
+title: "Errors"
+description: "HTTP status codes and the consistent error envelope returned by every public API endpoint."
+---
+
+The public API uses HTTP status codes to signal coarse-grained outcomes (success, auth failure, validation error, server fault) and a consistent JSON error envelope to communicate the specifics. Implement the handler once and use it for every endpoint.
+
+## Status codes
+
+| Code | Meaning | When you see it |
+|------|---------|-----------------|
+| `200` | Success | The endpoint returns its expected response body. |
+| `400` | Bad request | A semantic precondition failed (e.g. `merge_post_id == into_post_id`, parent comment doesn't belong to the same post). The body explains what's wrong. |
+| `401` | Unauthorized | Missing / unknown / inactive `api_key`, or the key doesn't grant `public_api` scope. |
+| `404` | Not found | The referenced resource doesn't exist *for your organization*. ProductBridge returns 404 (not 403) when a resource exists in another org — by design, to avoid leaking the existence of cross-org data. |
+| `422` | Validation error | Pydantic rejected the request body — e.g. missing required field, wrong type, value out of range. The body lists every offending field. |
+| `5xx` | Server error | Bug or downstream outage on ProductBridge's side. Retry with backoff; if it persists, contact support. |
+
+## Error envelope
+
+Most non-2xx responses use this shape:
+
+```json
+{
+  "detail": {
+    "error": "human-readable message"
+  }
+}
+```
+
+For example, an unknown `api_key` returns:
+
+```json
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+
+{ "detail": { "error": "invalid api_key" } }
+```
+
+A retrieve against a post that doesn't belong to your org:
+
+```json
+HTTP/1.1 404 Not Found
+Content-Type: application/json
+
+{ "detail": { "error": "feedback post not found" } }
+```
+
+A 422 validation error returns FastAPI's structured error list — useful when several fields fail at once:
+
+```json
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/json
+
+{
+  "detail": [
+    {
+      "type": "missing",
+      "loc": ["body", "api_key"],
+      "msg": "Field required",
+      "input": {}
+    },
+    {
+      "type": "value_error",
+      "loc": ["body", "limit"],
+      "msg": "Input should be less than or equal to 100",
+      "input": 250
+    }
+  ]
+}
+```
+
+## Why 404 instead of 403 for cross-org access
+
+If you call `POST /feedback-posts/retrieve` with a post id that belongs to a different organization, ProductBridge returns **404 not found** — not **403 forbidden**. This is intentional:
+
+- `403` would tell you "this resource exists, but you can't see it" — that's an information leak.
+- `404` collapses "doesn't exist" and "exists in someone else's org" into the same response, so you can't enumerate cross-org resource ids.
+
+For the same reason, the `401` envelope is identical regardless of *why* the key was rejected (missing / typo / revoked / wrong scope).
+
+## A recommended client-side handler
+
+<CodeGroup show-lines="true" tabs="JavaScript,Python">
+  ```javascript
+  async function call(path, body) {
+    const res = await fetch(`https://api.productbridge.io/api/external/v1${path}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+    if (res.status === 200) {
+      return res.json();
+    }
+
+    const errBody = await res.json().catch(() => ({}));
+
+    switch (res.status) {
+      case 401:
+        throw new AuthError("Invalid or revoked api_key");
+      case 404:
+        throw new NotFoundError(errBody?.detail?.error || "not found");
+      case 422:
+        throw new ValidationError(errBody?.detail || []);
+      case 400:
+        throw new RequestError(errBody?.detail?.error || "bad request");
+      default:
+        if (res.status >= 500) throw new ServerError(`HTTP ${res.status}`);
+        throw new Error(`Unexpected ${res.status}`);
+    }
+  }
+  ```
+
+  ```python
+  import httpx
+
+  class AuthError(Exception): ...
+  class NotFoundError(Exception): ...
+  class ValidationError(Exception): ...
+  class RequestError(Exception): ...
+  class ServerError(Exception): ...
+
+  def call(path: str, body: dict) -> dict:
+      resp = httpx.post(
+          f"https://api.productbridge.io/api/external/v1{path}",
+          json=body,
+      )
+      if resp.status_code == 200:
+          return resp.json()
+
+      try:
+          err = resp.json()
+      except Exception:
+          err = {}
+
+      if resp.status_code == 401:
+          raise AuthError("Invalid or revoked api_key")
+      if resp.status_code == 404:
+          raise NotFoundError(err.get("detail", {}).get("error", "not found"))
+      if resp.status_code == 422:
+          raise ValidationError(err.get("detail", []))
+      if resp.status_code == 400:
+          raise RequestError(err.get("detail", {}).get("error", "bad request"))
+      if resp.status_code >= 500:
+          raise ServerError(f"HTTP {resp.status_code}")
+      raise Exception(f"Unexpected {resp.status_code}")
+  ```
+</CodeGroup>
+
+## Retry guidance
+
+| Class | Retry? | Backoff |
+|-------|--------|---------|
+| `5xx` | Yes | Exponential, starting at ~500ms; cap at 3 attempts. |
+| `4xx` | No (except 429 if/when rate limiting ships) | The request will keep failing until you fix the input. |
+| Network-level (timeout, connection reset) | Yes | Treat like 5xx. |
+
+<Callout kind="tip">
+  Log the full error envelope (status code + body) on every non-2xx — the `detail.error` string is meant to be human-readable and saves debugging time.
+</Callout>

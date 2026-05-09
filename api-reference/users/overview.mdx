@@ -1,0 +1,78 @@
+---
+title: "Users"
+description: "End-users of your product who interact with feedback, comments, and votes — distinct from your team's admin users."
+---
+
+A user in this API represents an **end-user of your product** — the people who file feedback, vote on posts, and leave comments. These are stored in ProductBridge's `organization_user` table, which is per-org and independent of the underlying SaaS account.
+
+The API lets you retrieve and soft-delete users. **Creating users is not exposed via the public API in v1** — users are created via your portal (when they sign in to vote/comment), via integrations (Zendesk, Freshdesk, etc.), or via the AI ingestion pipeline.
+
+<Callout kind="info">
+  **Three user concepts to keep straight.** ProductBridge has end-users (this resource), admin users (your team), and external users (imported from integrations). The public API only exposes end-users.
+</Callout>
+
+## The user object
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  The org-scoped membership row's UUID. Stable for the lifetime of the user's link to your org.
+</ResponseField>
+
+<ResponseField name="user_id" field-type="string" required="true" deprecated="false">
+  The underlying user's UUID — same value across organizations, if the user appears in multiple orgs.
+</ResponseField>
+
+<ResponseField name="email" field-type="string" required="false" deprecated="false">
+  The user's email address. May be `null` for users who haven't supplied one.
+</ResponseField>
+
+<ResponseField name="name" field-type="string" required="false" deprecated="false">
+  The user's display name. May be `null`.
+</ResponseField>
+
+<ResponseField name="avatar_url" field-type="string" required="false" deprecated="false">
+  URL of the user's avatar image. May be `null`.
+</ResponseField>
+
+<ResponseField name="portal_role" field-type="string" required="true" deprecated="false">
+  Role within the organization's portal. Defaults to `"end_user"`.
+</ResponseField>
+
+<ResponseField name="company_name" field-type="string" required="false" deprecated="false">
+  Optional company affiliation captured from the customer record. May be `null`.
+</ResponseField>
+
+<ResponseField name="customer_status" field-type="string" required="false" deprecated="false">
+  Optional CRM-style status (e.g. `"trial"`, `"paying"`, `"churned"`). May be `null`.
+</ResponseField>
+
+<ResponseField name="created_at" field-type="string" required="true" deprecated="false">
+  ISO 8601 timestamp at which the user was first linked to your organization.
+</ResponseField>
+
+## Example user object
+
+```json
+{
+  "id":   "ff3c3ef8-b8cd-cd15-01ba-orguser000001",
+  "user_id": "bb3c3ef8-b8cd-cd15-01ba-useruser0001",
+  "email": "sally@acme.example.com",
+  "name":  "Sally Doe",
+  "avatar_url": "https://acme.example.com/avatars/sally.png",
+  "portal_role": "end_user",
+  "company_name": "Acme Inc",
+  "customer_status": "paying",
+  "created_at": "2026-04-01T08:00:00.000Z"
+}
+```
+
+## What you can do
+
+<Columns cols="2">
+  <Card title="Retrieve a user" href="/api-reference/users/retrieve" icon="search" horizontal="false">
+    Look up a user by `user_id` or by `email`.
+  </Card>
+
+  <Card title="Delete a user" href="/api-reference/users/delete" icon="trash-2" horizontal="false">
+    Soft-delete the user's link to this organization. Other orgs are unaffected.
+  </Card>
+</Columns>
