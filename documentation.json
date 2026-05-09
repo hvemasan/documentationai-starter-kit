@@ -241,6 +241,11 @@
                     "title": "Linear",
                     "path": "integrations/project-management/linear",
                     "icon": "layout"
+                  },
+                  {
+                    "title": "ClickUp",
+                    "path": "integrations/project-management/clickup",
+                    "icon": "check-square"
                   }
                 ]
               },
