@@ -2,21 +2,21 @@
 title: Single Sign-On (SSO)
 description: >-
   Let your users sign in to the public portal using your existing login system.
-  Configure a JWT redirect flow so ProductBridge hands off authentication to your
-  app — no password required on the ProductBridge side.
+  Configure a JWT redirect flow so ProductBridge hands off authentication to
+  your app — no password required on the ProductBridge side.
 ---
-
 ## Overview
 
 ProductBridge SSO uses a **redirect-based JWT flow**. When a user visits your portal and clicks Sign In, ProductBridge sends them to your login page. After they authenticate, your server generates a signed JWT and redirects them back. ProductBridge verifies the token and creates an authenticated session.
 
-<Image src="/images/sso_redirect_tab_initial_setup_framed.png" width="960" height="540" alt="ProductBridge Settings → SSO page showing the SSO Redirect tab with the three-step setup wizard: redirect URL field, Test Redirect Flow button, and the Enable SSO toggle disabled until the test passes" />
+<Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778333127314-5hqr02zbnrs-sso_redirect_tab_initial_setup_framed.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
 
 <Columns cols="2">
-  <Card title="SSO Redirect" href="#configure-sso-redirect" icon="shield" horizontal={false}>
+  <Card title="SSO Redirect" href="#configure-sso-redirect" icon="shield" horizontal="false">
     Set your login page URL, test the full redirect flow, and enable SSO for your portal.
   </Card>
-  <Card title="Widget Auth" href="#widget-auth-settings" icon="fingerprint" horizontal={false}>
+
+  <Card title="Widget Auth" href="#widget-auth-settings" icon="fingerprint" horizontal="false">
     Lock the in-app widget to identified users only and enforce HMAC hash verification.
   </Card>
 </Columns>
@@ -41,12 +41,16 @@ sequenceDiagram
 ```
 
 1. **User clicks Sign In** on your ProductBridge portal
+
 2. **ProductBridge redirects** to your configured login page with `redirect`, `organizationId`, and `returnTo` query parameters
+
 3. **Your server authenticates** the user and generates a signed JWT
+
 4. **Your server redirects** back to the ProductBridge SSO callback with `ssoToken` and `organizationId`
+
 5. **ProductBridge verifies** the JWT signature and creates a 30-day session
 
-<Callout kind="info">
+<Callout kind="info" collapsed="false">
   The JWT is signed with your **Widget API Secret** — the same key used for widget identity verification. Your secret never leaves your server.
 </Callout>
 
@@ -56,7 +60,7 @@ sequenceDiagram
 
 Go to **Settings → Security → SSO Redirect** to configure the three steps below.
 
-<Image src="/images/sso_redirect_tab_configured_and_active_framed.png" width="960" height="540" alt="SSO Redirect tab fully configured and active: redirect URL set to https://test.resumeup.ai/chrome-extension-sign-in, the Tested badge is green, Enable Single Sign-On Redirect toggle is on, and Disable ProductBridge login toggle is off" />
+<Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778333244052-xe6bebhaft-pasted-image-1778333234935.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
 
 ### Step 1 — Set Your Redirect URL
 
@@ -68,11 +72,11 @@ https://yourapp.com/login
 
 ProductBridge appends these query parameters when redirecting to your login page:
 
-| Parameter | Description |
-|---|---|
-| `redirect` | The ProductBridge SSO callback URL to redirect back to after login |
-| `organizationId` | Your ProductBridge organization ID |
-| `returnTo` | The portal page the user was trying to reach |
+| Parameter        | Description                                                        |
+| ---------------- | ------------------------------------------------------------------ |
+| `redirect`       | The ProductBridge SSO callback URL to redirect back to after login |
+| `organizationId` | Your ProductBridge organization ID                                 |
+| `returnTo`       | The portal page the user was trying to reach                       |
 
 Your login page should read these parameters, authenticate the user, generate a JWT, and redirect to `redirect?ssoToken=JWT&organizationId=organizationId`.
 
@@ -80,21 +84,23 @@ Your login page should read these parameters, authenticate the user, generate a 
 
 Click **Test Redirect Flow** to verify the complete loop before going live. ProductBridge opens a popup, sends a test request to your login page, and waits for a valid JWT callback.
 
-<Image src="/images/sso_test_redirect_flow_in_progress_framed.png" width="960" height="500" alt="SSO test in progress: the SSO Redirect tab shows the Testing… state while a popup window opens to the customer login page (resumeup.ai) waiting for authentication and JWT callback" />
+<Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778333302603-deicnm3ub4n-pasted-image-1778333293816.png?fm=auto&auto=compress%2Cformat" width="1938" height="1038" alt="" />
 
 <Steps>
   <Step title="Click Test Redirect Flow" icon="play" title-type="p">
     ProductBridge opens a popup window and redirects to your configured login page with `test=true` appended to the query parameters.
   </Step>
+
   <Step title="Complete authentication in the popup" icon="log-in" title-type="p">
     Your login page receives the request, authenticates the test, and sends a JWT back to the ProductBridge callback URL.
   </Step>
+
   <Step title="See the result" icon="check-circle" title-type="p">
     If the JWT is valid, the popup closes and the **SSO Tested** badge turns green. If verification fails, an error message describes what went wrong.
   </Step>
 </Steps>
 
-<Callout kind="alert">
+<Callout kind="alert" collapsed="false">
   You must complete a successful test before you can enable SSO. The **Enable SSO** toggle is locked until the test passes.
 </Callout>
 
@@ -106,7 +112,7 @@ After a successful test, two toggles become available (visible at the bottom of 
 
 **Disable ProductBridge Login** — When on, the native ProductBridge login form is hidden entirely. Users can only sign in via your SSO redirect. Enable this only after confirming SSO works correctly.
 
-<Callout kind="danger">
+<Callout kind="danger" collapsed="false">
   Enabling "Disable ProductBridge Login" locks out all users who previously signed in with a ProductBridge password. Make sure SSO is fully working before turning this on. You can always disable SSO from the dashboard to restore access.
 </Callout>
 
@@ -120,284 +126,284 @@ Your login page must generate a signed JWT and redirect back to ProductBridge. S
 
 Go to **Settings → Security → API Keys**. If no key exists yet, click **Generate Private Key**.
 
-<Image src="/images/sso_api_keys_tab_empty_state_framed.png" width="960" height="540" alt="API Keys tab in its empty state showing a No Key badge and a Generate Private Key button — the starting point before any SSO key has been created" />
+<Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778333390435-8spl3kjektt-pasted-image-1778333380692.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
 
 After generation, the full secret is shown **once**. Copy it immediately and store it in your server environment.
 
-<Image src="/images/sso_api_keys_tab_with_active_key_framed.png" width="960" height="540" alt="API Keys tab with an active key: the key value is masked as 7c879659●●●●●, an Active badge and Regenerate button are visible, and an alert reminds you to copy the key now because it cannot be viewed again" />
+<Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778333421976-dcxdkh02dfe-pasted-image-1778333413175.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
 
 ```bash
 PRODUCTBRIDGE_WIDGET_SECRET=your_64_char_hex_secret
 ```
 
-<Callout kind="danger">
+<Callout kind="danger" collapsed="false">
   The full secret is displayed only once at generation time. If you lose it, click **Regenerate** to issue a new key — but be aware this immediately invalidates every existing JWT signed with the old secret.
 </Callout>
 
 ### Generate the JWT
 
-<CodeGroup tabs="Node.js, Python, PHP, Ruby, Go">
-```javascript title="sso-callback.js (Express)"
-const jwt = require('jsonwebtoken');
-// npm install jsonwebtoken
+<CodeGroup show-lines="true" tabs={[]}>
+  ```javascript
+  const jwt = require('jsonwebtoken');
+  // npm install jsonwebtoken
 
-const PRODUCTBRIDGE_SECRET = process.env.PRODUCTBRIDGE_WIDGET_SECRET;
+  const PRODUCTBRIDGE_SECRET = process.env.PRODUCTBRIDGE_WIDGET_SECRET;
 
-// Called after your own auth succeeds
-function handleSSOCallback(req, res) {
-  const { redirect, organizationId, returnTo } = req.query;
-  const user = req.user; // your authenticated user
+  // Called after your own auth succeeds
+  function handleSSOCallback(req, res) {
+    const { redirect, organizationId, returnTo } = req.query;
+    const user = req.user; // your authenticated user
 
-  const token = jwt.sign(
-    {
-      // Required
-      email: user.email,
+    const token = jwt.sign(
+      {
+        // Required
+        email: user.email,
 
-      // Recommended
-      name: user.name,
-      id: String(user.id),
-      avatarURL: user.avatarUrl,
+        // Recommended
+        name: user.name,
+        id: String(user.id),
+        avatarURL: user.avatarUrl,
 
-      // Optional: company & plan data
-      company_name: user.companyName,
-      company_id: String(user.companyId),
-      company_mrr: user.mrr,
-      customer_status: user.status,     // "active" | "trial" | "churned"
-      renewal_date: user.renewalDate,   // ISO date string
-      renewal_risk: user.renewalRisk,   // "low" | "medium" | "high"
-    },
-    PRODUCTBRIDGE_SECRET,
-    { expiresIn: '1h', algorithm: 'HS256' }
-  );
+        // Optional: company & plan data
+        company_name: user.companyName,
+        company_id: String(user.companyId),
+        company_mrr: user.mrr,
+        customer_status: user.status,     // "active" | "trial" | "churned"
+        renewal_date: user.renewalDate,   // ISO date string
+        renewal_risk: user.renewalRisk,   // "low" | "medium" | "high"
+      },
+      PRODUCTBRIDGE_SECRET,
+      { expiresIn: '1h', algorithm: 'HS256' }
+    );
 
-  // Redirect back to ProductBridge
-  const callbackUrl = new URL(redirect);
-  callbackUrl.searchParams.set('ssoToken', token);
-  callbackUrl.searchParams.set('organizationId', organizationId);
-  if (returnTo) callbackUrl.searchParams.set('returnTo', returnTo);
+    // Redirect back to ProductBridge
+    const callbackUrl = new URL(redirect);
+    callbackUrl.searchParams.set('ssoToken', token);
+    callbackUrl.searchParams.set('organizationId', organizationId);
+    if (returnTo) callbackUrl.searchParams.set('returnTo', returnTo);
 
-  res.redirect(callbackUrl.toString());
-}
-```
+    res.redirect(callbackUrl.toString());
+  }
+  ```
 
-```python title="sso_callback.py (Flask / Django)"
-import jwt
-import os
-from datetime import datetime, timedelta, timezone
-# pip install PyJWT
+  ```python
+  import jwt
+  import os
+  from datetime import datetime, timedelta, timezone
+  # pip install PyJWT
 
-PRODUCTBRIDGE_SECRET = os.environ['PRODUCTBRIDGE_WIDGET_SECRET']
+  PRODUCTBRIDGE_SECRET = os.environ['PRODUCTBRIDGE_WIDGET_SECRET']
 
-def handle_sso_callback(request):
-    redirect_url = request.args.get('redirect')
-    organization_id = request.args.get('organizationId')
-    return_to = request.args.get('returnTo')
-    user = current_user  # your authenticated user
+  def handle_sso_callback(request):
+      redirect_url = request.args.get('redirect')
+      organization_id = request.args.get('organizationId')
+      return_to = request.args.get('returnTo')
+      user = current_user  # your authenticated user
 
-    payload = {
+      payload = {
+          # Required
+          'email': user.email,
+
+          # Recommended
+          'name': user.name,
+          'id': str(user.id),
+          'avatarURL': user.avatar_url,
+
+          # Optional: company & plan data
+          'company_name': user.company_name,
+          'company_id': str(user.company_id) if user.company_id else None,
+          'company_mrr': user.mrr,
+          'customer_status': user.status,
+          'renewal_date': user.renewal_date,
+          'renewal_risk': user.renewal_risk,
+
+          # Token lifetime
+          'exp': datetime.now(tz=timezone.utc) + timedelta(hours=1),
+      }
+
+      token = jwt.encode(payload, PRODUCTBRIDGE_SECRET, algorithm='HS256')
+
+      from urllib.parse import urlparse, urlencode, parse_qs
+      import urllib.parse
+
+      params = {'ssoToken': token, 'organizationId': organization_id}
+      if return_to:
+          params['returnTo'] = return_to
+
+      callback = f"{redirect_url}?{urlencode(params)}"
+      return redirect(callback)
+  ```
+
+  ```php
+  <?php
+  use Firebase\JWT\JWT;
+  // composer require firebase/php-jwt
+
+  class SSOController extends Controller
+  {
+      public function callback(Request $request): \Illuminate\Http\RedirectResponse
+      {
+          $redirectUrl    = $request->query('redirect');
+          $organizationId = $request->query('organizationId');
+          $returnTo       = $request->query('returnTo');
+          $user           = $request->user();
+
+          $payload = array_filter([
+              // Required
+              'email'           => $user->email,
+
+              // Recommended
+              'name'            => $user->name,
+              'id'              => (string) $user->id,
+              'avatarURL'       => $user->avatar_url,
+
+              // Optional
+              'company_name'    => $user->company_name,
+              'company_id'      => $user->company_id ? (string) $user->company_id : null,
+              'company_mrr'     => $user->mrr,
+              'customer_status' => $user->status,
+              'renewal_date'    => $user->renewal_date,
+              'renewal_risk'    => $user->renewal_risk,
+
+              'exp'             => time() + 3600,
+          ]);
+
+          $token = JWT::encode($payload, env('PRODUCTBRIDGE_WIDGET_SECRET'), 'HS256');
+
+          $params = http_build_query(array_filter([
+              'ssoToken'       => $token,
+              'organizationId' => $organizationId,
+              'returnTo'       => $returnTo,
+          ]));
+
+          return redirect("{$redirectUrl}?{$params}");
+      }
+  }
+  ```
+
+  ```ruby
+  require 'jwt'
+
+  class SSOController < ApplicationController
+    def callback
+      redirect_url    = params[:redirect]
+      organization_id = params[:organizationId]
+      return_to       = params[:returnTo]
+      user            = current_user
+
+      payload = {
         # Required
-        'email': user.email,
+        email: user.email,
 
         # Recommended
-        'name': user.name,
-        'id': str(user.id),
-        'avatarURL': user.avatar_url,
+        name: user.name,
+        id: user.id.to_s,
+        avatarURL: user.avatar_url,
 
-        # Optional: company & plan data
-        'company_name': user.company_name,
-        'company_id': str(user.company_id) if user.company_id else None,
-        'company_mrr': user.mrr,
-        'customer_status': user.status,
-        'renewal_date': user.renewal_date,
-        'renewal_risk': user.renewal_risk,
+        # Optional
+        company_name: user.company_name,
+        company_id: user.company_id&.to_s,
+        company_mrr: user.mrr,
+        customer_status: user.status,
+        renewal_date: user.renewal_date,
+        renewal_risk: user.renewal_risk,
 
-        # Token lifetime
-        'exp': datetime.now(tz=timezone.utc) + timedelta(hours=1),
-    }
+        exp: 1.hour.from_now.to_i,
+      }.compact
 
-    token = jwt.encode(payload, PRODUCTBRIDGE_SECRET, algorithm='HS256')
+      token = JWT.encode(payload, ENV['PRODUCTBRIDGE_WIDGET_SECRET'], 'HS256')
 
-    from urllib.parse import urlparse, urlencode, parse_qs
-    import urllib.parse
-
-    params = {'ssoToken': token, 'organizationId': organization_id}
-    if return_to:
-        params['returnTo'] = return_to
-
-    callback = f"{redirect_url}?{urlencode(params)}"
-    return redirect(callback)
-```
-
-```php title="SSOController.php (Laravel)"
-<?php
-use Firebase\JWT\JWT;
-// composer require firebase/php-jwt
-
-class SSOController extends Controller
-{
-    public function callback(Request $request): \Illuminate\Http\RedirectResponse
-    {
-        $redirectUrl    = $request->query('redirect');
-        $organizationId = $request->query('organizationId');
-        $returnTo       = $request->query('returnTo');
-        $user           = $request->user();
-
-        $payload = array_filter([
-            // Required
-            'email'           => $user->email,
-
-            // Recommended
-            'name'            => $user->name,
-            'id'              => (string) $user->id,
-            'avatarURL'       => $user->avatar_url,
-
-            // Optional
-            'company_name'    => $user->company_name,
-            'company_id'      => $user->company_id ? (string) $user->company_id : null,
-            'company_mrr'     => $user->mrr,
-            'customer_status' => $user->status,
-            'renewal_date'    => $user->renewal_date,
-            'renewal_risk'    => $user->renewal_risk,
-
-            'exp'             => time() + 3600,
-        ]);
-
-        $token = JWT::encode($payload, env('PRODUCTBRIDGE_WIDGET_SECRET'), 'HS256');
-
-        $params = http_build_query(array_filter([
-            'ssoToken'       => $token,
-            'organizationId' => $organizationId,
-            'returnTo'       => $returnTo,
-        ]));
-
-        return redirect("{$redirectUrl}?{$params}");
-    }
-}
-```
-
-```ruby title="sso_controller.rb (Rails)"
-require 'jwt'
-
-class SSOController < ApplicationController
-  def callback
-    redirect_url    = params[:redirect]
-    organization_id = params[:organizationId]
-    return_to       = params[:returnTo]
-    user            = current_user
-
-    payload = {
-      # Required
-      email: user.email,
-
-      # Recommended
-      name: user.name,
-      id: user.id.to_s,
-      avatarURL: user.avatar_url,
-
-      # Optional
-      company_name: user.company_name,
-      company_id: user.company_id&.to_s,
-      company_mrr: user.mrr,
-      customer_status: user.status,
-      renewal_date: user.renewal_date,
-      renewal_risk: user.renewal_risk,
-
-      exp: 1.hour.from_now.to_i,
-    }.compact
-
-    token = JWT.encode(payload, ENV['PRODUCTBRIDGE_WIDGET_SECRET'], 'HS256')
-
-    query = { ssoToken: token, organizationId: organization_id, returnTo: return_to }.compact
-    redirect_to "#{redirect_url}?#{query.to_query}"
+      query = { ssoToken: token, organizationId: organization_id, returnTo: return_to }.compact
+      redirect_to "#{redirect_url}?#{query.to_query}"
+    end
   end
-end
-```
+  ```
 
-```go title="sso_handler.go"
-package handlers
+  ```go
+  package handlers
 
-import (
-    "net/http"
-    "net/url"
-    "os"
-    "time"
+  import (
+      "net/http"
+      "net/url"
+      "os"
+      "time"
 
-    "github.com/golang-jwt/jwt/v5"
-)
+      "github.com/golang-jwt/jwt/v5"
+  )
 
-var secret = []byte(os.Getenv("PRODUCTBRIDGE_WIDGET_SECRET"))
+  var secret = []byte(os.Getenv("PRODUCTBRIDGE_WIDGET_SECRET"))
 
-type SSOClaims struct {
-    Email          string  `json:"email"`
-    Name           string  `json:"name,omitempty"`
-    ID             string  `json:"id,omitempty"`
-    AvatarURL      string  `json:"avatarURL,omitempty"`
-    CompanyName    string  `json:"company_name,omitempty"`
-    CompanyID      string  `json:"company_id,omitempty"`
-    CompanyMRR     float64 `json:"company_mrr,omitempty"`
-    CustomerStatus string  `json:"customer_status,omitempty"`
-    RenewalDate    string  `json:"renewal_date,omitempty"`
-    RenewalRisk    string  `json:"renewal_risk,omitempty"`
-    jwt.RegisteredClaims
-}
+  type SSOClaims struct {
+      Email          string  `json:"email"`
+      Name           string  `json:"name,omitempty"`
+      ID             string  `json:"id,omitempty"`
+      AvatarURL      string  `json:"avatarURL,omitempty"`
+      CompanyName    string  `json:"company_name,omitempty"`
+      CompanyID      string  `json:"company_id,omitempty"`
+      CompanyMRR     float64 `json:"company_mrr,omitempty"`
+      CustomerStatus string  `json:"customer_status,omitempty"`
+      RenewalDate    string  `json:"renewal_date,omitempty"`
+      RenewalRisk    string  `json:"renewal_risk,omitempty"`
+      jwt.RegisteredClaims
+  }
 
-func SSOCallback(w http.ResponseWriter, r *http.Request) {
-    q           := r.URL.Query()
-    redirectURL := q.Get("redirect")
-    orgID       := q.Get("organizationId")
-    returnTo    := q.Get("returnTo")
-    user        := userFromContext(r.Context())
+  func SSOCallback(w http.ResponseWriter, r *http.Request) {
+      q           := r.URL.Query()
+      redirectURL := q.Get("redirect")
+      orgID       := q.Get("organizationId")
+      returnTo    := q.Get("returnTo")
+      user        := userFromContext(r.Context())
 
-    claims := SSOClaims{
-        Email:          user.Email,
-        Name:           user.Name,
-        ID:             user.ID,
-        AvatarURL:      user.AvatarURL,
-        CompanyName:    user.CompanyName,
-        CompanyID:      user.CompanyID,
-        CompanyMRR:     user.MRR,
-        CustomerStatus: user.Status,
-        RenewalDate:    user.RenewalDate,
-        RenewalRisk:    user.RenewalRisk,
-        RegisteredClaims: jwt.RegisteredClaims{
-            ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour)),
-            IssuedAt:  jwt.NewNumericDate(time.Now()),
-        },
-    }
+      claims := SSOClaims{
+          Email:          user.Email,
+          Name:           user.Name,
+          ID:             user.ID,
+          AvatarURL:      user.AvatarURL,
+          CompanyName:    user.CompanyName,
+          CompanyID:      user.CompanyID,
+          CompanyMRR:     user.MRR,
+          CustomerStatus: user.Status,
+          RenewalDate:    user.RenewalDate,
+          RenewalRisk:    user.RenewalRisk,
+          RegisteredClaims: jwt.RegisteredClaims{
+              ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour)),
+              IssuedAt:  jwt.NewNumericDate(time.Now()),
+          },
+      }
 
-    token, _ := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString(secret)
+      token, _ := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString(secret)
 
-    cb, _ := url.Parse(redirectURL)
-    p := url.Values{"ssoToken": {token}, "organizationId": {orgID}}
-    if returnTo != "" {
-        p.Set("returnTo", returnTo)
-    }
-    cb.RawQuery = p.Encode()
+      cb, _ := url.Parse(redirectURL)
+      p := url.Values{"ssoToken": {token}, "organizationId": {orgID}}
+      if returnTo != "" {
+          p.Set("returnTo", returnTo)
+      }
+      cb.RawQuery = p.Encode()
 
-    http.Redirect(w, r, cb.String(), http.StatusFound)
-}
-```
+      http.Redirect(w, r, cb.String(), http.StatusFound)
+  }
+  ```
 </CodeGroup>
 
 ### JWT Payload Reference
 
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `email` | string | **Yes** | User's email — used as the primary identity anchor |
-| `name` | string | Recommended | Display name shown in the ProductBridge dashboard |
-| `id` | string | Recommended | Your internal user ID for deduplication |
-| `avatarURL` | string | No | Profile picture URL |
-| `company_name` | string | No | User's company name |
-| `company_id` | string | No | Your internal company / account ID |
-| `company_mrr` | number | No | Monthly recurring revenue in USD |
-| `customer_status` | string | No | `active`, `trial`, `churned`, or any custom value |
-| `renewal_date` | string | No | ISO date string of the next renewal |
-| `renewal_risk` | string | No | `low`, `medium`, or `high` |
-| `account_owner_id` | string | No | Internal ID of the account owner or CSM |
-| `account_owner_email` | string | No | Email of the account manager or CSM |
-| `external_user_id` | string | No | Any external system ID (CRM, Salesforce, etc.) |
+| Field                 | Type   | Required    | Description                                        |
+| --------------------- | ------ | ----------- | -------------------------------------------------- |
+| `email`               | string | **Yes**     | User's email — used as the primary identity anchor |
+| `name`                | string | Recommended | Display name shown in the ProductBridge dashboard  |
+| `id`                  | string | Recommended | Your internal user ID for deduplication            |
+| `avatarURL`           | string | No          | Profile picture URL                                |
+| `company_name`        | string | No          | User's company name                                |
+| `company_id`          | string | No          | Your internal company / account ID                 |
+| `company_mrr`         | number | No          | Monthly recurring revenue in USD                   |
+| `customer_status`     | string | No          | `active`, `trial`, `churned`, or any custom value  |
+| `renewal_date`        | string | No          | ISO date string of the next renewal                |
+| `renewal_risk`        | string | No          | `low`, `medium`, or `high`                         |
+| `account_owner_id`    | string | No          | Internal ID of the account owner or CSM            |
+| `account_owner_email` | string | No          | Email of the account manager or CSM                |
+| `external_user_id`    | string | No          | Any external system ID (CRM, Salesforce, etc.)     |
 
-<Callout kind="info">
+<Callout kind="info" collapsed="false">
   Only `email` is required. Start there and add company and plan fields later when you want user segmentation and revenue-weighted prioritization in your dashboard.
 </Callout>
 
@@ -407,7 +413,7 @@ func SSOCallback(w http.ResponseWriter, r *http.Request) {
 
 Go to **Settings → Security → Widget Auth** to control how the in-app widget handles user identity.
 
-<Image src="/images/sso_widget_auth_tab_settings_framed.png" width="960" height="540" alt="Widget Auth tab showing three controls: Require identify() for widget toggle, Require user hash for identify calls toggle with the userHash = HMAC-SHA256(user.id, privateKey) formula displayed, and an Identify Mode selector with Upsert and Update Only options" />
+<Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778333495547-g6d0gidb7qt-pasted-image-1778333485351.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
 
 ### Require identify() for Widget
 
@@ -421,7 +427,7 @@ When enabled, ProductBridge also validates an HMAC-SHA256 hash of the user ID in
 
 Generate the hash on your server and include it in the JWT payload:
 
-```javascript title="Adding user hash to JWT"
+```javascript
 const crypto = require('crypto');
 
 const userHash = crypto
@@ -441,10 +447,10 @@ jwt.sign(
 
 Controls what happens when the widget receives an `identify()` call for a user who does not exist in ProductBridge yet.
 
-| Mode | Behavior |
-|---|---|
+| Mode                 | Behavior                                                                                                                           |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | **Upsert** (default) | Creates a new user record if the email is not found. Use for self-serve products where any authenticated user can submit feedback. |
-| **Update Only** | Rejects identify calls for unknown emails. Use when you want to restrict widget feedback to a pre-imported user list only. |
+| **Update Only**      | Rejects identify calls for unknown emails. Use when you want to restrict widget feedback to a pre-imported user list only.         |
 
 ---
 
@@ -452,11 +458,11 @@ Controls what happens when the widget receives an `identify()` call for a user w
 
 Go to **Settings → Security → Portal** to see the SSO callback URL and your portal URL.
 
-<Image src="/images/sso_portal_tab_urls_framed.png" width="960" height="540" alt="Portal tab showing two read-only fields with copy buttons: Your Portal URL (the public-facing portal address) and SSO Callback URL (https://app.productbridge.io/api/redirects/sso) where your login page must redirect users back to with the ssoToken parameter" />
+<Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778333544514-byi6q6m7usa-pasted-image-1778333535456.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
 
-| Field | Value |
-|---|---|
-| **Portal URL** | Your public portal address (subdomain or custom domain) |
+| Field                | Value                                                                                       |
+| -------------------- | ------------------------------------------------------------------------------------------- |
+| **Portal URL**       | Your public portal address (subdomain or custom domain)                                     |
 | **SSO Callback URL** | The URL your login page redirects back to — always `/api/redirects/sso` on your portal host |
 
 Copy the **SSO Callback URL** and allowlist it on your OAuth provider or CSRF whitelist if your login system enforces origin checking.
@@ -474,8 +480,11 @@ Copy the **SSO Callback URL** and allowlist it on your OAuth provider or CSRF wh
     Your login page is not returning a valid JWT callback. Check:
 
     - The `redirect` query parameter is forwarded to your callback URL exactly as received
+
     - `ssoToken` and `organizationId` are both included in the redirect back to ProductBridge
+
     - The JWT `exp` claim is set to a future time (tokens expire after 1 hour)
+
     - Your server clock is synchronized — tokens issued in the future are rejected
   </Expandable>
 
@@ -493,3 +502,4 @@ Copy the **SSO Callback URL** and allowlist it on your OAuth provider or CSRF wh
     The most common cause is a signature mismatch. Verify that `PRODUCTBRIDGE_WIDGET_SECRET` on your server matches the key in **Settings → Security → API Keys**. Also confirm you are using the `HS256` algorithm — other algorithms are not accepted.
   </Expandable>
 </ExpandableGroup>
+
