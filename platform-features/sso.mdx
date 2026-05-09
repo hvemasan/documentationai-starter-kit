@@ -10,7 +10,7 @@ description: >-
 
 ProductBridge SSO uses a **redirect-based JWT flow**. When a user visits your portal and clicks Sign In, ProductBridge sends them to your login page. After they authenticate, your server generates a signed JWT and redirects them back. ProductBridge verifies the token and creates an authenticated session.
 
-<Image src="/images/sso-overview-placeholder.png" width="960" height="480" alt="SSO settings page showing the three-step configuration wizard with redirect URL input, test button, and enable toggle" />
+<Image src="/images/sso_redirect_tab_initial_setup_framed.png" width="960" height="540" alt="ProductBridge Settings → SSO page showing the SSO Redirect tab with the three-step setup wizard: redirect URL field, Test Redirect Flow button, and the Enable SSO toggle disabled until the test passes" />
 
 <Columns cols="2">
   <Card title="SSO Redirect" href="#configure-sso-redirect" icon="shield" horizontal={false}>
@@ -56,7 +56,7 @@ sequenceDiagram
 
 Go to **Settings → Security → SSO Redirect** to configure the three steps below.
 
-<Image src="/images/sso-redirect-tab-placeholder.png" width="960" height="600" alt="SSO Redirect tab showing three steps: redirect URL input, test redirect button, and enable SSO toggles" />
+<Image src="/images/sso_redirect_tab_configured_and_active_framed.png" width="960" height="540" alt="SSO Redirect tab fully configured and active: redirect URL set to https://test.resumeup.ai/chrome-extension-sign-in, the Tested badge is green, Enable Single Sign-On Redirect toggle is on, and Disable ProductBridge login toggle is off" />
 
 ### Step 1 — Set Your Redirect URL
 
@@ -80,7 +80,7 @@ Your login page should read these parameters, authenticate the user, generate a 
 
 Click **Test Redirect Flow** to verify the complete loop before going live. ProductBridge opens a popup, sends a test request to your login page, and waits for a valid JWT callback.
 
-<Image src="/images/sso-test-flow-placeholder.png" width="960" height="400" alt="SSO test popup showing a pending test with the test URL and waiting for callback status" />
+<Image src="/images/sso_test_redirect_flow_in_progress_framed.png" width="960" height="500" alt="SSO test in progress: the SSO Redirect tab shows the Testing… state while a popup window opens to the customer login page (resumeup.ai) waiting for authentication and JWT callback" />
 
 <Steps>
   <Step title="Click Test Redirect Flow" icon="play" title-type="p">
@@ -100,9 +100,7 @@ Click **Test Redirect Flow** to verify the complete loop before going live. Prod
 
 ### Step 3 — Enable SSO
 
-After a successful test, two toggles become available:
-
-<Image src="/images/sso-enable-toggles-placeholder.png" width="960" height="280" alt="Two toggle switches: Enable Single Sign-On Redirect and Disable ProductBridge Login" />
+After a successful test, two toggles become available (visible at the bottom of the screenshot at the top of this section).
 
 **Enable Single Sign-On Redirect** — When on, all portal Sign In clicks redirect to your login page instead of showing the ProductBridge login form.
 
@@ -120,11 +118,21 @@ Your login page must generate a signed JWT and redirect back to ProductBridge. S
 
 ### Get Your API Secret
 
-Go to **Settings → Security → API Keys**, click **Generate API Key**, and copy the secret. Store it in your server environment — it is shown only once.
+Go to **Settings → Security → API Keys**. If no key exists yet, click **Generate Private Key**.
+
+<Image src="/images/sso_api_keys_tab_empty_state_framed.png" width="960" height="540" alt="API Keys tab in its empty state showing a No Key badge and a Generate Private Key button — the starting point before any SSO key has been created" />
+
+After generation, the full secret is shown **once**. Copy it immediately and store it in your server environment.
+
+<Image src="/images/sso_api_keys_tab_with_active_key_framed.png" width="960" height="540" alt="API Keys tab with an active key: the key value is masked as 7c879659●●●●●, an Active badge and Regenerate button are visible, and an alert reminds you to copy the key now because it cannot be viewed again" />
 
 ```bash
 PRODUCTBRIDGE_WIDGET_SECRET=your_64_char_hex_secret
 ```
+
+<Callout kind="danger">
+  The full secret is displayed only once at generation time. If you lose it, click **Regenerate** to issue a new key — but be aware this immediately invalidates every existing JWT signed with the old secret.
+</Callout>
 
 ### Generate the JWT
 
@@ -399,7 +407,7 @@ func SSOCallback(w http.ResponseWriter, r *http.Request) {
 
 Go to **Settings → Security → Widget Auth** to control how the in-app widget handles user identity.
 
-<Image src="/images/sso-widget-auth-placeholder.png" width="960" height="400" alt="Widget Auth tab showing three toggle settings: require identify, require user hash, and identify mode selector" />
+<Image src="/images/sso_widget_auth_tab_settings_framed.png" width="960" height="540" alt="Widget Auth tab showing three controls: Require identify() for widget toggle, Require user hash for identify calls toggle with the userHash = HMAC-SHA256(user.id, privateKey) formula displayed, and an Identify Mode selector with Upsert and Update Only options" />
 
 ### Require identify() for Widget
 
@@ -444,7 +452,7 @@ Controls what happens when the widget receives an `identify()` call for a user w
 
 Go to **Settings → Security → Portal** to see the SSO callback URL and your portal URL.
 
-<Image src="/images/sso-portal-info-placeholder.png" width="960" height="320" alt="Portal tab showing the portal URL and SSO callback URL with copy buttons" />
+<Image src="/images/sso_portal_tab_urls_framed.png" width="960" height="540" alt="Portal tab showing two read-only fields with copy buttons: Your Portal URL (the public-facing portal address) and SSO Callback URL (https://app.productbridge.io/api/redirects/sso) where your login page must redirect users back to with the ssoToken parameter" />
 
 | Field | Value |
 |---|---|

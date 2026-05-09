@@ -38,15 +38,13 @@ The sync runs in real time over webhooks. There is nothing to poll, no manual re
   <Step title="Open the Integrations page" icon="layout-dashboard" title-type="p">
     Sign in to your ProductBridge dashboard and click **Connect Sources** in the sidebar, then select **ClickUp** from the **Project Management** section.
 
-    {/* IMAGE NEEDED: Screenshot of the Connect Sources page with the ClickUp tile highlighted */}
-    <Image src="/images/clickup/integrations-list.png" width="1342" height="608" alt="ProductBridge Connect Sources page showing the ClickUp tile" />
+    <Image src="/images/clickup/clickup-integrations-list_framed.png" width="1940" height="1100" alt="ProductBridge Connect Sources page showing the ClickUp tile under Project Management" />
   </Step>
 
   <Step title="Click Connect ClickUp" icon="plug" title-type="p">
     On the ClickUp integration page, click **Connect ClickUp**. ProductBridge starts the ClickUp OAuth flow and redirects you to ClickUp's authorization screen.
 
-    {/* IMAGE NEEDED: Screenshot of the empty/disconnected ClickUp integration detail page with the "Connect ClickUp" button visible */}
-    <Image src="/images/clickup/connect-button.png" width="1358" height="644" alt="ClickUp integration page in ProductBridge with the Connect ClickUp button" />
+    <Image src="/images/clickup/clickup-connect-button_framed.png" width="1940" height="1100" alt="ClickUp integration page in ProductBridge with the Connect ClickUp button visible" />
   </Step>
 
   <Step title="Authorize ProductBridge in ClickUp" icon="shield" title-type="p">
@@ -56,8 +54,7 @@ The sync runs in real time over webhooks. There is nothing to poll, no manual re
       ClickUp grants access at the **workspace level**. You can disconnect at any time from the same page in ProductBridge — there is no scope selection, so review which workspaces you grant access to.
     </Callout>
 
-    {/* IMAGE NEEDED: Screenshot of the ClickUp OAuth authorization screen showing workspace pickers */}
-    <Image src="/images/clickup/oauth-authorize.png" width="1338" height="639" alt="ClickUp authorization screen asking to select workspaces" />
+    <Image src="/images/clickup/clickup-oauth-authorize_framed.png" width="1940" height="1100" alt="ClickUp authorization screen asking to select a workspace" />
   </Step>
 
   <Step title="Confirm the connection" icon="check-circle" title-type="p">
@@ -71,8 +68,7 @@ The sync runs in real time over webhooks. There is nothing to poll, no manual re
 
     - Stores each workspace's webhook signing secret so incoming events can be verified
 
-    {/* IMAGE NEEDED: Screenshot of the connected ClickUp integration page showing workspace details */}
-    <Image src="/images/clickup/connected-state.png" width="1354" height="649" alt="ClickUp integration page showing the connected state with workspace details" />
+    <Image src="/images/clickup/clickup-connected-state_framed.png" width="1940" height="1100" alt="ClickUp integration page showing the connected state, connection details, sync status, rules, and disconnect option" />
   </Step>
 </Steps>
 
@@ -84,15 +80,11 @@ Once connected, every feedback post in your dashboard gets a **ClickUp Tasks** s
   <Step title="Open a feedback post" icon="message-square" title-type="p">
     Click any post in the **Feedback** view to open the post detail panel. Scroll the right sidebar to find the **ClickUp Tasks** section.
 
-    {/* IMAGE NEEDED: Post detail modal sidebar showing the empty "ClickUp Tasks" section with the "Link" button */}
-    <Image src="/images/clickup/post-detail-empty.png" width="800" height="500" alt="Feedback post detail with the empty ClickUp Tasks section" />
+    <Image src="/images/clickup/clickup-post-detail-empty_framed.png" width="1940" height="1100" alt="Feedback post detail view ready to be linked to a ClickUp task" />
   </Step>
 
   <Step title="Click Link" icon="link" title-type="p">
     Click the **Link** button next to **ClickUp Tasks**. A dialog opens with three tabs: **Search**, **Task ID**, and **Create**.
-
-    {/* IMAGE NEEDED: The Link ClickUp Task dialog showing all three tabs */}
-    <Image src="/images/clickup/link-dialog.png" width="500" height="600" alt="Link ClickUp Task dialog with Search, Task ID, and Create tabs" />
   </Step>
 
   <Step title="Choose how to link the task" icon="search" title-type="p">
@@ -102,8 +94,7 @@ Once connected, every feedback post in your dashboard gets a **ClickUp Tasks** s
       <Tab title="Search" icon="search">
         Pick a workspace, then type any text to search across tasks in that workspace. Click any result to link it instantly.
 
-        {/* IMAGE NEEDED: Search tab showing search results with a status indicator on each task */}
-        <Image src="/images/clickup/link-dialog-search.png" width="500" height="600" alt="Search tab showing matching ClickUp tasks" />
+        <Image src="/images/clickup/clickup-link-dialog-search_framed.png" width="1940" height="1100" alt="Link dialog Search tab with matching ClickUp tasks listed" />
       </Tab>
 
       <Tab title="Task ID" icon="hash">
@@ -113,15 +104,13 @@ Once connected, every feedback post in your dashboard gets a **ClickUp Tasks** s
           The Task ID is the alphanumeric string in your ClickUp task URL: `https://app.clickup.com/t/9hx2k0p`.
         </Callout>
 
-        {/* IMAGE NEEDED: Task ID tab showing the ID input + the preview card after lookup */}
-        <Image src="/images/clickup/link-dialog-task-id.png" width="500" height="600" alt="Task ID tab showing a previewed ClickUp task ready to link" />
+        <Image src="/images/clickup/clickup-link-dialog-task-id_framed.png" width="1940" height="1100" alt="Link dialog Task ID tab showing a previewed ClickUp task ready to link" />
       </Tab>
 
       <Tab title="Create" icon="plus">
         Pick a workspace, then a list, optionally a starting status, and fill in a title and description. Click **Create & Link Task** to create the task in ClickUp and link it to the post in one step.
 
-        {/* IMAGE NEEDED: Create tab showing workspace, list, status, title, description form */}
-        <Image src="/images/clickup/link-dialog-create.png" width="500" height="600" alt="Create tab with the new task form" />
+        <Image src="/images/clickup/clickup-link-dialog-create_framed.png" width="1940" height="1100" alt="Link dialog Create tab with workspace, list, status, title, and description form" />
       </Tab>
     </Tabs>
   </Step>
@@ -129,8 +118,7 @@ Once connected, every feedback post in your dashboard gets a **ClickUp Tasks** s
   <Step title="Verify the link" icon="check" title-type="p">
     The linked task appears in the post's **ClickUp Tasks** section with its current status. Hover any linked task to **open it in ClickUp** or **unlink it**.
 
-    {/* IMAGE NEEDED: Post detail with one or two linked ClickUp tasks visible */}
-    <Image src="/images/clickup/post-detail-linked.png" width="800" height="500" alt="Feedback post showing linked ClickUp tasks with status badges" />
+    <Image src="/images/clickup/clickup-post-detail-linked_framed.png" width="1940" height="1100" alt="Feedback post detail showing linked ClickUp tasks with their current statuses" />
   </Step>
 </Steps>
 
@@ -152,8 +140,7 @@ If a post has multiple linked tasks, you also pick whether the rule fires when *
   <Step title="Open the ClickUp settings page" icon="settings" title-type="p">
     Go back to **Connect Sources > ClickUp**. Below the connection details, you'll see the **Rules** section.
 
-    {/* IMAGE NEEDED: Screenshot of the ClickUp integration page with the empty Rules section */}
-    <Image src="/images/clickup/rules-empty.png" width="1200" height="500" alt="ClickUp settings page with the empty Rules section" />
+    <Image src="/images/clickup/clickup-connected-state_framed.png" width="1940" height="1100" alt="ClickUp settings page showing the Rules section before any rule has been created" />
   </Step>
 
   <Step title="Click Create New Rule" icon="plus" title-type="p">
@@ -174,15 +161,13 @@ If a post has multiple linked tasks, you also pick whether the rule fires when *
       ProductBridge reads statuses from the **Space level** in ClickUp by default (where most workspaces define them) and merges in any per-list custom statuses. If you don't see a status, make sure it exists on at least one Space in your workspace.
     </Callout>
 
-    {/* IMAGE NEEDED: The Create Rule form expanded with all selectors visible */}
-    <Image src="/images/clickup/rules-create.png" width="1200" height="350" alt="Create Rule form with the dropdowns for trigger status, post status, and notification choice" />
+    <Image src="/images/clickup/clickup-rules-create_framed.png" width="1940" height="1100" alt="Create Rule form with the ClickUp status dropdown open showing real workspace statuses" />
   </Step>
 
   <Step title="Save the rule" icon="check-circle" title-type="p">
     Click **Create**. The rule appears in the list and is active immediately. New ClickUp status changes that match it start syncing right away.
 
-    {/* IMAGE NEEDED: The Rules section showing one or more saved rules in their plain-English form */}
-    <Image src="/images/clickup/rules-list.png" width="1200" height="400" alt="Rules list showing saved rules in plain-English form" />
+    <Image src="/images/clickup/clickup-rules-list_framed.png" width="1940" height="1100" alt="Rules section with a saved rule shown in plain-English form" />
   </Step>
 </Steps>
 
