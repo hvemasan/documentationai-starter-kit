@@ -143,6 +143,11 @@
                 "title": "Notifications",
                 "path": "platform-features/notifications",
                 "icon": "bell"
+              },
+              {
+                "title": "Single Sign-On (SSO)",
+                "path": "platform-features/sso",
+                "icon": "shield-check"
               }
             ]
           },
@@ -236,6 +241,11 @@
                     "title": "Linear",
                     "path": "integrations/project-management/linear",
                     "icon": "layout"
+                  },
+                  {
+                    "title": "ClickUp",
+                    "path": "integrations/project-management/clickup",
+                    "icon": "check-square"
                   }
                 ]
               },

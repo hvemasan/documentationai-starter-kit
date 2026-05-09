@@ -1,133 +1,43 @@
 ---
 title: Widgets & Embeds
 description: >-
-  Embed a ProductBridge feedback widget into any website or app. Choose from
-  six embed types — floating button, sidebar, inline, custom trigger, iFrame,
-  and direct URL — and configure identity verification to automatically identify
-  your logged-in users.
+  Embed a ProductBridge feedback widget into any website or app. Choose the
+  embed type that fits your UI — floating button, inline, custom trigger, iFrame,
+  or direct URL — and follow the setup guide for your choice.
 ---
 
-## What Are Widgets?
+## Choose Your Embed Type
 
-ProductBridge widgets let your users submit feedback, view your roadmap, and read changelog updates without ever leaving your product. Pick the embed type that fits your UI, drop in a few lines of code, and you're collecting feedback in minutes.
+Pick the widget that fits how your product is built. Each type has a dedicated setup guide with copy-paste code for your framework.
 
-## Six Embed Types
-
-<Columns cols="3">
+<Columns cols="2">
   <Card title="Floating Button" href="/core-concepts/feedback-collection/widgets/floating-button" icon="message-square" horizontal={false}>
-    A floating button in the corner of your page. Opens as a **popup** or a full-height **sidebar** panel. Most popular — zero layout changes required.
+    A button fixed to the corner of every page. Clicks open a **popup** modal or a full-height **sidebar** panel. The most popular option — zero layout changes required.
   </Card>
   <Card title="Inline Embed" href="/core-concepts/feedback-collection/widgets/inline-embed" icon="app-window" horizontal={false}>
-    Renders the widget directly inside a container element on your page. Great for dedicated feedback pages or help centers.
+    Renders the widget directly inside a `<div>` on your page — no overlay, no floating button. Ideal for a dedicated `/feedback` page or a help center section.
   </Card>
   <Card title="Custom Trigger" href="/core-concepts/feedback-collection/widgets/custom-trigger" icon="mouse-pointer-click" horizontal={false}>
-    Attach the widget to **any element** on your page — your own button, nav item, or menu link. The default floating button is hidden.
+    Attach the widget to **any element** — your own nav link, help button, or keyboard shortcut. The default floating button is hidden; only your element opens the widget.
   </Card>
   <Card title="iFrame Embed" href="/core-concepts/feedback-collection/widgets/iframe-embed" icon="frame" horizontal={false}>
-    A standard `<iframe>` tag. No SDK needed. Works anywhere — CMSs, Notion, Webflow, Framer, static HTML.
+    A plain `<iframe>` tag — no SDK, no JavaScript. Works anywhere HTML embeds are supported: Notion, Webflow, Framer, CMSs, and static pages.
   </Card>
   <Card title="Direct URL" href="/core-concepts/feedback-collection/widgets/direct-url" icon="link" horizontal={false}>
-    A shareable link to your feedback portal. No code required. Use it in emails, Slack, support tickets, or anywhere a link works.
+    A shareable link to your feedback portal. No code at all. Drop it into emails, Slack messages, support tickets, or anywhere a link works.
   </Card>
   <Card title="Identity Verification" href="/core-concepts/feedback-collection/widgets/identity-verification" icon="shield-check" horizontal={false}>
-    Generate a JWT token on your server to automatically identify your logged-in users. Supported in Node.js, Python, PHP, Ruby, Go, and all major frontend frameworks.
+    Automatically identify your logged-in users in any SDK embed type. Generate a signed JWT on your server — setup guides for Node.js, Python, PHP, Ruby, and Go included.
   </Card>
 </Columns>
 
-## Quick Start (2 Minutes)
+## Not Sure Which to Pick?
 
-The fastest path — a floating feedback button on your site with a single script tag.
-
-<Steps>
-  <Step title="Get your Organization ID" icon="key" title-type="p">
-    Sign in to your ProductBridge dashboard and go to **Settings > Widget & Embeds**. Copy your **Organization ID** — it looks like `da10975d-0faf-4c8b-b526-4a5038a4e4d5`.
-
-    <Callout kind="info" collapsed="false">
-      Your Organization ID is public and safe to include in client-side code. It only grants read and submit access to your public widget — no admin operations.
-    </Callout>
-  </Step>
-
-  <Step title="Add the script tag" icon="code" title-type="p">
-    Paste this snippet before the closing `</body>` tag of your HTML:
-
-    ```html
-    <script>
-      (function() {
-        var s = document.createElement('script');
-        s.src = 'https://app.productbridge.io/sdk/pb-widget.js';
-        s.async = true;
-        s.onload = function() {
-          ProductBridge.init({
-            organizationId: 'YOUR_ORGANIZATION_ID',
-            position: 'bottom-right',
-            theme: 'auto',
-            buttonColor: '#3B82F6',
-            buttonText: 'Feedback',
-          });
-        };
-        document.head.appendChild(s);
-      })();
-    </script>
-    ```
-
-    Replace `YOUR_ORGANIZATION_ID` with the ID you copied in Step 1.
-  </Step>
-
-  <Step title="Verify it works" icon="check-circle" title-type="p">
-    Load your page. A **Feedback** button appears in the bottom-right corner. Click it — the widget opens. You're done.
-
-    <Callout kind="tip" collapsed="false">
-      Use the **Preview** tab in **Settings > Widget & Embeds** to preview your widget live before deploying.
-    </Callout>
-  </Step>
-</Steps>
-
-## Identify Your Users (Recommended)
-
-By default, the widget works anonymously. To automatically identify your logged-in users — so feedback is linked to their profile, segment, and company — add [Identity Verification](/core-concepts/feedback-collection/widgets/identity-verification).
-
-Identity verification requires generating a short-lived JWT on your backend and passing it to `ProductBridge.init()`. See the full guide for server-side code in Node.js, Python, PHP, Ruby, and Go, plus copy-paste components for React, Vue, and Angular.
-
-## Configuration Reference
-
-All SDK embed types accept the following options in `ProductBridge.init()`:
-
-| Option | Type | Default | Description |
-|---|---|---|---|
-| `organizationId` | string | — | **Required.** Your organization ID from Settings |
-| `position` | string | `bottom-right` | Floating button position: `bottom-right`, `bottom-left`, `top-right`, `top-left` |
-| `mode` | string | `popup` | `popup` (modal) or `sidebar` (full-height panel) |
-| `theme` | string | `auto` | `auto` (follows system), `light`, or `dark` |
-| `defaultTab` | string | `feedback` | Starting tab: `feedback`, `roadmap`, or `changelog` |
-| `buttonColor` | string | `#3B82F6` | Hex color for the floating button |
-| `buttonText` | string | `Feedback` | Label on the floating button |
-| `userToken` | string | — | JWT from your server for automatic user identification |
-| `containerId` | string | — | Container element ID — for `embed()` (inline embed) only |
-| `height` | string | `600px` | Widget height — for `embed()` (inline embed) only |
-| `zIndex` | number | `999999` | CSS z-index for the widget overlay |
-
-## SDK Methods
-
-Once the SDK loads, these methods are available on the global `ProductBridge` object:
-
-| Method | Description |
+| I want to… | Use this |
 |---|---|
-| `ProductBridge.init(config)` | Initialize the floating button widget |
-| `ProductBridge.embed(config)` | Embed the widget inline inside a container |
-| `ProductBridge.open()` | Open the widget popup or panel |
-| `ProductBridge.close()` | Close the widget |
-| `ProductBridge.toggle()` | Toggle between open and closed |
-| `ProductBridge.identify(token)` | Identify a user with a JWT token after init |
-| `ProductBridge.destroy()` | Remove the widget and clean up all DOM changes |
-
-## Widget Modules
-
-Each widget can display up to three modules. Configure which ones appear in **Settings > Widget & Embeds**:
-
-| Module | Description |
-|---|---|
-| **Feedback** | Feedback submission form — the default |
-| **Roadmap** | Read-only view of your public roadmap |
-| **Changelog** | Latest product updates and release notes |
-
-Use `defaultTab` to control which module opens first.
+| Add feedback to my app with minimal effort | [Floating Button](/core-concepts/feedback-collection/widgets/floating-button) |
+| Show the widget inside my own page layout | [Inline Embed](/core-concepts/feedback-collection/widgets/inline-embed) |
+| Use my own button or nav item to open it | [Custom Trigger](/core-concepts/feedback-collection/widgets/custom-trigger) |
+| Embed in a CMS or no-code tool | [iFrame Embed](/core-concepts/feedback-collection/widgets/iframe-embed) |
+| Share a link with no code | [Direct URL](/core-concepts/feedback-collection/widgets/direct-url) |
+| Link feedback to logged-in user profiles | [Identity Verification](/core-concepts/feedback-collection/widgets/identity-verification) |
