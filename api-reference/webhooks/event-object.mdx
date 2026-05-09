@@ -1,0 +1,115 @@
+---
+title: "Event object"
+description: "The JSON envelope and HTTP headers that accompany every webhook delivery from ProductBridge."
+---
+
+Every webhook delivery uses the same JSON envelope. Switch on the `event` field in your handler to dispatch to the right per-type logic.
+
+## Envelope shape
+
+<ResponseField name="event" field-type="string" required="true" deprecated="false">
+  The canonical event type. One of the 11 values listed on the [Event types](/api-reference/webhooks/event-types) page (e.g. `post.created`, `vote.deleted`).
+</ResponseField>
+
+<ResponseField name="organization_id" field-type="string" required="true" deprecated="false">
+  UUID of the organization the event belongs to. Useful when a single receiver handles webhooks from multiple ProductBridge organizations.
+</ResponseField>
+
+<ResponseField name="occurred_at" field-type="string" required="true" deprecated="false">
+  ISO 8601 timestamp (UTC) at which ProductBridge dispatched the event. Note: this is the dispatch time, not necessarily the moment the underlying business action happened — but they're nearly identical in practice (sub-second).
+</ResponseField>
+
+<ResponseField name="data" field-type="object" required="true" deprecated="false">
+  Per-event payload. The shape of `data` depends on `event`. See [Event types](/api-reference/webhooks/event-types) for every variant.
+</ResponseField>
+
+## Example delivery
+
+A `vote.created` event delivery looks like this:
+
+```http
+POST /your/webhook/endpoint HTTP/1.1
+Host: receiver.example.com
+Content-Type: application/json
+X-ProductBridge-Event: vote.created
+X-ProductBridge-Signature: sha256=ad27c9b1f8e5a2...4f3b
+X-ProductBridge-Webhook-Id: 9d2b4e07-5b6f-4d1c-bc11-2f1e0c8a90b1
+
+{
+  "event": "vote.created",
+  "organization_id": "f5b9b8aa-1b1a-4f1e-9a45-12d8a4a55555",
+  "occurred_at": "2026-05-09T12:34:56.789Z",
+  "data": {
+    "id": "9d2b4e07-5b6f-4d1c-bc11-2f1e0c8a90b1",
+    "post_id": "553c3ef8b8cdcd1501ba1238",
+    "post_title": "Add dark mode",
+    "board_id": "553c3ef8b8cdcd1501ba1234"
+  }
+}
+```
+
+## HTTP headers
+
+ProductBridge sets these headers on every webhook request:
+
+| Header                       | Description |
+|------------------------------|-------------|
+| `Content-Type`               | Always `application/json`. |
+| `X-ProductBridge-Event`      | The event type, mirroring the `event` field in the body. Useful for routing without parsing the body first. |
+| `X-ProductBridge-Signature`  | HMAC-SHA256 of the raw request body using your webhook's signing secret, hex-encoded with the `sha256=` prefix. See [Webhook signatures](/api-reference/webhooks/signatures). |
+| `X-ProductBridge-Webhook-Id` | UUID of the webhook subscription that generated this delivery. Useful when one receiver serves multiple subscriptions and needs to disambiguate. |
+
+<Callout kind="alert">
+  Always verify `X-ProductBridge-Signature` before trusting the body. An unauthenticated webhook URL is a public attack surface — anyone who learns or guesses the URL could otherwise forge events.
+</Callout>
+
+## Handling the envelope
+
+A typical receiver:
+
+<CodeGroup show-lines="true" tabs="JavaScript,Python">
+  ```javascript
+  app.post("/webhook", async (req, res) => {
+    if (!verify(req)) return res.status(401).end();
+    const { event, organization_id, occurred_at, data } = req.body;
+
+    switch (event) {
+      case "post.created":
+        await handlePostCreated(organization_id, data);
+        break;
+      case "vote.deleted":
+        await handleVoteDeleted(organization_id, data);
+        break;
+      default:
+        // Forward-compatible: just log and 200 unknown event types
+        console.log(`Unhandled event: ${event}`);
+    }
+
+    res.status(200).end();
+  });
+  ```
+
+  ```python
+  @app.post("/webhook")
+  async def receive(request: Request):
+      raw_body = await request.body()
+      if not verify(raw_body, request.headers.get("x-productbridge-signature", "")):
+          return Response(status_code=401)
+
+      payload = json.loads(raw_body)
+      event = payload["event"]
+      data = payload["data"]
+
+      if event == "post.created":
+          await handle_post_created(payload["organization_id"], data)
+      elif event == "vote.deleted":
+          await handle_vote_deleted(payload["organization_id"], data)
+      # else: forward-compatible; just 200 unknown event types
+
+      return Response(status_code=200)
+  ```
+</CodeGroup>
+
+<Callout kind="tip">
+  Always return a 2xx response within 30 seconds, even for unknown event types. Returning a non-2xx triggers retries; consistently failing on events you don't care about wastes resources and may surface as health alarms in your dashboard.
+</Callout>

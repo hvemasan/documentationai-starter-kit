@@ -1,0 +1,404 @@
+---
+title: "Event types"
+description: "All 11 events ProductBridge dispatches to webhooks, with per-event data shapes and example payloads."
+---
+
+ProductBridge emits 11 canonical event types. Each one is delivered to every active webhook subscription on the organization — there is no per-webhook event filter. Switch on the `event` field in your handler to dispatch to the right per-type logic.
+
+## Summary
+
+| Event                 | Description |
+|-----------------------|-------------|
+| `post.created`        | A new feedback or roadmap post is created. |
+| `post.edited`         | A post's title, description, board, owner, ETA, category, custom fields, or moderation status changed. |
+| `post.deleted`        | A post is soft-deleted. |
+| `post.tag_added`      | A tag is added to a post. Fires once per tag added. |
+| `post.tag_removed`    | A tag is removed from a post. Fires once per tag removed. |
+| `post.status_changed` | A post's status moves between groups (open → in-progress → completed → closed). |
+| `comment.created`     | A new comment is created on a post. |
+| `comment.edited`      | A comment's content is updated. |
+| `comment.deleted`     | A comment is soft-deleted. |
+| `vote.created`        | A user upvotes a post. |
+| `vote.deleted`        | A user removes their upvote. |
+
+The remainder of this page documents the per-event `data` shape — the inner object inside the [event envelope](/api-reference/webhooks/event-object).
+
+---
+
+## post.created
+
+Fires whenever a feedback or roadmap post is created — including via the public API, dashboard, sidebar integrations (Zendesk, Freshdesk), and the AI processing pipeline.
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  UUID of the new post.
+</ResponseField>
+
+<ResponseField name="title" field-type="string" required="true" deprecated="false">
+  The post's title.
+</ResponseField>
+
+<ResponseField name="details" field-type="string" required="false" deprecated="false">
+  The post's body / description, possibly empty.
+</ResponseField>
+
+<ResponseField name="board_id" field-type="string" required="false" deprecated="false">
+  UUID of the board the post lives on. Empty string when no board is set.
+</ResponseField>
+
+<ResponseField name="board_name" field-type="string" required="false" deprecated="false">
+  Human-readable name of the board.
+</ResponseField>
+
+```json
+{
+  "event": "post.created",
+  "organization_id": "f5b9b8aa-1b1a-4f1e-9a45-12d8a4a55555",
+  "occurred_at": "2026-05-09T12:34:56.789Z",
+  "data": {
+    "id": "553c3ef8b8cdcd1501ba1238",
+    "title": "Add dark mode",
+    "details": "Please support dark mode in the dashboard.",
+    "board_id": "553c3ef8b8cdcd1501ba1234",
+    "board_name": "Feature Requests"
+  }
+}
+```
+
+---
+
+## post.edited
+
+Fires when any non-status, non-tag content field of a post changes (status changes have their own `post.status_changed` event; tag changes have `post.tag_added` / `post.tag_removed`).
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  UUID of the post.
+</ResponseField>
+
+<ResponseField name="post_id" field-type="string" required="true" deprecated="false">
+  Same as `id`. Provided for symmetry with the comment / vote events.
+</ResponseField>
+
+<ResponseField name="title" field-type="string" required="false" deprecated="false">
+  The new title, when included in the update. `null` when title was not part of the change.
+</ResponseField>
+
+```json
+{
+  "event": "post.edited",
+  "organization_id": "f5b9b8aa-1b1a-4f1e-9a45-12d8a4a55555",
+  "occurred_at": "2026-05-09T12:35:10.000Z",
+  "data": {
+    "id": "553c3ef8b8cdcd1501ba1238",
+    "post_id": "553c3ef8b8cdcd1501ba1238",
+    "title": "Add dark mode (high contrast)"
+  }
+}
+```
+
+---
+
+## post.deleted
+
+Fires when a post is soft-deleted. The post row remains in the database with `is_active = false` for audit; the dispatcher captures the title before deletion so receivers can render a meaningful notification.
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  UUID of the deleted post.
+</ResponseField>
+
+<ResponseField name="post_id" field-type="string" required="true" deprecated="false">
+  Same as `id`.
+</ResponseField>
+
+<ResponseField name="title" field-type="string" required="false" deprecated="false">
+  The post's title, captured immediately before deletion.
+</ResponseField>
+
+```json
+{
+  "event": "post.deleted",
+  "organization_id": "f5b9b8aa-1b1a-4f1e-9a45-12d8a4a55555",
+  "occurred_at": "2026-05-09T12:36:00.000Z",
+  "data": {
+    "id": "553c3ef8b8cdcd1501ba1238",
+    "post_id": "553c3ef8b8cdcd1501ba1238",
+    "title": "Add dark mode (high contrast)"
+  }
+}
+```
+
+---
+
+## post.tag_added
+
+Fires once per tag added to a post. If a single update adds three tags, three deliveries fire — one per tag.
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  Composite identifier `<post_id>_<tag_id>` — useful for receiver-side dedupe.
+</ResponseField>
+
+<ResponseField name="post_id" field-type="string" required="true" deprecated="false">
+  UUID of the post.
+</ResponseField>
+
+<ResponseField name="post_title" field-type="string" required="true" deprecated="false">
+  The post's title at the moment of the change.
+</ResponseField>
+
+<ResponseField name="tag_id" field-type="string" required="true" deprecated="false">
+  UUID of the tag added.
+</ResponseField>
+
+<ResponseField name="board_id" field-type="string" required="false" deprecated="false">
+  UUID of the board the post belongs to.
+</ResponseField>
+
+```json
+{
+  "event": "post.tag_added",
+  "organization_id": "f5b9b8aa-1b1a-4f1e-9a45-12d8a4a55555",
+  "occurred_at": "2026-05-09T12:37:00.000Z",
+  "data": {
+    "id": "553c3ef8b8cdcd1501ba1238_a1b2c3d4-...",
+    "post_id": "553c3ef8b8cdcd1501ba1238",
+    "post_title": "Add dark mode",
+    "tag_id": "a1b2c3d4-1111-2222-3333-444455556666",
+    "board_id": "553c3ef8b8cdcd1501ba1234"
+  }
+}
+```
+
+---
+
+## post.tag_removed
+
+Symmetric to `post.tag_added` — fires once per tag removed. Same `data` shape.
+
+```json
+{
+  "event": "post.tag_removed",
+  "organization_id": "f5b9b8aa-1b1a-4f1e-9a45-12d8a4a55555",
+  "occurred_at": "2026-05-09T12:37:30.000Z",
+  "data": {
+    "id": "553c3ef8b8cdcd1501ba1238_a1b2c3d4-...",
+    "post_id": "553c3ef8b8cdcd1501ba1238",
+    "post_title": "Add dark mode",
+    "tag_id": "a1b2c3d4-1111-2222-3333-444455556666",
+    "board_id": "553c3ef8b8cdcd1501ba1234"
+  }
+}
+```
+
+---
+
+## post.status_changed
+
+Fires when a post's status moves to a new status row. ProductBridge categorizes statuses into groups (open / in-progress / completed / closed); this event fires on any cross-status transition, regardless of group.
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  UUID of the post.
+</ResponseField>
+
+<ResponseField name="post_id" field-type="string" required="true" deprecated="false">
+  Same as `id`.
+</ResponseField>
+
+<ResponseField name="title" field-type="string" required="true" deprecated="false">
+  The post's title.
+</ResponseField>
+
+<ResponseField name="old_status" field-type="string" required="false" deprecated="false">
+  Human-readable name of the previous status (e.g. `"open"`).
+</ResponseField>
+
+<ResponseField name="new_status" field-type="string" required="false" deprecated="false">
+  Human-readable name of the new status (e.g. `"in progress"`).
+</ResponseField>
+
+<ResponseField name="board_id" field-type="string" required="false" deprecated="false">
+  UUID of the post's board.
+</ResponseField>
+
+```json
+{
+  "event": "post.status_changed",
+  "organization_id": "f5b9b8aa-1b1a-4f1e-9a45-12d8a4a55555",
+  "occurred_at": "2026-05-09T12:38:00.000Z",
+  "data": {
+    "id": "553c3ef8b8cdcd1501ba1238",
+    "post_id": "553c3ef8b8cdcd1501ba1238",
+    "title": "Add dark mode",
+    "old_status": "open",
+    "new_status": "in progress",
+    "board_id": "553c3ef8b8cdcd1501ba1234"
+  }
+}
+```
+
+---
+
+## comment.created
+
+Fires when a comment is created on a feedback post — from the dashboard, public portal, or public API.
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  UUID of the comment.
+</ResponseField>
+
+<ResponseField name="post_id" field-type="string" required="true" deprecated="false">
+  UUID of the post the comment is attached to.
+</ResponseField>
+
+<ResponseField name="post_title" field-type="string" required="true" deprecated="false">
+  The post's title at the time of the comment.
+</ResponseField>
+
+<ResponseField name="content" field-type="string" required="true" deprecated="false">
+  The comment body, truncated to 500 chars in some delivery paths to keep payload sizes bounded.
+</ResponseField>
+
+<ResponseField name="board_id" field-type="string" required="false" deprecated="false">
+  UUID of the board the post belongs to.
+</ResponseField>
+
+<ResponseField name="board_name" field-type="string" required="false" deprecated="false">
+  Human-readable name of the board.
+</ResponseField>
+
+<ResponseField name="author_name" field-type="string" required="false" deprecated="false">
+  Display name of the comment's author. Empty string when unknown.
+</ResponseField>
+
+```json
+{
+  "event": "comment.created",
+  "organization_id": "f5b9b8aa-1b1a-4f1e-9a45-12d8a4a55555",
+  "occurred_at": "2026-05-09T12:39:00.000Z",
+  "data": {
+    "id": "f5b9b8aa-aaaa-bbbb-cccc-dddddddddddd",
+    "post_id": "553c3ef8b8cdcd1501ba1238",
+    "post_title": "Add dark mode",
+    "content": "+1 from the entire data team.",
+    "board_id": "553c3ef8b8cdcd1501ba1234",
+    "board_name": "Feature Requests",
+    "author_name": "Sally Doe"
+  }
+}
+```
+
+---
+
+## comment.edited
+
+Fires when a comment's content is updated.
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  UUID of the comment.
+</ResponseField>
+
+<ResponseField name="post_id" field-type="string" required="true" deprecated="false">
+  UUID of the post the comment is attached to.
+</ResponseField>
+
+```json
+{
+  "event": "comment.edited",
+  "organization_id": "f5b9b8aa-1b1a-4f1e-9a45-12d8a4a55555",
+  "occurred_at": "2026-05-09T12:39:30.000Z",
+  "data": {
+    "id": "f5b9b8aa-aaaa-bbbb-cccc-dddddddddddd",
+    "post_id": "553c3ef8b8cdcd1501ba1238"
+  }
+}
+```
+
+---
+
+## comment.deleted
+
+Fires when a comment is soft-deleted. The dispatcher captures the post id before deletion so receivers can locate the parent post.
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  UUID of the deleted comment.
+</ResponseField>
+
+<ResponseField name="post_id" field-type="string" required="true" deprecated="false">
+  UUID of the post the comment was attached to.
+</ResponseField>
+
+```json
+{
+  "event": "comment.deleted",
+  "organization_id": "f5b9b8aa-1b1a-4f1e-9a45-12d8a4a55555",
+  "occurred_at": "2026-05-09T12:40:00.000Z",
+  "data": {
+    "id": "f5b9b8aa-aaaa-bbbb-cccc-dddddddddddd",
+    "post_id": "553c3ef8b8cdcd1501ba1238"
+  }
+}
+```
+
+---
+
+## vote.created
+
+Fires when a user upvotes a feedback post (toggles the vote on). Re-toggling a previously-removed vote also fires this event.
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  UUID of the vote row.
+</ResponseField>
+
+<ResponseField name="post_id" field-type="string" required="true" deprecated="false">
+  UUID of the post being voted on.
+</ResponseField>
+
+<ResponseField name="post_title" field-type="string" required="true" deprecated="false">
+  The post's title.
+</ResponseField>
+
+<ResponseField name="board_id" field-type="string" required="false" deprecated="false">
+  UUID of the post's board.
+</ResponseField>
+
+```json
+{
+  "event": "vote.created",
+  "organization_id": "f5b9b8aa-1b1a-4f1e-9a45-12d8a4a55555",
+  "occurred_at": "2026-05-09T12:41:00.000Z",
+  "data": {
+    "id": "9d2b4e07-5b6f-4d1c-bc11-2f1e0c8a90b1",
+    "post_id": "553c3ef8b8cdcd1501ba1238",
+    "post_title": "Add dark mode",
+    "board_id": "553c3ef8b8cdcd1501ba1234"
+  }
+}
+```
+
+---
+
+## vote.deleted
+
+Fires when a user removes their upvote on a feedback post (toggles the vote off).
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  UUID of the vote row that was deactivated.
+</ResponseField>
+
+<ResponseField name="post_id" field-type="string" required="true" deprecated="false">
+  UUID of the post the vote was on.
+</ResponseField>
+
+```json
+{
+  "event": "vote.deleted",
+  "organization_id": "f5b9b8aa-1b1a-4f1e-9a45-12d8a4a55555",
+  "occurred_at": "2026-05-09T12:41:30.000Z",
+  "data": {
+    "id": "9d2b4e07-5b6f-4d1c-bc11-2f1e0c8a90b1",
+    "post_id": "553c3ef8b8cdcd1501ba1238"
+  }
+}
+```
+
+<Callout kind="info">
+  Future ProductBridge releases may add events or fields to the existing event payloads. Receivers should treat unknown event types as a no-op (return 200) and ignore unknown fields rather than failing.
+</Callout>

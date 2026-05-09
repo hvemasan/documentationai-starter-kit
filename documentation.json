@@ -274,6 +274,33 @@
         "icon": "code",
         "groups": [
           {
+            "group": "Webhooks",
+            "icon": "webhook",
+            "expandable": true,
+            "pages": [
+              {
+                "title": "Overview",
+                "path": "api-reference/webhooks/overview",
+                "icon": "info"
+              },
+              {
+                "title": "Event object",
+                "path": "api-reference/webhooks/event-object",
+                "icon": "code-2"
+              },
+              {
+                "title": "Event types",
+                "path": "api-reference/webhooks/event-types",
+                "icon": "list"
+              },
+              {
+                "title": "Webhook signatures",
+                "path": "api-reference/webhooks/signatures",
+                "icon": "shield-check"
+              }
+            ]
+          },
+          {
             "group": "Endpoints",
             "openapi": "api-reference/openapi.yaml",
             "pages": []

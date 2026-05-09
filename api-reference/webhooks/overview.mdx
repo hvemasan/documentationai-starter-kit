@@ -1,0 +1,77 @@
+---
+title: "Webhooks"
+description: "Receive real-time notifications when posts, comments, and votes change in your ProductBridge organization."
+---
+
+By setting up webhooks, your server will be notified of ProductBridge events as they happen. For example, when a user creates a new post, ProductBridge sends a `POST` request to your registered URL with the post details — your code can react instantly without polling.
+
+## How it works
+
+Each organization can register one or more outbound webhook URLs. Every event delivered to ProductBridge from any source — public API, dashboard, integrations, or AI processing pipelines — is fanned out to every active webhook on the organization. There is no per-webhook event filter; every webhook receives every event.
+
+Each webhook delivery includes:
+
+- A JSON envelope with the event type, organization id, server timestamp, and a per-event `data` payload — see [Event object](/api-reference/webhooks/event-object).
+- An HMAC-SHA256 signature in the `X-ProductBridge-Signature` header, computed from the raw request body using a per-webhook signing secret — see [Webhook signatures](/api-reference/webhooks/signatures).
+
+## Set up a webhook
+
+<Steps>
+  <Step title="Open the Webhooks page" icon="settings" titleType="p">
+    In your ProductBridge dashboard, go to **Settings → API → Webhooks**.
+  </Step>
+
+  <Step title="Add a new webhook" icon="plus" titleType="p">
+    Click **Add webhook**, paste the HTTPS URL on your server that will receive event deliveries, and give it a label (e.g. `production-server` or `analytics-pipeline`).
+  </Step>
+
+  <Step title="Save the signing secret" icon="key" titleType="p">
+    The dashboard shows a **signing secret** in a modal. Copy it and store it on your receiver — for example as an environment variable named `PRODUCTBRIDGE_WEBHOOK_SECRET`.
+
+    <Callout kind="alert">
+      The signing secret is shown **only once**. ProductBridge does not store a retrievable copy. If you lose it, you must revoke the webhook and create a new one.
+    </Callout>
+  </Step>
+
+  <Step title="Implement signature verification" icon="shield-check" titleType="p">
+    On every incoming request, compute `HMAC-SHA256(secret, raw_body)` and compare it (in constant time) to the `X-ProductBridge-Signature` header. Reject the request if they don't match. See [Webhook signatures](/api-reference/webhooks/signatures) for code samples in Node.js, Python, Go, and PHP.
+  </Step>
+
+  <Step title="Handle the events you care about" icon="filter" titleType="p">
+    Switch on the `event` field in the JSON body. The 11 supported event types are listed on the [Event types](/api-reference/webhooks/event-types) page.
+  </Step>
+</Steps>
+
+## Multiple webhooks per organization
+
+You can register any number of webhook URLs — each one with its own signing secret and independent lifecycle. This lets you point different downstream systems (your CRM, your analytics pipeline, a Slack relay, etc.) at different receivers without sharing credentials.
+
+<Columns cols="2">
+  <Card title="Event object" href="/api-reference/webhooks/event-object" icon="code-2" horizontal="false">
+    The JSON envelope every delivery uses, plus the HTTP headers that accompany it.
+  </Card>
+
+  <Card title="Event types" href="/api-reference/webhooks/event-types" icon="list" horizontal="false">
+    All 11 events ProductBridge dispatches, with their per-event `data` shapes.
+  </Card>
+
+  <Card title="Webhook signatures" href="/api-reference/webhooks/signatures" icon="shield-check" horizontal="false">
+    HMAC-SHA256 verification with copy-paste-ready receiver snippets in four languages.
+  </Card>
+
+  <Card title="API endpoints" href="/api-reference" icon="code" horizontal="false">
+    The full public API surface for fetching and modifying ProductBridge data.
+  </Card>
+</Columns>
+
+## Delivery behavior
+
+- **Async, fire-and-forget.** Event delivery never blocks the API request that produced the event.
+- **Per-webhook isolation.** A failing receiver doesn't affect deliveries to your other webhooks.
+- **Retries on failure.** Non-2xx responses, timeouts, and connection errors trigger up to 3 retries with exponential backoff (initial delay 60s).
+- **Timeouts.** 10s connect, 30s read.
+- **Idempotency.** Receivers should be idempotent; the same event may be delivered more than once during retries.
+
+<Callout kind="tip">
+  The dashboard surfaces each webhook's last successful delivery time, last failure time, and last failure reason — use these to diagnose receiver issues without backend access.
+</Callout>

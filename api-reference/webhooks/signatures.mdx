@@ -1,0 +1,212 @@
+---
+title: "Webhook signatures"
+description: "Verify that webhook deliveries actually came from ProductBridge using HMAC-SHA256."
+---
+
+ProductBridge signs every webhook delivery with HMAC-SHA256. **Always verify the signature on incoming requests before trusting the payload** — without this check, anyone who learns or guesses your webhook URL could forge events and trigger your downstream automation.
+
+## How it works
+
+When ProductBridge dispatches a webhook, it computes:
+
+```
+signature = "sha256=" + HMAC-SHA256(signing_secret, raw_request_body).hex()
+```
+
+…and sends it in the `X-ProductBridge-Signature` header. The signing secret is the per-webhook value returned exactly once when you registered the webhook (the modal in the dashboard's **Settings → API → Webhooks** page).
+
+Your receiver verifies by computing the same HMAC with its locally-stored copy of the secret and comparing the two strings in **constant time**.
+
+<Callout kind="alert">
+  The signing secret never crosses the wire — it lives only in two places: ProductBridge's database and your receiver's secrets manager. The header carries the *signature* (a one-way HMAC output), which is useless to an attacker without the secret.
+</Callout>
+
+## Headers on every delivery
+
+| Header                       | Description |
+|------------------------------|-------------|
+| `X-ProductBridge-Event`      | The event type (e.g. `vote.created`). Mirrors the `event` field in the JSON body. |
+| `X-ProductBridge-Signature`  | `sha256=<hex>` where `<hex>` is the HMAC-SHA256 of the raw request body using the webhook's signing secret. |
+| `X-ProductBridge-Webhook-Id` | UUID of the webhook subscription this delivery is for. Helpful when one receiver serves multiple webhooks. |
+
+## Verification — what your code must do
+
+<Steps>
+  <Step title="Read the raw request body" icon="binary" titleType="p">
+    Capture the unparsed bytes — not a re-serialized JSON object. Most frameworks parse JSON before reaching your handler; you need the original bytes the request arrived with.
+  </Step>
+
+  <Step title="Compute the expected signature" icon="key" titleType="p">
+    `expected = "sha256=" + HMAC-SHA256(your_stored_secret, raw_body).hex()`
+  </Step>
+
+  <Step title="Compare in constant time" icon="shield-check" titleType="p">
+    Use `crypto.timingSafeEqual` (Node.js), `hmac.compare_digest` (Python), `hmac.Equal` (Go), or `hash_equals` (PHP) to avoid timing attacks. Never use `==` for signature comparison.
+  </Step>
+
+  <Step title="Reject mismatches with HTTP 401" icon="x" titleType="p">
+    If the signature doesn't match, return 401 immediately. Don't process the body, don't log it, don't retry — treat it as a forgery attempt.
+  </Step>
+</Steps>
+
+<Callout kind="alert">
+  The signature is computed over the **raw request body bytes**. Many web frameworks parse JSON before reaching your handler — re-serializing changes whitespace and breaks the signature. Make sure you capture the original bytes:
+
+  - **Express / Node.js:** use `express.raw({ type: 'application/json' })` middleware.
+  - **FastAPI:** call `await request.body()` before any JSON parsing.
+  - **Flask:** use `request.get_data(cache=True)`.
+  - **Go (net/http):** read `r.Body` once, store the bytes, then re-parse.
+</Callout>
+
+## Receiver implementations
+
+<CodeGroup show-lines="true" tabs="Node.js,Python,Go,PHP">
+  ```javascript
+  // Node.js (Express). The raw-body middleware is essential.
+  import crypto from "node:crypto";
+  import express from "express";
+
+  const app = express();
+  app.use(express.raw({ type: "application/json" }));
+
+  const SECRET = process.env.PRODUCTBRIDGE_WEBHOOK_SECRET;
+
+  function verify(req) {
+    const expected =
+      "sha256=" +
+      crypto.createHmac("sha256", SECRET).update(req.body).digest("hex");
+    const got = req.headers["x-productbridge-signature"] || "";
+    if (expected.length !== got.length) return false;
+    return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(got));
+  }
+
+  app.post("/webhook", (req, res) => {
+    if (!verify(req)) return res.status(401).end();
+    const payload = JSON.parse(req.body.toString("utf8"));
+    // ... handle payload.event ...
+    res.status(200).end();
+  });
+  ```
+
+  ```python
+  # Python (FastAPI).
+  import hmac, hashlib, json, os
+  from fastapi import FastAPI, Request, Response
+
+  app = FastAPI()
+  SECRET = os.environ["PRODUCTBRIDGE_WEBHOOK_SECRET"]
+
+  def verify(raw_body: bytes, signature_header: str) -> bool:
+      expected = "sha256=" + hmac.new(
+          SECRET.encode(), raw_body, hashlib.sha256
+      ).hexdigest()
+      return hmac.compare_digest(expected, signature_header or "")
+
+  @app.post("/webhook")
+  async def receive(request: Request):
+      raw_body = await request.body()
+      sig = request.headers.get("x-productbridge-signature", "")
+      if not verify(raw_body, sig):
+          return Response(status_code=401)
+      payload = json.loads(raw_body)
+      # ... handle payload["event"] ...
+      return Response(status_code=200)
+  ```
+
+  ```go
+  // Go (net/http).
+  package main
+
+  import (
+      "crypto/hmac"
+      "crypto/sha256"
+      "encoding/hex"
+      "io"
+      "net/http"
+      "os"
+  )
+
+  var secret = []byte(os.Getenv("PRODUCTBRIDGE_WEBHOOK_SECRET"))
+
+  func verify(rawBody []byte, signatureHeader string) bool {
+      mac := hmac.New(sha256.New, secret)
+      mac.Write(rawBody)
+      expected := "sha256=" + hex.EncodeToString(mac.Sum(nil))
+      return hmac.Equal([]byte(expected), []byte(signatureHeader))
+  }
+
+  func handler(w http.ResponseWriter, r *http.Request) {
+      raw, err := io.ReadAll(r.Body)
+      if err != nil {
+          http.Error(w, "bad body", http.StatusBadRequest)
+          return
+      }
+      if !verify(raw, r.Header.Get("X-ProductBridge-Signature")) {
+          http.Error(w, "unauthorized", http.StatusUnauthorized)
+          return
+      }
+      // ... json.Unmarshal(raw, &payload); handle payload.Event ...
+      w.WriteHeader(http.StatusOK)
+  }
+  ```
+
+  ```php
+  <?php
+  // PHP.
+  $secret = getenv("PRODUCTBRIDGE_WEBHOOK_SECRET");
+  $rawBody = file_get_contents("php://input");
+  $signatureHeader = $_SERVER["HTTP_X_PRODUCTBRIDGE_SIGNATURE"] ?? "";
+
+  $expected = "sha256=" . hash_hmac("sha256", $rawBody, $secret);
+  if (!hash_equals($expected, $signatureHeader)) {
+      http_response_code(401);
+      exit;
+  }
+
+  $payload = json_decode($rawBody, true);
+  // ... handle $payload["event"] ...
+  http_response_code(200);
+  ```
+</CodeGroup>
+
+## Rotating a signing secret
+
+If a signing secret leaks, **revoke the webhook and create a new one**. There is no in-place rotation:
+
+<Steps>
+  <Step title="Revoke the compromised webhook" icon="trash-2" titleType="p">
+    In the dashboard, click **Revoke** on the affected row. Delivery stops immediately; ProductBridge will not POST to that URL again.
+  </Step>
+
+  <Step title="Create a fresh webhook with the same URL" icon="plus" titleType="p">
+    Add a new webhook subscription pointing at the same URL. The dashboard will return a new signing secret in the create modal.
+  </Step>
+
+  <Step title="Update your receiver's stored secret" icon="key" titleType="p">
+    Replace the old `PRODUCTBRIDGE_WEBHOOK_SECRET` value with the new one in your secrets manager / env vars and redeploy.
+  </Step>
+</Steps>
+
+<Callout kind="tip">
+  Plan rotation as a deploy-coordinated step: revoke + recreate + update receiver are not atomic, so during the brief window between revoke and the new secret being live in your receiver, deliveries will fail. ProductBridge's automatic 3× retry-with-backoff usually papers over this if you complete the rotation within ~5 minutes.
+</Callout>
+
+## Common pitfalls
+
+<ExpandableGroup>
+  <Expandable title="Signature mismatch even though the secret is right" default-open="false">
+    Almost always caused by signature being computed over a re-serialized body instead of the raw bytes. JSON.parse + JSON.stringify reorders keys and changes whitespace, which changes the HMAC output. Capture the raw body before any framework-level parsing.
+  </Expandable>
+
+  <Expandable title="`==` vs constant-time comparison" default-open="false">
+    Using `==` (or string equality in any language) for signature comparison is technically a timing leak. An attacker who can measure response times might be able to recover bytes of the signature one at a time. Use `crypto.timingSafeEqual` / `hmac.compare_digest` / `hash_equals` / `hmac.Equal` instead.
+  </Expandable>
+
+  <Expandable title="Lost the signing secret" default-open="false">
+    There is no API to retrieve a signing secret after creation. Revoke the webhook and create a new one — see the rotation steps above.
+  </Expandable>
+
+  <Expandable title="Replay attacks" default-open="false">
+    ProductBridge does not currently emit a timestamp header, so receivers cannot detect "this delivery arrived 6 hours late". For most use cases this is fine — the worst-case impact is a duplicate processed event, which idempotent receivers handle by deduping on the event id. If your use case requires stronger guarantees, write us.
+  </Expandable>
+</ExpandableGroup>
