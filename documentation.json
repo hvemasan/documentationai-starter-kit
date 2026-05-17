@@ -126,6 +126,32 @@
             ]
           },
           {
+            "group": "Configurations & Settings",
+            "icon": "settings",
+            "pages": [
+              {
+                "title": "Branding & Custom Domain",
+                "path": "settings/branding-and-custom-domain",
+                "icon": "palette"
+              },
+              {
+                "title": "Custom Email & SMTP",
+                "path": "settings/custom-email-and-smtp",
+                "icon": "mail"
+              },
+              {
+                "title": "Visibility & SEO",
+                "path": "settings/visibility-and-seo",
+                "icon": "search"
+              },
+              {
+                "title": "Moderation",
+                "path": "settings/moderation",
+                "icon": "shield"
+              }
+            ]
+          },
+          {
             "group": "Platform Features",
             "icon": "box",
             "pages": [

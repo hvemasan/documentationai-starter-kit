@@ -1,0 +1,132 @@
+---
+title: Moderation
+description: Keep your public portal clean — review posts and comments before they go live, let AI flag risky content, and anonymize users when needed.
+---
+
+## Why Moderation Matters
+
+A public feedback portal is a magnet for everything from genuine product ideas to spam, off-topic complaints, and the occasional sensitive customer story. ProductBridge gives you three independent moderation controls so you can pick exactly how much friction is appropriate for your community.
+
+| Control | What It Does | Default |
+|---------|--------------|---------|
+| **Post Moderation** | New feedback posts require admin approval before going public | On |
+| **Comment Moderation** | New comments require admin approval before going public | On |
+| **AI Moderation** | AI flags new content for review instead of auto-processing it | Off |
+| **Hide User Identity** | Anonymize user names on public posts and comments | Off |
+
+Toggle any of them independently — they don't depend on each other.
+
+## Moderation States
+
+Every post and comment carries a **moderation status** that determines whether it's visible on the public portal:
+
+| Status | Visible Publicly? | When It Happens |
+|--------|------------------|------------------|
+| **Pending** | No | Created while moderation is enabled, awaiting admin action |
+| **Accepted** | Yes | Approved by an admin, or auto-accepted when moderation is off |
+| **Rejected** | No | Manually rejected by an admin (kept for audit) |
+| **Spam** | No | Marked as spam (kept for audit and learning) |
+
+## Post Moderation
+
+When enabled, every new feedback post lands in your **moderation queue** with status `Pending`. It stays invisible to the public until an admin accepts, rejects, or marks it as spam.
+
+<Steps>
+  <Step title="Enable Post Moderation" icon="shield">
+    Go to **Settings → Moderation** and toggle **Post Moderation** on.
+  </Step>
+  <Step title="Review the queue" icon="inbox">
+    Open the **Moderation** queue from your admin dashboard. New posts appear here with full context — title, description, submitter, source.
+  </Step>
+  <Step title="Act on each post" icon="check-circle">
+    - **Accept** — publishes the post to the portal
+    - **Reject** — keeps the post hidden but preserved for audit
+    - **Mark as spam** — hides the post and helps train the AI moderation model
+  </Step>
+</Steps>
+
+<Callout kind="tip">
+  Turn post moderation **off** for trusted internal portals or when you want frictionless community submission. Turn it **on** for high-visibility public portals where one bad post can hurt your brand.
+</Callout>
+
+## Comment Moderation
+
+Identical behavior to post moderation, but for comments on existing posts. New comments stay `Pending` until you approve them.
+
+This is especially useful on high-traffic posts where a back-and-forth thread can derail quickly.
+
+## AI Moderation
+
+AI Moderation adds an automated review layer. When enabled, every incoming post is analyzed before it's auto-processed by the AI pipeline. If the content looks risky — spam patterns, abusive language, off-topic noise — it's parked in the moderation queue with status `Pending` for your team to review.
+
+<Callout kind="info">
+  AI Moderation **gates the AI pipeline**, not just the public portal. Without it, posts move through deduplication, categorization, and routing automatically. With it, anything flagged waits for human approval first.
+</Callout>
+
+### When to Enable AI Moderation
+
+- **You receive feedback from many channels.** Integrations like Slack, Discord, and reviews can flood your inbox — AI moderation thins the noise.
+- **You don't have bandwidth to manually approve every post.** AI lets through obvious good content and only escalates the gray area.
+- **You're scaling.** What works at 10 posts a day doesn't work at 1,000.
+
+### What Gets Flagged
+
+AI moderation looks for:
+
+- Spam and promotional content
+- Abusive or hostile language
+- Off-topic submissions (e.g., job applications, customer support requests that should go elsewhere)
+- Suspiciously low-quality content (gibberish, test posts)
+
+Anything flagged shows up in your moderation queue with the AI's reason attached, so you can decide quickly.
+
+## Hide User Identity
+
+When enabled, end-user names are replaced with a generic label (e.g., "Anonymous") on the public portal. Their internal identity is preserved in your admin dashboard — only the public-facing display changes.
+
+Use this when:
+
+- Your customers expect privacy (regulated industries, sensitive products)
+- You don't want public posts to expose customer relationships
+- You want to encourage candid feedback without fear of being identified by other users
+
+<Callout kind="alert">
+  Hiding user identity is **public-facing only**. Your team can still see who submitted what in the admin dashboard, so you can follow up and close the loop.
+</Callout>
+
+## Recommended Configurations
+
+<ExpandableGroup>
+  <Expandable title="High-trust internal portal" default-open="false">
+    - Post Moderation: **Off**
+    - Comment Moderation: **Off**
+    - AI Moderation: **Off**
+    - Hide User Identity: **Off**
+
+    All content goes live immediately. Best for company-internal portals where everyone is identified and accountable.
+  </Expandable>
+  <Expandable title="Public SaaS portal (default)" default-open="false">
+    - Post Moderation: **On**
+    - Comment Moderation: **On**
+    - AI Moderation: **Off**
+    - Hide User Identity: **Off**
+
+    Every post and comment is admin-reviewed. Manageable for small-to-medium traffic.
+  </Expandable>
+  <Expandable title="High-traffic public portal" default-open="false">
+    - Post Moderation: **On**
+    - Comment Moderation: **On**
+    - AI Moderation: **On**
+    - Hide User Identity: **Off**
+
+    AI handles the firehose, escalating only the gray area. Recommended for portals receiving more than ~50 submissions a day.
+  </Expandable>
+  <Expandable title="Privacy-sensitive industry" default-open="false">
+    - Post Moderation: **On**
+    - Comment Moderation: **On**
+    - AI Moderation: **On**
+    - Hide User Identity: **On**
+
+    Strict review plus public anonymity. Good for healthcare, finance, legal, or any regulated context.
+  </Expandable>
+</ExpandableGroup>

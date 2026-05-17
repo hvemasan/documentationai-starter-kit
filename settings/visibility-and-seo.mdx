@@ -1,0 +1,96 @@
+---
+title: Visibility & SEO
+description: Control who can see your public portal — and how it appears in search engines and social shares.
+---
+
+## Two Separate Concepts
+
+This page covers two related but distinct controls:
+
+| Control | Scope | Purpose |
+|---------|-------|---------|
+| **SEO** | Workspace-wide | How your portal appears in Google results and social previews |
+| **Visibility** | Per board / per post | Who can see a specific board, post, or comment |
+
+Get both right and you control exactly how your portal shows up — both to search engines and to different audiences.
+
+## SEO Settings
+
+SEO settings apply to your entire public portal. They control the metadata search engines use to index your pages and how previews look when someone shares a link on social media.
+
+<Steps>
+  <Step title="Open SEO settings" icon="search">
+    Go to **Settings → General → SEO**.
+  </Step>
+  <Step title="Allow search engine indexing" icon="globe">
+    Toggle **Allow Search Engine Indexing** on or off.
+
+    - **On** — search engines (Google, Bing) can crawl and index your portal. Best for public-facing feedback hubs you want discoverable.
+    - **Off** — a `noindex` directive is added to every page. Best for internal portals or private beta programs.
+
+    <Callout kind="info">
+      Indexing is **off by default**. Turn it on once your portal has real content and you're ready for it to appear in search results.
+    </Callout>
+  </Step>
+  <Step title="Configure meta data" icon="tag">
+    Set the metadata used on every portal page:
+
+    - **Meta title** — page title used by search engines and browser tabs
+    - **Meta description** — short summary (under 160 characters) shown in search results
+    - **OG image URL** — the image used in social media link previews (Twitter, LinkedIn, Slack, etc.)
+  </Step>
+  <Step title="Save" icon="check">
+    Changes take effect immediately. Use a tool like [opengraph.xyz](https://www.opengraph.xyz) to preview how your links will appear when shared.
+  </Step>
+</Steps>
+
+<Callout kind="tip">
+  A good OG image is roughly **1200×630px**. Include your logo and the portal's purpose ("Submit feedback for Acme") so social previews stand out.
+</Callout>
+
+## Visibility
+
+Visibility controls who can actually access content on your portal. Unlike SEO (which is workspace-wide), visibility is set **per resource** — each board, post, and comment carries its own visibility level.
+
+### Visibility Levels
+
+| Level | Who Can See It |
+|-------|----------------|
+| **Public** | Anyone with the link, including unauthenticated visitors |
+| **Internal** | Only authenticated team members of your workspace |
+| **User Segments** | Only end-users who match one or more defined segments |
+
+### Where Visibility Is Set
+
+- **Boards** — when creating a feedback or roadmap board, choose its visibility. All posts within inherit the board's defaults but can be overridden.
+- **Posts** — change the visibility of an individual post if it needs to be more (or less) restricted than its board.
+- **Comments** — comments default to the parent post's visibility, but can be marked internal for team-only discussion.
+
+<Callout kind="info">
+  Looking for how to set visibility on a specific board or post? See the [Feedback Boards](/api-reference/feedback-boards/overview) and [Roadmap Boards](/api-reference/roadmap-boards/overview) docs for board-level controls, and your admin dashboard for per-post changes.
+</Callout>
+
+### User Segments
+
+If you choose **User Segments** visibility, you'll select one or more segments that gate access. End-users must be signed in and match a segment to see the content.
+
+Segments are powerful for scenarios like:
+
+- Beta features visible only to your **Beta Customers** segment
+- Enterprise-only roadmap items visible to **Enterprise Tier** customers
+- Region-specific posts visible to **EU Customers**
+
+Learn more about defining segments under **Setup & Organize → User Segments** *(coming soon)*.
+
+## How SEO and Visibility Work Together
+
+These two settings are independent:
+
+- A **Public** post on a portal with **indexing on** → discoverable on Google
+- A **Public** post on a portal with **indexing off** → visible to anyone with the link, but not indexed
+- An **Internal** post on a portal with **indexing on** → still hidden from non-team members; indexing doesn't expose private content
+- A **User Segment** post → only visible to matching authenticated users, regardless of SEO settings
+
+<Callout kind="alert">
+  Turning indexing on doesn't expose internal or segment-gated content — but it does make every **public** page discoverable. Review which boards and posts are marked Public before turning indexing on.
+</Callout>

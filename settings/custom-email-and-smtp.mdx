@@ -1,0 +1,128 @@
+---
+title: Custom Email & SMTP
+description: Send ProductBridge emails from your own domain or SMTP server, so notifications and digests reach your customers under your brand.
+---
+
+## Send Emails From Your Own Domain
+
+By default, ProductBridge sends all transactional and notification emails from our shared sending domain. That works fine, but if you want emails to come from your own address (e.g., `feedback@yourproduct.com`) — and land in inboxes with your branding — you have two options:
+
+| Option | When to Use |
+|--------|-------------|
+| **Custom Sending Domain** | Easiest setup. You add DNS records to your domain and we handle the rest. Recommended for most teams. |
+| **Custom SMTP** | Use your own SMTP server (Gmail Workspace, AWS SES, Postmark, etc.). Choose this if you need full control over the sending infrastructure. |
+
+You can configure either — or both. If both are configured, ProductBridge prefers your custom SMTP and falls back to our system mailer if it fails.
+
+## Custom Sending Domain
+
+Use this option to send emails from a domain you own without running your own SMTP server. ProductBridge uses **Resend** under the hood — you just add a few DNS records and verify ownership.
+
+<Steps>
+  <Step title="Open Email Domain settings" icon="mail">
+    Go to **Settings → Email → Sending Domain** and click **Add Domain**.
+  </Step>
+  <Step title="Enter your domain and sender details" icon="at-sign">
+    Provide:
+
+    - **Domain** — the root domain emails will send from (e.g., `yourproduct.com`)
+    - **Sender name** — the display name customers see (e.g., "ProductTeam at Yourproduct")
+    - **Sender email** — the address emails come from (e.g., `feedback@yourproduct.com`)
+    - **Reply-to email** *(optional)* — a different address for replies
+    - **Region** — the sending region (defaults to `us-east-1`)
+  </Step>
+  <Step title="Add the DNS records" icon="server">
+    ProductBridge generates a set of DNS records (typically `MX`, `TXT`, and `DKIM` records). Add each one to your DNS provider exactly as shown.
+  </Step>
+  <Step title="Verify" icon="check-circle">
+    ProductBridge polls your DNS in the background. Once all records are detected, the status flips from **Not started** to **Verified**, and the domain becomes active.
+  </Step>
+</Steps>
+
+### Verification Status
+
+| Status | Meaning |
+|--------|---------|
+| Not started | Domain added but DNS records not yet detected |
+| Pending | Some records detected, waiting on the rest |
+| Verified | All records confirmed — domain is sending |
+| Failed | DNS records missing or incorrect |
+
+<Callout kind="tip">
+  DNS propagation can take anywhere from a few minutes to a few hours. If your status stays as **Not started** for more than an hour, double-check that every record name and value matches exactly.
+</Callout>
+
+## Custom SMTP
+
+Use this option to route ProductBridge emails through your own SMTP server. Choose this if you already have a mail infrastructure (Google Workspace, Amazon SES, Postmark, SendGrid) and want everything to flow through it.
+
+<Steps>
+  <Step title="Open SMTP settings" icon="server">
+    Go to **Settings → Email → Custom SMTP** and toggle **Enable Custom SMTP**.
+  </Step>
+  <Step title="Enter your SMTP credentials" icon="key">
+    Provide:
+
+    - **Sender email** — the address messages send from
+    - **Sender name** — the display name shown in the inbox
+    - **Host** — your SMTP server hostname (e.g., `smtp.gmail.com`, `email-smtp.us-east-1.amazonaws.com`)
+    - **Port** — typically `587` (TLS) or `465` (SSL)
+    - **Username** — your SMTP login
+    - **Password** — your SMTP password or app-specific token
+
+    <Callout kind="alert">
+      Your password is encrypted at rest and only decrypted at send time. We never log or display it after you save.
+    </Callout>
+  </Step>
+  <Step title="Test the connection" icon="zap">
+    Click **Test Connection**. ProductBridge attempts a real SMTP handshake with your credentials.
+
+    On success, the status flips to **Active**. On failure, you'll get the specific error (auth failed, host unreachable, etc.) so you can fix it.
+  </Step>
+  <Step title="Done" icon="check">
+    Once active, all outgoing emails from ProductBridge will use your SMTP server.
+  </Step>
+</Steps>
+
+### Status
+
+| Status | Meaning |
+|--------|---------|
+| Pending | Credentials saved but connection test not yet passed |
+| Active | Test connection succeeded — SMTP is in use |
+
+## Which Emails Use These Settings?
+
+Both options apply to **all outbound email** from your ProductBridge workspace, including:
+
+- Changelog subscriber notifications
+- Comment and status-change notifications
+- Team member invites
+- Moderation alerts
+- Any other transactional message
+
+## Fallback Behavior
+
+ProductBridge tries your custom configuration first and falls back to our system mailer if it fails. This means a misconfigured SMTP or expired DKIM record won't block notifications from being delivered — they just won't come from your domain until you fix the issue.
+
+<Callout kind="info">
+  Want to know if a fallback happened? Email delivery logs (coming soon) will surface which mailer was used for each message. For now, contact support if you suspect emails aren't going out via your custom setup.
+</Callout>
+
+## Troubleshooting
+
+<ExpandableGroup>
+  <Expandable title="SMTP test fails with authentication error">
+    - Confirm the username and password are correct (try logging into your provider's webmail with the same credentials)
+    - If using Gmail, you must create an **App Password** — your regular Google password won't work
+    - For AWS SES, use the SMTP credentials from the SES console, not your AWS access keys
+  </Expandable>
+  <Expandable title="My sending domain is verified but emails still aren't arriving">
+    - Check the recipient's spam folder — newly verified domains sometimes get filtered until they build sender reputation
+    - Confirm your DNS records still match exactly (some DNS providers truncate long `TXT` values)
+    - If you have both DMARC and SPF records, ensure they include ProductBridge / Resend as an authorized sender
+  </Expandable>
+  <Expandable title="Can I use different sender addresses for different email types?">
+    Not yet — one sender email per workspace today. If you need per-event sender control, let us know.
+  </Expandable>
+</ExpandableGroup>
