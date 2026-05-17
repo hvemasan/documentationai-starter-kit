@@ -1,0 +1,87 @@
+---
+title: Tags
+description: Attach multiple labels to a post so you can slice your inbox by impact, persona, product area, or any other dimension that matters to your team.
+---
+
+## What Is a Tag?
+
+A tag is a flexible label you can attach to a post. Unlike categories (one per post), **a post can have many tags**. Tags are the workhorse of feedback organization — use them for everything from "High Impact" to "Mobile" to "Enterprise Customer."
+
+Tags are **organization-wide**: the same pool is reused across all feedback and roadmap boards.
+
+## Default Tags
+
+When you create a workspace, ProductBridge seeds 10 default tags:
+
+| Tag | Common Use |
+|-----|------------|
+| **Quick Win** | Easy-to-build requests with high payoff |
+| **High Impact** | Big-bet ideas worth deep investment |
+| **Blocker** | Issues stopping customers from succeeding |
+| **Enterprise** | Surfaced by enterprise accounts |
+| **Power User** | Surfaced by your most engaged users |
+| **New User** | Surfaced during onboarding |
+| **Churned** | Mentioned by customers who later left |
+| **Needs Research** | Worth understanding more before deciding |
+| **Duplicate** | Likely a duplicate of another request |
+| **Community Top** | Most-voted by the broader community |
+
+Treat these as a starting point — rename or remove any that don't fit your team, and add your own.
+
+## Manage Tags
+
+<Steps>
+  <Step title="Open Tags" icon="tag">
+    Go to **Settings → Tags**.
+  </Step>
+  <Step title="Create or edit a tag" icon="plus">
+    Each tag has:
+
+    - **Name** — the label users see (e.g., "Mobile")
+    - **Color** *(optional)* — used as a colored chip in the admin and on the portal
+    - **Show on Feedback** — make available on feedback posts (default: on)
+    - **Show on Roadmap** — make available on roadmap posts (default: on)
+  </Step>
+  <Step title="Reorder" icon="move-vertical">
+    Drag tags into the order you want them to appear in the tag picker.
+  </Step>
+  <Step title="Delete" icon="trash">
+    Deleting a tag removes it from all posts it was applied to. The posts themselves are untouched.
+  </Step>
+</Steps>
+
+## Apply Tags to Posts
+
+Tags can be applied to a post in several ways:
+
+- **Manually** — pick from the tag dropdown in the post editor
+- **By the AI pipeline** — when feedback comes in via integration (Slack, Intercom, etc.), the AI can auto-tag based on content
+- **By bulk action** — select multiple posts in the inbox and apply a tag to all at once
+
+A single post can have any number of tags — there's no limit.
+
+## Tags vs. Categories vs. Custom Fields
+
+| Use | When | Examples |
+|-----|------|----------|
+| **Category** | One broad theme per post | Idea, Bug, Question |
+| **Tag** | Multiple labels per post | High Impact, Mobile, Enterprise |
+| **Custom Field** | Structured per-post data | Customer ARR (number), Urgency (select) |
+
+If you find yourself wanting to attach a **value** (a number, date, or specific selection) to a post, that's a [custom field](/setup/custom-fields), not a tag.
+
+## Filtering by Tags
+
+Tags shine in the inbox. Combine tags with statuses, custom fields, and boards in a [saved view](/setup/saved-views) to build slices like:
+
+- "Open feature requests from Enterprise customers, sorted by votes"
+- "Mobile bugs marked Blocker"
+- "Quick Wins planned for this quarter"
+
+<Callout kind="tip">
+  Keep tags scannable. If you have more than ~50 tags, the picker becomes overwhelming. Audit periodically — merge near-duplicates ("Mobile" and "Mobile App"), retire stale tags.
+</Callout>
+
+## Public vs. Internal Tags
+
+By default, tags are visible on the public portal. If you want some tags to remain admin-only (e.g., internal triage labels like "Needs Research"), use the **Show on Feedback** and **Show on Roadmap** toggles to hide them from the public-facing boards while keeping them available in the admin.

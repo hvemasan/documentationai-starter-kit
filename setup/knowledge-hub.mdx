@@ -1,0 +1,106 @@
+---
+title: Knowledge Hub
+description: Upload your product documentation, PRDs, and help articles so ProductBridge's AI knows what you've already built — and can tell new feedback apart from existing features.
+---
+
+## Why a Knowledge Hub?
+
+ProductBridge's AI gets dramatically smarter the moment it knows what your product actually does. Without that context, every incoming piece of feedback looks novel — even if you shipped the feature six months ago. With it, the AI can:
+
+- **Recognize duplicates of existing features.** "Can you add dark mode?" gets flagged against your existing dark-mode docs.
+- **Refine [deduplication](/core-concepts/feedback-intelligence) accuracy.** Semantic dedup uses the Knowledge Hub as a baseline.
+- **Power [Ask AI](/core-concepts/feedback-intelligence/ask-ai).** Questions about your product return answers grounded in your own docs.
+- **Better categorize incoming feedback.** Knowing which features exist sharpens the AI's mental map.
+
+The Knowledge Hub is an **admin-only**, internal corpus — it's not customer-facing. Think of it as the briefing document you give the AI.
+
+## What to Upload
+
+Anything that describes what your product does, how it works, or what's already shipped:
+
+| Type | Examples |
+|------|----------|
+| **Product specs** | PRDs, feature briefs, design docs |
+| **Help articles** | Your customer-facing help center content |
+| **Release notes** | Past changelog entries, internal launch notes |
+| **Onboarding flows** | Step-by-step guides for new users |
+| **API documentation** | Public and internal API references |
+| **Internal wikis** | Engineering notes, architecture docs |
+
+**You don't need to upload everything at once.** Start with the most important 5–10 documents — your top-level feature docs and your help center articles — and add more as you see gaps.
+
+## Supported Formats
+
+- **PDF** (.pdf)
+- **Word** (.docx)
+- **Plain text** (.txt)
+- **CSV** (.csv)
+- **Markdown** (.md)
+
+Each document is automatically parsed, split into searchable chunks, and embedded into ProductBridge's vector database.
+
+## Upload a Document
+
+<Steps>
+  <Step title="Open Knowledge Hub" icon="book-open">
+    Go to **Settings → Knowledge Hub** and click **Upload Document**.
+  </Step>
+  <Step title="Choose a file" icon="file-up">
+    Select a file from your computer or drag-and-drop it into the upload area.
+  </Step>
+  <Step title="Wait for processing" icon="clock">
+    The document moves through these stages:
+
+    - **Uploaded** — file stored, waiting in queue
+    - **Processing** — being parsed and chunked
+    - **Completed** — fully indexed and queryable
+    - **Failed** — something went wrong (the error reason is shown)
+
+    Most documents finish in under a minute. Very large PDFs may take a few minutes.
+  </Step>
+  <Step title="Verify it's working" icon="check-circle">
+    Open [Ask AI](/core-concepts/feedback-intelligence/ask-ai) and ask a question that should be answered by your document. If the answer references your content, the document is indexed correctly.
+  </Step>
+</Steps>
+
+## Document Status
+
+| Status | Meaning | What to Do |
+|--------|---------|------------|
+| **Uploaded** | Queued, not yet processed | Wait — usually quick |
+| **Processing** | Being parsed and chunked | Wait |
+| **Completed** | Indexed and queryable | Nothing — it's working |
+| **Failed** | Couldn't be processed | Check the error; try reprocessing or re-uploading |
+
+If a document fails, you can click **Reprocess** to try again — useful if it failed due to a transient issue.
+
+## How the AI Uses Your Knowledge Hub
+
+When new feedback arrives, the AI runs it against your Knowledge Hub in two ways:
+
+1. **Existing-feature check** — Is this asking for something already documented? If yes, the post is flagged as a likely match and surfaced to admins.
+2. **Categorization context** — Knowing what your product does helps the AI tag the right category, suggest the right board, and find the right team owner.
+
+When you query Ask AI, the system performs a **hybrid search** (semantic + keyword) across your Knowledge Hub and your feedback corpus, then composes an answer grounded in both.
+
+## Keep It Updated
+
+The Knowledge Hub is most valuable when it reflects what your product actually does **today**. A few maintenance habits:
+
+- **After every release**, upload the relevant release notes or update the existing doc.
+- **When you sunset a feature**, delete or update the corresponding doc so the AI stops referencing it.
+- **Periodically audit** — outdated docs that say "coming soon" for a shipped feature confuse the AI.
+
+<Callout kind="tip">
+  If you have a public help center, export and upload those articles as a starting point — they're already written for clarity and cover your top features.
+</Callout>
+
+## Privacy & Scope
+
+- Documents are **scoped to your organization** — no other workspace can query your content.
+- Documents are **not exposed to end users.** This is an internal corpus only.
+- The same vector store powers [deduplication](/core-concepts/feedback-intelligence) and Ask AI — you upload once, use everywhere.
+
+<Callout kind="alert">
+  Don't upload sensitive data you wouldn't want the AI to surface in admin Ask AI answers — internal financials, employee records, etc. Stick to product knowledge.
+</Callout>

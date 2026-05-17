@@ -1,0 +1,91 @@
+---
+title: Custom Fields
+description: Capture structured data alongside every post — ARR, urgency, account IDs, anything specific to how your team triages — without forcing it into the title or description.
+---
+
+## What Is a Custom Field?
+
+Custom fields let you attach **structured data** to feedback and roadmap posts. While categories and tags are great for navigation and filtering, custom fields are where you store the **values** that drive reporting and prioritization — things like:
+
+- A customer's ARR (number)
+- Urgency level (Low / Medium / High)
+- Account ID (text)
+- Source meeting date (date)
+- Linked Jira ticket key (text)
+
+Custom fields are **organization-wide**, defined once and reused across boards. Individual [boards](/setup/boards) can choose which fields to require or hide.
+
+## Supported Field Types
+
+| Type | Description | Example Use |
+|------|-------------|-------------|
+| **Text** | Single-line free text | Account ID, Linked ticket |
+| **Number** | Numeric input | ARR, Effort estimate |
+| **Select** | Single-choice dropdown | Urgency, Region |
+| **Multi-Select** | Multiple choices from a list | Affected products, Personas |
+
+<Callout kind="info">
+  More field types (date, URL, user reference) are on the roadmap. If you need a specific type today, let us know.
+</Callout>
+
+## Create a Custom Field
+
+<Steps>
+  <Step title="Open Custom Fields" icon="list-plus">
+    Go to **Settings → Custom Fields**.
+  </Step>
+  <Step title="Add a new field" icon="plus">
+    Configure:
+
+    - **Field name** — what appears as the label on the form (e.g., "Customer ARR")
+    - **Field type** — Text, Number, Select, or Multi-Select
+    - **Placeholder** *(optional)* — helper text shown in the input
+    - **Optional** — toggle off to make the field required (default: optional)
+    - **Options** *(Select & Multi-Select only)* — define the choices users can pick from
+  </Step>
+  <Step title="Reorder" icon="move-vertical">
+    Drag fields to control the order they appear on the post form.
+  </Step>
+  <Step title="Scope to specific boards" icon="clipboard-list">
+    Open a board's settings → **Custom Fields** to choose which fields appear on that board's posts. Useful when some fields only make sense in certain contexts (e.g., "Account ID" required on the Enterprise board, hidden elsewhere).
+  </Step>
+</Steps>
+
+## When to Use Custom Fields vs. Tags vs. Categories
+
+| Use | Best For |
+|-----|----------|
+| **Custom Field** | A specific value per post (number, date, single choice from a long list) |
+| **Tag** | Many free-form labels per post for filtering |
+| **Category** | One broad theme per post (Bug, Idea, Question) |
+
+If you find yourself making a **tag for every possible value** of something (e.g., tags like "ARR-10k", "ARR-50k", "ARR-100k"), you want a **custom field** instead.
+
+## Use Custom Fields in Reports and Filters
+
+Once defined, custom fields are first-class filters across ProductBridge:
+
+- **Inbox filters** — "Show all posts with Urgency = High"
+- **Saved views** — bake field filters into a [saved view](/setup/saved-views) for repeat access
+- **User segments** — segment customers by a field on their associated post
+- **Ask AI** — ask "What are the top requests from customers with ARR > 100k?"
+
+## Setting Field Values
+
+Field values can be filled in:
+
+- **Manually** by an admin on the post detail page
+- **By the public portal user** — if the field is marked visible on the public form
+- **By the AI pipeline** — when feedback comes in from integrations, the AI can auto-fill structured fields based on the source (e.g., extract the customer name from Intercom metadata)
+- **Via the API** — bulk-set fields on imported or third-party posts
+
+## Best Practices
+
+<Callout kind="tip">
+  Start with two or three fields that drive real decisions. It's tempting to add a custom field for every "wouldn't it be nice to track" — but every required field is friction on the form. Keep the public-facing form short; track internal-only fields in admin.
+</Callout>
+
+- **Make most fields optional.** Required fields slow down submission. Make a field required only if you genuinely can't process the post without it.
+- **Use Select for known sets.** If the value is one of a small fixed list (Urgency, Region, Persona), use Select — it forces consistency and makes filtering reliable.
+- **Use Number when you'll sort by it.** ARR, vote weight, effort estimate — these are far more useful as numbers than as text tags.
+- **Don't put PII in custom fields you'd surface publicly.** If a field can show on the public portal, treat it like any public form input.

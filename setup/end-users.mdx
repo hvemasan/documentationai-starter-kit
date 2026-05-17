@@ -1,0 +1,96 @@
+---
+title: End Users
+description: Every customer who submits feedback, votes, comments, or reacts is an End User in ProductBridge — with their own profile, history, and segment membership.
+---
+
+## End Users vs. Team Members
+
+ProductBridge has two distinct user types:
+
+| Type | Who They Are | Where They Sign In |
+|------|--------------|--------------------|
+| **Team Members** | Your internal team — PMs, engineers, support | Admin dashboard |
+| **End Users** | Your customers and prospects | Public portal |
+
+This page is about **end users** — the people on the other side of your portal. For team members and roles, see Members & Roles in [Configurations & Settings](/settings/branding-and-custom-domain).
+
+## How End Users Get Created
+
+End users land in ProductBridge through three channels:
+
+1. **Public portal sign-up** — they create an account directly when submitting feedback or voting
+2. **Identity verification from your app** — you sign a JWT in your app and pass it to the ProductBridge widget, which creates or matches the user automatically
+3. **Integration sync** — when feedback arrives from Intercom, Slack, Zendesk, etc., the original sender is mapped to an end user via integration identity (`slack:U12345`, `intercom:abc`, etc.)
+
+All three paths converge on the same user record, so a customer who emails you on Intercom, votes on your public portal, and signs in via your app shows up as **one** end user — not three.
+
+## End User Profile
+
+Every end user has:
+
+| Field | Source |
+|-------|--------|
+| **Email** | Required, globally unique |
+| **Name** | Provided by user or pulled from integration |
+| **Avatar** | Uploaded, gravatar-derived, or pulled from integration |
+| **External identities** | Integration-specific IDs (Slack user, Intercom contact, etc.) |
+| **Display name** | What you show internally (defaults to name) |
+| **Company info** | Company name, MRR, customer status, renewal risk |
+| **Verification status** | Whether email has been verified |
+| **Browser / OS** | Captured at sign-up |
+| **Activity history** | All posts, votes, comments, and reactions |
+
+Click any end user in the admin to see their full profile and engagement history.
+
+## Identifying Users in the Widget
+
+If you're using the [ProductBridge widget](/core-concepts/feedback-collection/widgets/floating-button), you can tell ProductBridge who the current signed-in user is so their feedback is attributed correctly.
+
+You have two options:
+
+| Method | Use When |
+|--------|----------|
+| **Plain identity** | Quick to set up, but users can spoof identities |
+| **Signed identity (JWT)** | Recommended for production. Your server signs a token that proves the user is who they claim |
+
+See [Identity Verification](/core-concepts/feedback-collection/widgets/identity-verification) for the full setup.
+
+<Callout kind="tip">
+  Always use signed identity in production. Without it, anyone visiting your portal could submit feedback as someone else — which messes up your analytics and trust.
+</Callout>
+
+## External User Resolution
+
+When feedback arrives from a third-party integration, ProductBridge matches the sender against existing end users:
+
+1. **By external ID** — if a Slack user `U12345` posted feedback before, the new post is linked to the same end user.
+2. **By email** — if the integration provides an email and that email matches an existing end user, they're linked.
+3. **By creation** — if no match, a new end user is created with the integration's identity attached.
+
+This is what lets you see "Sarah from Acme submitted 3 posts via Intercom, voted on 5 posts on the portal, and commented on the Slack #feedback channel" — all as one unified profile.
+
+## Hiding User Identity
+
+If your organization has [Hide User Identity](/settings/moderation) enabled, end users are still tracked internally with full profile data — but their names are replaced with "Anonymous" on the public portal.
+
+This is public-facing only. Your admin dashboard still shows who submitted what, so you can follow up privately.
+
+## Grouping End Users with Segments
+
+Once you have end users, the natural next step is **grouping them**:
+
+- **Beta customers** — users with a `beta = true` flag
+- **Enterprise** — users where company MRR > $5k
+- **Power users** — users with more than 10 votes or posts
+
+These groups are called [User Segments](/setup/user-segments). Segments power audience gating (which boards can a user see?), filtering in your inbox, and Ask AI scoping.
+
+## Privacy & Data
+
+- End user data is **scoped to your organization** — no other workspace can see it.
+- Email is **always required** for an end user to exist. Even integration-sourced users need an email tied to their external ID.
+- End users can request data deletion via your support process — once removed, their posts become anonymous in the admin but the post content itself is retained.
+
+<Callout kind="info">
+  Need to delete an end user's data for a GDPR or similar request? Use the **Delete User** action in the admin. Their posts remain (so vote counts stay accurate) but author attribution is removed.
+</Callout>

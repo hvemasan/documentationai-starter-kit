@@ -1,0 +1,111 @@
+---
+title: Statuses
+description: Define the lifecycle every post moves through — from "Under Review" to "Completed" — and customize the language and colors to match how your team actually works.
+---
+
+## What Is a Status?
+
+A status describes where a post is in its lifecycle. ProductBridge ships with sensible defaults like "Under Review," "Planned," "In Progress," and "Completed" — but you can rename, recolor, reorder, or add your own.
+
+Statuses are **organization-wide** and **shared across feedback, roadmap, and changelog posts**. You can hide specific statuses from specific surfaces (e.g., "In Progress" on roadmap only, "Open" on feedback only).
+
+## Default Statuses
+
+When you create a workspace, ProductBridge seeds 6 statuses across 4 status groups:
+
+| Status | Status Group | Meaning |
+|--------|--------------|---------|
+| **Open** | Open | Newly submitted, untouched |
+| **Under Review** | Open | Acknowledged, being triaged |
+| **Planned** | In Progress | Committed to be built |
+| **In Progress** | In Progress | Actively being worked on |
+| **Completed** | Completed | Shipped |
+| **Closed** | Closed | Won't be built (won't do, duplicate, etc.) |
+
+## Status Groups
+
+Every status belongs to one of four **status groups**, which control high-level behavior like visibility in the roadmap columns:
+
+| Group | Statuses Typically In It | Roadmap Column |
+|-------|--------------------------|----------------|
+| **Open** | Open, Under Review | Up Next / Considering |
+| **In Progress** | Planned, In Progress | Now / Soon |
+| **Completed** | Completed, Released | Shipped |
+| **Closed** | Closed, Won't Do, Duplicate | Hidden by default |
+
+When you create a custom status, you assign it to a group so the rest of ProductBridge knows where it fits.
+
+## Manage Statuses
+
+<Steps>
+  <Step title="Open Statuses" icon="circle-dot">
+    Go to **Settings → Statuses**.
+  </Step>
+  <Step title="Create or edit a status" icon="plus">
+    Each status has:
+
+    - **Name** — what users see (e.g., "Under Review")
+    - **Color** *(optional)* — used as a colored chip on the portal and in admin
+    - **Status Group** — Open / In Progress / Completed / Closed
+    - **Default Status** — mark one status as the default for new posts
+    - **Show on Feedback** — make available on feedback posts (default: on)
+    - **Show on Roadmap** — make available on roadmap posts (default: on)
+  </Step>
+  <Step title="Reorder" icon="move-vertical">
+    Drag statuses into the order you want them displayed. This affects column order on the roadmap and the status dropdown.
+  </Step>
+  <Step title="Delete" icon="trash">
+    Deleting a status reassigns affected posts to your default status. You'll be asked to confirm.
+  </Step>
+</Steps>
+
+## Common Customizations
+
+Different teams use different lifecycles. A few patterns we see:
+
+<ExpandableGroup>
+  <Expandable title="Lean startup">
+    Strip down to the basics:
+
+    - **Open** → **Building** → **Shipped** → **Won't Do**
+
+    Fewer statuses = less ceremony. Best for small teams moving fast.
+  </Expandable>
+  <Expandable title="Engineering-focused">
+    Match your engineering stages:
+
+    - **Triage** → **Backlog** → **In Sprint** → **In Review** → **Released** → **Won't Fix**
+
+    Useful when feedback flows directly into engineering planning.
+  </Expandable>
+  <Expandable title="Discovery-focused">
+    Emphasize research before commitment:
+
+    - **Open** → **Researching** → **Validated** → **Planned** → **In Progress** → **Released** → **Archived**
+
+    Good for product teams that do heavy discovery before building.
+  </Expandable>
+</ExpandableGroup>
+
+## Hiding Statuses From Specific Surfaces
+
+Use **Show on Feedback** and **Show on Roadmap** to scope a status to where it makes sense:
+
+- **"Open"** → typically feedback-only (roadmap items start as Planned)
+- **"In Progress"** → typically roadmap-only (feedback rarely lives long enough to be "in progress")
+- **"Released"** → may show on both feedback (closing the loop) and roadmap
+
+## Status Changes Trigger Notifications
+
+When a post's status changes, ProductBridge can notify:
+
+- Everyone who voted on or commented on the post (email + in-app)
+- Subscribed Slack/Discord channels
+- Outbound webhooks
+- Linked external systems (Jira, Linear, ClickUp) — if you've configured [status sync rules](/integrations/project-management/jira)
+
+This is how you **close the feedback loop** — customers who asked for a feature get notified when it ships.
+
+<Callout kind="tip">
+  Pair every status change with a comment explaining the reason. "Planned for Q3 — bundling with the workspace redesign" is far more satisfying for customers than a silent status flip.
+</Callout>

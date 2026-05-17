@@ -1,0 +1,108 @@
+---
+title: Reactions
+description: Let users react with emojis on changelog entries and comments — a lightweight way to signal nuance beyond a binary upvote.
+---
+
+## Reactions vs. Votes
+
+ProductBridge has two engagement primitives — they look similar but serve different purposes:
+
+| | Votes | Reactions |
+|---|-------|-----------|
+| **Signal** | "I want this" | "How this made me feel" |
+| **Per user** | One per post (binary) | Multiple per entity, one per emoji |
+| **Where** | Feedback posts, roadmap posts | Changelog entries, comments |
+| **Authentication** | Required | Required (no anonymous reactions) |
+| **Best for** | Prioritization | Nuanced sentiment |
+
+Use **votes** when you want a clean prioritization signal — "how many people want this feature." Use **reactions** when you want richer feedback — "did this changelog land well? did people find it exciting, confusing, frustrating?"
+
+## Default Reaction Set
+
+ProductBridge ships with a set of default emoji reactions covering common sentiments:
+
+| Emoji | Common Meaning |
+|-------|----------------|
+| 👍 | Approval, agreement |
+| ❤️ | Love it |
+| 🎉 | Celebrating |
+| 🚀 | Excited to use it |
+| 🤔 | Confused, needs clarification |
+| 😕 | Disappointed |
+| 👎 | Disapproval |
+
+You can customize this set — hide reactions you don't want available, or add new ones.
+
+## Where Reactions Appear
+
+| Surface | Reactions On |
+|---------|-------------|
+| **Changelog entries** | The post itself — readers can react to a release announcement |
+| **Comments** | Individual comments on feedback, roadmap, or changelog posts |
+
+Each surface has its own visibility toggle — you can show reactions on changelog but hide them on comments, or vice versa.
+
+## Manage Reactions
+
+<Steps>
+  <Step title="Open Reactions" icon="smile">
+    Go to **Settings → Reactions**.
+  </Step>
+  <Step title="Toggle reactions on/off per surface" icon="eye">
+    For each reaction in the list, choose:
+
+    - **Show on Changelog** — available on changelog entries (default: on)
+    - **Show on Comments** — available on comments (default: on)
+
+    Turn both off to fully retire a reaction without deleting it.
+  </Step>
+  <Step title="Add a custom reaction" icon="plus">
+    Click **Add Reaction** and provide:
+
+    - **Emoji** — the actual emoji character
+    - **Code** — a short identifier (e.g., `confetti`)
+    - **Name** *(optional)* — a label shown on hover
+  </Step>
+  <Step title="Reorder" icon="move-vertical">
+    Drag reactions to control the display order in the picker.
+  </Step>
+</Steps>
+
+## Who Can React
+
+Only **signed-in users** can react — anonymous visitors see existing reactions and counts but can't add their own.
+
+This means:
+
+- End users who created an account (via the public portal or [identity verification](/core-concepts/feedback-collection/widgets/identity-verification)) can react
+- Team members can react on behalf of their workspace
+- Anonymous portal visitors see reactions but are prompted to sign in if they try to react
+
+## One Reaction Per User Per Emoji
+
+A user can attach **multiple different reactions** to the same entity, but only **one of each kind**. So:
+
+- ✅ You can react with 👍 *and* 🎉 to a single changelog post
+- ❌ You can't react with 👍 twice on the same post
+
+Clicking your own existing reaction removes it (toggles off).
+
+## When to Use Reactions
+
+Reactions shine when you want feedback richer than a binary vote but lower-effort than a comment:
+
+<ExpandableGroup>
+  <Expandable title="On changelog announcements">
+    Gauge how customers feel about each release. A flood of 🎉 reactions on a feature launch is meaningful sentiment data; a quiet 🤔 spike tells you something didn't land.
+  </Expandable>
+  <Expandable title="On comment threads">
+    Let readers signal agreement without piling on duplicate "+1" comments. Reactions keep threads readable.
+  </Expandable>
+  <Expandable title="Internal team alignment">
+    On internal/team-only boards, reactions are a quick way to indicate "I agree, no need to add a comment."
+  </Expandable>
+</ExpandableGroup>
+
+<Callout kind="tip">
+  Keep your reaction set small. Five to seven well-chosen emojis are easier to scan than fifteen. If a reaction never gets used, retire it.
+</Callout>

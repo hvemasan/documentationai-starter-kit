@@ -152,6 +152,62 @@
             ]
           },
           {
+            "group": "Setup & Organize",
+            "icon": "layers",
+            "pages": [
+              {
+                "title": "Boards",
+                "path": "setup/boards",
+                "icon": "clipboard-list"
+              },
+              {
+                "title": "Categories",
+                "path": "setup/categories",
+                "icon": "folder"
+              },
+              {
+                "title": "Tags",
+                "path": "setup/tags",
+                "icon": "tag"
+              },
+              {
+                "title": "Statuses",
+                "path": "setup/statuses",
+                "icon": "circle-dot"
+              },
+              {
+                "title": "Custom Fields",
+                "path": "setup/custom-fields",
+                "icon": "list-plus"
+              },
+              {
+                "title": "Knowledge Hub",
+                "path": "setup/knowledge-hub",
+                "icon": "book-open"
+              },
+              {
+                "title": "End Users",
+                "path": "setup/end-users",
+                "icon": "users"
+              },
+              {
+                "title": "User Segments",
+                "path": "setup/user-segments",
+                "icon": "users-round"
+              },
+              {
+                "title": "Saved Views",
+                "path": "setup/saved-views",
+                "icon": "bookmark"
+              },
+              {
+                "title": "Reactions",
+                "path": "setup/reactions",
+                "icon": "smile"
+              }
+            ]
+          },
+          {
             "group": "Platform Features",
             "icon": "box",
             "pages": [

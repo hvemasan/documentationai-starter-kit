@@ -1,0 +1,103 @@
+---
+title: Boards
+description: Organize feedback and roadmap items into separate boards — by product area, customer tier, or stage — so each audience sees only what matters to them.
+---
+
+## What Is a Board?
+
+A board is a container for posts. Every feedback post lives on a **feedback board**, and every roadmap item lives on a **roadmap board**. Boards let you separate concerns — for example, a "Mobile App" board distinct from a "Web Dashboard" board — and apply different visibility, voting, and access rules to each.
+
+You can create as many boards as you need. There's no hard limit.
+
+## Two Board Types
+
+| Type | Used For | Where It Appears |
+|------|----------|------------------|
+| **Feedback Board** | Customer-submitted ideas, problems, requests | Feedback tab on the public portal |
+| **Roadmap Board** | Internal planning — what you're building, in what order | Roadmap tab on the public portal |
+
+Roadmap boards additionally support **archival** — older completed roadmaps can be archived without deletion, keeping your active roadmap focused.
+
+## Create a Board
+
+<Steps>
+  <Step title="Open Boards settings" icon="clipboard-list">
+    Go to **Feedback → Boards** (or **Roadmap → Boards** for a roadmap board) and click **New Board**.
+  </Step>
+  <Step title="Name and describe" icon="type">
+    Give your board:
+
+    - **Name** — what customers will see (e.g., "Mobile App Feedback")
+    - **Slug** — the URL-friendly version (auto-generated from the name; you can override)
+    - **Description** *(optional)* — a short blurb shown at the top of the board
+    - **Icon** *(optional)* — a small image displayed next to the board name
+  </Step>
+  <Step title="Set visibility" icon="eye">
+    Choose who can see the board:
+
+    - **Public** — anyone with the link
+    - **Internal** — only signed-in team members
+    - **User Segments** — only end-users matching one or more [segments](/setup/user-segments)
+  </Step>
+  <Step title="Set who can post" icon="pencil">
+    Independently of visibility, control who can **create** a post on this board:
+
+    - Anyone (matches visibility)
+    - Signed-in users only
+    - Specific segments
+  </Step>
+  <Step title="Configure board options" icon="sliders">
+    Turn features on or off per board:
+
+    - **Voting** — let users upvote posts (default: on)
+    - **Commenting** — let users discuss posts (default: on)
+    - **Show post dates** — display when posts were submitted (default: on)
+    - **Show ETA** *(roadmap boards only)* — display estimated completion dates (default: on)
+  </Step>
+  <Step title="Save" icon="check">
+    Your board is live immediately at `your-portal-domain/boards/<slug>`.
+  </Step>
+</Steps>
+
+## When to Use Multiple Boards
+
+A single board is fine for most teams starting out. Consider splitting into multiple when:
+
+- **You have multiple products** — separate "Acme Pro" and "Acme Lite" boards keep feedback streams distinct
+- **You have multiple audiences** — a "Beta Customers" board with segment visibility, plus a public board for everyone else
+- **Volume is overwhelming** — splitting "Feature Requests" from "Bug Reports" into different boards keeps each focused
+- **Different teams own different areas** — Mobile team owns the Mobile board, Web team owns the Web board
+
+<Callout kind="tip">
+  Don't over-split early. It's easier to add a second board later than to merge two boards back into one. Start with one, see where the conversation gets crowded, then split.
+</Callout>
+
+## Board-Level Custom Fields
+
+Each board can override which [custom fields](/setup/custom-fields) appear on its posts. For example, your "Enterprise Feedback" board might require an "Account ID" field that your public board doesn't need.
+
+Configure these in the board's settings under **Custom Fields**.
+
+## Archiving Roadmap Boards
+
+Roadmap boards support archival — useful when a roadmap phase wraps up but you want to keep the history:
+
+- Open the roadmap board → **Settings → Archive Board**
+- Archived boards are hidden from the public portal but remain accessible in the admin
+- Unarchive at any time
+
+Feedback boards don't support archival in the same way — instead, set their visibility to **Internal** or delete them when no longer needed.
+
+## Visibility & Access Rules
+
+Visibility and post-creation access are **independent** — you can have a board that's publicly visible but only allows specific segments to post, or vice versa.
+
+| Visibility | Post Access | Common Use Case |
+|-----------|-------------|------------------|
+| Public | Anyone | Standard public feedback hub |
+| Public | Signed-in only | Reduce spam; require an account to post |
+| Public | Segment only | Public roadmap, but only customers can request features |
+| Internal | Internal | Team-only ideation board |
+| Segment | Segment | Beta board scoped to your Beta Customers |
+
+See [Visibility & SEO](/settings/visibility-and-seo) for the full breakdown of visibility levels.
