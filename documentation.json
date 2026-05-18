@@ -208,6 +208,22 @@
             ]
           },
           {
+            "group": "Notifications",
+            "icon": "bell",
+            "pages": [
+              {
+                "title": "In-App",
+                "path": "notifications/in-app",
+                "icon": "bell-ring"
+              },
+              {
+                "title": "Email",
+                "path": "notifications/email",
+                "icon": "mail"
+              }
+            ]
+          },
+          {
             "group": "Platform Features",
             "icon": "box",
             "pages": [

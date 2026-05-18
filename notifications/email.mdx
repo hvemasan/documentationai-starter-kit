@@ -1,0 +1,151 @@
+---
+title: Email Notifications
+description: Reach team members and customers outside the app — with assignment alerts, roadmap status updates, and changelog announcements sent straight to their inbox.
+---
+
+## What ProductBridge Emails
+
+ProductBridge sends three types of email today:
+
+| Email | Recipient | Trigger |
+|-------|-----------|---------|
+| **Changelog Announcement** | Subscribed end users | When a changelog post is published with email notifications enabled |
+| **Post Assignment** | Assigned team member | When an admin assigns a post to them |
+| **Roadmap Status Change** | Authors of linked feedback posts | When the linked roadmap item's status changes |
+
+The first one targets your **customers**. The other two target your **team**.
+
+<Callout kind="info">
+  Assignment and roadmap status emails only send if your workspace has [custom SMTP configured](/settings/custom-email-and-smtp). Changelog announcements work either way — they use the system mailer as a fallback.
+</Callout>
+
+## Changelog Announcement Emails
+
+The most user-visible email flow. When you publish a changelog post with email notifications enabled, every subscriber on your changelog gets a copy.
+
+### How Subscribers Sign Up
+
+End users subscribe directly from the public changelog page on your portal. There's an **Enable Email Notifications** toggle in the org-level [changelog settings](/core-concepts/changelog) — if it's off, subscriptions are disabled workspace-wide.
+
+When someone subscribes, they immediately receive a **confirmation email** so they know it worked.
+
+### Triggering an Announcement
+
+<Steps>
+  <Step title="Write a changelog post" icon="megaphone">
+    Create a new changelog entry in the admin dashboard.
+  </Step>
+  <Step title="Enable Send Email Notification" icon="mail">
+    On the post editor, toggle **Send Email Notification** to on. (You can also configure scheduled publishing — the email fires when the scheduled post auto-publishes.)
+  </Step>
+  <Step title="Publish" icon="send">
+    ProductBridge queues the email send. Recipients are batched in chunks for efficiency — large subscriber lists are processed in waves, but the entire send typically completes in minutes.
+  </Step>
+  <Step title="Track delivery" icon="bar-chart-3">
+    Every send is logged per-recipient with status (sent / failed) and error message if any. Open the post in the admin to see delivery results.
+  </Step>
+</Steps>
+
+### Email Format
+
+| Field | Value |
+|-------|-------|
+| **From** | Your organization name + sender email (from your [email settings](/settings/custom-email-and-smtp) or system default) |
+| **Subject** | `{Org Name}: {Post Title}` |
+| **Body** | Rendered changelog content (HTML), with a link back to the public changelog |
+| **Unsubscribe** | Footer note pointing back to your changelog page (no token-based one-click unsubscribe today) |
+
+### Unsubscribing
+
+Subscribers manage their subscription from the changelog page on your public portal. There's no token-based unsubscribe link embedded in the email today.
+
+<Callout kind="alert">
+  This means if a subscriber wants out, they need to revisit your portal. Consider linking back to your changelog page prominently in the email body so they know where to manage their subscription.
+</Callout>
+
+## Assignment Emails
+
+When an admin assigns a post to a team member, the assignee gets an email so they know to act — even if they're not currently logged in.
+
+| Field | Value |
+|-------|-------|
+| **Trigger** | Admin assigns or unassigns a post (feedback or roadmap) |
+| **Recipient** | The assignee (or unassigned user) — one email per event |
+| **Subject** | "{Actor} assigned you a post" or "You were unassigned from a post" |
+| **Body** | Post title, board, description preview, direct link to the post |
+
+### Requires Custom SMTP
+
+Assignment emails only send when your workspace has [Custom SMTP configured and active](/settings/custom-email-and-smtp). If SMTP isn't set up, the email is silently skipped — the in-app notification still fires either way.
+
+<Callout kind="tip">
+  Set up custom SMTP early if your team relies on assignment workflows. Otherwise team members will only see assignments when they happen to check the app.
+</Callout>
+
+## Roadmap Status Change Emails
+
+When a roadmap item moves to a new status (e.g., **Planned → In Progress**, or **In Progress → Completed**), authors of all feedback posts linked to that roadmap item get an email.
+
+This is how you **close the feedback loop** — customers who asked for a feature get notified when it ships.
+
+| Field | Value |
+|-------|-------|
+| **Trigger** | Roadmap post status changes |
+| **Recipients** | Authors of all feedback posts linked to the roadmap item (batch send) |
+| **Subject** | "Roadmap update: {Title} is now {New Status}" |
+| **Body** | Roadmap item title, the new status, and a link back to the post |
+
+### Requires Custom SMTP
+
+Like assignment emails, roadmap status emails only send when custom SMTP is configured. If it isn't, the in-app notification still fires for linked feedback authors, but no email is sent.
+
+### Batched Delivery
+
+All recipients for a single status change are sent in one batch send (one SMTP connection, many recipients). Each recipient's delivery is logged individually.
+
+## How ProductBridge Sends Email
+
+Behind the scenes, email is sent via SMTP using a two-tier resolution:
+
+1. **Custom org SMTP** — if your workspace has [Custom SMTP configured and active](/settings/custom-email-and-smtp), it's tried first
+2. **System SMTP fallback** — if your custom SMTP fails (or isn't configured), the system mailer is used
+
+This means changelog announcement emails always go out — even if your custom SMTP is misconfigured, your subscribers still get the message via our fallback. Assignment and roadmap status emails are stricter: they require active custom SMTP and skip silently otherwise.
+
+| Email | Custom SMTP Required? | Fallback to System SMTP? |
+|-------|----------------------|---------------------------|
+| Changelog Announcement | No | Yes |
+| Post Assignment | **Yes** | No |
+| Roadmap Status Change | **Yes** | No |
+
+## User-Level Email Preferences
+
+ProductBridge does **not** currently support per-user notification preferences for emails. Email behavior is determined by:
+
+- **Workspace-level toggles** (e.g., "Enable email subscriptions on the changelog")
+- **Per-post toggles** (e.g., "Send email for this changelog entry")
+- **Whether custom SMTP is configured** (for assignment and roadmap status emails)
+
+End users can unsubscribe from changelog emails via the changelog page on your portal. Team members currently can't opt out of assignment or roadmap status emails individually — those are workspace-wide.
+
+## Email Delivery Logs
+
+For every email send, ProductBridge logs the per-recipient outcome — success or failure — along with any error message. Use these logs to:
+
+- Diagnose deliverability issues (bounces, hard fails)
+- Audit who was actually notified about a changelog
+- Investigate why a specific recipient didn't get an email
+
+Logs are visible in the admin dashboard for changelog sends; assignment and roadmap status logs are available via the system tools.
+
+## What's Not (Yet) Emailed
+
+A few flows you might expect that don't currently send emails:
+
+- **Comment activity** — comments and replies are in-app only
+- **New post notifications to admins** — in-app only
+- **Vote milestones** — in-app only
+- **@ mentions** — not implemented
+- **Moderation alerts** — pending content doesn't trigger emails to admins
+
+If any of these would meaningfully change your workflow, let us know.

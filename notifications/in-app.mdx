@@ -1,0 +1,117 @@
+---
+title: In-App Notifications
+description: Stay on top of everything happening in your workspace — new posts, comments, assignments, status changes, and vote milestones — all from your in-app notification inbox.
+---
+
+## Your Inbox at a Glance
+
+Every team member has an in-app notification inbox accessed from the bell icon in the admin dashboard. Notifications appear in real time as things happen across your workspace — no refresh required.
+
+End users on the public portal also have a notification inbox, scoped to posts and comments they're involved in.
+
+## Three Categories
+
+Notifications are grouped into three tabs, each with its own unread badge:
+
+<Columns cols={3}>
+  <Card title="Posts" icon="file-text" href="#posts">
+    New feedback, roadmap links, status changes, vote milestones.
+  </Card>
+  <Card title="Comments" icon="message-circle" href="#comments">
+    New comments and replies.
+  </Card>
+  <Card title="Assignments" icon="user-check" href="#assignments">
+    Posts assigned or unassigned to you (admin only).
+  </Card>
+</Columns>
+
+## Posts
+
+Notifications about post activity across your workspace.
+
+| Event | Trigger | Who Gets Notified |
+|-------|---------|-------------------|
+| **New Feedback Post** | A new feedback post is created | All team members except the post author |
+| **Feedback → Roadmap Link** | A feedback post is linked to a roadmap item | The feedback post's author |
+| **Roadmap Status Changed** | A roadmap item moves to a new status | Authors of all feedback posts linked to that roadmap item |
+| **Vote Milestone** | A feedback post crosses 5, 10, 25, 50, 100, 250, 500, or 1,000 votes | The feedback post's author |
+
+<Callout kind="tip">
+  Vote milestone notifications surface trending feedback early. When a post hits 25 votes within a week, that's a strong signal to dig in.
+</Callout>
+
+## Comments
+
+| Event | Trigger | Who Gets Notified |
+|-------|---------|-------------------|
+| **Comment on Post** | Someone comments on a feedback or roadmap post | The post's author (excluding self-comments) |
+| **Comment Reply** | Someone replies to an existing comment | The parent comment's author (excluding self-replies) |
+
+Each notification includes a preview of the comment so you can decide whether to act on it without clicking through.
+
+## Assignments
+
+Assignment notifications are admin-only — end users don't see them.
+
+| Event | Trigger | Who Gets Notified |
+|-------|---------|-------------------|
+| **Post Assigned** | An admin assigns a post to a team member | The assignee |
+| **Post Unassigned** | An admin removes a team member from a post | The unassigned user |
+
+<Callout kind="info">
+  Assignment notifications also trigger an **email** to the assignee when your workspace has [custom SMTP configured](/settings/custom-email-and-smtp). See [Email Notifications](/notifications/email).
+</Callout>
+
+## What Each Notification Looks Like
+
+| Element | Description |
+|---------|-------------|
+| **Title** | Human-readable summary — "John commented on your post" |
+| **Body** | Preview of the relevant content |
+| **Actor** | The user who triggered the event, with avatar |
+| **Timestamp** | When it happened |
+| **Link** | One click jumps you to the relevant post or comment |
+
+## Read / Unread
+
+<Steps>
+  <Step title="Open a notification" icon="check">
+    Clicking any notification marks it as read and navigates to the linked post or comment.
+  </Step>
+  <Step title="Mark all as read" icon="check-check">
+    Use **Mark All as Read** in the inbox header to clear unread counts across all categories, or within a single category tab.
+  </Step>
+  <Step title="Delete" icon="trash">
+    Admins can dismiss notifications they no longer need to see. End users on the public portal cannot delete notifications.
+  </Step>
+</Steps>
+
+## Filtering
+
+Use the tabs and filters in the inbox to focus on what matters:
+
+- **Tab filtering** — switch between Posts, Comments, and Assignments
+- **Unread only** — show only notifications that need your attention
+- **All** — view the full chronological feed across categories
+
+## Admin vs. End User Inboxes
+
+<Tabs>
+  <Tab title="Admin Users" icon="shield">
+    Admins receive every notification type, including assignments. They can also delete notifications from their inbox to keep it tidy.
+  </Tab>
+  <Tab title="End Users" icon="user">
+    End users see notifications scoped to their own activity — comments on posts they created, status changes on posts they voted for, replies to their comments. Assignment notifications don't apply.
+  </Tab>
+</Tabs>
+
+## What's Not (Yet) Notified
+
+ProductBridge intentionally keeps the in-app notification set focused. The following are **not** in-app notifications today:
+
+- **@ mentions in comments** — no mention parsing or alerts
+- **Moderation flags** — pending posts/comments don't trigger a notification (use the moderation queue instead)
+- **Vote changes** — voters aren't notified when posts they voted on change status
+- **Integration sync errors** — surfaced in the integration settings page, not the inbox
+
+If any of these would meaningfully change your workflow, let us know.
