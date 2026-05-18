@@ -238,11 +238,6 @@
                 "icon": "users"
               },
               {
-                "title": "Notifications",
-                "path": "platform-features/notifications",
-                "icon": "bell"
-              },
-              {
                 "title": "Single Sign-On (SSO)",
                 "path": "platform-features/sso",
                 "icon": "shield-check"
