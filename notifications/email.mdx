@@ -25,9 +25,13 @@ The most user-visible email flow. When you publish a changelog post with email n
 
 ### How Subscribers Sign Up
 
-End users subscribe directly from the public changelog page on your portal. There's an **Enable Email Notifications** toggle in the org-level [changelog settings](/core-concepts/changelog) — if it's off, subscriptions are disabled workspace-wide.
+End users subscribe directly from the public changelog page on your portal — but only when you've turned on the workspace-level **Allow Email Subscriptions** toggle in your changelog settings. With that toggle off, the subscribe option is hidden from the public portal entirely.
 
 When someone subscribes, they immediately receive a **confirmation email** so they know it worked.
+
+<Callout kind="info">
+  **Allow Email Subscriptions** is admin-only — there's no per-end-user opt-out beyond the unsubscribe path (which is portal-based today). Toggle it from your changelog settings to enable or disable subscriber sign-ups workspace-wide.
+</Callout>
 
 ### Triggering an Announcement
 

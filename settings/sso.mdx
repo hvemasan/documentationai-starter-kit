@@ -58,7 +58,7 @@ sequenceDiagram
 
 ## Configure SSO Redirect
 
-Go to **Settings → Security → SSO Redirect** to configure the three steps below.
+Go to **Settings → SSO → SSO Redirect** to configure the three steps below.
 
 <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778333244052-xe6bebhaft-pasted-image-1778333234935.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
 
@@ -124,7 +124,7 @@ Your login page must generate a signed JWT and redirect back to ProductBridge. S
 
 ### Get Your API Secret
 
-Go to **Settings → Security → API Keys**. If no key exists yet, click **Generate Private Key**.
+Go to **Settings → SSO → API Keys**. If no key exists yet, click **Generate Private Key**.
 
 <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778333390435-8spl3kjektt-pasted-image-1778333380692.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
 
@@ -411,7 +411,7 @@ PRODUCTBRIDGE_WIDGET_SECRET=your_64_char_hex_secret
 
 ## Widget Auth Settings
 
-Go to **Settings → Security → Widget Auth** to control how the in-app widget handles user identity.
+Go to **Settings → SSO → Widget Auth** to control how the in-app widget handles user identity.
 
 <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778333495547-g6d0gidb7qt-pasted-image-1778333485351.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
 
@@ -456,7 +456,7 @@ Controls what happens when the widget receives an `identify()` call for a user w
 
 ## Portal Auth Methods
 
-Go to **Settings → Security → Portal** to see the SSO callback URL and your portal URL.
+Go to **Settings → SSO → Portal** to see the SSO callback URL and your portal URL.
 
 <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778333544514-byi6q6m7usa-pasted-image-1778333535456.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
 
@@ -473,7 +473,7 @@ Copy the **SSO Callback URL** and allowlist it on your OAuth provider or CSRF wh
 
 <ExpandableGroup>
   <Expandable title="Test says 'Token verification failed'" default-open="false">
-    The JWT signature did not match. Check that the secret used to sign the token matches the API key displayed in **Settings → Security → API Keys**. The key is only shown once — if you are unsure, generate a new one and update your server environment variable.
+    The JWT signature did not match. Check that the secret used to sign the token matches the API key displayed in **Settings → SSO → API Keys**. The key is only shown once — if you are unsure, generate a new one and update your server environment variable.
   </Expandable>
 
   <Expandable title="SSO redirect loop — users keep getting sent back to my login page" default-open="false">
@@ -499,7 +499,7 @@ Copy the **SSO Callback URL** and allowlist it on your OAuth provider or CSRF wh
   </Expandable>
 
   <Expandable title="Widget shows 'Please log in' even after passing a userToken" default-open="false">
-    The most common cause is a signature mismatch. Verify that `PRODUCTBRIDGE_WIDGET_SECRET` on your server matches the key in **Settings → Security → API Keys**. Also confirm you are using the `HS256` algorithm — other algorithms are not accepted.
+    The most common cause is a signature mismatch. Verify that `PRODUCTBRIDGE_WIDGET_SECRET` on your server matches the key in **Settings → SSO → API Keys**. Also confirm you are using the `HS256` algorithm — other algorithms are not accepted.
   </Expandable>
 </ExpandableGroup>
 
