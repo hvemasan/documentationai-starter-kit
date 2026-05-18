@@ -356,6 +356,19 @@
                     "icon": "zap"
                   }
                 ]
+              },
+              {
+                "group": "AI Assistants",
+                "icon": "bot",
+                "expandable": true,
+                "path": "integrations/ai-assistants",
+                "pages": [
+                  {
+                    "title": "MCP Server",
+                    "path": "integrations/ai-assistants/mcp-server",
+                    "icon": "plug-zap"
+                  }
+                ]
               }
             ]
           }
