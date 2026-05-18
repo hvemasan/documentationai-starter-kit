@@ -1,0 +1,130 @@
+---
+title: Import Feedback with a CSV
+description: Migrate your existing feedback posts from any tool into ProductBridge by uploading a .CSV file.
+---
+
+## Overview
+
+ProductBridge's CSV import lets you bring your existing user feedback into ProductBridge from any other tool — Canny, Upvoty, Nolt, or any custom spreadsheet. Your posts, authors, statuses, boards, tags, categories, upvote counts, and timestamps all transfer cleanly.
+
+<Callout kind="info">
+  The import runs as a background job, so you can close the settings page after starting it — your data continues importing in the background.
+</Callout>
+
+## Supported field mappings
+
+The following fields can be mapped from any column in your CSV:
+
+| ProductBridge field | Notes |
+|---|---|
+| **Title** *(required)* | The only required field. Any row missing a title is skipped. |
+| Content / Description | The full post description or details. |
+| Upvotes / Score | Original upvote count is preserved and shown on the post. |
+| Status | Mapped to an existing status in your org during import. |
+| Board | Mapped to an existing board in your org during import. |
+| Category | Auto-created if no case-insensitive match exists. |
+| Tags | Comma-separated list. Each tag is auto-created if needed. |
+| ETA / Due Date | Parsed from ISO 8601 or common date formats. |
+| Created At | Preserves the original creation date from your source tool. |
+| Author Name | Stored with the post. |
+| Author Email | Used to match or create a real user account. |
+| Author Picture | URL stored with the author's profile. |
+| Owner Email | Assigned as owner if they are already a team member. |
+
+## Before you import
+
+<Steps>
+  <Step title="Export your data as a CSV" icon="download">
+    Export your posts from your current tool as a `.csv` file.
+
+    - [Exporting from Canny](/help-center/guides/migrate-from-canny)
+    - [Exporting from Upvoty](/help-center/guides/migrate-from-upvoty)
+    - [Exporting from Nolt](/help-center/guides/migrate-from-nolt)
+
+    If you are not migrating from one of these tools, export a CSV from your source with as many of the fields above as possible.
+
+    <Callout kind="alert">
+      Files must be `.csv` format and under **10 MB** (approximately 50,000 rows). Split larger exports into multiple files.
+    </Callout>
+  </Step>
+
+  <Step title="Make sure your boards and statuses exist" icon="layers">
+    During import you will map each unique status and board value from your CSV to an existing ProductBridge status or board. Create any missing boards or statuses in **Settings → Feedback** and **Settings → Statuses** before starting your import.
+
+    <Callout kind="tip">
+      Categories and tags do **not** need to exist in advance — they are auto-created during import if no case-insensitive match is found.
+    </Callout>
+  </Step>
+</Steps>
+
+## Import process
+
+<Steps>
+  <Step title="Go to Settings → Import Data" icon="upload">
+    Navigate to **Settings → Import Data** in your ProductBridge dashboard. Drag and drop your `.csv` file onto the upload zone, or click **Choose file** to browse.
+  </Step>
+
+  <Step title="Map columns" icon="table">
+    ProductBridge reads your CSV headers and displays each column as a card with up to 5 sample values. Use the dropdown on each card to assign it to a ProductBridge field.
+
+    - **Title** must be mapped to exactly one column to proceed.
+    - Columns you do not need can be left as **Unselected**.
+    - Each field can only be mapped to one column.
+  </Step>
+
+  <Step title="Map statuses and boards" icon="git-branch">
+    If you mapped a **Status** or **Board** column, ProductBridge shows every unique value from your CSV. Assign each one to an existing status or board in your organization.
+
+    <Callout kind="info">
+      If a post has no status or board value (or you did not map those columns), it falls back to your organization's default board and default status automatically.
+    </Callout>
+  </Step>
+
+  <Step title="Start importing" icon="play">
+    Click **Start Importing**. The import runs as a background job. A progress bar shows how many rows have been processed, and a summary shows how many were successfully imported versus skipped.
+
+    Any rows that could not be imported are listed in the **Row issues** section with the specific reason.
+  </Step>
+</Steps>
+
+## What happens to authors
+
+| Situation | What ProductBridge does |
+|---|---|
+| Author email is present | Looks up an existing user account or creates a new one. The post is attributed to that user. |
+| Author email is blank | Attributes the post to the admin who ran the import. |
+| Owner email is present but not a team member | Sets owner to blank and logs a warning. Never creates a new team member. |
+
+## Upvote counts
+
+The original upvote score from your CSV is stored alongside the post and shown everywhere votes are displayed. The imported count does not require the original voters to have ProductBridge accounts.
+
+## After the import
+
+- Check **Settings → Categories** and **Settings → Tags** to review any auto-created items.
+- Imported posts appear on the board immediately and are searchable.
+- You can run multiple imports — each import is independent and does not deduplicate against existing posts.
+
+## Frequently asked questions
+
+<ExpandableGroup>
+  <Expandable title="Can I undo an import?" default-open="false">
+    There is no one-click undo. You can manually delete imported posts from the feedback board. If you need to clean up a large import, contact support.
+  </Expandable>
+
+  <Expandable title="Will duplicate posts be created?" default-open="false">
+    ProductBridge does not automatically deduplicate posts during import. If you import the same CSV twice, duplicate posts will be created.
+  </Expandable>
+
+  <Expandable title="What if my CSV uses semicolons instead of commas?" default-open="false">
+    ProductBridge expects standard comma-delimited CSV files. Open your file in a spreadsheet app and save it as CSV (comma separated) before uploading.
+  </Expandable>
+
+  <Expandable title="Why are some rows showing as skipped?" default-open="false">
+    A row is skipped if its **Title** field is empty after mapping. All other missing fields fall back to defaults and do not cause a row to fail. Check the **Row issues** log on the importing screen for specific reasons.
+  </Expandable>
+
+  <Expandable title="What encoding should my CSV use?" default-open="false">
+    UTF-8 encoding is recommended. UTF-8 with BOM (the format Excel exports by default) is also supported.
+  </Expandable>
+</ExpandableGroup>

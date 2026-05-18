@@ -1,0 +1,109 @@
+---
+title: Migrating from Nolt
+description: Step-by-step guide to export your Nolt feedback and import it into ProductBridge using the CSV import tool.
+---
+
+## Overview
+
+Nolt provides a CSV export of all your feedback posts from the board settings. Once you have that file, ProductBridge's import wizard maps each column so your posts, votes, statuses, and authors transfer cleanly.
+
+## Step 1 — Export your posts from Nolt
+
+<Steps>
+  <Step title="Open your Nolt board settings" icon="settings">
+    Log in to Nolt and open the board you want to export. Click the **Settings** icon (gear) for that board.
+  </Step>
+
+  <Step title="Export feedback" icon="download">
+    Scroll to the **Export** section and click **Export as CSV**. Nolt will download a `.csv` file of all posts in that board.
+
+    <Callout kind="alert">
+      Nolt exports one board at a time. If you have multiple boards, repeat this step for each board and import them separately, mapping each one to the correct ProductBridge board during the import.
+    </Callout>
+  </Step>
+
+  <Step title="Save the file" icon="file-down">
+    Save the downloaded `.csv` file to your computer. If you have multiple boards, name the files clearly so you can identify them during import.
+  </Step>
+</Steps>
+
+## Step 2 — Upload to ProductBridge
+
+Navigate to **Settings → Import Data** in ProductBridge and drop your Nolt CSV onto the upload zone.
+
+## Step 3 — Map Nolt columns to ProductBridge fields
+
+Here is how Nolt's standard export columns map to ProductBridge:
+
+| Nolt column | ProductBridge field | Notes |
+|---|---|---|
+| `title` | **Title** *(required)* | Map this first. |
+| `description` / `details` | Content | The full post body. |
+| `votes` | Upvotes | Preserved as the imported vote count. |
+| `status` | Status | Mapped to your org's statuses in the next step. |
+| `author_email` / `email` | Author Email | Matches or creates a user account. |
+| `author_name` | Author Name | Stored with the post. |
+| `created_at` | Created At | Preserves the original Nolt creation date. |
+| `tags` | Tags | Comma-separated — auto-created if needed. |
+| `category` | Category | Auto-created if no matching category exists. |
+
+<Callout kind="info">
+  Because Nolt exports one board per file, the **Board** column is usually not in the CSV. During the value-mapping step, all posts in the file can be directed to a single ProductBridge board you choose.
+</Callout>
+
+## Step 4 — Map statuses and boards
+
+After column mapping, ProductBridge shows every unique status value from your Nolt CSV. Assign each one to an existing ProductBridge status.
+
+**Common Nolt status values and suggested mappings:**
+
+| Nolt status | Suggested ProductBridge status |
+|---|---|
+| `open` | Open |
+| `planned` | Planned |
+| `in-progress` | In Progress |
+| `complete` | Completed |
+| `declined` | Closed |
+
+If you did not map a **Board** column (common with Nolt exports), all posts fall back to your organization's default board. If you want to send them to a specific board, make sure you have a **Board** column in your CSV or map accordingly.
+
+## Step 5 — Start importing
+
+Click **Start Importing**. ProductBridge processes your posts in the background. When complete, a summary shows how many posts were imported and how many were skipped with the specific reasons.
+
+## Importing multiple Nolt boards
+
+Because Nolt exports per board, repeat the full import process for each board:
+
+1. Export the board from Nolt.
+2. Go to **Settings → Import Data** and upload that file.
+3. In the column mapping step, map all the same columns as before.
+4. In the value mapping step, point the board to the corresponding ProductBridge board.
+5. Click **Start Importing**.
+
+## What transfers from Nolt
+
+| Data | Transferred | Notes |
+|---|---|---|
+| Post title | Yes | Required field. |
+| Post description | Yes | Map the description column. |
+| Vote count | Yes | Shown as the post's upvote count. |
+| Status | Yes | Must be mapped to a ProductBridge status. |
+| Board | Yes | Falls back to default board if not in CSV. |
+| Category | Yes | Auto-created if not found. |
+| Tags | Yes | Auto-created if not found. |
+| Author name & email | Yes | Creates or matches a user account. |
+| Creation date | Yes | Map the `created_at` column. |
+| Comments | No | Comments are not included in Nolt's CSV export. |
+| Attachments | No | Only text content transfers. |
+| Voter list | No | The total vote count transfers, not individual voter identities. |
+
+## After the import
+
+- If you imported multiple boards, verify that each board received the correct posts.
+- Check **Settings → Tags** and **Settings → Categories** for any auto-created items.
+- Imported posts appear immediately and are fully searchable.
+
+<Callout kind="tip">
+  Looking for a more detailed walkthrough? See the main [Import Feedback with a CSV](/help-center/guides/import-data) guide.
+</Callout>

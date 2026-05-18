@@ -616,6 +616,29 @@
                 "path": "help-center/guides/create-project"
               }
             ]
+          },
+          {
+            "group": "Migration & Import",
+            "icon": "file-spreadsheet",
+            "expandable": true,
+            "path": "help-center/guides/import-data",
+            "pages": [
+              {
+                "title": "Migrate from Canny",
+                "path": "help-center/guides/migrate-from-canny",
+                "icon": "arrow-right-from-line"
+              },
+              {
+                "title": "Migrate from Upvoty",
+                "path": "help-center/guides/migrate-from-upvoty",
+                "icon": "arrow-right-from-line"
+              },
+              {
+                "title": "Migrate from Nolt",
+                "path": "help-center/guides/migrate-from-nolt",
+                "icon": "arrow-right-from-line"
+              }
+            ]
           }
         ]
       }

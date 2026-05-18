@@ -1,0 +1,104 @@
+---
+title: Migrating from Canny
+description: Step-by-step guide to export your Canny posts and import them into ProductBridge using the CSV import tool.
+---
+
+## Overview
+
+Canny lets you export all of your posts as a CSV file from the admin dashboard. Once you have that file, ProductBridge's import wizard maps each Canny column to the right field so your posts, votes, statuses, and author details transfer cleanly.
+
+## Step 1 — Export your posts from Canny
+
+<Steps>
+  <Step title="Open Settings in Canny" icon="settings">
+    Log in to your Canny workspace and click **Settings** in the left sidebar.
+  </Step>
+
+  <Step title="Go to Export" icon="download">
+    Under the **Data** section, click **Export**. Canny will generate a `.csv` file containing all posts across all boards.
+  </Step>
+
+  <Step title="Download the file" icon="file-down">
+    Click **Download CSV**. The file is exported immediately and saved to your downloads folder.
+
+    <Callout kind="info">
+      Canny exports all boards into a single CSV. You do not need to export board by board.
+    </Callout>
+  </Step>
+</Steps>
+
+## Step 2 — Upload to ProductBridge
+
+Navigate to **Settings → Import Data** in ProductBridge and drop your Canny CSV onto the upload zone.
+
+## Step 3 — Map Canny columns to ProductBridge fields
+
+Canny's export includes many columns. Here is how the most common ones map to ProductBridge:
+
+| Canny column | ProductBridge field | Notes |
+|---|---|---|
+| `title` | **Title** *(required)* | Map this first. |
+| `details` | Content | The full post description. |
+| `score` | Upvotes | Preserved as the imported vote count. |
+| `status` | Status | Maps to your org's statuses in the next step. |
+| `board` | Board | Maps to your org's boards in the next step. |
+| `category` | Category | Auto-created if it doesn't exist. |
+| `tags` | Tags | Comma-separated — each tag is auto-created if needed. |
+| `_Due date` | ETA / Due Date | Parsed automatically. |
+| `authorName` | Author Name | Stored with the post. |
+| `authorEmail` | Author Email | Matches or creates a user account. |
+| `ownerEmail` | Owner Email | Assigned if the person is already a team member. |
+| `created` | Created At | Preserves the original Canny creation date. |
+| `id` | *(leave unselected)* | Not used directly. |
+
+<Callout kind="tip">
+  Any column you do not need can be left as **Unselected**. Only **Title** is required to proceed.
+</Callout>
+
+## Step 4 — Map statuses and boards
+
+After column mapping, ProductBridge shows every unique status and board value from your Canny CSV. Assign each one to an existing status and board in your ProductBridge organization.
+
+**Common Canny status values and suggested mappings:**
+
+| Canny status | Suggested ProductBridge status |
+|---|---|
+| `open` | Open |
+| `under review` | Under Review |
+| `in progress` | In Progress |
+| `complete` | Completed |
+| `closed` | Closed |
+
+Create any missing statuses in **Settings → Statuses** before starting the import if you want a one-to-one match.
+
+## Step 5 — Start importing
+
+Click **Start Importing**. ProductBridge processes your posts in the background. When the import finishes, a summary shows how many posts were successfully imported and how many were skipped with the reasons.
+
+## What transfers from Canny
+
+| Data | Transferred | Notes |
+|---|---|---|
+| Post title | Yes | Required field. |
+| Post description | Yes | Map the `details` column. |
+| Vote count / score | Yes | Shown as the post's upvote count. |
+| Status | Yes | Must be mapped to a ProductBridge status. |
+| Board | Yes | Must be mapped to a ProductBridge board. |
+| Category | Yes | Auto-created if not found. |
+| Tags | Yes | Auto-created if not found. |
+| Author name & email | Yes | Creates or matches a user account. |
+| Creation date | Yes | Map the `created` column. |
+| Due date | Yes | Map the `_Due date` column. |
+| Comments | No | Comments are not included in Canny's CSV export. |
+| Attachments | No | Only text content transfers. |
+| Voter list | No | The total vote count transfers, not individual voter identities. |
+
+## After the import
+
+- Review **Settings → Statuses** and **Settings → Boards** to confirm everything mapped correctly.
+- Check **Settings → Categories** and **Settings → Tags** for any auto-created items.
+- Imported posts appear on the board immediately.
+
+<Callout kind="tip">
+  Looking for a more detailed walkthrough? See the main [Import Feedback with a CSV](/help-center/guides/import-data) guide.
+</Callout>

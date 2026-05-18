@@ -1,0 +1,99 @@
+---
+title: Migrating from Upvoty
+description: Step-by-step guide to export your Upvoty feedback and import it into ProductBridge using the CSV import tool.
+---
+
+## Overview
+
+Upvoty allows you to export your feedback posts as a CSV file. Once you have that file, ProductBridge's import wizard guides you through column mapping so your posts, votes, statuses, and author details transfer cleanly.
+
+## Step 1 — Export your posts from Upvoty
+
+<Steps>
+  <Step title="Open your Upvoty dashboard" icon="layout-dashboard">
+    Log in to your Upvoty workspace and go to **Settings**.
+  </Step>
+
+  <Step title="Navigate to Export" icon="download">
+    In the Settings menu, look for the **Export** or **Data Export** section. Click **Export posts** to generate a CSV of all your feedback.
+  </Step>
+
+  <Step title="Download the file" icon="file-down">
+    Upvoty will prepare the export and either download it immediately or email you a link. Save the `.csv` file to your computer.
+
+    <Callout kind="info">
+      If Upvoty exports a `.xlsx` or spreadsheet file, open it in Excel or Google Sheets and save it as **CSV (comma separated values)** before uploading to ProductBridge.
+    </Callout>
+  </Step>
+</Steps>
+
+## Step 2 — Upload to ProductBridge
+
+Navigate to **Settings → Import Data** in ProductBridge and drop your Upvoty CSV onto the upload zone.
+
+## Step 3 — Map Upvoty columns to ProductBridge fields
+
+Upvoty's export structure may vary depending on your plan. Here is a common mapping:
+
+| Upvoty column | ProductBridge field | Notes |
+|---|---|---|
+| `title` / `name` | **Title** *(required)* | Map this first. |
+| `description` / `body` | Content | The full post body. |
+| `votes` / `upvotes` | Upvotes | Preserved as the imported vote count. |
+| `status` | Status | Mapped to your org's statuses in the next step. |
+| `board` / `category` | Board | Mapped to your org's boards in the next step. |
+| `tags` | Tags | Comma-separated — auto-created if needed. |
+| `author_email` / `email` | Author Email | Matches or creates a user account. |
+| `author_name` / `name` | Author Name | Stored with the post. |
+| `created_at` / `date` | Created At | Preserves the original creation date. |
+| `due_date` / `eta` | ETA / Due Date | Parsed automatically. |
+
+<Callout kind="tip">
+  Column names in Upvoty exports can vary. Check the first row of your CSV to identify the exact header names, then map accordingly.
+</Callout>
+
+## Step 4 — Map statuses and boards
+
+After column mapping, ProductBridge shows every unique status and board value from your Upvoty CSV. Assign each one to an existing ProductBridge status or board.
+
+**Common Upvoty status values and suggested mappings:**
+
+| Upvoty status | Suggested ProductBridge status |
+|---|---|
+| `open` | Open |
+| `planned` | Planned |
+| `in-progress` | In Progress |
+| `done` / `completed` | Completed |
+| `closed` | Closed |
+
+Create any missing statuses in **Settings → Statuses** before starting the import if you want an exact match.
+
+## Step 5 — Start importing
+
+Click **Start Importing**. ProductBridge processes your posts in the background. When complete, a summary shows how many posts were imported successfully and how many were skipped with the specific reasons.
+
+## What transfers from Upvoty
+
+| Data | Transferred | Notes |
+|---|---|---|
+| Post title | Yes | Required field. |
+| Post description | Yes | Map the description column. |
+| Vote count | Yes | Shown as the post's upvote count. |
+| Status | Yes | Must be mapped to a ProductBridge status. |
+| Board / Category | Yes | Must be mapped to a ProductBridge board. |
+| Tags | Yes | Auto-created if not found. |
+| Author name & email | Yes | Creates or matches a user account. |
+| Creation date | Yes | Map the date column. |
+| Comments | No | Comments are not included in standard CSV exports. |
+| Attachments | No | Only text content transfers. |
+| Voter list | No | The total vote count transfers, not individual voter identities. |
+
+## After the import
+
+- Review auto-created tags in **Settings → Tags**.
+- Check that board and status mappings look correct on the feedback board.
+- Imported posts appear immediately and are fully searchable.
+
+<Callout kind="tip">
+  Looking for a more detailed walkthrough? See the main [Import Feedback with a CSV](/help-center/guides/import-data) guide.
+</Callout>
