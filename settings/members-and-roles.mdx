@@ -1,0 +1,111 @@
+---
+title: Members & Roles
+description: Invite your team to ProductBridge, assign roles to control who can do what, and manage workspace membership over time.
+---
+
+## Workspace Membership
+
+Every ProductBridge workspace has a set of **team members** — your internal users who manage feedback, integrations, and the public portal. Team members are distinct from [end users](/setup/end-users), who are the customers submitting feedback through your portal.
+
+Each team member has one of three roles, granting different levels of access.
+
+## Roles
+
+| Role | What They Can Do |
+|------|-------------------|
+| **Owner** | Full access to everything. Can manage all settings, billing, members, and roles. Owners cannot be removed by anyone except another owner. |
+| **Admin** | Manage projects, integrations, settings, and add/remove other members (except owners). Cannot modify billing. |
+| **Member** | Can create and manage feedback, roadmap items, comments, and changelog entries. No access to organization settings or member management. |
+
+<Callout kind="info">
+  Every workspace must have at least one Owner. The user who created the workspace is the initial Owner. Owners can promote any Admin to Owner.
+</Callout>
+
+## Invite a Team Member
+
+<Steps>
+  <Step title="Open Members settings" icon="users">
+    Go to **Settings → Members**.
+  </Step>
+  <Step title="Click Invite Member" icon="user-plus">
+    Enter the person's email address and select their role (Admin or Member). Only an Owner can promote another user to Owner — and that's done after the invite is accepted.
+  </Step>
+  <Step title="Send the invitation" icon="mail">
+    ProductBridge sends an email invitation to the address you entered. The invite links to a sign-up page where they'll accept and create their account.
+  </Step>
+  <Step title="Track pending invites" icon="clock">
+    Open the **Invitations** tab to see who's been invited but hasn't accepted yet. You can resend or cancel a pending invite at any time.
+  </Step>
+</Steps>
+
+<Callout kind="alert">
+  Invitations expire after **7 days**. If a team member doesn't accept in time, you'll need to send a fresh invite.
+</Callout>
+
+## Invitation Lifecycle
+
+Every invite moves through these states:
+
+| Status | Meaning |
+|--------|---------|
+| **Pending** | Sent, not yet accepted |
+| **Accepted** | The recipient signed up and joined the workspace |
+| **Rejected** | The recipient declined the invite |
+| **Canceled** | The inviter or another admin canceled before acceptance |
+
+Once accepted, the user shows up in the **Members** tab with their assigned role.
+
+## Change a Member's Role
+
+Admins and Owners can change another member's role at any time.
+
+<Steps>
+  <Step title="Open the member" icon="user">
+    Go to **Settings → Members** and find the team member in the list.
+  </Step>
+  <Step title="Update the role" icon="shield">
+    Click the role dropdown next to their name and select the new role. Changes take effect immediately.
+  </Step>
+</Steps>
+
+A few rules:
+
+- An Admin can change other Members to Admin, but cannot change Owners
+- Only an Owner can change another user to or from Owner
+- You can't remove the last Owner from a workspace — promote someone else first
+
+## Remove a Member
+
+To remove a team member from the workspace:
+
+1. Go to **Settings → Members** and find the user
+2. Click **Remove**
+3. Confirm
+
+Removed members lose all access immediately. Their historical actions (posts created, comments left) remain visible — attribution is preserved.
+
+<Callout kind="alert">
+  Removing the last Owner is blocked. Transfer ownership to another team member first.
+</Callout>
+
+## Member Profiles
+
+Every team member has a profile with:
+
+- **Display name** — what other users see across the app
+- **Email** — used for login and notifications
+- **Avatar** — uploaded image or default initial
+- **SSO identity** — if your workspace uses [SSO](/settings/sso), the linked external identity
+
+Members can update their own display name and avatar from their account dropdown. Email is managed by your authentication provider and can't be changed in-app.
+
+## What's Not Currently Supported
+
+A few capabilities you might expect that don't exist today:
+
+- **Bulk invite** — invitations are sent one at a time
+- **Per-board or per-project role scoping** — roles are workspace-wide; a Member is a Member everywhere in the workspace
+- **Custom roles** — only Owner / Admin / Member; no custom permission sets
+- **Per-user notification preferences** — notifications go to all team members based on event type, not per-user opt-in
+
+If any of these would meaningfully change how your team uses ProductBridge, let us know.

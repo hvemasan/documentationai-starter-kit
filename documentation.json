@@ -148,6 +148,16 @@
                 "title": "Moderation",
                 "path": "settings/moderation",
                 "icon": "shield"
+              },
+              {
+                "title": "Members & Roles",
+                "path": "settings/members-and-roles",
+                "icon": "users"
+              },
+              {
+                "title": "Single Sign-On (SSO)",
+                "path": "settings/sso",
+                "icon": "shield-check"
               }
             ]
           },
@@ -220,27 +230,6 @@
                 "title": "Email",
                 "path": "notifications/email",
                 "icon": "mail"
-              }
-            ]
-          },
-          {
-            "group": "Platform Features",
-            "icon": "box",
-            "pages": [
-              {
-                "title": "Knowledgebase",
-                "path": "platform-features/knowledgebase",
-                "icon": "book-open"
-              },
-              {
-                "title": "Users",
-                "path": "platform-features/users",
-                "icon": "users"
-              },
-              {
-                "title": "Single Sign-On (SSO)",
-                "path": "platform-features/sso",
-                "icon": "shield-check"
               }
             ]
           },

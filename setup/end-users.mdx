@@ -24,6 +24,21 @@ End users land in ProductBridge through three channels:
 
 All three paths converge on the same user record, so a customer who emails you on Intercom, votes on your public portal, and signs in via your app shows up as **one** end user — not three.
 
+## Identified vs. Anonymous Visitors
+
+When someone interacts with your portal or widget, they fall into one of two buckets:
+
+| Type | Who They Are | What Gets Tracked |
+|------|--------------|-------------------|
+| **Identified** | Signed in (via portal account, [identity verification](/core-concepts/feedback-collection/widgets/identity-verification), or integration source) | Linked to a persistent end-user profile, with full history |
+| **Anonymous** | Submitting feedback or voting without signing in | Tracked by session — not linked to a profile, no history across visits |
+
+Identified users let you do everything segments, history, and Ask AI promise. Anonymous users get the work done but you lose the link between sessions.
+
+<Callout kind="tip">
+  If your product already has authenticated users, set up [identity verification](/core-concepts/feedback-collection/widgets/identity-verification) so every widget interaction is identified — even if customers never explicitly sign in to ProductBridge.
+</Callout>
+
 ## End User Profile
 
 Every end user has:
