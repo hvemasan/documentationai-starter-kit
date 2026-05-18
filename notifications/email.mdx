@@ -71,7 +71,7 @@ When an admin assigns a post to a team member, the assignee gets an email so the
 |-------|-------|
 | **Trigger** | Admin assigns or unassigns a post (feedback or roadmap) |
 | **Recipient** | The assignee (or unassigned user) — one email per event |
-| **Subject** | "{Actor} assigned you a post" or "You were unassigned from a post" |
+| **Subject** | `{Actor} assigned you a post` or `You were unassigned from a post` |
 | **Body** | Post title, board, description preview, direct link to the post |
 
 ### Requires Custom SMTP
@@ -92,7 +92,7 @@ This is how you **close the feedback loop** — customers who asked for a featur
 |-------|-------|
 | **Trigger** | Roadmap post status changes |
 | **Recipients** | Authors of all feedback posts linked to the roadmap item (batch send) |
-| **Subject** | "Roadmap update: {Title} is now {New Status}" |
+| **Subject** | `Roadmap update: {Title} is now {New Status}` |
 | **Body** | Roadmap item title, the new status, and a link back to the post |
 
 ### Requires Custom SMTP
