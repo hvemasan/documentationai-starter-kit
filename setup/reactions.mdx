@@ -17,21 +17,24 @@ ProductBridge has two engagement primitives — they look similar but serve diff
 
 Use **votes** when you want a clean prioritization signal — "how many people want this feature." Use **reactions** when you want richer feedback — "did this changelog land well? did people find it exciting, confusing, frustrating?"
 
-## Default Reaction Set
+## The Reaction Set
 
-ProductBridge ships with a set of default emoji reactions covering common sentiments:
+ProductBridge ships with a fixed set of 10 emoji reactions, available everywhere reactions are supported:
 
 | Emoji | Common Meaning |
 |-------|----------------|
 | 👍 | Approval, agreement |
-| ❤️ | Love it |
-| 🎉 | Celebrating |
-| 🚀 | Excited to use it |
-| 🤔 | Confused, needs clarification |
-| 😕 | Disappointed |
 | 👎 | Disapproval |
+| ❤️ | Love it |
+| 😍 | Strong positive |
+| 🎉 | Celebrating |
+| 😂 | Funny |
+| 🤔 | Thinking, considering |
+| 😢 | Sad, disappointed |
+| 🔥 | Excited, fire emoji |
+| 🚀 | Excited to ship / use |
 
-You can customize this set — hide reactions you don't want available, or add new ones.
+This set is the same across all reactable surfaces today. Custom emoji and per-surface visibility toggles aren't supported yet.
 
 ## Where Reactions Appear
 
@@ -39,34 +42,6 @@ You can customize this set — hide reactions you don't want available, or add n
 |---------|-------------|
 | **Changelog entries** | The post itself — readers can react to a release announcement |
 | **Comments** | Individual comments on feedback, roadmap, or changelog posts |
-
-Each surface has its own visibility toggle — you can show reactions on changelog but hide them on comments, or vice versa.
-
-## Manage Reactions
-
-<Steps>
-  <Step title="Open Reactions" icon="smile">
-    Go to **Settings → Reactions**.
-  </Step>
-  <Step title="Toggle reactions on/off per surface" icon="eye">
-    For each reaction in the list, choose:
-
-    - **Show on Changelog** — available on changelog entries (default: on)
-    - **Show on Comments** — available on comments (default: on)
-
-    Turn both off to fully retire a reaction without deleting it.
-  </Step>
-  <Step title="Add a custom reaction" icon="plus">
-    Click **Add Reaction** and provide:
-
-    - **Emoji** — the actual emoji character
-    - **Code** — a short identifier (e.g., `confetti`)
-    - **Name** *(optional)* — a label shown on hover
-  </Step>
-  <Step title="Reorder" icon="move-vertical">
-    Drag reactions to control the display order in the picker.
-  </Step>
-</Steps>
 
 ## Who Can React
 
@@ -104,5 +79,5 @@ Reactions shine when you want feedback richer than a binary vote but lower-effor
 </ExpandableGroup>
 
 <Callout kind="tip">
-  Keep your reaction set small. Five to seven well-chosen emojis are easier to scan than fifteen. If a reaction never gets used, retire it.
+  The 10-emoji set strikes a balance between expressiveness and scannability. If you have strong opinions about which emojis would serve your community better, let us know — we may add per-workspace customization in the future.
 </Callout>

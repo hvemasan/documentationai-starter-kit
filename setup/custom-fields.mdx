@@ -20,13 +20,12 @@ Custom fields are **organization-wide**, defined once and reused across boards. 
 | Type | Description | Example Use |
 |------|-------------|-------------|
 | **Text** | Single-line free text | Account ID, Linked ticket |
+| **Multiline Text** | Multi-line free text | Internal notes, Acceptance criteria |
 | **Number** | Numeric input | ARR, Effort estimate |
-| **Select** | Single-choice dropdown | Urgency, Region |
-| **Multi-Select** | Multiple choices from a list | Affected products, Personas |
-
-<Callout kind="info">
-  More field types (date, URL, user reference) are on the roadmap. If you need a specific type today, let us know.
-</Callout>
+| **Dropdown** | Single-choice picker from a defined list | Urgency, Region |
+| **Multiselect** | Multiple choices from a defined list | Affected products, Personas |
+| **Date** | Date picker | Target ship date, Customer renewal |
+| **Checkbox** | Single on/off toggle | Has SLA, Internal use only |
 
 ## Create a Custom Field
 
@@ -38,10 +37,10 @@ Custom fields are **organization-wide**, defined once and reused across boards. 
     Configure:
 
     - **Field name** — what appears as the label on the form (e.g., "Customer ARR")
-    - **Field type** — Text, Number, Select, or Multi-Select
+    - **Field type** — Text, Multiline Text, Number, Dropdown, Multiselect, Date, or Checkbox
     - **Placeholder** *(optional)* — helper text shown in the input
     - **Optional** — toggle off to make the field required (default: optional)
-    - **Options** *(Select & Multi-Select only)* — define the choices users can pick from
+    - **Options** *(Dropdown & Multiselect only)* — define the choices users can pick from
   </Step>
   <Step title="Reorder" icon="move-vertical">
     Drag fields to control the order they appear on the post form.
@@ -86,6 +85,6 @@ Field values can be filled in:
 </Callout>
 
 - **Make most fields optional.** Required fields slow down submission. Make a field required only if you genuinely can't process the post without it.
-- **Use Select for known sets.** If the value is one of a small fixed list (Urgency, Region, Persona), use Select — it forces consistency and makes filtering reliable.
+- **Use Dropdown for known sets.** If the value is one of a small fixed list (Urgency, Region, Persona), use Dropdown — it forces consistency and makes filtering reliable.
 - **Use Number when you'll sort by it.** ARR, vote weight, effort estimate — these are far more useful as numbers than as text tags.
 - **Don't put PII in custom fields you'd surface publicly.** If a field can show on the public portal, treat it like any public form input.

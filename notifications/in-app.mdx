@@ -9,9 +9,9 @@ Every team member has an in-app notification inbox accessed from the bell icon i
 
 End users on the public portal also have a notification inbox, scoped to posts and comments they're involved in.
 
-## Three Categories
+## Four Tabs
 
-Notifications are grouped into three tabs, each with its own unread badge:
+Notifications are grouped into four tabs in the inbox: **All**, **Comments**, **Posts**, and **Assignments**. Each category tab carries its own unread badge so you can scan what needs attention.
 
 <Columns cols={3}>
   <Card title="Posts" icon="file-text" href="#posts">
@@ -24,6 +24,8 @@ Notifications are grouped into three tabs, each with its own unread badge:
     Posts assigned or unassigned to you (admin only).
   </Card>
 </Columns>
+
+The **All** tab shows everything in a single chronological feed.
 
 ## Posts
 
@@ -76,29 +78,24 @@ Assignment notifications are admin-only — end users don't see them.
 
 <Steps>
   <Step title="Open a notification" icon="check">
-    Clicking any notification marks it as read and navigates to the linked post or comment.
+    Clicking any notification marks it as read and opens the linked post or comment.
   </Step>
   <Step title="Mark all as read" icon="check-check">
-    Use **Mark All as Read** in the inbox header to clear unread counts across all categories, or within a single category tab.
-  </Step>
-  <Step title="Delete" icon="trash">
-    Admins can dismiss notifications they no longer need to see. End users on the public portal cannot delete notifications.
+    Use **Mark all as read** in the inbox header to clear all unread notifications.
   </Step>
 </Steps>
 
+Unread notifications are marked with a blue indicator dot; opening or marking-all-as-read removes it.
+
 ## Filtering
 
-Use the tabs and filters in the inbox to focus on what matters:
-
-- **Tab filtering** — switch between Posts, Comments, and Assignments
-- **Unread only** — show only notifications that need your attention
-- **All** — view the full chronological feed across categories
+Switch between the **All / Comments / Posts / Assignments** tabs in the inbox header to focus on what matters. The list scrolls in chronological order and loads more entries automatically as you scroll to the bottom.
 
 ## Admin vs. End User Inboxes
 
 <Tabs>
   <Tab title="Admin Users" icon="shield">
-    Admins receive every notification type, including assignments. They can also delete notifications from their inbox to keep it tidy.
+    Admins receive every notification type, including assignments. Open a notification to jump straight to the relevant post or comment.
   </Tab>
   <Tab title="End Users" icon="user">
     End users see notifications scoped to their own activity — comments on posts they created, status changes on posts they voted for, replies to their comments. Assignment notifications don't apply.

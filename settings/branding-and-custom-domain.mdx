@@ -12,16 +12,14 @@ When customers land on your public portal, you want it to feel like an extension
 Branding settings apply across your public portal, customer-facing emails, and embedded widgets.
 
 <Steps>
-  <Step title="Open Branding settings" icon="palette">
-    Go to **Settings → General → Branding**.
+  <Step title="Open General settings" icon="palette">
+    Go to **Brand Settings → General**.
   </Step>
   <Step title="Set your brand color" icon="droplet">
-    Pick a primary brand color. This is the accent color used for buttons, links, and highlights across your portal.
-
-    You can configure **two variants** — one for light mode and one for dark mode — so your portal looks great in either theme.
+    Pick a primary brand color. This is the accent color used for buttons, links, and highlights across your portal — in both light and dark themes.
   </Step>
   <Step title="Upload a favicon" icon="image">
-    Upload your product's favicon (the small icon shown in browser tabs). PNG or ICO formats work best.
+    Upload your product's favicon (the small icon shown in browser tabs). PNG, JPEG, GIF, WebP, and ICO formats are all accepted.
   </Step>
   <Step title="Save" icon="check">
     Save your changes. Branding updates apply instantly across the portal — no redeploy needed.
@@ -30,12 +28,11 @@ Branding settings apply across your public portal, customer-facing emails, and e
 
 | Setting | Description | Where It Appears |
 |---------|-------------|------------------|
-| Brand color (light) | Hex color used in light theme | Portal buttons, links, accents |
-| Brand color (dark) | Hex color used in dark theme | Portal buttons, links, accents |
+| Brand color | Hex color used as the accent | Portal buttons, links, accents |
 | Favicon | Browser tab icon | Public portal, email templates |
 
 <Callout kind="tip">
-  Pick brand colors with enough contrast against both white and dark backgrounds. If your brand color is very light, set a darker variant for dark mode so it stays readable.
+  Pick a brand color with enough contrast against both white and dark backgrounds — the same color is used in both themes, so a mid-range hue works best.
 </Callout>
 
 ## Custom Domain
@@ -50,7 +47,7 @@ ProductBridge uses **Cloudflare for SaaS** under the hood to provision SSL certi
 
 <Steps>
   <Step title="Open Domain settings" icon="globe">
-    Go to **Settings → General → Custom Domain** and toggle **Enable Custom Domain**.
+    Go to **Brand Settings → Custom Domain** and toggle **Enable Custom Domain**.
   </Step>
   <Step title="Enter your domain" icon="link">
     Enter the hostname you want to use, for example `feedback.yourproduct.com`.
@@ -60,10 +57,9 @@ ProductBridge uses **Cloudflare for SaaS** under the hood to provision SSL certi
     </Callout>
   </Step>
   <Step title="Add the DNS record" icon="server">
-    After saving, ProductBridge displays a **verification token** and **ACME TXT record** (name and value). Add both to your DNS provider:
+    After saving, ProductBridge displays the `CNAME` record you need to add at your DNS provider. The record name is your custom hostname; the value is the target ProductBridge gives you.
 
-    - A `CNAME` record pointing your hostname to the target ProductBridge provides
-    - A `TXT` record using the ACME name and value (used by Cloudflare to issue your SSL certificate)
+    Add the record exactly as shown.
   </Step>
   <Step title="Wait for verification" icon="clock">
     DNS propagation typically takes a few minutes but can take up to 24 hours. ProductBridge polls verification status automatically — refresh the settings page to see when your domain switches from **Pending** to **Verified**.
@@ -77,11 +73,12 @@ ProductBridge uses **Cloudflare for SaaS** under the hood to provision SSL certi
 
 | Status | Meaning |
 |--------|---------|
-| Pending | DNS records not yet detected, or certificate still being issued |
+| Pending | DNS record not yet detected |
+| Pending Validation | DNS detected, SSL certificate still being issued |
 | Verified | Domain is live and serving traffic with a valid SSL certificate |
 
 <Callout kind="alert">
-  Don't delete the DNS records once verified — Cloudflare uses them to renew your SSL certificate automatically. Removing them will eventually cause your domain to stop working.
+  Don't delete the CNAME record once verified — the platform uses it to renew your SSL certificate automatically. Removing it will eventually cause your domain to stop working.
 </Callout>
 
 ### Troubleshooting
@@ -91,7 +88,6 @@ ProductBridge uses **Cloudflare for SaaS** under the hood to provision SSL certi
     Verify that:
 
     - The `CNAME` record points to the exact target ProductBridge gave you
-    - The `TXT` record name and value match exactly (these are case-sensitive)
     - DNS propagation has had time to complete — use a tool like [dnschecker.org](https://dnschecker.org) to confirm your records are visible globally
 
     If everything looks right and the status is still Pending after a few hours, contact support.

@@ -46,18 +46,19 @@ Claude calls a tool, the MCP server verifies your bearer token, scopes the call 
 
 <Steps>
   <Step title="Generate your connection config" icon="key">
-    In the ProductBridge admin, go to **Integrations → AI Assistants → MCP Server** and click **Generate Connection**.
+    In the ProductBridge admin, go to **Settings → Connect → MCP Server** and click **Generate MCP Config**.
 
-    Optionally name the connection (e.g., "laptop" or "ci-pipeline") so you can identify it later in audit logs.
+    Optionally name the connection (the **Credential name** field) so you can identify it later — useful if you create multiple connections for different machines or pipelines.
 
     ProductBridge generates:
 
-    - A **bearer token** (shown once — copy it immediately)
-    - The **MCP URL** to connect to
-    - A **ready-to-paste config snippet** for Claude Desktop
+    - A **Server URL** to connect to
+    - A **Bearer token** (shown with a reveal/hide toggle — copy it from the field)
+    - A **Key prefix** — a short identifier for the token used in audit displays
+    - Ready-to-paste config snippets for Claude Desktop and Claude Code
 
     <Callout kind="alert">
-      The bearer token is shown only once. Copy and store it securely. If you lose it, click **Rotate Key** to issue a fresh one — the old key becomes invalid immediately.
+      Treat the bearer token as a production secret. If you suspect it's exposed, click **Regenerate** to issue a fresh one — the old key becomes invalid immediately.
     </Callout>
   </Step>
   <Step title="Paste into your Claude client" icon="clipboard">
@@ -189,22 +190,22 @@ Claude reads the tool descriptions, decides which ones it needs, and composes th
 
 ## Connection Management
 
-### Rotate Your Token
+### Regenerate Your Token
 
 If your token is exposed or you want to refresh it:
 
-1. Go to **Integrations → AI Assistants → MCP Server**
-2. Click **Rotate Key**
+1. Go to **Settings → Connect → MCP Server**
+2. Click **Regenerate**
 
 The old token is invalidated immediately. You'll need to update your Claude config with the new one.
 
-### Last Used
+### Credential Name & Key Prefix
 
-Every successful tool call updates a **Last Used** timestamp on your connection, so you can tell at a glance whether a connection is still active.
+Each connection carries a **Credential name** (for your own identification) and a **Key prefix** — a short identifier shown in the UI so you can recognize the token without revealing it. Use the show/hide toggle next to the bearer token field when you need to copy it.
 
 ### Multiple Connections
 
-You can have multiple MCP connections per user (e.g., one for your laptop, one for a CI pipeline). Each gets its own token and audit trail.
+You can create multiple MCP connections per user (e.g., one for your laptop, one for a CI pipeline). Each gets its own bearer token.
 
 ---
 
@@ -215,8 +216,8 @@ You can have multiple MCP connections per user (e.g., one for your laptop, one f
 | **Organization scope** | Every tool call is scoped to the organization the token belongs to. Claude can never see another workspace's data. |
 | **Bearer token auth** | HTTP `Authorization: Bearer pb_...` header on every request |
 | **Token storage** | Tokens are SHA-256 hashed and encrypted at rest. We never log raw tokens. |
-| **Read + write** | MCP tools can create and update content. Rotate the token immediately if exposed. |
-| **Audit trail** | Every tool call updates a `last_used_at` timestamp. Errors are logged with context. |
+| **Read + write** | MCP tools can create and update content. Regenerate the token immediately if exposed. |
+| **Audit trail** | Errors and key activity are logged on the server side for support investigation. |
 
 <Callout kind="alert">
   Treat your MCP bearer token like a production API key — never paste it into chats, screenshots, or commits. Rotate it immediately if it ends up somewhere it shouldn't.
@@ -236,7 +237,7 @@ You can have multiple MCP connections per user (e.g., one for your laptop, one f
   <Expandable title="Tools return 'Unauthorized' or 401">
     The bearer token isn't valid. Either:
     - You pasted a different token (check the `Authorization` header in your config)
-    - The token has been rotated — generate a fresh one and update your config
+    - The token has been regenerated — generate a fresh one and update your config
     - The token was revoked manually from the connections list
   </Expandable>
   <Expandable title="Tools work but Claude doesn't pick them up automatically">
