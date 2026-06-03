@@ -354,6 +354,11 @@
                     "title": "Zapier",
                     "path": "integrations/automations/zapier",
                     "icon": "zap"
+                  },
+                  {
+                    "title": "Make",
+                    "path": "integrations/automations/make",
+                    "icon": "workflow"
                   }
                 ]
               },
