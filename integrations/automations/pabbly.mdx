@@ -44,13 +44,13 @@ The top-level `event` field tells you which event fired (the equivalent of a "ty
 
 <Steps>
   <Step title="Add the ProductBridge app" icon="plus">
-    Open the [ProductBridge app invite link](https://connect.pabbly.com/share-app/DERYagRTVzQFTwRuVB8DJAwYVVFSCwRmBh9SQFVaAnoBT1YtA0JYMlwQVHZRFgRlXhdXPVYKU25fSwEFUwUCcV1EBjlcQwZbVWYJTABfDiQMblgvBE9XbQVUBDdUHAM5DANVclIfBFkGCFJoVU4CRAFYVi0DTVh4XBxUPFEeBC5eD1dmVh1TaV9cAWBTGQJsXVYGY1xOBltVZglMAF8OJAxu) and accept the app into your Pabbly account. This is a one-time step.
+    In ProductBridge, go to **Connect Sources → Pabbly Connect** and click **Add ProductBridge to Pabbly**. Accept the app into your Pabbly account when prompted. This is a one-time step.
   </Step>
   <Step title="Create a workflow" icon="workflow">
     In Pabbly Connect, create a new workflow and choose the **ProductBridge** app (or Pabbly's built-in **Webhook** app) as the trigger. Pabbly generates a **webhook URL** — copy it.
   </Step>
   <Step title="Register the URL in ProductBridge" icon="link">
-    In ProductBridge, go to **Settings → Integrations → Pabbly Connect**, click **Add endpoint**, paste the Pabbly webhook URL, and save.
+    In ProductBridge, go to **Connect Sources → Pabbly Connect**, click **Add endpoint**, paste the Pabbly webhook URL, and save.
 
     <Callout kind="info">
       A signing secret is shown once when you add the endpoint. It is **optional** for Pabbly — Pabbly's webhook trigger does not verify signatures. It's only useful if you choose to verify the `X-ProductBridge-Signature` header in a custom step.
@@ -180,8 +180,8 @@ Each request also includes these headers:
   <Expandable title="Delivery & retries" default-open="false">
     ProductBridge records the last delivery time and the last failure reason for each endpoint.
     A failing endpoint never blocks delivery to your other endpoints. You can revoke an endpoint
-    at any time from **Settings → Integrations → Pabbly Connect** (or **Settings → API &
-    Webhooks**), which stops deliveries immediately.
+    at any time from **Connect Sources → Pabbly Connect** (or **Settings → API & Webhooks**),
+    which stops deliveries immediately.
   </Expandable>
 </ExpandableGroup>
 
@@ -196,7 +196,7 @@ Each request also includes these headers:
 <ExpandableGroup>
   <Expandable title="Not receiving events" default-open="false">
     - Verify your Pabbly workflow is turned **on**
-    - Confirm the webhook URL is registered and **active** in **Settings → Integrations → Pabbly Connect**
+    - Confirm the webhook URL is registered and **active** in **Connect Sources → Pabbly Connect**
     - Ensure your ProductBridge plan includes **API & webhooks**
     - Trigger a fresh event (e.g., create a post) and check Pabbly's task history
   </Expandable>
