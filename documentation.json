@@ -359,6 +359,11 @@
                     "title": "Make",
                     "path": "integrations/automations/make",
                     "icon": "workflow"
+                  },
+                  {
+                    "title": "Pabbly Connect",
+                    "path": "integrations/automations/pabbly",
+                    "icon": "workflow"
                   }
                 ]
               },

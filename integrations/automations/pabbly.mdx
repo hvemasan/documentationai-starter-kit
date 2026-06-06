@@ -1,0 +1,211 @@
+---
+title: Pabbly Connect Integration
+description: Connect ProductBridge to 2,000+ apps using Pabbly Connect. Send feedback events — new posts, comments, votes, and status changes — to Pabbly in real time and route them anywhere.
+---
+
+<img src="https://product-bridge.nyc3.digitaloceanspaces.com/feedback-post-files/image-1780486993708-n93z3vv.png" width="80" height="80" alt="Pabbly Connect" />
+
+## Overview
+
+The ProductBridge Pabbly Connect integration streams your feedback events to Pabbly Connect in real time. Every time something happens in ProductBridge — a new post, comment, vote, or status change — ProductBridge sends the event to a Pabbly webhook, where you can filter it and route it to 2,000+ apps without writing code.
+
+This integration is **one-way** (ProductBridge → Pabbly): Pabbly *receives* events. ProductBridge sends a single, consistent payload for every event, with a top-level `event` field you filter on.
+
+<Columns cols={3}>
+  <Card title="Real-time events" icon="bell" href="#how-it-works">
+    Posts, comments, votes, and status changes are delivered the moment they happen.
+  </Card>
+  <Card title="11 event types" icon="list" href="#events">
+    One webhook receives every event — filter by the `event` field to act on the ones you want.
+  </Card>
+  <Card title="Filter & route" icon="filter" href="#example-scenarios">
+    Send feedback to Slack, Google Sheets, your project tracker, email, and more.
+  </Card>
+</Columns>
+
+## How it works
+
+When an event occurs, ProductBridge sends an HTTP `POST` to your Pabbly webhook URL with a JSON envelope:
+
+```json
+{ "event": "post.created", "organization_id": "…", "occurred_at": "…", "data": { … } }
+```
+
+The top-level `event` field tells you which event fired (the equivalent of a "type" field). In Pabbly, you add a **Filter** step on `event` to branch on a specific event type, then add your downstream actions.
+
+## Prerequisites
+
+<Callout kind="info" title="Before you start">
+- A ProductBridge account whose plan includes **API & webhooks**
+- A Pabbly Connect account
+</Callout>
+
+## Connect ProductBridge to Pabbly
+
+<Steps>
+  <Step title="Add the ProductBridge app" icon="plus">
+    Open the [ProductBridge app invite link](https://connect.pabbly.com/share-app/DERYagRTVzQFTwRuVB8DJAwYVVFSCwRmBh9SQFVaAnoBT1YtA0JYMlwQVHZRFgRlXhdXPVYKU25fSwEFUwUCcV1EBjlcQwZbVWYJTABfDiQMblgvBE9XbQVUBDdUHAM5DANVclIfBFkGCFJoVU4CRAFYVi0DTVh4XBxUPFEeBC5eD1dmVh1TaV9cAWBTGQJsXVYGY1xOBltVZglMAF8OJAxu) and accept the app into your Pabbly account. This is a one-time step.
+  </Step>
+  <Step title="Create a workflow" icon="workflow">
+    In Pabbly Connect, create a new workflow and choose the **ProductBridge** app (or Pabbly's built-in **Webhook** app) as the trigger. Pabbly generates a **webhook URL** — copy it.
+  </Step>
+  <Step title="Register the URL in ProductBridge" icon="link">
+    In ProductBridge, go to **Settings → Integrations → Pabbly Connect**, click **Add endpoint**, paste the Pabbly webhook URL, and save.
+
+    <Callout kind="info">
+      A signing secret is shown once when you add the endpoint. It is **optional** for Pabbly — Pabbly's webhook trigger does not verify signatures. It's only useful if you choose to verify the `X-ProductBridge-Signature` header in a custom step.
+    </Callout>
+  </Step>
+  <Step title="Send a test event" icon="play">
+    Trigger any event in ProductBridge — for example, create a feedback post — so Pabbly captures a sample payload to map your fields.
+  </Step>
+  <Step title="Filter and build" icon="filter">
+    Add a **Filter** step in Pabbly on the `event` field, then add the downstream actions for that event type. Turn the workflow on.
+  </Step>
+</Steps>
+
+## Events
+
+Every event is delivered to the same webhook URL with the same envelope shape. The `event` field identifies the type.
+
+| Event | Fires when |
+|-------|-----------|
+| `post.created` | A new feedback post is created |
+| `post.edited` | A post's title or details are edited |
+| `post.deleted` | A post is deleted |
+| `post.tag_added` | A tag is added to a post |
+| `post.tag_removed` | A tag is removed from a post |
+| `post.status_changed` | A post's status changes (e.g., Open → In Progress) |
+| `comment.created` | A comment is added to a post |
+| `comment.edited` | A comment is edited |
+| `comment.deleted` | A comment is deleted |
+| `vote.created` | A user votes on a post |
+| `vote.deleted` | A vote is removed |
+
+## Event payload
+
+Each delivery is a JSON envelope with four top-level fields: `event` (the type), `organization_id`, `occurred_at` (ISO 8601), and `data` (the event-specific object).
+
+```json title="post.created example"
+{
+  "event": "post.created",
+  "organization_id": "b1f2c3d4-0000-0000-0000-000000000000",
+  "occurred_at": "2026-06-05T12:00:00.000000+00:00",
+  "data": {
+    "id": "9c8b7a60-0000-0000-0000-000000000000",
+    "title": "Add dark mode",
+    "details": "Please add a dark theme.",
+    "board": { "id": "…", "name": "Feature Requests" },
+    "status": { "id": "…", "name": "Under Review", "color": "#F59E0B" },
+    "vote_count": 1,
+    "comment_count": 0,
+    "tags": [ { "id": "…", "name": "UI", "color": "#3B82F6" } ],
+    "author": { "id": "…", "name": "Jane Doe", "email": "jane@example.com" },
+    "created_at": "2026-06-05T12:00:00.000000+00:00",
+    "url": "https://feedback.yourcompany.com/p/add-dark-mode"
+  }
+}
+```
+
+Each request also includes these headers:
+
+| Header | Description |
+|--------|-------------|
+| `X-ProductBridge-Event` | The event type, e.g. `post.created` |
+| `X-ProductBridge-Signature` | `sha256=` followed by an HMAC-SHA256 of the raw body (see security below) |
+| `X-ProductBridge-Webhook-Id` | The ID of the registered endpoint |
+
+## Filtering events
+
+<Callout kind="tip">
+  Because every event arrives at the same URL, add a Pabbly **Filter** step on the `event` field — for example, `event` **Equals** `post.created` — so the rest of the workflow runs only for that event type. Create a separate workflow (or filter branch) per event you care about.
+</Callout>
+
+## Example scenarios
+
+<Tabs>
+  <Tab title="Slack Notification" icon="message-circle">
+    **Filter:** `event` Equals `post.created`
+    **Action:** Send a Message (Slack)
+
+    Notify your product team in Slack whenever a new feedback post is submitted. Map `data.title`, `data.author.name`, and `data.board.name` into the message.
+  </Tab>
+  <Tab title="Spreadsheet Logging" icon="table">
+    **Filter:** `event` Equals `vote.created`
+    **Action:** Add a Row (Google Sheets)
+
+    Log every vote to a Google Sheet for custom analytics. Track which posts gain traction and who is voting.
+  </Tab>
+  <Tab title="Status to Tracker" icon="ticket">
+    **Filter:** `event` Equals `post.status_changed`
+    **Action:** Update an Issue (Jira, ClickUp, Trello, …)
+
+    When a post moves to "In Progress", update the matching issue in your project tracker using `data.new_status`.
+  </Tab>
+  <Tab title="Email Digest" icon="mail">
+    **Filter:** `event` Equals `comment.created`
+    **Action:** Send an Email
+
+    Email a stakeholder whenever a new comment is posted, including `data.content` and the parent post title.
+  </Tab>
+</Tabs>
+
+## Webhook delivery & security
+
+<ExpandableGroup>
+  <Expandable title="Payload envelope" default-open="false">
+    Every delivery uses the same shape:
+
+    - `event` — the event type (one of the 11 listed above)
+    - `organization_id` — your ProductBridge organization ID
+    - `occurred_at` — ISO 8601 timestamp of delivery
+    - `data` — the event-specific object (post, comment, vote, or status-change details)
+  </Expandable>
+
+  <Expandable title="Headers" default-open="false">
+    - `X-ProductBridge-Event` — the event type, for convenience when routing
+    - `X-ProductBridge-Signature` — `sha256=<hex>`, an HMAC-SHA256 of the raw request body
+    - `X-ProductBridge-Webhook-Id` — the registered endpoint's ID
+  </Expandable>
+
+  <Expandable title="Verifying the signature (optional)" default-open="false">
+    ProductBridge signs every payload with the endpoint's signing secret using
+    `HMAC-SHA256(secret, raw_body)`, sent as the `X-ProductBridge-Signature` header.
+
+    Verification is **optional** and not required for Pabbly — Pabbly's webhook trigger accepts
+    the payload as-is and does not verify signatures. Only verify if you add a custom step that
+    can recompute the HMAC over the exact raw bytes of the request body.
+  </Expandable>
+
+  <Expandable title="Delivery & retries" default-open="false">
+    ProductBridge records the last delivery time and the last failure reason for each endpoint.
+    A failing endpoint never blocks delivery to your other endpoints. You can revoke an endpoint
+    at any time from **Settings → Integrations → Pabbly Connect** (or **Settings → API &
+    Webhooks**), which stops deliveries immediately.
+  </Expandable>
+</ExpandableGroup>
+
+## Pushing data into ProductBridge
+
+<Callout kind="info">
+  This integration is one-way: Pabbly **receives** events from ProductBridge. To create or update ProductBridge records *from* Pabbly, use Pabbly's generic **API** module to call the ProductBridge API. See the [API reference](https://docs.productbridge.io/api-reference/introduction).
+</Callout>
+
+## Troubleshooting
+
+<ExpandableGroup>
+  <Expandable title="Not receiving events" default-open="false">
+    - Verify your Pabbly workflow is turned **on**
+    - Confirm the webhook URL is registered and **active** in **Settings → Integrations → Pabbly Connect**
+    - Ensure your ProductBridge plan includes **API & webhooks**
+    - Trigger a fresh event (e.g., create a post) and check Pabbly's task history
+  </Expandable>
+
+  <Expandable title="Receiving every event" default-open="false">
+    - The webhook intentionally delivers **all** events. Add a Pabbly **Filter** on the `event` field to act on a single event type.
+  </Expandable>
+
+  <Expandable title="Verifying authenticity" default-open="false">
+    - The `X-ProductBridge-Signature` header is provided for optional HMAC verification. Pabbly does not check it automatically, so you can safely ignore it unless you build a custom verification step.
+  </Expandable>
+</ExpandableGroup>
