@@ -267,6 +267,11 @@
                     "title": "Discord",
                     "path": "integrations/communication-channels/discord",
                     "icon": "lucide-message-circle-dashed"
+                  },
+                  {
+                    "title": "Gong",
+                    "path": "integrations/communication-channels/gong",
+                    "icon": "phone-call"
                   }
                 ]
               },

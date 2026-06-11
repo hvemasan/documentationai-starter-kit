@@ -1,0 +1,134 @@
+---
+title: Gong Integration
+description: >-
+  Connect ProductBridge to Gong to automatically turn call transcripts into
+  feedback — capturing product requests and pain points from your sales and
+  customer-success calls.
+---
+
+<img src="https://product-bridge.nyc3.digitaloceanspaces.com/feedback-post-files/image-1781212421178-nfxgs4b.png" width="80" height="80" alt="Gong" />
+
+## Overview
+
+Gong is a conversation-intelligence platform that records and transcribes your sales and customer-success calls. The Gong integration connects your Gong workspace to ProductBridge and automatically turns the product feedback voiced on those calls into feedback posts — so insights from customer conversations never get lost.
+
+Once connected, ProductBridge reads your call transcripts (read-only) and runs each conversation through an AI pipeline. When a customer mentions a feature request, a missing capability, a limitation, or a UX complaint, ProductBridge extracts it, deduplicates it against your existing feedback, and creates a new post or consolidates it into a matching one. Pure sales talk — pricing, scheduling, and rapport — is ignored.
+
+This is a **one-way ingestion** integration: feedback flows from Gong into ProductBridge, and nothing is written back to Gong. Gong does not offer webhooks for calls, so new calls are pulled on a schedule rather than in real time.
+
+## Prerequisites
+
+<Callout kind="info" collapsed="false">
+  - A Gong account with **technical administrator** access (Gong authorizes at the company level — one admin connects the whole workspace)
+
+  - A Gong OAuth app with a **Client ID** and **Client Secret**, created in **Admin center → Settings → Ecosystem → API**. Listing an app on the Gong Collective requires Gong partner approval
+
+  - A ProductBridge organization with at least one feedback board configured
+</Callout>
+
+## Connect Gong
+
+<Steps>
+  <Step title="Open the Integration Settings" icon="layout-dashboard" title-type="p">
+    Sign in to your ProductBridge admin dashboard and navigate to **Settings → Integrations → Gong**.
+  </Step>
+
+  <Step title="Choose a Historical Sync Window" icon="history" title-type="p">
+    Optionally enable **historical sync** and pick a lookback window between **1 and 60 days**. When enabled, ProductBridge backfills your existing call transcripts from that window right after you connect.
+  </Step>
+
+  <Step title="Authorize in Gong" icon="shield" title-type="p">
+    Click **Connect Gong**. You are redirected to Gong, where you sign in as a **technical administrator** and approve the requested scopes. Because Gong authorization is company-level, this single approval covers your entire workspace.
+  </Step>
+
+  <Step title="Confirm Connection" icon="check-circle" title-type="p">
+    After you authorize, ProductBridge stores your credentials and the integration status updates to **Connected**, showing your Gong workspace. If you enabled historical sync, the backfill begins immediately in the background.
+  </Step>
+</Steps>
+
+## Scopes
+
+ProductBridge requests the minimum read-only scopes needed to ingest transcripts and attribute feedback to the right participant:
+
+| Scope                        | Why it's needed                                              |
+| ---------------------------- | ----------------------------------------------------------- |
+| `api:calls:read:basic`       | Read basic call metadata                                    |
+| `api:calls:read:extensive`   | List calls and read participant (party) details             |
+| `api:calls:read:transcript`  | Read call transcripts to detect and extract feedback        |
+| `api:users:read`             | Resolve call participants to the correct customer / account |
+
+## What Happens After Connect
+
+Immediately after connection, ProductBridge:
+
+- Encrypts and stores your access token, rotating refresh token, and the per-customer Gong API base URL
+
+- Runs a **historical backfill** over your chosen lookback window (if historical sync was enabled), queuing each call's transcript for AI analysis
+
+- Begins **polling Gong every few hours** for newly recorded calls, since Gong has no call webhooks
+
+Each call becomes a single item that flows through ProductBridge's AI pipeline. Calls that contain product feedback become posts; the rest are discarded.
+
+## How Feedback Is Processed
+
+Every Gong call runs through the same AI pipeline used across ProductBridge's communication-channel integrations:
+
+| Stage           | What Happens                                                                                                                                                                  |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Normalize**   | The transcript and call participants are combined into a structured format. The **external participant** (your customer) is identified as the feedback author                |
+| **Detect**      | An LLM decides whether the call contains actionable product feedback. Sales and commercial talk — pricing, scheduling, rapport — is treated as not feedback                  |
+| **Extract**     | An LLM extracts a title, description, sentiment, priority, feature area, and the specific pain points the customer raised                                                     |
+| **Deduplicate** | Semantic search (Voyage AI + Qdrant) checks for similar existing posts. If similarity is high enough (≥ 0.85), the call is consolidated into the existing post — no duplicate |
+| **Organize**    | An LLM assigns the right board, category, and tags                                                                                                                           |
+
+<Callout kind="info" collapsed="false">
+  Gong feedback is tagged with `source: gong` and `source_type: integration`. The original Gong call URL is stored in the post's metadata, so you can jump from a feedback post back to the source call.
+</Callout>
+
+## Privacy & Security
+
+- **Company-level OAuth** — Gong does not support user-level OAuth; a single technical admin authorizes the integration for the whole workspace.
+
+- **Private calls are never ingested** — Any call marked private in Gong (`isPrivate: true`) is skipped entirely. ProductBridge does not read or even request transcripts for private calls.
+
+- **Read-only** — The integration only reads call data. It never modifies calls or writes any data back to Gong.
+
+- **Encrypted credentials with automatic refresh** — Access and refresh tokens are encrypted at rest using Fernet symmetric encryption with a server-managed key. The rotating refresh token is renewed automatically about 5 minutes before expiry, so the integration never silently breaks.
+
+- **Organization-scoped access** — Ingested feedback lives inside the single ProductBridge organization that connected the integration and is governed by role-based access control. Each Gong workspace can be linked to exactly one organization.
+
+## Limitations
+
+- **Not real time** — Gong has no call webhooks, so new calls are imported on the poll interval (every few hours) rather than the instant a call ends.
+
+- **Transcript required** — Only calls that have a transcript in Gong are analyzed. Calls awaiting transcription are picked up on a later poll.
+
+- **Backfill window** — Historical backfill covers only your chosen lookback window (1–60 days). Older calls are not imported retroactively.
+
+- **One Gong workspace per organization** — Connect a different ProductBridge organization for each Gong workspace.
+
+- **Private calls excluded** — Calls marked private in Gong are intentionally never ingested.
+
+## Disconnect
+
+To disconnect Gong, navigate to **Settings → Integrations → Gong** and click **Disconnect**. ProductBridge:
+
+- Marks the integration as `disconnected`
+
+- Removes the stored Gong credentials
+
+- Stops polling for new calls
+
+Existing feedback posts remain in ProductBridge — only the live connection is removed.
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **A call didn't create feedback** — Not every call contains product feedback. The AI pipeline only creates posts when it detects actionable product input; pure sales, pricing, and scheduling conversations are discarded by design.
+
+  - **No new feedback appearing** — Confirm the integration shows as **Connected**, that your recent calls have finished transcribing in Gong, and remember that new calls are imported on the poll interval rather than instantly.
+
+  - **Duplicate feedback** — ProductBridge deduplicates automatically using semantic similarity. When a similar post already exists, the call is consolidated into it instead of creating a duplicate.
+
+  - **A private call wasn't imported** — This is expected. Calls marked private in Gong are never ingested.
+
+  - **Connection stopped working / token errors** — Reconnect from **Settings → Integrations → Gong** to refresh credentials. ProductBridge normally refreshes the rotating token automatically before it expires.
+</Expandable>
