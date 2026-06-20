@@ -105,11 +105,34 @@
                     "title": "Ask AI",
                     "path": "core-concepts/feedback-intelligence/ask-ai",
                     "icon": "sparkles"
+                  }
+                ]
+              },
+              {
+                "group": "Insights",
+                "icon": "lightbulb",
+                "expandable": true,
+                "path": "core-concepts/insights",
+                "pages": [
+                  {
+                    "title": "Overview",
+                    "path": "core-concepts/insights/overview",
+                    "icon": "layout-dashboard"
                   },
                   {
-                    "title": "Intelligence Dashboard",
-                    "path": "core-concepts/feedback-intelligence/dashboard",
-                    "icon": "bar-chart-3"
+                    "title": "Themes",
+                    "path": "core-concepts/insights/themes",
+                    "icon": "book"
+                  },
+                  {
+                    "title": "Observations",
+                    "path": "core-concepts/insights/observations",
+                    "icon": "list"
+                  },
+                  {
+                    "title": "Strengths",
+                    "path": "core-concepts/insights/strengths",
+                    "icon": "heart"
                   }
                 ]
               },
@@ -667,5 +690,11 @@
         "link": ""
       }
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/core-concepts/feedback-intelligence/dashboard",
+      "destination": "/core-concepts/insights/overview"
+    }
+  ]
 }

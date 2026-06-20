@@ -1,0 +1,44 @@
+---
+title: Observations
+description: >-
+  Observations are the distinct problems and requests in your feedback — each
+  deduplicated across customers and ranked by how many people it reaches.
+---
+
+## The Problems That Matter Most
+
+An **observation** is one distinct problem or request — for example, *"Resume editor intermittently loses user-entered content."* ProductBridge groups every matching signal from every customer into a single observation, so 40 people reporting the same issue become one ranked, evidence-backed entry instead of 40 rows to triage.
+
+Observations are **ranked by reach** — the problems showing up across the most feedback rise to the top.
+
+{/* TODO: screenshot — Insights > Observations. Capture, frame with apply_gradient_border.py, upload via the platform, then replace this comment with an <Image .../>. */}
+
+## Reading the Observations Table
+
+| Column | Description |
+|---|---|
+| **Rank** | Position by reach (highest reach first) |
+| **Observation** | The distinct problem or request, in plain language |
+| **Theme** | The functional area it rolls up into (see [Themes](/core-concepts/insights/themes)) |
+| **Reach** | Distinct people behind it — authors plus upvoters, counted once each |
+| **Status** | `Emerging`, `Active`, `Dismissed`, or `Resolved` (see [Status](/core-concepts/insights#status)) |
+| **Created** | When the observation was first opened |
+
+## Filter and Sort
+
+- **Status** — focus on `Active` issues, or review what is `Emerging`
+- **Source** — keep observations with evidence from a specific source
+- **Board** — limit to a feedback board
+- **Sort** — defaults to **Highest reach**
+
+## Open the Evidence
+
+Select any row to open its **evidence drawer** — the underlying signals and the source feedback posts behind the observation, in each customer's own words. This is where you confirm an observation is real and understand the nuance before acting on it.
+
+## From Insight to Roadmap
+
+When an observation is worth acting on, promote it to your [Product Roadmap](/core-concepts/product-roadmap). The supporting feedback follows the link, so the roadmap item carries its evidence and reach with it — and the people behind it can be notified as its status changes.
+
+<Callout kind="tip">
+  Sort by **Highest reach** to triage what affects the most people first, then switch the status filter to `Emerging` to catch new issues before they grow.
+</Callout>
