@@ -90,10 +90,22 @@ With your project created and a feedback channel enabled, you are ready to recei
     Add the ProductBridge widget to your application with a single script tag:
 
     ```html
-    <script
-      src="https://widget.productbridge.com/v1/widget.js"
-      data-project="YOUR_PROJECT_ID"
-      async>
+    <script>
+      (function() {
+        var s = document.createElement('script');
+        s.src = 'https://app.productbridge.io/sdk/pb-widget.js';
+        s.async = true;
+        s.onload = function() {
+          ProductBridge.init({
+            organizationId: 'YOUR_ORGANIZATION_ID',
+            position: 'bottom-right',
+            defaultTab: 'feedback',
+            buttonColor: '#3B82F6',
+            buttonText: 'Feedback',
+          });
+        };
+        document.head.appendChild(s);
+      })();
     </script>
     ```
 
