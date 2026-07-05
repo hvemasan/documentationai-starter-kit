@@ -1,0 +1,96 @@
+---
+title: "AI Credits & Billing"
+description: "Understand how AI credits meter Ask AI and other AI features, check your balance and usage history, and buy top-up credit packs."
+---
+
+## What AI Credits Are
+
+AI credits meter your AI usage across ProductBridge. Every AI operation debits credits from your account, including:
+
+- **Ask AI** — each message you send charges 1 credit
+- **Feedback pipeline** — AI analysis of incoming feedback from integrations and the portal
+- **AI Writer** — AI-assisted drafting
+- **AI search** — semantic search over your feedback
+
+<Callout kind="info">
+  Credits belong to your **account**, not to a single organization. If you own multiple organizations, they all draw from the same credit balance.
+</Callout>
+
+## Where Credits Come From
+
+Your spendable balance combines two pools:
+
+| Pool | Source | Expiry |
+|------|--------|--------|
+| Monthly allocation | Granted by your plan each month | Resets every 30 days — unused credits do **not** roll over |
+| Top-up balance | One-time credit packs you purchase | Never expires |
+
+Top-up credits are only spent **after** your monthly allocation is exhausted, so purchased credits are never wasted.
+
+Your available balance is: `remaining monthly allocation + top-up balance`.
+
+<Callout kind="tip">
+  Promotions can also grant **bonus credits**, shown separately on the credits tile. Unlike top-ups, bonus credits can carry an expiry date — the tile shows how many days remain.
+</Callout>
+
+## Check Your Balance
+
+<Steps>
+  <Step title="Open Billing" icon="credit-card" title-type="p">
+    Click your avatar in the bottom-left of the sidebar and choose **Billing**.
+  </Step>
+
+  <Step title="Read the credits tile" icon="gauge" title-type="p">
+    The **AI credits available** tile shows your headline spendable balance, broken down into the monthly and top-up pools. The monthly pool resets at the end of your current 30-day period.
+  </Step>
+</Steps>
+
+<Callout kind="info">
+  Viewing balance and usage requires the billing permission on your role. Owners always have it.
+</Callout>
+
+## View Usage History
+
+The Billing page includes a usage ledger — one row per AI operation, newest first. Each entry records the operation type, credits charged (split by pool), the organization it ran for, and when it happened. You can filter by organization, operation type, and date range.
+
+Use the ledger to understand where credits go — for example, whether most spend comes from the feedback pipeline or from Ask AI sessions.
+
+## Buy More Credits
+
+When you need more than your monthly allocation:
+
+<Steps>
+  <Step title="Open the credit packs section" icon="package" title-type="p">
+    On the Billing page, find **Need more AI credits?** — it lists the available one-time top-up packs.
+  </Step>
+
+  <Step title="Buy a pack" icon="shopping-cart" title-type="p">
+    Click **Buy credits** on a pack to open the secure checkout.
+  </Step>
+
+  <Step title="Wait for the balance to update" icon="refresh-cw" title-type="p">
+    Credits are added right after payment is confirmed. This can take a few seconds — refresh the Billing page if the balance hasn't updated yet.
+  </Step>
+</Steps>
+
+Top-up credits never expire, and you can buy packs even without an active subscription.
+
+## Running Out of Credits
+
+When your balance reaches zero:
+
+- AI features pause — Ask AI and other AI operations show an **Out of AI credits** prompt instead of running
+- Everything else keeps working — feedback boards, roadmap, changelog, portal, and integrations are unaffected (only the AI analysis of incoming items waits)
+- You can either buy a top-up pack immediately or wait for your monthly allocation to reset
+
+## Related Pages
+
+<Columns cols="2">
+  <Card title="Ask AI" href="/core-concepts/feedback-intelligence/ask-ai" icon="sparkles" horizontal="false">
+    The conversational AI assistant that consumes 1 credit per message.
+  </Card>
+
+  <Card title="Insights" href="/core-concepts/insights" icon="lightbulb" horizontal="false">
+    AI-generated themes, observations, and strengths from your feedback.
+  </Card>
+</Columns>

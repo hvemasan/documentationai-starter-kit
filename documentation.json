@@ -181,6 +181,11 @@
                 "title": "Single Sign-On (SSO)",
                 "path": "settings/sso",
                 "icon": "shield-check"
+              },
+              {
+                "title": "AI Credits & Billing",
+                "path": "settings/ai-credits",
+                "icon": "coins"
               }
             ]
           },
