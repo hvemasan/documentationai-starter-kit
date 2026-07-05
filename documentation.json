@@ -305,14 +305,14 @@
                 "path": "integrations/public-reviews",
                 "pages": [
                   {
-                    "title": "G2",
-                    "path": "integrations/public-reviews/g2",
-                    "icon": "star"
+                    "title": "TrustPilot",
+                    "path": "integrations/public-reviews/trustpilot",
+                    "icon": "shield-check"
                   },
                   {
-                    "title": "Capterra",
-                    "path": "integrations/public-reviews/capterra",
-                    "icon": "award"
+                    "title": "AppSumo",
+                    "path": "integrations/public-reviews/appsumo",
+                    "icon": "shopping-bag"
                   },
                   {
                     "title": "App Store",
@@ -323,16 +323,6 @@
                     "title": "Play Store",
                     "path": "integrations/public-reviews/play-store",
                     "icon": "smartphone"
-                  },
-                  {
-                    "title": "AppSumo",
-                    "path": "integrations/public-reviews/appsumo",
-                    "icon": "shopping-bag"
-                  },
-                  {
-                    "title": "TrustPilot",
-                    "path": "integrations/public-reviews/trustpilot",
-                    "icon": "shield-check"
                   }
                 ]
               },
@@ -507,9 +497,21 @@
             "icon": "clipboard-list",
             "expandable": true,
             "pages": [
-              { "title": "Overview", "path": "api-reference/feedback-boards/overview", "icon": "info" },
-              { "title": "Retrieve", "path": "api-reference/feedback-boards/retrieve", "icon": "search" },
-              { "title": "List",     "path": "api-reference/feedback-boards/list",     "icon": "list" }
+              {
+                "title": "Overview",
+                "path": "api-reference/feedback-boards/overview",
+                "icon": "info"
+              },
+              {
+                "title": "Retrieve",
+                "path": "api-reference/feedback-boards/retrieve",
+                "icon": "search"
+              },
+              {
+                "title": "List",
+                "path": "api-reference/feedback-boards/list",
+                "icon": "list"
+              }
             ]
           },
           {
@@ -517,9 +519,21 @@
             "icon": "map",
             "expandable": true,
             "pages": [
-              { "title": "Overview", "path": "api-reference/roadmap-boards/overview", "icon": "info" },
-              { "title": "Retrieve", "path": "api-reference/roadmap-boards/retrieve", "icon": "search" },
-              { "title": "List",     "path": "api-reference/roadmap-boards/list",     "icon": "list" }
+              {
+                "title": "Overview",
+                "path": "api-reference/roadmap-boards/overview",
+                "icon": "info"
+              },
+              {
+                "title": "Retrieve",
+                "path": "api-reference/roadmap-boards/retrieve",
+                "icon": "search"
+              },
+              {
+                "title": "List",
+                "path": "api-reference/roadmap-boards/list",
+                "icon": "list"
+              }
             ]
           },
           {
@@ -527,10 +541,26 @@
             "icon": "tag",
             "expandable": true,
             "pages": [
-              { "title": "Overview", "path": "api-reference/tags/overview", "icon": "info" },
-              { "title": "Retrieve", "path": "api-reference/tags/retrieve", "icon": "search" },
-              { "title": "List",     "path": "api-reference/tags/list",     "icon": "list" },
-              { "title": "Create",   "path": "api-reference/tags/create",   "icon": "plus" }
+              {
+                "title": "Overview",
+                "path": "api-reference/tags/overview",
+                "icon": "info"
+              },
+              {
+                "title": "Retrieve",
+                "path": "api-reference/tags/retrieve",
+                "icon": "search"
+              },
+              {
+                "title": "List",
+                "path": "api-reference/tags/list",
+                "icon": "list"
+              },
+              {
+                "title": "Create",
+                "path": "api-reference/tags/create",
+                "icon": "plus"
+              }
             ]
           },
           {
@@ -538,8 +568,16 @@
             "icon": "circle-dot",
             "expandable": true,
             "pages": [
-              { "title": "Overview", "path": "api-reference/statuses/overview", "icon": "info" },
-              { "title": "List",     "path": "api-reference/statuses/list",     "icon": "list" }
+              {
+                "title": "Overview",
+                "path": "api-reference/statuses/overview",
+                "icon": "info"
+              },
+              {
+                "title": "List",
+                "path": "api-reference/statuses/list",
+                "icon": "list"
+              }
             ]
           },
           {
@@ -547,8 +585,16 @@
             "icon": "flag",
             "expandable": true,
             "pages": [
-              { "title": "Overview", "path": "api-reference/labels/overview", "icon": "info" },
-              { "title": "List",     "path": "api-reference/labels/list",     "icon": "list" }
+              {
+                "title": "Overview",
+                "path": "api-reference/labels/overview",
+                "icon": "info"
+              },
+              {
+                "title": "List",
+                "path": "api-reference/labels/list",
+                "icon": "list"
+              }
             ]
           },
           {
@@ -556,12 +602,36 @@
             "icon": "message-square",
             "expandable": true,
             "pages": [
-              { "title": "Overview", "path": "api-reference/feedback-posts/overview", "icon": "info" },
-              { "title": "Retrieve", "path": "api-reference/feedback-posts/retrieve", "icon": "search" },
-              { "title": "List",     "path": "api-reference/feedback-posts/list",     "icon": "list" },
-              { "title": "Update",   "path": "api-reference/feedback-posts/update",   "icon": "pencil" },
-              { "title": "Merge",    "path": "api-reference/feedback-posts/merge",    "icon": "git-merge" },
-              { "title": "Delete",   "path": "api-reference/feedback-posts/delete",   "icon": "trash-2" }
+              {
+                "title": "Overview",
+                "path": "api-reference/feedback-posts/overview",
+                "icon": "info"
+              },
+              {
+                "title": "Retrieve",
+                "path": "api-reference/feedback-posts/retrieve",
+                "icon": "search"
+              },
+              {
+                "title": "List",
+                "path": "api-reference/feedback-posts/list",
+                "icon": "list"
+              },
+              {
+                "title": "Update",
+                "path": "api-reference/feedback-posts/update",
+                "icon": "pencil"
+              },
+              {
+                "title": "Merge",
+                "path": "api-reference/feedback-posts/merge",
+                "icon": "git-merge"
+              },
+              {
+                "title": "Delete",
+                "path": "api-reference/feedback-posts/delete",
+                "icon": "trash-2"
+              }
             ]
           },
           {
@@ -569,11 +639,31 @@
             "icon": "message-circle",
             "expandable": true,
             "pages": [
-              { "title": "Overview",        "path": "api-reference/comments/overview",        "icon": "info" },
-              { "title": "Retrieve",        "path": "api-reference/comments/retrieve",        "icon": "search" },
-              { "title": "List",            "path": "api-reference/comments/list",            "icon": "list" },
-              { "title": "Create",          "path": "api-reference/comments/create",          "icon": "plus" },
-              { "title": "Delete by post",  "path": "api-reference/comments/delete-by-post",  "icon": "trash-2" }
+              {
+                "title": "Overview",
+                "path": "api-reference/comments/overview",
+                "icon": "info"
+              },
+              {
+                "title": "Retrieve",
+                "path": "api-reference/comments/retrieve",
+                "icon": "search"
+              },
+              {
+                "title": "List",
+                "path": "api-reference/comments/list",
+                "icon": "list"
+              },
+              {
+                "title": "Create",
+                "path": "api-reference/comments/create",
+                "icon": "plus"
+              },
+              {
+                "title": "Delete by post",
+                "path": "api-reference/comments/delete-by-post",
+                "icon": "trash-2"
+              }
             ]
           },
           {
@@ -581,9 +671,21 @@
             "icon": "users",
             "expandable": true,
             "pages": [
-              { "title": "Overview", "path": "api-reference/users/overview", "icon": "info" },
-              { "title": "Retrieve", "path": "api-reference/users/retrieve", "icon": "search" },
-              { "title": "Delete",   "path": "api-reference/users/delete",   "icon": "trash-2" }
+              {
+                "title": "Overview",
+                "path": "api-reference/users/overview",
+                "icon": "info"
+              },
+              {
+                "title": "Retrieve",
+                "path": "api-reference/users/retrieve",
+                "icon": "search"
+              },
+              {
+                "title": "Delete",
+                "path": "api-reference/users/delete",
+                "icon": "trash-2"
+              }
             ]
           },
           {
@@ -591,9 +693,21 @@
             "icon": "thumbs-up",
             "expandable": true,
             "pages": [
-              { "title": "Overview", "path": "api-reference/votes/overview", "icon": "info" },
-              { "title": "Toggle",   "path": "api-reference/votes/toggle",   "icon": "toggle-right" },
-              { "title": "Voters",   "path": "api-reference/votes/voters",   "icon": "users" }
+              {
+                "title": "Overview",
+                "path": "api-reference/votes/overview",
+                "icon": "info"
+              },
+              {
+                "title": "Toggle",
+                "path": "api-reference/votes/toggle",
+                "icon": "toggle-right"
+              },
+              {
+                "title": "Voters",
+                "path": "api-reference/votes/voters",
+                "icon": "users"
+              }
             ]
           },
           {
@@ -601,9 +715,21 @@
             "icon": "megaphone",
             "expandable": true,
             "pages": [
-              { "title": "Overview", "path": "api-reference/changelog/overview", "icon": "info" },
-              { "title": "Create",   "path": "api-reference/changelog/create",   "icon": "plus" },
-              { "title": "List",     "path": "api-reference/changelog/list",     "icon": "list" }
+              {
+                "title": "Overview",
+                "path": "api-reference/changelog/overview",
+                "icon": "info"
+              },
+              {
+                "title": "Create",
+                "path": "api-reference/changelog/create",
+                "icon": "plus"
+              },
+              {
+                "title": "List",
+                "path": "api-reference/changelog/list",
+                "icon": "list"
+              }
             ]
           },
           {
