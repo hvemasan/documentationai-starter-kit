@@ -1,167 +1,59 @@
 ---
-title: Integrations and Extensions
-description: Learn how to connect ProductBridge with external tools to enhance your documentation workflow and automate processes.
+title: Integrations Overview
+description: >-
+  Connect ProductBridge to the tools your team already uses — support desks,
+  chat apps, review platforms, issue trackers, automation platforms, and AI
+  assistants — so feedback flows into one place automatically.
 ---
 
-## Overview
+## Bring Every Feedback Source into ProductBridge
 
-ProductBridge supports seamless integrations with popular third-party services, version control systems, notification platforms, and custom APIs. These connections enable you to sync documentation across repositories, receive real-time alerts on changes, and automate workflows using webhooks.
+ProductBridge integrates with the tools where your customers and teammates already talk about your product. Feedback captured through any integration flows into the same boards, deduplication, and AI analysis as feedback submitted directly — so nothing gets siloed.
 
-<Callout kind="info">
-Review available integrations in your ProductBridge dashboard at `https://dashboard.example.com/integrations`. Enable connections with a few clicks.
-</Callout>
+To browse and connect integrations, click **Connect Sources** in the dashboard sidebar. The Integrations catalog lists every available integration grouped by category, with a **Connected only** filter. Click any card to open that integration's configuration page.
 
-## Third-Party App Connections
+## Integration Categories
 
-Connect ProductBridge to tools like GitHub, Slack, and Zapier to streamline your documentation pipeline.
-
-<Columns cols={3}>
-  <Card title="GitHub" icon="github" href="https://github.com" target="_blank">
-    Sync docs with repositories for automatic updates on commits.
+<Columns cols="2">
+  <Card title="Communication Channels" href="/integrations/communication-channels" icon="message-circle" horizontal="false">
+    Capture feedback automatically from Intercom, Zendesk, Freshdesk, Slack, Discord, and Gong conversations.
   </Card>
-  <Card title="Slack" icon="message-circle" href="https://slack.com" target="_blank">
-    Send notifications for doc publishes and reviews.
+
+  <Card title="Public Reviews" href="/integrations/public-reviews" icon="star" horizontal="false">
+    Import reviews from Trustpilot, AppSumo, the App Store, and the Play Store — no credentials required.
   </Card>
-  <Card title="Zapier" icon="zap" href="https://zapier.com" target="_blank">
-    Build no-code automations with 5000+ apps.
+
+  <Card title="Project Management" href="/integrations/project-management" icon="kanban" horizontal="false">
+    Link feedback posts to Jira, Linear, and ClickUp issues, and sync status changes back automatically.
+  </Card>
+
+  <Card title="Data & Enrichment" href="/integrations/data-and-enrichment" icon="chrome" horizontal="false">
+    Capture feedback from any webpage with the ProductBridge Chrome Extension.
+  </Card>
+
+  <Card title="Automations" href="/integrations/automations" icon="workflow" horizontal="false">
+    Build no-code workflows with Zapier, Make, and Pabbly Connect, or use outbound webhooks directly.
+  </Card>
+
+  <Card title="AI Assistants" href="/integrations/ai-assistants" icon="bot" horizontal="false">
+    Connect Claude or any MCP-compatible assistant to read, search, and act on your workspace.
   </Card>
 </Columns>
 
-## Version Control System Syncing
+## How Integrations Work
 
-Set up two-way syncing with Git providers to keep your documentation in sync with code changes.
+Most integrations follow the same lifecycle:
 
-<Steps>
-  <Step title="Connect Repository" icon="git-branch">
-    Navigate to `Integrations > VCS` in your dashboard.
-    
-    Select GitHub or GitLab and authorize access.
-  </Step>
-  <Step title="Configure Sync" icon="settings">
-    Choose branches to watch (e.g., `main`, `develop`).
-    
-````yaml
-sync:
-  branch: main
-  path: docs/
-  auto_publish: true
-````
-  </Step>
-  <Step title="Test Sync" icon="play">
-    Push a change to your repo and verify it appears in ProductBridge.
-  </Step>
-</Steps>
+1. **Connect** — Open **Connect Sources**, pick the integration, and authorize it (OAuth) or provide the required details (for example, a domain and API key, or a public listing URL).
 
-## Notification and Alert Setups
+2. **Capture** — Feedback flows in automatically via webhooks, scheduled syncs, or explicit submissions like slash commands and sidebar apps.
 
-Configure alerts for events like doc updates, publish failures, or review requests. Choose your preferred channel.
+3. **Analyze** — Imported items run through ProductBridge's AI pipeline for detection, extraction, deduplication, and routing to the right board.
 
-<Tabs>
-  <Tab title="Slack" icon="message-circle">
-    Add your Slack webhook URL.
-    
-````javascript
-const payload = {
-  text: "New doc published: {doc_title}",
-  channel: "#docs"
-};
-````
-  </Tab>
-  <Tab title="Email" icon="mail">
-    Enter recipient emails and select events.
-    
-    Supports SMTP or services like SendGrid.
-  </Tab>
-  <Tab title="Discord" icon="discourse">
-    Use Discord webhooks for rich embeds.
-    
-````json
-{
-  "embeds": [{
-    "title": "Doc Updated",
-    "description": "{doc_url}"
-  }]
-}
-````
-  </Tab>
-</Tabs>
-
-## API and Webhook Configurations
-
-Use ProductBridge APIs for custom integrations and receive webhooks for real-time events.
-
-### API Authentication
-
-<ParamField header="Authorization" param-type="string" required="true">
-  Bearer `{YOUR_API_KEY}` obtained from dashboard.
-</ParamField>
-
-<ParamField query="version" param-type="string" required="false">
-  API version, defaults to `v1`.
-</ParamField>
-
-### Webhook Setup
-
-Create webhooks for events like `doc.published`.
-
-<Request tabs="cURL,JavaScript" show-lines="true">
-```bash
-curl -X POST https://api.example.com/webhooks \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "url": "https://your-webhook-url.com/productbridge",
-    "events": ["doc.published", "doc.updated"]
-  }'
-```
-
-````javascript
-const response = await fetch('https://api.example.com/webhooks', {
-  method: 'POST',
-  headers: {
-    'Authorization': 'Bearer YOUR_API_KEY',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    url: 'https://your-webhook-url.com/productbridge',
-    events: ['doc.published', 'doc.updated']
-  })
-});
-````
-</Request>
-
-### Sample Webhook Payload
-
-<Response tabs="Success,Error">
-```json
-{
-  "event": "doc.published",
-  "data": {
-    "id": "doc_123",
-    "title": "API Guide",
-    "url": "https://docs.example.com/api-guide"
-  },
-  "timestamp": "2024-10-15T10:30:00Z"
-}
-```
-
-```json
-{
-  "error": "Invalid signature",
-  "code": 401
-}
-```
-</Response>
-
-<Expandable title="Advanced Webhook Security" default-open="false">
-Verify signatures using HMAC-SHA256 with your webhook secret.
-  
-````javascript
-const crypto = require('crypto');
-const signature = 'sha256=' + crypto.createHmac('sha256', secret).update(payload).digest('hex');
-````
-</Expandable>
+4. **Act** — Link posts to issues in your tracker, notify voters when statuses change, and push events to other tools through automations.
 
 <Callout kind="tip">
-Explore more in the [API Reference](/api-reference) or set up your first integration today.
+  Start with the channel where most of your customer conversations happen — usually your support desk or Slack — then add review platforms and an issue tracker once feedback is flowing.
 </Callout>
+
+For custom integrations, ProductBridge also provides a REST API and outbound webhooks. See the [API Reference](/api-reference/introduction) to get started.

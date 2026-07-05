@@ -1,69 +1,68 @@
 ---
 title: TrustPilot Integration
-description: Connect ProductBridge to TrustPilot to import and analyze customer reviews from your TrustPilot business profile.
+description: >-
+  Connect ProductBridge to TrustPilot by pasting your public review page URL —
+  no API keys or paid plan required. Reviews import automatically every day.
 ---
 
 <img src="https://cdn.simpleicons.org/trustpilot" width="80" height="80" alt="TrustPilot" />
 
 ## Overview
 
-The TrustPilot integration imports reviews from your TrustPilot business profile into ProductBridge. Monitor customer trust signals, track sentiment trends, and analyze TrustPilot feedback alongside all your other feedback channels in one place.
+The TrustPilot integration imports reviews from your public TrustPilot review page into ProductBridge. Monitor customer trust signals, track sentiment trends, and analyze TrustPilot feedback alongside all your other feedback channels in one place.
+
+Connecting requires **no credentials** — you paste your public TrustPilot review URL or your business domain, and ProductBridge handles the rest.
 
 ## Prerequisites
 
-<Callout kind="info" title="Before you start">
-- A TrustPilot business profile with at least one review
-- TrustPilot Business API access (available on TrustPilot paid plans)
-- A ProductBridge project to receive imported reviews
+<Callout kind="info" collapsed="false">
+  - A public TrustPilot review page for your business (e.g., `trustpilot.com/review/example.com`)
+
+  - A ProductBridge organization with at least one feedback board configured
 </Callout>
 
 ## Connect TrustPilot
 
 <Steps>
-  <Step title="Open Integration Settings" icon="settings">
-    Navigate to **Settings > Integrations > TrustPilot** in your ProductBridge dashboard and click **Connect**.
+  <Step title="Open the Integrations catalog" icon="layout-dashboard" title-type="p">
+    Sign in to your ProductBridge dashboard, click **Connect Sources** in the sidebar, and select **TrustPilot**.
   </Step>
-  <Step title="Enter API Credentials" icon="key">
-    Provide your TrustPilot Business API key and business unit ID. You can find these in your TrustPilot Business dashboard under **Integrations > API**.
+  <Step title="Paste your review URL or domain" icon="link" title-type="p">
+    Paste the public TrustPilot review URL of your business, or just the domain:
+
+    - `https://www.trustpilot.com/review/example.com`
+    - `example.com`
   </Step>
-  <Step title="Configure Sync" icon="calendar">
-    Choose your sync frequency (daily or weekly) and whether to backfill existing reviews or start with new ones only.
+  <Step title="Optionally import historical data" icon="history" title-type="p">
+    Toggle on **Import historical data** and pick a window between **1 and 30 days** to backfill existing reviews from that period. This is off by default.
   </Step>
-  <Step title="Activate" icon="check">
-    Click **Enable** to start importing reviews. ProductBridge begins pulling reviews immediately.
+  <Step title="Click Connect TrustPilot" icon="check" title-type="p">
+    The integration status updates to **Connected**. Reviews start syncing automatically — no further configuration needed.
   </Step>
 </Steps>
 
-## Configure Settings
+## How Reviews Sync
 
-| Setting | Options | Description |
-|---------|---------|-------------|
-| Sync frequency | Daily, Weekly | How often new reviews are pulled |
-| Backfill | On, Off | Import historical reviews on first sync |
-| Minimum stars | 1-5 | Only import reviews at or below a specific star rating |
-| Language filter | All, Specific | Import reviews in all languages or select specific ones |
+- **Automatic daily sync** — ProductBridge pulls new reviews once a day at **02:00 UTC**
+
+- **Sync depth** — Each sync checks your most recent reviews (150 by default) and imports the ones it hasn't seen yet
+
+- **Historical import** — If enabled at connect time, reviews from your chosen 1–30 day window are backfilled once in the background
+
+Each imported review is tagged with its TrustPilot source, sentiment is derived by AI from the review text, and the review flows into [Feedback Intelligence](/core-concepts/feedback-intelligence) for categorization and trend analysis — just like feedback from any other channel.
 
 <Callout kind="tip">
   TrustPilot reviews are highly visible to potential customers. Monitor negative reviews closely and use ProductBridge to track whether reported issues are addressed in your roadmap.
 </Callout>
 
-## How It Works
+## Disconnect
 
-Once connected:
-
-1. TrustPilot reviews are imported on your configured schedule and tagged with "via TrustPilot"
-2. Star ratings (1-5) are converted to sentiment scores: 4-5 = positive, 3 = neutral, 1-2 = negative
-3. Review text is analyzed by AI to extract specific topics, complaints, and feature mentions
-4. Reviewer information (where available) is linked to ProductBridge user profiles
-5. All imported reviews flow into [Feedback Intelligence](/core-concepts/feedback-intelligence) for analysis
-
-<Callout kind="info">
-  TrustPilot reviews are public and often influence purchasing decisions. Use the Intelligence Dashboard to compare TrustPilot sentiment with private feedback to identify gaps between public perception and internal product priorities.
-</Callout>
+To stop syncing, open **Connect Sources > TrustPilot** and click **Disconnect**. Reviews already imported stay in ProductBridge.
 
 <Expandable title="Troubleshooting" default-open="false">
-  - **No reviews importing** — Verify your Business API key is valid and the business unit ID is correct
-  - **API access denied** — TrustPilot Business API requires a paid plan. Check your TrustPilot subscription level
-  - **Missing reviews** — Some reviews may be flagged or removed by TrustPilot moderation. These are excluded from API responses
-  - **Rate limits** — TrustPilot enforces API rate limits. ProductBridge handles retries automatically
+  - **No reviews importing** — Verify the URL or domain you pasted matches your public TrustPilot review page and that the page has published reviews
+
+  - **New reviews not appearing immediately** — Reviews sync once a day at 02:00 UTC; a review posted today typically appears within 24 hours
+
+  - **Duplicate reviews** — ProductBridge deduplicates imported reviews automatically, so re-syncs never create duplicates
 </Expandable>

@@ -1,95 +1,36 @@
 ---
 title: Custom Email & SMTP
-description: Send ProductBridge emails from your own domain so notifications, assignments, and changelog announcements reach your customers from your brand — not from ProductBridge's shared sender.
+description: Send ProductBridge emails from your own domain by connecting your SMTP server — so notifications, assignments, and changelog announcements reach your customers from your brand.
 ---
 
-## Two Ways to Brand Your Outbound Email
+## Send Email From Your Own Domain
 
-By default, ProductBridge sends emails through our shared system mailer. To send from your own domain, you have two options:
-
-| Option | When to Use |
-|--------|-------------|
-| **Custom Sending Domain** | Easiest setup — register a subdomain and verify it via DNS. Recommended for most teams. |
-| **Custom SMTP** | Use your own SMTP server (Gmail Workspace, AWS SES, Postmark, etc.). Choose this if you need full control over the sending infrastructure or have an internal policy requiring it. |
-
-You can configure either — or both. If both are configured, ProductBridge prefers your custom SMTP and falls back to the system mailer when needed.
+By default, ProductBridge sends emails through our shared system mailer. To send from your own domain, connect your own SMTP server (Google Workspace, Amazon SES, Postmark, SendGrid, Mailgun, etc.) under **Custom SMTP**.
 
 <Callout kind="info">
-  Some email flows have stricter requirements. [Assignment emails](/notifications/email) and roadmap status change emails skip silently if custom SMTP isn't configured. Changelog announcements always send via the system mailer if needed.
+  Custom SMTP is never required for delivery. Every ProductBridge email falls back to the system mailer when custom SMTP isn't configured or fails — nothing is skipped.
 </Callout>
-
----
-
-## Custom Sending Domain
-
-Use this option to send emails from a subdomain you own (e.g., `notifications.yourdomain.com`) without running your own SMTP server. You register the subdomain in ProductBridge, add a few DNS records, and we handle delivery.
-
-### Set Up Your Sending Domain
-
-<Steps>
-  <Step title="Open Email Domain settings" icon="mail">
-    Go to **Brand Settings → Email Domain** and click **Add Domain**.
-  </Step>
-  <Step title="Enter a subdomain" icon="at-sign">
-    The domain must be a **subdomain** with at least three parts — for example:
-
-    - ✅ `notifications.yourproduct.com`
-    - ✅ `mail.yourproduct.com`
-    - ❌ `yourproduct.com` (apex domain — not allowed)
-
-    Using a subdomain keeps ProductBridge sends isolated from your primary email infrastructure.
-  </Step>
-  <Step title="Add the DNS records" icon="server">
-    After registration, ProductBridge displays the DNS records to add to your DNS provider. These typically include records for authentication (SPF, DKIM, DMARC) and mail routing.
-
-    Add each record exactly as shown — name, type, and value are all case-sensitive.
-  </Step>
-  <Step title="Verify" icon="check-circle">
-    Once your records are in place, return to **Brand Settings → Email Domain** and click **Verify**. ProductBridge checks each record and updates the verification status.
-
-    DNS propagation can take anywhere from a few minutes to a few hours. If verification fails, double-check the record name and value (some DNS providers truncate long values).
-  </Step>
-  <Step title="Configure your sender" icon="user">
-    Once verified, set:
-
-    - **Sender name** — the display name customers see (e.g., "Acme Product Team")
-    - **Sender email** — the address emails come from (must be on your verified subdomain)
-    - **Reply-to email** *(optional)* — a different address for replies (can be on any domain)
-  </Step>
-</Steps>
-
-### Verification Status
-
-| Status | Meaning |
-|--------|---------|
-| **Pending** | Domain registered, DNS records not yet detected |
-| **Verified** | All records confirmed — domain is sending |
-| **Failed** | One or more records missing or incorrect |
-
-You can re-check status from the Email Domain settings at any time.
-
-### Delete a Domain
-
-To remove a sending domain, click **Delete Domain** in the Email Domain settings. You'll be asked to confirm. After deletion, the domain is unregistered from our sending infrastructure and your outbound email reverts to the system mailer (unless you also have Custom SMTP configured).
-
----
 
 ## Custom SMTP
 
-Use this option to route ProductBridge emails through your own SMTP server. Choose this if you already have a mail infrastructure (Google Workspace, Amazon SES, Postmark, SendGrid, Mailgun) and want everything to flow through it.
+Use this option to route ProductBridge emails through your own SMTP server. Choose this if you already have a mail infrastructure and want everything to flow through it.
+
+<Callout kind="info">
+  Custom SMTP is available on plans that include the `email_notifications` feature.
+</Callout>
 
 ### Set Up Custom SMTP
 
 <Steps>
   <Step title="Open SMTP settings" icon="server">
-    Go to **Brand Settings → SMTP** and toggle **Enable Custom SMTP**.
+    Go to **Settings → Brand Settings**, open the **SMTP** tab, and turn on the **Custom SMTP** switch.
   </Step>
   <Step title="Enter your SMTP credentials" icon="key">
     Provide:
 
-    - **Sender email** — the address messages are sent from (e.g., `feedback@yourproduct.com`)
-    - **Sender name** — the display name shown in the inbox (e.g., "Acme Product Team")
-    - **Host** — your SMTP server hostname (e.g., `smtp.gmail.com`, `email-smtp.us-east-1.amazonaws.com`, `smtp.postmarkapp.com`)
+    - **Sender Name** — the display name shown in the inbox (e.g., "Acme Product Team")
+    - **Email Address** — the address messages are sent from (e.g., `feedback@yourproduct.com`)
+    - **SMTP Host** — your SMTP server hostname (e.g., `smtp.gmail.com`, `email-smtp.us-east-1.amazonaws.com`, `smtp.postmarkapp.com`)
     - **Port** — typically `587` (TLS) or `465` (SSL)
     - **Username** — your SMTP login
     - **Password** — your SMTP password or app-specific token
@@ -101,10 +42,10 @@ Use this option to route ProductBridge emails through your own SMTP server. Choo
   <Step title="Test the connection" icon="zap">
     Click **Test Connection**. ProductBridge attempts a real SMTP handshake using the credentials you provided.
 
-    On success, the status changes to **Verified**. On failure, you'll get a specific error (auth failed, host unreachable, TLS handshake failed, etc.) so you can fix it.
+    On success, the status changes to **Active**. On failure, you'll get an error so you can fix the credentials.
   </Step>
   <Step title="Done" icon="check">
-    Once verified, every outgoing email from ProductBridge routes through your SMTP server.
+    Once active, outgoing email from ProductBridge routes through your SMTP server.
   </Step>
 </Steps>
 
@@ -113,38 +54,36 @@ Use this option to route ProductBridge emails through your own SMTP server. Choo
 | Status | Meaning |
 |--------|---------|
 | **Not Tested** | Credentials saved but the connection test hasn't run yet |
-| **Verified** | Test connection succeeded — SMTP is in use for every outbound email |
+| **Active** | Test connection succeeded — your SMTP is used for outbound email |
 | **Error** | Last test failed — emails fall back to the system mailer until fixed |
 
-You can re-test or update credentials at any time. Changing credentials resets the status to **Not Tested** until you re-run the test.
-
----
+You can re-test or update credentials at any time.
 
 ## How Delivery Works
 
-When both options are configured, ProductBridge sends emails using a two-tier strategy:
+ProductBridge sends every email using a two-tier strategy:
 
-1. **Your custom SMTP** — tried first when status is **Verified**
+1. **Your custom SMTP** — tried first when configured and active
 2. **System SMTP fallback** — used if custom SMTP isn't configured or fails
 
-A misconfigured Custom Sending Domain or SMTP won't block delivery — it just falls back to the system mailer until you fix it.
+A misconfigured SMTP setup won't block delivery — every email type falls back to the system mailer until you fix it.
 
 ## Which Emails Are Affected?
 
-When your custom configuration is active, **all outbound emails** from ProductBridge route through it:
+When your custom SMTP is active, **all outbound emails** from ProductBridge route through it:
 
 - [Changelog subscriber announcements](/notifications/email)
 - [Post assignment notifications](/notifications/email)
-- [Roadmap status change emails](/notifications/email)
+- [Status change and comment emails](/notifications/email)
 - Team member invitations
 - Subscription confirmation emails
 - Any other transactional message
 
-## Common Provider Setups (Custom SMTP)
+## Common Provider Setups
 
 <Tabs>
   <Tab title="Google Workspace" icon="mail">
-    - **Host:** `smtp.gmail.com`
+    - **SMTP Host:** `smtp.gmail.com`
     - **Port:** `587`
     - **Username:** the full email address (e.g., `feedback@yourproduct.com`)
     - **Password:** an [App Password](https://support.google.com/accounts/answer/185833) generated for your Google Account — your normal Google password will not work
@@ -154,19 +93,19 @@ When your custom configuration is active, **all outbound emails** from ProductBr
     </Callout>
   </Tab>
   <Tab title="Amazon SES" icon="server">
-    - **Host:** `email-smtp.<region>.amazonaws.com` (e.g., `email-smtp.us-east-1.amazonaws.com`)
+    - **SMTP Host:** `email-smtp.<region>.amazonaws.com` (e.g., `email-smtp.us-east-1.amazonaws.com`)
     - **Port:** `587`
     - **Username & Password:** SMTP credentials generated in the SES console (not your AWS access keys)
     - **Verify your sender** in SES before testing — SES rejects sends from unverified addresses
   </Tab>
   <Tab title="Postmark" icon="send">
-    - **Host:** `smtp.postmarkapp.com`
+    - **SMTP Host:** `smtp.postmarkapp.com`
     - **Port:** `587`
     - **Username:** your Postmark Server Token
     - **Password:** the same Server Token (Postmark uses it for both)
   </Tab>
   <Tab title="SendGrid" icon="cloud">
-    - **Host:** `smtp.sendgrid.net`
+    - **SMTP Host:** `smtp.sendgrid.net`
     - **Port:** `587`
     - **Username:** `apikey` (literally the string `apikey`)
     - **Password:** your SendGrid API Key with at least "Mail Send" permission
@@ -176,12 +115,6 @@ When your custom configuration is active, **all outbound emails** from ProductBr
 ## Troubleshooting
 
 <ExpandableGroup>
-  <Expandable title="Sending Domain verification stays Pending">
-    - DNS propagation typically takes minutes but can take hours — wait and re-check
-    - Confirm every record name and value matches exactly (case-sensitive)
-    - Some DNS providers truncate long `TXT` values — make sure the full value is saved
-    - Make sure you registered a **subdomain** (e.g., `notifications.yourdomain.com`), not an apex domain
-  </Expandable>
   <Expandable title="SMTP test fails with authentication error">
     - Double-check the username and password — try logging into your provider's webmail or sending from another tool with the same credentials
     - For Gmail, you must generate an **App Password** under your Google Account security settings — your normal password won't work
@@ -201,6 +134,6 @@ When your custom configuration is active, **all outbound emails** from ProductBr
   </Expandable>
   <Expandable title="My emails are going out but not from my domain">
     - This usually means custom SMTP is in **Not Tested** or **Error** status, so ProductBridge is falling back to the system mailer. Click **Test Connection** again
-    - Confirm the **Sender email** field matches a verified sender on your SMTP provider — providers reject mail with mismatched From addresses
+    - Confirm the **Email Address** field matches a verified sender on your SMTP provider — providers reject mail with mismatched From addresses
   </Expandable>
 </ExpandableGroup>

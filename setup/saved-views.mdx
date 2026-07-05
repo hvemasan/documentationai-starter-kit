@@ -5,7 +5,7 @@ description: Save your most-used inbox filters as one-click views — "Open ente
 
 ## What Is a Saved View?
 
-A saved view is a filter combination that you give a name. Instead of selecting board, status, tags, custom field values, and a segment every time you want to see "Open enterprise bugs," you save those filters once as a view called **Enterprise Bugs** and access it in one click forever after.
+A saved view is a filter combination that you give a name. Instead of selecting board, status, tags, and a segment every time you want to see "Open enterprise bugs," you save those filters once as a view called **Enterprise Bugs** and access it in one click forever after.
 
 Saved views are perfect for:
 
@@ -22,13 +22,16 @@ A saved view can combine any of:
 | **Board** | Only posts on the Mobile Feedback board |
 | **Status** | Only Open and Under Review |
 | **Tags** | Tagged High Impact or Enterprise |
-| **Category** | Only Bug Reports |
-| **Custom fields** | Urgency = High, ARR > 5000 |
+| **Categories** | Only Bug Reports |
+| **Author** | Submitted by a specific user |
+| **Assignee** | Assigned to a specific team member |
 | **User segment** | Submitted by Enterprise Customers |
+| **Source** | Where the post came from (portal, widget, integration) |
+| **Dates** | Created date or ETA ranges |
 | **Search text** | Title or description contains a keyword |
 | **Sort order** | By vote count, recency, etc. |
 
-You can apply as many filters as you need.
+You can apply as many filters as you need. Custom fields aren't filterable.
 
 ## Create a Saved View
 
@@ -36,33 +39,31 @@ You can apply as many filters as you need.
   <Step title="Filter your inbox" icon="filter">
     Open your feedback or roadmap inbox and apply the filters you want — board, status, tags, anything.
   </Step>
-  <Step title="Save as view" icon="bookmark-plus">
-    Click **Save as View** in the toolbar.
+  <Step title="Save the view" icon="bookmark-plus">
+    Click **Save view** (shown as **Save filters** in some toolbars).
 
     Give it:
 
     - **Name** — what you'll see in the views list (e.g., "Enterprise Bugs")
     - **Description** *(optional)* — for context, especially useful for shared views
-    - **Visibility** — Private (just you) or Public (everyone in your workspace)
+    - **Make this view private** — check to keep the view to yourself; leave unchecked to share it with everyone in your workspace (views are shared by default)
   </Step>
   <Step title="Access it later" icon="bookmark">
-    Saved views appear in the **Views** dropdown in your inbox sidebar. One click jumps you straight into the filtered list.
+    Saved views appear in the **Saved Views** dropdown in your inbox toolbar. One click jumps you straight into the filtered list.
   </Step>
 </Steps>
 
-## Private vs. Public Views
+## Private vs. Shared Views
 
 Each saved view is either:
 
 | Type | Who Can See It | Best For |
 |------|----------------|----------|
-| **Private** | Just you | Your personal triage queues |
-| **Public** | Everyone in your workspace | Standing team views, shared dashboards |
-
-You can only edit views you created. Public views created by someone else are read-only for you — but you can duplicate them and save your own version.
+| **Private** (checkbox on) | Just you | Your personal triage queues |
+| **Shared** (default) | Everyone in your workspace | Standing team views, shared dashboards |
 
 <Callout kind="tip">
-  Create a handful of well-named public views early — like **Triage Queue**, **This Week's Wins**, **Customer Escalations**. They become the shared muscle memory for how your team uses ProductBridge.
+  Create a handful of well-named shared views early — like **Triage Queue**, **This Week's Wins**, **Customer Escalations**. They become the shared muscle memory for how your team uses ProductBridge.
 </Callout>
 
 ## Feedback vs. Roadmap Views
@@ -75,9 +76,11 @@ You can have any number of each.
 
 To update an existing view:
 
-1. Open the view from the sidebar
+1. Open the view from the **Saved Views** dropdown
 2. Adjust filters as needed
-3. Click **Update View** to save changes in place, or **Save as New** to spin off a variant
+3. Click **Save changes** to update the view in place, or **Save as new** to spin off a variant
+
+You can also open **Manage Views** from the Saved Views dropdown to rename or delete views. Edit and delete are available on every view — there's no per-view ownership lock, so coordinate with your team before changing a shared view.
 
 ## Common Saved Views
 
@@ -91,7 +94,7 @@ A few starter ideas:
     Filter: tag = `Quick Win`, status = `Planned`. Surfaces small bets you can ship fast.
   </Expandable>
   <Expandable title="Enterprise Escalations">
-    Filter: segment = `Enterprise Customers`, custom field `Urgency` = `High`. Anything an enterprise customer marked urgent.
+    Filter: segment = `Enterprise Customers`, tag = `Blocker`. Anything blocking an enterprise customer.
   </Expandable>
   <Expandable title="Mobile Bugs This Sprint">
     Filter: board = `Mobile`, category = `Bug`, status = `In Progress`. Live view of mobile defects mid-sprint.
@@ -111,12 +114,6 @@ Easy to confuse — here's the line:
 | **Saved View** | A filtered post inbox | When you'll keep coming back to the same filtered post list |
 
 You can — and often should — **use a segment as one filter inside a saved view.** For example, the view "Enterprise Escalations" filters posts whose submitter is in the **Enterprise Customers** segment.
-
-## Sharing a View
-
-Currently, sharing a public view means anyone in your workspace can find it in the Views dropdown. There's no per-view permission system yet — public is workspace-wide.
-
-For deeper sharing (export to CSV, share a read-only link), use the export tools in your inbox.
 
 <Callout kind="info">
   Saved views are evaluated live each time you open them — they always reflect the current state of your inbox. Bookmarking a view and opening it tomorrow shows tomorrow's matches, not the snapshot from when you saved it.

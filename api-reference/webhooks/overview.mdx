@@ -17,8 +17,8 @@ Each webhook delivery includes:
 ## Set up a webhook
 
 <Steps>
-  <Step title="Open the Webhooks page" icon="settings" titleType="p">
-    In your ProductBridge dashboard, go to **Settings → API → Webhooks**.
+  <Step title="Open the API & Webhooks page" icon="settings" titleType="p">
+    In your ProductBridge dashboard, go to **Settings → Connect → API & Webhooks** and find the **Webhook endpoints** section.
   </Step>
 
   <Step title="Add a new webhook" icon="plus" titleType="p">
@@ -68,9 +68,9 @@ You can register any number of webhook URLs — each one with its own signing se
 
 - **Async, fire-and-forget.** Event delivery never blocks the API request that produced the event.
 - **Per-webhook isolation.** A failing receiver doesn't affect deliveries to your other webhooks.
-- **Retries on failure.** Non-2xx responses, timeouts, and connection errors trigger up to 3 retries with exponential backoff (initial delay 60s).
+- **No automatic redelivery.** Non-2xx responses, timeouts, and connection errors are recorded as delivery failures (visible in the dashboard as the webhook's last failure time and reason), but the event is **not** redelivered. If your receiver misses an event, re-fetch the affected resource via the public API.
 - **Timeouts.** 10s connect, 30s read.
-- **Idempotency.** Receivers should be idempotent; the same event may be delivered more than once during retries.
+- **Idempotency.** Receivers should still be idempotent; the same event may occasionally be delivered more than once.
 
 <Callout kind="tip">
   The dashboard surfaces each webhook's last successful delivery time, last failure time, and last failure reason — use these to diagnose receiver issues without backend access.

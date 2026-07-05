@@ -5,7 +5,17 @@ description: Migrate your existing feedback posts from any tool into ProductBrid
 
 ## Overview
 
-ProductBridge's CSV import lets you bring your existing user feedback into ProductBridge from any other tool — Canny, Upvoty, Nolt, or any custom spreadsheet. Your posts, authors, statuses, boards, tags, categories, upvote counts, and timestamps all transfer cleanly.
+ProductBridge's CSV import lets you bring your existing user feedback into ProductBridge from any other tool — Upvoty, Nolt, or any custom spreadsheet. Your posts, authors, statuses, boards, tags, categories, upvote counts, and timestamps all transfer cleanly.
+
+The importer lives at **Settings → Connect → Import Data** and has two tabs: **CSV import** (this guide) and **Third Party import** (API-based).
+
+<Callout kind="info">
+  Import Data availability depends on your plan. If you don't see the Import Data tab under **Settings → Connect**, check your plan on the Billing page.
+</Callout>
+
+<Callout kind="tip">
+  Migrating from **Canny**? You don't need a CSV — ProductBridge imports directly from Canny's API, including votes and comments. See [Migrating from Canny](/help-center/guides/migrate-from-canny).
+</Callout>
 
 <Callout kind="info">
   The import runs as a background job, so you can close the settings page after starting it — your data continues importing in the background.
@@ -30,6 +40,8 @@ The following fields can be mapped from any column in your CSV:
 | Author Email | Used to match or create a real user account. |
 | Author Picture | URL stored with the author's profile. |
 | Owner Email | Assigned as owner if they are already a team member. |
+| External ID | The post's ID in your source tool, stored in the post's metadata. |
+| External URL | Link to the original post in your source tool, stored with the post. |
 
 ## Before you import
 
@@ -37,14 +49,13 @@ The following fields can be mapped from any column in your CSV:
   <Step title="Export your data as a CSV" icon="download">
     Export your posts from your current tool as a `.csv` file.
 
-    - [Exporting from Canny](/help-center/guides/migrate-from-canny)
     - [Exporting from Upvoty](/help-center/guides/migrate-from-upvoty)
     - [Exporting from Nolt](/help-center/guides/migrate-from-nolt)
 
-    If you are not migrating from one of these tools, export a CSV from your source with as many of the fields above as possible.
+    If you are not migrating from one of these tools, export a CSV from your source with as many of the fields above as possible. Canny users should use the [API-based Canny importer](/help-center/guides/migrate-from-canny) instead of a CSV.
 
     <Callout kind="alert">
-      Files must be `.csv` format and under **10 MB** (approximately 50,000 rows). Split larger exports into multiple files.
+      Files must be `.csv` format and under **5 MB**. Split larger exports into multiple files.
     </Callout>
   </Step>
 
@@ -60,8 +71,8 @@ The following fields can be mapped from any column in your CSV:
 ## Import process
 
 <Steps>
-  <Step title="Go to Settings → Import Data" icon="upload">
-    Navigate to **Settings → Import Data** in your ProductBridge dashboard. Drag and drop your `.csv` file onto the upload zone, or click **Choose file** to browse.
+  <Step title="Go to Settings → Connect → Import Data" icon="upload">
+    Navigate to **Settings → Connect → Import Data** in your ProductBridge dashboard and make sure the **CSV import** tab is selected. Drag and drop your `.csv` file onto the upload zone, or click **Choose file** to browse.
   </Step>
 
   <Step title="Map columns" icon="table">

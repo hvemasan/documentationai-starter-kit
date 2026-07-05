@@ -20,7 +20,7 @@ Your portal URL follows this pattern:
 https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID
 ```
 
-Find your **Organization ID** in **Settings > Widget & Embeds**.
+Find your **Organization ID** in **Settings → Connect → Widget & Embeds**.
 
 You can also deep-link directly to a specific tab:
 
@@ -85,13 +85,3 @@ Use it as a standard HTML anchor — no SDK needed:
 - Users are not automatically identified — they must log in manually at the portal
 - No programmatic control or SDK events
 - Opens as a standalone page, not embedded in your UI
-
-## Identify Users via URL (Optional)
-
-If you generate a short-lived token on your server, you can pre-authenticate users by appending it as a query parameter — saving them the login step:
-
-```
-https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID?token=JWT_FROM_YOUR_SERVER
-```
-
-The token is the same JWT you generate for SDK identity verification. See [Identity Verification](/core-concepts/feedback-collection/widgets/identity-verification) for how to generate it.

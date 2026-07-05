@@ -24,21 +24,21 @@ The ProductBridge Zapier integration lets you connect your feedback workflows to
 ## Prerequisites
 
 <Callout kind="info" title="Before you start">
-- A ProductBridge account with an active project
+- A ProductBridge organization with at least one feedback board
 - A Zapier account (free or paid)
-- Your ProductBridge Zapier API key
+- A ProductBridge Zapier API key (generated in the steps below)
 </Callout>
 
 ## Connect ProductBridge to Zapier
 
 <Steps>
-  <Step title="Get your API key" icon="key">
-    In ProductBridge, navigate to **Settings > Integrations > Zapier** and copy your Zapier API key.
+  <Step title="Generate your API key" icon="key">
+    In ProductBridge, open **Connect Sources > Zapier**, give the key a name, and click **Generate** to create a Zapier API key. Copy it right away — the full key (prefixed `zpk_`) is shown only once.
 
-    Each API key is scoped to your organization and grants access to all projects within it.
+    Each API key is scoped to your organization and grants access to all boards within it.
 
     <Callout kind="alert">
-      Keep your API key secure. Do not share it publicly or commit it to version control. You can regenerate it at any time from the settings page, but existing Zaps will need to be reconnected.
+      Keep your API key secure. Do not share it publicly or commit it to version control. You can revoke it and generate a new one at any time from the same page, but existing Zaps will need to be reconnected.
     </Callout>
   </Step>
   <Step title="Add ProductBridge in Zapier" icon="plus">
@@ -271,7 +271,7 @@ The Zapier integration communicates with the ProductBridge API at `https://api.p
   </Expandable>
 
   <Expandable title="Authentication errors" default-open="false">
-    - Regenerate your API key in **ProductBridge > Settings > Integrations > Zapier**
+    - Generate a fresh API key in **ProductBridge > Connect Sources > Zapier** and check it starts with `zpk_`
     - Reconnect your ProductBridge account in Zapier by clicking **Reconnect** on the connection
     - Ensure your ProductBridge subscription includes API access
   </Expandable>
@@ -279,6 +279,6 @@ The Zapier integration communicates with the ProductBridge API at `https://api.p
   <Expandable title="Missing dropdown options" default-open="false">
     - Boards, statuses, and tags are loaded dynamically from your ProductBridge account
     - If a board or status was recently created, click **Load More** in the Zapier dropdown to refresh
-    - Ensure your API key has access to the project containing the boards you expect to see
+    - Ensure your API key belongs to the organization containing the boards you expect to see
   </Expandable>
 </ExpandableGroup>

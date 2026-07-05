@@ -731,11 +731,6 @@
                 "icon": "list"
               }
             ]
-          },
-          {
-            "group": "Endpoints",
-            "openapi": "api-reference/openapi.yaml",
-            "pages": []
           }
         ]
       },
@@ -776,7 +771,7 @@
             "expandable": false,
             "pages": [
               {
-                "title": "Create Project",
+                "title": "Create Organization",
                 "path": "help-center/guides/create-project"
               }
             ]

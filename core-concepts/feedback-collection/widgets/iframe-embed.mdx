@@ -20,18 +20,17 @@ Your widget iFrame URL follows this pattern:
 https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID
 ```
 
-Find your **Organization ID** in **Settings > Widget & Embeds**.
+Find your **Organization ID** in **Settings → Connect → Widget & Embeds**.
 
-Optional query parameters let you set the default tab and theme:
+An optional query parameter lets you set the default tab:
 
 ```
-https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID?tab=feedback&theme=light
+https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID?tab=feedback
 ```
 
 | Parameter | Values | Default | Description |
 |---|---|---|---|
 | `tab` | `feedback`, `roadmap`, `changelog` | `feedback` | Default tab when the widget loads |
-| `theme` | `light`, `dark` | Follows system | Force a specific color theme |
 
 ## Installation
 
@@ -40,9 +39,10 @@ https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID?tab=feedback&theme=ligh
 <iframe
   src="https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID"
   width="100%"
-  height="650"
+  height="600"
   frameborder="0"
-  style="border: none; border-radius: 12px; display: block;">
+  style="border: none; border-radius: 12px; display: block;"
+  allow="clipboard-write">
 </iframe>
 ```
 
@@ -51,12 +51,10 @@ https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID?tab=feedback&theme=ligh
 export default function ProductBridgeFrame({
   organizationId = 'YOUR_ORGANIZATION_ID',
   tab = 'feedback',
-  theme = null,         // null = system default, 'light', or 'dark'
-  height = 650,
+  height = 600,
   borderRadius = 12,
 }) {
   const params = new URLSearchParams({ tab });
-  if (theme) params.set('theme', theme);
 
   const src = `https://app.productbridge.io/widget/${organizationId}?${params}`;
 
@@ -67,6 +65,7 @@ export default function ProductBridgeFrame({
       height={height}
       frameBorder="0"
       style={{ border: 'none', borderRadius, display: 'block' }}
+      allow="clipboard-write"
     />
   );
 }
@@ -82,14 +81,12 @@ import { computed } from 'vue';
 const props = defineProps({
   organizationId: { type: String, default: 'YOUR_ORGANIZATION_ID' },
   tab:            { type: String, default: 'feedback' },
-  theme:          { type: String, default: null },
-  height:         { type: Number, default: 650 },
+  height:         { type: Number, default: 600 },
   borderRadius:   { type: Number, default: 12 },
 });
 
 const src = computed(() => {
   const params = new URLSearchParams({ tab: props.tab });
-  if (props.theme) params.set('theme', props.theme);
   return `https://app.productbridge.io/widget/${props.organizationId}?${params}`;
 });
 </script>
@@ -100,6 +97,7 @@ const src = computed(() => {
     width="100%"
     :height="height"
     frameborder="0"
+    allow="clipboard-write"
     :style="{ border: 'none', borderRadius: borderRadius + 'px', display: 'block' }"
   />
 </template>
@@ -120,6 +118,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
       width="100%"
       [attr.height]="height"
       frameborder="0"
+      allow="clipboard-write"
       [style.border]="'none'"
       [style.border-radius]="borderRadius + 'px'"
       [style.display]="'block'">
@@ -131,8 +130,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 export class ProductBridgeFrameComponent implements OnChanges {
   @Input() organizationId = 'YOUR_ORGANIZATION_ID';
   @Input() tab = 'feedback';
-  @Input() theme: string | null = null;
-  @Input() height = 650;
+  @Input() height = 600;
   @Input() borderRadius = 12;
 
   safeUrl!: SafeResourceUrl;
@@ -147,7 +145,6 @@ export class ProductBridgeFrameComponent implements OnChanges {
 
   private buildUrl(): void {
     const params = new URLSearchParams({ tab: this.tab });
-    if (this.theme) params.set('theme', this.theme);
     const url = `https://app.productbridge.io/widget/${this.organizationId}?${params}`;
     this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
@@ -166,15 +163,16 @@ export class ProductBridgeFrameComponent implements OnChanges {
   <iframe
     src="https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID"
     width="100%"
-    height="700"
+    height="600"
     frameborder="0"
-    style="border: none; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); display: block;">
+    style="border: none; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); display: block;"
+    allow="clipboard-write">
   </iframe>
 </div>
 ```
 
 <Callout kind="tip" collapsed="false">
-  Set a fixed pixel height on the iframe (e.g. `height="650"`) rather than using CSS `height: 100%`. Percentage heights on iframes require the parent chain to also have explicit heights, which often causes the iframe to collapse to zero.
+  Set a fixed pixel height on the iframe (e.g. `height="600"`) rather than using CSS `height: 100%`. Percentage heights on iframes require the parent chain to also have explicit heights, which often causes the iframe to collapse to zero.
 </Callout>
 
 ## Limitations

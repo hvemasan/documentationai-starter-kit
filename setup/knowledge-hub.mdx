@@ -37,7 +37,7 @@ Anything that describes what your product does, how it works, or what's already 
 - **CSV** (.csv)
 - **Markdown** (.md)
 
-Each document is automatically parsed, split into searchable chunks, and embedded into ProductBridge's vector database.
+Files can be up to **5 MB** each (the upload dialog shows "PDF · DOCX · TXT · CSV · MD — max 5 MB"). Each document is automatically parsed, split into searchable chunks, and embedded into ProductBridge's vector database.
 
 ## Upload a Document
 
@@ -51,9 +51,10 @@ Each document is automatically parsed, split into searchable chunks, and embedde
   <Step title="Wait for processing" icon="clock">
     The document moves through these stages:
 
+    - **Downloading** — file being fetched
     - **Uploaded** — file stored, waiting in queue
     - **Processing** — being parsed and chunked
-    - **Completed** — fully indexed and queryable
+    - **Ready** — fully indexed and queryable
     - **Failed** — something went wrong (the error reason is shown)
 
     Most documents finish in under a minute. Very large PDFs may take a few minutes.
@@ -67,9 +68,10 @@ Each document is automatically parsed, split into searchable chunks, and embedde
 
 | Status | Meaning | What to Do |
 |--------|---------|------------|
+| **Downloading** | File being fetched | Wait |
 | **Uploaded** | Queued, not yet processed | Wait — usually quick |
 | **Processing** | Being parsed and chunked | Wait |
-| **Completed** | Indexed and queryable | Nothing — it's working |
+| **Ready** | Indexed and queryable | Nothing — it's working |
 | **Failed** | Couldn't be processed | Check the error; try reprocessing or re-uploading |
 
 If a document fails, you can click **Reprocess** to try again — useful if it failed due to a transient issue.

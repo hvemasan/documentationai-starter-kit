@@ -1,86 +1,52 @@
 ---
 title: Chrome Extension
-description: Capture feedback from any webpage using the ProductBridge Chrome Extension. Highlight text, annotate screenshots, and submit feedback directly to your project.
+description: Create feedback posts from any webpage using the ProductBridge Chrome Extension — no tab switching, no copy-paste.
 ---
 
 <img src="https://product-bridge.nyc3.digitaloceanspaces.com/board-icons/board-icon-1775752058525-lw3shl4.png" width="80" height="80" alt="Chrome Extension" />
 
 ## Overview
 
-The ProductBridge Chrome Extension lets you capture feedback from any webpage — competitor reviews, social media posts, support forums, or internal tools. Highlight text, take annotated screenshots, and submit feedback to ProductBridge without switching tabs.
+The ProductBridge Chrome Extension lets you create feedback posts from any webpage — competitor reviews, social media posts, support forums, or internal tools — without switching tabs. Feedback you capture lands on the board you choose in your ProductBridge organization.
+
+Unlike other integrations, the extension runs entirely in your browser. There is nothing to connect on the server side: install it, sign in, and start capturing.
 
 ## Prerequisites
 
-<Callout kind="info" title="Before you start">
-- Google Chrome or a Chromium-based browser (Edge, Brave, Arc)
-- A ProductBridge account with at least one project
+<Callout kind="info" collapsed="false">
+  - Google Chrome or a Chromium-based browser (Edge, Brave, Arc)
+
+  - A ProductBridge account with access to at least one organization and feedback board
 </Callout>
 
 ## Install the Extension
 
 <Steps>
-  <Step title="Download from Chrome Web Store" icon="download">
-    Visit the [ProductBridge Chrome Extension](https://chrome.google.com/webstore) page and click **Add to Chrome**. Confirm the permissions when prompted.
+  <Step title="Add it from the Chrome Web Store" icon="download" title-type="p">
+    Open the [ProductBridge Chrome Extension](https://chromewebstore.google.com/detail/productbridge/lpincafcclgbgncffebiemkmcaognpfo) page and click **Add to Chrome**. Confirm the permissions when prompted.
   </Step>
-  <Step title="Sign In" icon="log-in">
-    Click the ProductBridge icon in your browser toolbar and sign in with your ProductBridge account credentials. The extension connects to your workspace automatically.
+  <Step title="Sign in" icon="log-in" title-type="p">
+    Click the ProductBridge icon in your browser toolbar and sign in with your ProductBridge account. Pick the organization and board you want feedback to go to.
   </Step>
-  <Step title="Select a Project" icon="folder">
-    Choose the default project where captured feedback should be sent. You can change this per submission.
+  <Step title="Verify the connection" icon="check" title-type="p">
+    Open **Connect Sources** in your ProductBridge dashboard — the Chrome Extension card shows as **Connected** automatically once the extension is detected in your browser. There is no manual connect step.
   </Step>
 </Steps>
 
 ## Capture Feedback
 
-<Tabs>
-  <Tab title="Text Selection" icon="type">
-    Highlight any text on a webpage, right-click, and select **Send to ProductBridge**. The selected text becomes the feedback content, and the page URL is attached automatically.
-
-    You can add a title, select a board, and add tags before submitting.
-  </Tab>
-  <Tab title="Screenshot" icon="camera">
-    Click the ProductBridge extension icon and select **Capture Screenshot**. Annotate the screenshot with arrows, highlights, or text notes. The annotated image is attached to the feedback post.
-
-    Screenshots are useful for capturing visual bugs, competitor UI patterns, or social media mentions.
-  </Tab>
-  <Tab title="Quick Submit" icon="zap">
-    Click the extension icon, type your feedback directly, and hit **Submit**. The current page URL is attached automatically. Use this for quick notes while browsing.
-  </Tab>
-</Tabs>
-
-## Configure Settings
-
-Access extension settings by clicking the ProductBridge icon and selecting the gear icon:
-
-| Setting | Description |
-|---------|-------------|
-| Default project | The project where feedback is sent by default |
-| Default board | The board to pre-select when submitting feedback |
-| Include page URL | Automatically attach the current page URL to submissions |
-| Include page title | Automatically use the page title as the feedback title |
-| Keyboard shortcut | Set a custom shortcut for quick capture (default: `Ctrl+Shift+F`) |
-
-<Callout kind="tip">
-  Set up a keyboard shortcut for quick capture. Press `Ctrl+Shift+F` (customizable) to open the feedback form instantly from any page.
-</Callout>
-
-## How It Works
-
-Once installed:
-
-1. Feedback captured via the extension is sent to your ProductBridge project immediately
-2. Each item is tagged with "via Chrome Extension" and includes the source URL
-3. Screenshots are stored in your ProductBridge media storage and linked to the feedback post
-4. All captured feedback flows into [Feedback Intelligence](/core-concepts/feedback-intelligence) for analysis
-5. You can filter by source in the feedback inbox to see all extension-captured items
+With the extension installed, click the ProductBridge icon on any webpage to create a feedback post. Fill in the feedback details and submit — the post is created in your selected organization and board immediately, and flows into [Feedback Intelligence](/core-concepts/feedback-intelligence) for analysis like feedback from any other source.
 
 <Callout kind="info">
-  The Chrome Extension works on any webpage, including pages behind authentication. No data is sent to ProductBridge until you explicitly submit feedback.
+  The extension only sends data to ProductBridge when you explicitly submit feedback. Browsing activity is not tracked.
 </Callout>
 
 <Expandable title="Troubleshooting" default-open="false">
   - **Extension not appearing** — Check that the extension is enabled in `chrome://extensions`. Pin it to the toolbar for easy access.
+
+  - **Card not showing Connected** — Detection runs in the browser where the extension is installed. Open your ProductBridge dashboard in the same browser profile that has the extension.
+
   - **Sign-in issues** — Ensure you are using the same email address as your ProductBridge account. Try signing out and back in.
-  - **Screenshots not capturing** — Some pages block screenshot APIs. Try using the text selection method instead.
-  - **Submissions failing** — Check your internet connection and verify the extension is signed in. Clear the extension cache if issues persist.
+
+  - **Submissions failing** — Check your internet connection and verify the extension is signed in.
 </Expandable>

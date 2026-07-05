@@ -111,5 +111,5 @@ A typical receiver:
 </CodeGroup>
 
 <Callout kind="tip">
-  Always return a 2xx response within 30 seconds, even for unknown event types. Returning a non-2xx triggers retries; consistently failing on events you don't care about wastes resources and may surface as health alarms in your dashboard.
+  Always return a 2xx response within 30 seconds, even for unknown event types. Returning a non-2xx is recorded as a delivery failure; consistently failing on events you don't care about pollutes your webhook's failure history in the dashboard and makes real receiver problems harder to spot.
 </Callout>

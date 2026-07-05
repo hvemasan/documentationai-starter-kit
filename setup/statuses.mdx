@@ -7,11 +7,11 @@ description: Define the lifecycle every post moves through — from "Under Revie
 
 A status describes where a post is in its lifecycle. ProductBridge ships with sensible defaults like "Under Review," "Planned," "In Progress," and "Completed" — but you can rename, recolor, reorder, or add your own.
 
-Statuses are **organization-wide** and **shared across feedback, roadmap, and changelog posts**. You can hide specific statuses from specific surfaces (e.g., "In Progress" on roadmap only, "Open" on feedback only).
+Statuses are **organization-wide** and **shared across feedback and roadmap posts**. You can hide specific statuses from specific surfaces (e.g., "In Progress" on roadmap only, "Open" on feedback only). Changelog posts don't use statuses — they have their own labels system, managed at **Settings → Changelog**.
 
 ## Default Statuses
 
-When you create a workspace, ProductBridge seeds 6 statuses across 4 status groups:
+When you create a workspace, ProductBridge seeds a starter set of statuses:
 
 | Status | Status Group | Meaning |
 |--------|--------------|---------|
@@ -24,38 +24,40 @@ When you create a workspace, ProductBridge seeds 6 statuses across 4 status grou
 
 ## Status Groups
 
-Every status belongs to one of four **status groups**, which control high-level behavior like visibility in the roadmap columns:
+Every status belongs to one of four **status groups**: **Open**, **In Progress**, **Completed**, and **Closed**. Groups control high-level behavior — for example, the roadmap kanban columns are driven by status groups, and closed-group statuses are treated as terminal.
 
-| Group | Statuses Typically In It | Roadmap Column |
-|-------|--------------------------|----------------|
-| **Open** | Open, Under Review | Up Next / Considering |
-| **In Progress** | Planned, In Progress | Now / Soon |
-| **Completed** | Completed, Released | Shipped |
-| **Closed** | Closed, Won't Do, Duplicate | Hidden by default |
+| Group | Statuses Typically In It |
+|-------|--------------------------|
+| **Open** | Open, Under Review |
+| **In Progress** | Planned, In Progress |
+| **Completed** | Completed, Released |
+| **Closed** | Closed, Won't Do, Duplicate |
 
-When you create a custom status, you assign it to a group so the rest of ProductBridge knows where it fits.
+On the **Manage Statuses** page, statuses are listed under their group headings, and each group has its own **New** button — a status is created directly into the group you add it from.
 
 ## Manage Statuses
 
 <Steps>
   <Step title="Open Statuses" icon="circle-dot">
-    Go to **Settings → Statuses**.
+    Go to **Settings → Statuses** (the page is titled **Manage Statuses**).
   </Step>
   <Step title="Create or edit a status" icon="plus">
-    Each status has:
+    Click **New** next to the group you want the status in. Each status has:
 
     - **Name** — what users see (e.g., "Under Review")
-    - **Color** *(optional)* — used as a colored chip on the portal and in admin
-    - **Status Group** — Open / In Progress / Completed / Closed
-    - **Default Status** — mark one status as the default for new posts
-    - **Show on Feedback** — make available on feedback posts (default: on)
-    - **Show on Roadmap** — make available on roadmap posts (default: on)
+    - **Color** — used as a colored chip on the portal and in admin
+    - **Show on Feedback Board** — make available on feedback posts
+    - **Show on Roadmap Board** — make available on roadmap posts
+
+    <Callout kind="info">
+      One status carries a **Default** badge — it's applied to new posts automatically. The default can't currently be reassigned from the dashboard.
+    </Callout>
   </Step>
   <Step title="Reorder" icon="move-vertical">
-    Drag statuses into the order you want them displayed. This affects column order on the roadmap and the status dropdown.
+    Drag statuses to reorder them **within their group**. This affects the order they appear in the status dropdown.
   </Step>
   <Step title="Delete" icon="trash">
-    Deleting a status reassigns affected posts to your default status. You'll be asked to confirm.
+    You'll be asked to confirm before deletion. A status that's still assigned to posts **can't be deleted** — move those posts to a different status first.
   </Step>
 </Steps>
 
@@ -89,7 +91,7 @@ Different teams use different lifecycles. A few patterns we see:
 
 ## Hiding Statuses From Specific Surfaces
 
-Use **Show on Feedback** and **Show on Roadmap** to scope a status to where it makes sense:
+Use **Show on Feedback Board** and **Show on Roadmap Board** to scope a status to where it makes sense:
 
 - **"Open"** → typically feedback-only (roadmap items start as Planned)
 - **"In Progress"** → typically roadmap-only (feedback rarely lives long enough to be "in progress")
@@ -97,14 +99,15 @@ Use **Show on Feedback** and **Show on Roadmap** to scope a status to where it m
 
 ## Status Changes Trigger Notifications
 
-When a post's status changes, ProductBridge can notify:
+Notifications for status changes are **follower-based**: everyone following a post gets notified when its status changes. Users follow a post via the bell icon on the post — and voting on a post follows it automatically. When you change a status, you choose whether to send with the **Notify followers (email & in-app)** toggle.
 
-- Everyone who voted on or commented on the post (email + in-app)
+Status changes can also reach:
+
 - Subscribed Slack/Discord channels
 - Outbound webhooks
 - Linked external systems (Jira, Linear, ClickUp) — if you've configured [status sync rules](/integrations/project-management/jira)
 
-This is how you **close the feedback loop** — customers who asked for a feature get notified when it ships.
+This is how you **close the feedback loop** — customers who voted for a feature get notified when it ships.
 
 <Callout kind="tip">
   Pair every status change with a comment explaining the reason. "Planned for Q3 — bundling with the workspace redesign" is far more satisfying for customers than a silent status flip.

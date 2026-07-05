@@ -14,7 +14,7 @@ ProductBridge does not return a standalone vote object via the public API — vo
 - **Toggle**: returns whether the user is now voted (`true`) or unvoted (`false`) after the operation.
 - **Voters list**: returns the list of users who currently have an active vote on a post.
 
-If you need vote counts, query [List feedback posts](/api-reference/feedback-posts/list) and inspect each post; counts are computed server-side and surfaced via the dashboard's portal API (a separate, narrower surface).
+The public API does not expose vote counts directly — post objects don't include a count field. If you need a count, paginate [List voters](/api-reference/votes/voters) for the post and count the results client-side.
 
 ## What you can do
 

@@ -1,132 +1,222 @@
 ---
 title: Jira Integration
-description: Connect ProductBridge with Atlassian Jira to sync documentation tasks, link pages to issues, and streamline your project management workflow.
+description: >-
+  Connect ProductBridge to Jira Cloud to link feedback posts with issues,
+  create Jira issues directly from feedback, and automatically update post
+  status when linked issues move forward in your Jira workflow.
 ---
-
-<img src="https://cdn.simpleicons.org/jira" width="80" height="80" alt="Jira" />
-
 ## Overview
 
-The Jira integration lets you connect ProductBridge to your Atlassian Jira instance so you can link documentation pages to Jira issues, track doc tasks alongside development work, and receive updates when linked issues change status.
+The Jira integration is a **two-way tracker link** between ProductBridge feedback and Jira Cloud issues. It does not import issues as feedback — instead, it gives your product and engineering teams a clean handoff once a piece of feedback is ready to be acted on.
 
-<Callout kind="info">
-  You need a Jira Cloud or Jira Data Center instance with admin permissions to set up this integration.
+Once connected, you can:
+
+- **Search Jira issues** from any feedback post and link them in one click
+
+- **Create a new Jira issue** directly from a feedback post — complete with project and issue-type pickers
+
+- **Auto-sync post status** — when a linked issue's status changes in Jira, ProductBridge updates the corresponding post status based on rules you define
+
+- **Notify voters automatically** when a post status changes because of a linked issue update
+
+The sync runs in real time over webhooks. There is nothing to poll, no manual refresh.
+
+<Callout kind="info" collapsed="false">
+  The integration works with **Jira Cloud** sites (`yourcompany.atlassian.net`).
 </Callout>
 
-## Setup
+## Prerequisites
+
+<Callout kind="info" collapsed="false">
+  - A Jira Cloud site where you can authorize apps
+
+  - A ProductBridge organization with at least one feedback board and configured post statuses
+
+  - A user with **Owner-level admin** permissions in ProductBridge to install integrations
+</Callout>
+
+## Connect Jira
 
 <Steps>
-  <Step title="Connect your Jira account" icon="link">
-    Navigate to **Settings > Integrations > Jira** in your ProductBridge dashboard.
+  <Step title="Open the Integrations page" icon="layout-dashboard" title-type="p">
+    Sign in to your ProductBridge dashboard and click **Connect Sources** in the sidebar, then select **Jira** from the **Project Management** section.
+  </Step>
 
-    Click **Connect Jira** and authorize ProductBridge to access your Jira instance.
+  <Step title="Click Connect Jira" icon="plug" title-type="p">
+    On the Jira integration page, click **Connect Jira**. ProductBridge starts the Atlassian OAuth flow and redirects you to Jira's authorization screen.
+  </Step>
 
-    <Callout kind="tip">
+  <Step title="Authorize ProductBridge in Jira" icon="shield" title-type="p">
+    On Atlassian's authorization screen, choose the Jira Cloud site you want to connect and approve the requested access.
+
+    <Callout kind="tip" collapsed="false">
       Use a service account rather than a personal account so the connection persists if team members leave.
     </Callout>
   </Step>
 
-  <Step title="Select your Jira project" icon="folder">
-    Choose the Jira project you want to link with ProductBridge.
+  <Step title="Confirm the connection" icon="check-circle" title-type="p">
+    After you approve, Jira redirects you back to ProductBridge. The integration status updates to **Connected** and the page shows the connected Jira site and the disconnect option.
 
-    You can connect multiple projects and map each to a specific documentation section.
+    Behind the scenes, ProductBridge:
 
-    ```json
-    {
-      "jira_project": "DOC",
-      "doc_section": "getting-started",
-      "sync_enabled": true
-    }
-    ```
-  </Step>
+    - Encrypts and stores the access token
 
-  <Step title="Configure sync settings" icon="settings">
-    Choose which events trigger syncs between ProductBridge and Jira.
-
-    | Event | Direction | Description |
-    |-------|-----------|-------------|
-    | Issue created | Jira → ProductBridge | Creates a linked doc task |
-    | Doc published | ProductBridge → Jira | Updates the linked issue status |
-    | Comment added | Bidirectional | Syncs comments between platforms |
+    - Registers a webhook for **issue updated** events so Jira can deliver status changes in real time
   </Step>
 </Steps>
 
-## Linking docs to Jira issues
+## Link a feedback post to a Jira issue
 
-You can link any documentation page to one or more Jira issues. Linked issues appear in the page sidebar and update automatically.
+Once connected, every feedback post in your dashboard gets a **Jira Issues** section in the post detail view.
 
-<Tabs>
-  <Tab title="From ProductBridge" icon="file-text">
-    Open a documentation page and click **Link Issue** in the sidebar.
+<Steps>
+  <Step title="Open a feedback post" icon="message-square" title-type="p">
+    Click any post in the **Feedback** view to open the post detail panel. Scroll the right sidebar to find the **Jira Issues** section.
+  </Step>
 
-    Search for the Jira issue by key (e.g., `DOC-142`) or summary text.
+  <Step title="Click Link" icon="link" title-type="p">
+    Click the **Link** button next to **Jira Issues**. A dialog opens with two tabs: **Search** and **Create**.
+  </Step>
 
-    ```
-    Linked: DOC-142 — Update API authentication guide
-    Status: In Progress
-    Assignee: jane@example.com
-    ```
-  </Tab>
+  <Step title="Choose how to link the issue" icon="search" title-type="p">
+    Use the tab that fits how you usually work in Jira.
 
-  <Tab title="From Jira" icon="ticket">
-    In any Jira issue, use the **ProductBridge** panel to link an existing doc page or create a new one.
+    <Tabs>
+      <Tab title="Search" icon="search">
+        Type any text to search across issues in your connected site. Each result shows the issue key, current status, summary, and assignee. Click any result to link it instantly.
+      </Tab>
 
-    The linked page URL appears in the issue details automatically.
-  </Tab>
-</Tabs>
+      <Tab title="Create" icon="plus">
+        Pick a **project**, then an **issue type** (Jira's non-subtask types for that project are offered, with a sensible default), and fill in a summary and description. ProductBridge creates the issue in Jira and links it to the post in one step.
+      </Tab>
+    </Tabs>
+  </Step>
 
-## Webhook events
+  <Step title="Verify the link" icon="check" title-type="p">
+    The linked issue appears in the post's **Jira Issues** section with its key and current status. From there you can **open it in Jira** or **unlink it**.
+  </Step>
+</Steps>
 
-ProductBridge sends webhook payloads for Jira-related events.
+## Status sync rules
 
-<Request tabs="cURL" show-lines="true">
-```bash
-curl -X POST https://api.productbridge.io/integrations/jira/webhook \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "event": "issue.linked",
-    "issue_key": "DOC-142",
-    "doc_id": "doc_456",
-    "timestamp": "2025-03-10T14:00:00Z"
-  }'
-```
-</Request>
+Linking is most powerful when Jira status changes flow back into ProductBridge automatically. **Status sync rules** translate Jira issue statuses into ProductBridge post statuses.
 
-<Response tabs="200,400">
-```json
-{
-  "status": "ok",
-  "message": "Webhook received",
-  "linked": true
-}
-```
+A rule answers three questions:
 
-```json
-{
-  "error": "Invalid issue key",
-  "code": "JIRA_ISSUE_NOT_FOUND"
-}
-```
-</Response>
+1. **When** a linked Jira issue changes to status X
+
+2. **Should** the post change to a specific ProductBridge status (for example, *Planned* → *In Progress* → *Complete*)?
+
+3. **And** should we notify everyone who voted for this post?
+
+If a post has multiple linked issues, you also pick whether the rule fires when **any** issue reaches the trigger status, or only when **all** issues do.
+
+### Create a rule
+
+<Steps>
+  <Step title="Open the Jira settings page" icon="settings" title-type="p">
+    Go back to **Connect Sources > Jira**. Below the connection details, you'll see the **Rules** section.
+  </Step>
+
+  <Step title="Click Create New Rule" icon="plus" title-type="p">
+    Click **Create New Rule**. A sentence-style builder appears so you can read the rule in plain English as you build it.
+  </Step>
+
+  <Step title="Build the rule" icon="wand-2" title-type="p">
+    Pick the values left to right:
+
+    | Field                             | What it does                                                                                                                   |
+    | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+    | **any / all**                     | Whether the rule fires when *any* linked Jira issue hits the trigger status, or only when *all* do                             |
+    | **Jira status**                   | The status name from Jira that triggers the rule (e.g. `In Progress`, `Done`) — populated from your connected site's statuses  |
+    | **Post status**                   | The ProductBridge feedback status the post should change to                                                                    |
+    | **Notify / Do not notify voters** | Whether to send in-app and email notifications to voters when the rule fires                                                   |
+  </Step>
+
+  <Step title="Save the rule" icon="check-circle" title-type="p">
+    Click **Create**. The rule appears in the list and is active immediately. New Jira status changes that match it start syncing right away.
+  </Step>
+</Steps>
+
+### How rule evaluation works
+
+When a linked issue's status changes in Jira:
+
+1. Jira sends an **issue updated** webhook to ProductBridge
+
+2. ProductBridge finds every feedback post that links to that issue
+
+3. For each rule on the integration, it checks whether the **any/all** condition is satisfied
+
+4. If a rule matches, the post status is updated and (optionally) voters are notified
+
+Rules are evaluated independently per post, so a single Jira status change can update many posts at once.
+
+## Behavior to expect
+
+| Action in Jira                  | Effect in ProductBridge                                                                    |
+| ------------------------------- | ------------------------------------------------------------------------------------------ |
+| Status change on a linked issue | Linked issue badge on the post updates; rules evaluated; notifications fired if configured |
+
+| Action in ProductBridge    | Effect in Jira                                                                                        |
+| -------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Link an existing issue     | A reference is stored on the feedback post; nothing changes inside Jira                                |
+| Create an issue from a post| A new issue appears in the chosen project with the summary and description you provided               |
+| Unlink an issue            | The reference is removed; the Jira issue itself is not deleted or modified                             |
+| Disconnect the integration | The registered webhook is deleted from Jira; existing post-issue links remain but stop syncing         |
+
+## Disconnect Jira
+
+To stop syncing:
+
+<Steps>
+  <Step title="Go to the Jira integration page" icon="settings" title-type="p">
+    Open **Connect Sources > Jira** and click **Disconnect**.
+  </Step>
+
+  <Step title="Confirm disconnection" icon="check" title-type="p">
+    ProductBridge:
+
+    - Marks the integration as disconnected so no new syncs run
+
+    - Deletes the webhook it registered in Jira
+
+    - Leaves the existing per-post issue links in place — your feedback posts keep their reference to the Jira issue even after disconnect, so you don't lose history. They simply stop receiving status updates.
+  </Step>
+</Steps>
 
 <ExpandableGroup>
-  <Expandable title="Supported Jira issue types" default-open="false">
-    - Task
-    - Story
-    - Bug
-    - Epic
-    - Sub-task
-    - Custom issue types configured in your Jira project
+  <Expandable title="Why don't I see my statuses in the rule dropdown?" default-open="false">
+    ProductBridge reads the full status list from your connected Jira Cloud site. If your dropdown is empty:
+
+    - Confirm the integration shows as **Connected** on **Connect Sources > Jira**
+
+    - Confirm the statuses exist in your Jira site's workflows
+
+    - Reconnect the integration if you recently changed sites
   </Expandable>
 
-  <Expandable title="Troubleshooting connection issues" default-open="false">
-    - Verify your Jira instance URL is correct and accessible
+  <Expandable title="Why isn't my post status updating when I change a Jira issue?" default-open="false">
+    Walk through the chain:
 
-    - Ensure the authorized account has read/write permissions on the target project
+    - Confirm the issue is actually **linked** to the post (open the post; the Jira Issues section should list it)
 
-    - Check that your firewall allows outbound connections to `api.atlassian.com`
+    - Confirm a **rule exists** that matches the new Jira status
 
-    - Revoke and re-authorize the connection if tokens have expired
+    - Confirm the rule's **any/all** mode fits — if the rule is set to **all** and the post links to multiple issues, every linked issue must reach the trigger status
+
+    - If a rule is set to **notify**, in-app notifications appear instantly; email delivery follows your organization's notification settings
+  </Expandable>
+
+  <Expandable title="Can I link the same Jira issue to multiple feedback posts?" default-open="false">
+    Yes. A single Jira issue can be referenced from many feedback posts. When the issue's status changes, every post that links to it is evaluated against your rules independently.
+  </Expandable>
+
+  <Expandable title="Does the integration import issues as feedback?" default-open="false">
+    No. The integration is intentionally **link-only**. Issues already in Jira don't appear as posts in ProductBridge — that would clutter your feedback inbox. Linking is initiated from a feedback post.
+  </Expandable>
+
+  <Expandable title="Does it work with Jira Data Center or Server?" default-open="false">
+    The integration connects to **Jira Cloud** sites via Atlassian OAuth. Self-hosted Jira Data Center and Server instances are not supported.
   </Expandable>
 </ExpandableGroup>

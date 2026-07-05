@@ -1,25 +1,27 @@
 ---
 title: Branding & Custom Domain
-description: Customize how ProductBridge looks to your users — set your brand colors, upload a favicon, and map your own domain to the public portal.
+description: Customize how ProductBridge looks to your users — upload a favicon, set portal brand colors for light and dark mode, and map your own domain to the public portal.
 ---
 
 ## Make ProductBridge Look Like Your Product
 
-When customers land on your public portal, you want it to feel like an extension of your product — not a third-party tool. ProductBridge lets you control branding (colors, favicon) and map your own domain (e.g., `feedback.yourproduct.com`) so the entire experience stays on-brand.
+When customers land on your public portal, you want it to feel like an extension of your product — not a third-party tool. ProductBridge lets you control branding (favicon, portal brand colors) and map your own domain (e.g., `feedback.yourproduct.com`) so the entire experience stays on-brand.
 
 ## Branding
 
-Branding settings apply across your public portal, customer-facing emails, and embedded widgets.
+Visual identity is split across two settings tabs:
+
+| Setting | Where to Configure |
+|---------|--------------------|
+| Favicon and organization name | **Settings → Organization → Brand Settings** (General tab) |
+| Portal brand colors | **Settings → Organization → Public Portal → Brand colors** |
 
 <Steps>
-  <Step title="Open General settings" icon="palette">
-    Go to **Brand Settings → General**.
-  </Step>
-  <Step title="Set your brand color" icon="droplet">
-    Pick a primary brand color. This is the accent color used for buttons, links, and highlights across your portal — in both light and dark themes.
-  </Step>
   <Step title="Upload a favicon" icon="image">
-    Upload your product's favicon (the small icon shown in browser tabs). PNG, JPEG, GIF, WebP, and ICO formats are all accepted.
+    Go to **Settings → Brand Settings** and upload your product's favicon (the small icon shown in browser tabs). PNG, JPEG, GIF, WebP, and ICO formats are all accepted. Use **Change Favicon** to replace an existing one.
+  </Step>
+  <Step title="Set your brand colors" icon="droplet">
+    Go to **Settings → Public Portal** and find the **Brand colors** section. Pick separate accent colors for **Light mode** and **Dark mode** — each is used for buttons, links, and highlights on your portal in that theme.
   </Step>
   <Step title="Save" icon="check">
     Save your changes. Branding updates apply instantly across the portal — no redeploy needed.
@@ -28,11 +30,11 @@ Branding settings apply across your public portal, customer-facing emails, and e
 
 | Setting | Description | Where It Appears |
 |---------|-------------|------------------|
-| Brand color | Hex color used as the accent | Portal buttons, links, accents |
+| Brand colors (Light mode / Dark mode) | Hex colors used as the accent per theme | Portal buttons, links, accents |
 | Favicon | Browser tab icon | Public portal, email templates |
 
 <Callout kind="tip">
-  Pick a brand color with enough contrast against both white and dark backgrounds — the same color is used in both themes, so a mid-range hue works best.
+  Because light and dark mode have separate color pickers, you can choose a darker accent for light backgrounds and a brighter one for dark backgrounds — no need to compromise on a single mid-range hue.
 </Callout>
 
 ## Custom Domain
@@ -41,31 +43,31 @@ By default, your portal lives at `your-org.productbridge.io`. With a custom doma
 
 ### How It Works
 
-ProductBridge uses **Cloudflare for SaaS** under the hood to provision SSL certificates and route traffic to your custom domain. You add a DNS record at your domain registrar, and ProductBridge handles the rest — certificate issuance, renewal, and edge routing.
+ProductBridge provisions SSL certificates and routes traffic to your custom domain automatically. You add a DNS record at your domain registrar, and ProductBridge handles the rest — certificate issuance, renewal, and routing.
 
 ### Add Your Custom Domain
 
 <Steps>
-  <Step title="Open Domain settings" icon="globe">
-    Go to **Brand Settings → Custom Domain** and toggle **Enable Custom Domain**.
+  <Step title="Open Custom Domain settings" icon="globe">
+    Go to **Settings → Organization → Custom Domain** and toggle **Enable custom domain**.
   </Step>
   <Step title="Enter your domain" icon="link">
-    Enter the hostname you want to use, for example `feedback.yourproduct.com`.
+    Enter the hostname you want to use in the **Domain URL** field, for example `feedback.yourproduct.com`, then click **Save Domain**.
 
     <Callout kind="info">
       Use a valid hostname only — no `https://`, no trailing slash, no port, no path. ProductBridge validates the format before saving.
     </Callout>
   </Step>
   <Step title="Add the DNS record" icon="server">
-    After saving, ProductBridge displays the `CNAME` record you need to add at your DNS provider. The record name is your custom hostname; the value is the target ProductBridge gives you.
+    After saving, ProductBridge displays the `CNAME` record you need to add at your DNS provider. The record name is your custom hostname; the value is `customdomains.productbridge.io`.
 
     Add the record exactly as shown.
   </Step>
-  <Step title="Wait for verification" icon="clock">
-    DNS propagation typically takes a few minutes but can take up to 24 hours. ProductBridge polls verification status automatically — refresh the settings page to see when your domain switches from **Pending** to **Verified**.
+  <Step title="Verify" icon="clock">
+    DNS propagation typically takes a few minutes but can take up to 48 hours. Click **Refresh Status** on the Custom Domain page to re-check verification — the status updates from **Pending** through **Validating** to **Active**.
   </Step>
   <Step title="Done" icon="check">
-    Once verified, your portal is live at your custom domain with a valid SSL certificate. The default `*.productbridge.io` URL continues to work as a fallback.
+    Once the status shows **Active**, your portal is live at your custom domain with a valid SSL certificate. The default `*.productbridge.io` URL continues to work as a fallback.
   </Step>
 </Steps>
 
@@ -73,9 +75,10 @@ ProductBridge uses **Cloudflare for SaaS** under the hood to provision SSL certi
 
 | Status | Meaning |
 |--------|---------|
+| Not Configured | No custom domain has been saved yet |
 | Pending | DNS record not yet detected |
-| Pending Validation | DNS detected, SSL certificate still being issued |
-| Verified | Domain is live and serving traffic with a valid SSL certificate |
+| Validating | DNS detected, SSL certificate still being issued |
+| Active | Domain is live and serving traffic with a valid SSL certificate |
 
 <Callout kind="alert">
   Don't delete the CNAME record once verified — the platform uses it to renew your SSL certificate automatically. Removing it will eventually cause your domain to stop working.
@@ -87,13 +90,14 @@ ProductBridge uses **Cloudflare for SaaS** under the hood to provision SSL certi
   <Expandable title="My domain is stuck on Pending">
     Verify that:
 
-    - The `CNAME` record points to the exact target ProductBridge gave you
-    - DNS propagation has had time to complete — use a tool like [dnschecker.org](https://dnschecker.org) to confirm your records are visible globally
+    - The `CNAME` record points to `customdomains.productbridge.io` exactly
+    - DNS propagation has had time to complete — it can take up to 48 hours; use a tool like [dnschecker.org](https://dnschecker.org) to confirm your records are visible globally
+    - You clicked **Refresh Status** after adding the record — verification is checked on demand, not automatically
 
-    If everything looks right and the status is still Pending after a few hours, contact support.
+    If everything looks right and the status is still Pending after 48 hours, contact support.
   </Expandable>
   <Expandable title="I get a certificate warning in the browser">
-    This usually means the SSL certificate hasn't been issued yet. Wait 10–15 minutes after the domain shows **Verified** and try again. Certificate issuance happens asynchronously after verification.
+    This usually means the SSL certificate hasn't been issued yet — the status shows **Validating** while that happens. Wait a few minutes, click **Refresh Status**, and try again once the status shows **Active**.
   </Expandable>
   <Expandable title="Can I use an apex domain (yourproduct.com)?">
     We recommend using a subdomain like `feedback.yourproduct.com`. Apex domains often have DNS limitations that prevent `CNAME` records, which can complicate setup. If you need apex support, contact us.

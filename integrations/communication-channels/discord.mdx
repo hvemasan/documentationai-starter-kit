@@ -14,7 +14,7 @@ The Discord integration connects ProductBridge to your Discord server so your co
 
 Unlike messaging integrations that listen passively, Discord uses an **explicit, opt-in flow**: members run the `/productbridge` slash command, fill in a simple form, and ProductBridge captures the feedback with high confidence. There's no ambient channel monitoring or guesswork.
 
-The integration also supports **outgoing notifications** — pushing updates about new feedback, status changes, vote milestones, comments, and changelog releases into the Discord channels of your choice.
+The integration also supports **outgoing notifications** — pushing updates about new feedback, status changes, vote milestones, comments, changelog releases, new roadmap posts, and roadmap status updates into the Discord channels of your choice.
 
 ## Prerequisites
 
@@ -30,13 +30,13 @@ The integration also supports **outgoing notifications** — pushing updates abo
 
 <Steps>
   <Step title="Open the Admin Dashboard" icon="layout-dashboard" title-type="p">
-    Sign in to your ProductBridge admin dashboard and navigate to **Settings > Integrations > Discord**.
+    Sign in to your ProductBridge dashboard, click **Connect Sources** in the sidebar, and select **Discord**.
 
     <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777407774806-o6xmw436fq-admin_integration_page_framed.png?fm=auto&auto=compress%2Cformat" width="1342" height="608" alt="" />
   </Step>
 
-  <Step title="Click Connect Discord" icon="plus" title-type="p">
-    On the Discord integration page, click the **Connect Discord** button. ProductBridge initiates the Discord OAuth flow and redirects you to Discord's authorization screen.
+  <Step title="Click Add to Discord" icon="plus" title-type="p">
+    On the Discord integration page, click the **Add to Discord** button. ProductBridge initiates the Discord OAuth flow and redirects you to Discord's authorization screen.
 
     <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777407834875-z7u4uwia5l9-slack_integration-admin_framed.png?fm=auto&auto=compress%2Cformat" width="1358" height="644" alt="" />
   </Step>
@@ -58,7 +58,7 @@ The integration also supports **outgoing notifications** — pushing updates abo
   </Step>
 
   <Step title="Confirm Installation" icon="check-circle" title-type="p">
-    After authorization, Discord redirects you back to ProductBridge. The integration status updates to **Connected**, and the page now displays your server name, server ID, and the registered application ID. and configure the settings to subscribe the events that happens in the ProductBridge will be notified in the configured discord channel for the respective events and you can subscribe the events to multiple channels.
+    After authorization, Discord redirects you back to ProductBridge. The integration status updates to **Connected**, and the page now displays your server name, server ID, and the registered application ID. From this page you can also configure notification channels — subscribe each channel to the ProductBridge events you care about, and subscribe the same event to multiple channels if needed.
 
     Behind the scenes, ProductBridge:
 
@@ -78,7 +78,7 @@ Immediately after connection:
 
 - The **ProductBridge bot** appears in your server's member list
 
-- The **`/productbridge`****\*\*\*\* slash command** is available in every channel the bot can see
+- The **`/productbridge` slash command** is available in every channel the bot can see
 
 - The **interaction endpoint** is registered with Discord — feedback submissions are processed in real time
 
@@ -126,7 +126,7 @@ ProductBridge uses a **single, explicit feedback path**: the `/productbridge` sl
 
 ## Configure Notifications
 
-The Discord integration also pushes outgoing notifications about ProductBridge activity into your server. Configure notification channels in **Settings > Integrations > Discord > Notifications**.
+The Discord integration also pushes outgoing notifications about ProductBridge activity into your server. Configure notification channels on **Connect Sources > Discord**.
 
 ### Notification Channels
 
@@ -144,13 +144,15 @@ You can map ProductBridge events to one or more Discord channels. For each chann
 
 ### Supported Events
 
-| Event                 | Description                                                      |
-| --------------------- | ---------------------------------------------------------------- |
-| `new_feedback`        | Posted when new feedback is submitted (from any source)          |
-| `status_change`       | Posted when a feedback status changes (e.g., Open → In Progress) |
-| `vote_milestone`      | Posted when a feedback post reaches a configured vote threshold  |
-| `new_comment`         | Posted when a comment is added to a feedback post                |
-| `changelog_published` | Posted when a changelog entry is published                       |
+| Event                   | Description                                                      |
+| ----------------------- | ---------------------------------------------------------------- |
+| `new_feedback`          | Posted when new feedback is submitted (from any source)          |
+| `status_change`         | Posted when a feedback status changes (e.g., Open → In Progress) |
+| `vote_milestone`        | Posted when a feedback post reaches a configured vote threshold  |
+| `new_comment`           | Posted when a comment is added to a feedback post                |
+| `changelog_published`   | Posted when a changelog entry is published                       |
+| `new_roadmap`           | Posted when a new roadmap post is created                        |
+| `roadmap_status_update` | Posted when a roadmap item's status changes                      |
 
 ### Notification Format
 
@@ -164,6 +166,8 @@ Notifications are rendered as Discord rich embeds, color-coded by event type:
 | Vote milestone                        | Purple      |
 | New comment                           | Gray        |
 | Changelog published                   | Dark green  |
+| New roadmap post                      | Blue        |
+| Roadmap status update                 | Teal        |
 
 Each embed includes the relevant title, description preview, board name, and a link back to the feedback post in ProductBridge.
 
@@ -217,7 +221,7 @@ Bot tokens, OAuth access tokens, server IDs, and application IDs are all encrypt
 
 ## Disconnect
 
-To disconnect Discord, navigate to **Settings > Integrations > Discord** and click **Disconnect**. ProductBridge:
+To disconnect Discord, open **Connect Sources > Discord** and click **Disconnect**. ProductBridge:
 
 - Marks the integration as `disconnected`
 
@@ -246,6 +250,6 @@ To fully remove the bot from your Discord server, also kick the **ProductBridge*
 
   - **Cross-server duplicate connection error** — A Discord server can only be connected to one ProductBridge organization at a time. If you see this error, the server is already linked to another org — contact support to migrate the connection.
 
-  - **Re-authorize** — If the connection stops working, revoke and reconnect from **Settings > Integrations > Discord**. This refreshes the bot token, re-registers the slash command, and re-establishes the interaction endpoint.
+  - **Re-authorize** — If the connection stops working, revoke and reconnect from **Connect Sources > Discord**. This refreshes the bot token, re-registers the slash command, and re-establishes the interaction endpoint.
 </Expandable>
 

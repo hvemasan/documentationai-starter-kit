@@ -19,45 +19,45 @@ You can create as many boards as you need. There's no hard limit.
 ## Create a Board
 
 <Steps>
-  <Step title="Open Boards settings" icon="clipboard-list">
-    Go to **Feedback → Boards** (or **Roadmap → Boards** for a roadmap board) and click **New Board**.
+  <Step title="Open board settings" icon="clipboard-list">
+    Go to **Settings → Feedback** (titled **Feedback Boards**) — or **Settings → Roadmap** for a roadmap board — and click **Add Board**.
   </Step>
   <Step title="Name and describe" icon="type">
     Give your board:
 
-    - **Name** — what customers will see (e.g., "Mobile App Feedback")
-    - **Slug** — the URL-friendly version (auto-generated from the name; you can override)
-    - **Description** *(optional)* — a short blurb shown at the top of the board
-    - **Icon** *(optional)* — a small image displayed next to the board name
+    - **Icon & Name** — an optional small image plus the name customers will see (e.g., "Mobile App Feedback")
+    - **Description** *(optional)* — a short blurb describing what the board is for
+
+    The board's URL slug is generated from the name automatically.
   </Step>
-  <Step title="Set visibility" icon="eye">
-    Choose who can see the board:
+  <Step title="Set who can see posts" icon="eye">
+    Under **Who can see posts**, choose the board's visibility:
 
     - **Public** — anyone with the link
     - **Internal** — only signed-in team members
-    - **User Segments** — only end-users matching one or more [segments](/setup/user-segments)
+    - **Segmented Users** — only end-users matching a [segment](/setup/user-segments) you choose
   </Step>
-  <Step title="Set who can post" icon="pencil">
-    Independently of visibility, control who can **create** a post on this board:
+  <Step title="Set who can create posts" icon="pencil">
+    On feedback boards, **Who can create posts** is controlled independently of visibility:
 
-    - Anyone (matches visibility)
-    - Signed-in users only
-    - Specific segments
+    - **Public** — anyone
+    - **Internal Team** — only your team members
+    - **Segmented Users** — only end-users matching a segment you choose
   </Step>
   <Step title="Configure board options" icon="sliders">
     Turn features on or off per board:
 
-    - **Voting** — let users upvote posts (default: on)
-    - **Commenting** — let users discuss posts (default: on)
-    - **Show post dates** — display when posts were submitted (default: on)
-    - **Show ETA** *(roadmap boards only)* — display estimated completion dates (default: on)
+    - **Disable Voting** — turn on to stop users upvoting posts (voting is enabled by default)
+    - **Disable Commenting** — turn on to stop users discussing posts (commenting is enabled by default)
+    - **Display Post Dates** — show when posts were submitted
+    - **Show ETA** *(roadmap boards only)* — display estimated completion dates
 
     <Callout kind="alert">
-      The Voting and Commenting toggles are phrased as **Disable Voting** and **Disable Commenting** in the form. Leaving them **off** keeps the feature **enabled** (the default); turning them **on** disables the feature. Easy to flip in your head — double-check before saving.
+      The Voting and Commenting toggles are phrased as **Disable Voting** and **Disable Commenting**. Leaving them **off** keeps the feature **enabled** (the default); turning them **on** disables the feature. Easy to flip in your head — double-check before saving.
     </Callout>
   </Step>
   <Step title="Save" icon="check">
-    Your board is live immediately at `your-portal-domain/boards/<slug>`.
+    Your board is live immediately at `your-org.productbridge.io/feedback/<board-slug>` (or `/roadmap/<board-slug>` for roadmap boards).
   </Step>
 </Steps>
 
@@ -76,20 +76,20 @@ A single board is fine for most teams starting out. Consider splitting into mult
 
 ## Board-Level Custom Fields
 
-Each board can override which [custom fields](/setup/custom-fields) appear on its posts. For example, your "Enterprise Feedback" board might require an "Account ID" field that your public board doesn't need.
+Each **feedback board** controls which [custom fields](/setup/custom-fields) appear on its post form. For example, your "Enterprise Feedback" board might collect an "Account ID" field that your public board doesn't need.
 
-Configure these in the board's settings under **Custom Fields**.
+Configure these in the board form under **Customize post input fields**. This section appears on feedback boards only — roadmap boards don't have custom fields.
 
 ## Visibility & Access Rules
 
-Visibility and post-creation access are **independent** — you can have a board that's publicly visible but only allows specific segments to post, or vice versa.
+Visibility and post-creation access are **independent** — you can have a board that's publicly visible but only lets your team or a specific segment post, or vice versa.
 
-| Visibility | Post Access | Common Use Case |
-|-----------|-------------|------------------|
-| Public | Anyone | Standard public feedback hub |
-| Public | Signed-in only | Reduce spam; require an account to post |
-| Public | Segment only | Public roadmap, but only customers can request features |
-| Internal | Internal | Team-only ideation board |
-| Segment | Segment | Beta board scoped to your Beta Customers |
+| Who Can See Posts | Who Can Create Posts | Common Use Case |
+|-------------------|----------------------|------------------|
+| Public | Public | Standard public feedback hub |
+| Public | Internal Team | Public roadmap-style board your team curates |
+| Public | Segmented Users | Publicly readable, but only customers can request features |
+| Internal | Internal Team | Team-only ideation board |
+| Segmented Users | Segmented Users | Beta board scoped to your Beta Customers |
 
 See [Visibility & SEO](/settings/visibility-and-seo) for the full breakdown of visibility levels.

@@ -5,7 +5,7 @@ description: "Posts can be assigned categories. Use the API to list, retrieve, c
 
 Posts can be assigned categories — short labels like "UI", "API", or "Performance" that classify what a feedback or roadmap post is about. Each category belongs to your organization and can be applied to posts on any board.
 
-The API lets you list, retrieve, create, and delete categories. To change the category assigned to a specific post, see the [feedback posts update endpoint](/api-reference) (covered in a future Phase 5d-b page).
+The API lets you list, retrieve, create, and delete categories. To change the category assigned to a specific post, use the [update feedback post endpoint](/api-reference/feedback-posts/update).
 
 <Callout kind="info">
   **Behavior differences from Canny.** ProductBridge categories are **organization-scoped** — one set of categories applies to every board in the org, instead of being defined per-board. Sub-categories (Canny's `parentID`) are not supported in v1; every category is top-level.

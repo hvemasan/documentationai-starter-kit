@@ -11,7 +11,7 @@ The Changelog is your public-facing feed for product updates. Announce new featu
 
 <Steps>
   <Step title="Create a New Entry" icon="plus">
-    Navigate to the **Changelog** tab and click **New Entry**. Enter a title that clearly describes the update (e.g., "New: Bulk feedback export" or "Fix: Dashboard loading performance").
+    Open **Changelog** under **Modules** in the sidebar and click **New Entry**. Enter a title that clearly describes the update (e.g., "New: Bulk feedback export" or "Fix: Dashboard loading performance").
   </Step>
   <Step title="Write the Details" icon="edit">
     Add a description covering what changed, why it matters, and any action users need to take. Use markdown formatting for clarity — headings, bullet points, and code blocks are all supported.
@@ -33,10 +33,14 @@ The Changelog is your public-facing feed for product updates. Announce new featu
 
 ## Changelog Page
 
-Your changelog is accessible at a public URL like `https://changelog.productbridge.io/your-project`. The page displays entries in reverse chronological order, with filtering by tag and a search bar.
+Your changelog lives on your public portal's **Changelog** tab at `https://{your-subdomain}.productbridge.io/changelog`. The page displays entries in reverse chronological order. You can link directly to a specific entry with the `?post={postId}` query parameter:
+
+```
+https://{your-subdomain}.productbridge.io/changelog?post=POST_ID
+```
 
 <Callout kind="tip">
-  Embed your changelog directly in your app using the changelog widget. Users see updates without leaving your product.
+  You can also surface your changelog inside your product with the [in-app widget](/core-concepts/feedback-collection/widgets) by setting `defaultTab: 'changelog'`.
 </Callout>
 
 ## Linking Changelog to Feedback
@@ -58,7 +62,3 @@ Not ready to publish yet? Save entries as drafts and schedule them for later:
 
 - **Drafts** — Work on entries without publishing. Only team members can see drafts.
 - **Scheduled Publishing** — Set a date and time for automatic publishing. Useful for coordinating announcements with releases.
-
-<Callout kind="info">
-  Scheduled entries publish at the time you set, regardless of timezone. All times are displayed in UTC in the scheduler to avoid confusion.
-</Callout>

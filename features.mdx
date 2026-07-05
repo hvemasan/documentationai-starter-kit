@@ -1,137 +1,98 @@
 ---
-title: Core Features
-description: Explore the essential features of ProductBridge that streamline documentation creation, collaboration, and maintenance.
+title: ProductBridge Features
+description: >-
+  An overview of everything ProductBridge offers — feedback collection and
+  moderation, a public portal, in-app widgets, roadmap prioritization,
+  changelog, AI-powered intelligence, integrations, a public API, and an MCP
+  server.
 ---
 
-## Overview
+## Everything You Need to Close the Feedback Loop
 
-ProductBridge provides powerful tools to create, organize, and maintain your documentation efficiently. You can build structured knowledge bases, collaborate in real-time, embed rich media, and customize every aspect to match your brand. These core features help teams produce high-quality docs without complexity.
+ProductBridge covers the full lifecycle of customer feedback: collect it from every channel, make sense of it with AI, prioritize what to build, and tell users what shipped. This page maps out each capability and where to learn more.
 
-<Columns cols={3}>
-  <Card title="Document Structuring" icon="book-open" href="#document-structuring">
-    Organize content with hierarchies, pages, and navigation.
+## Collect Feedback
+
+<Columns cols="2">
+  <Card title="Feedback Boards & Moderation" href="/core-concepts/feedback-collection" icon="inbox" horizontal="false">
+    Organize feedback into boards with statuses, tags, and categories. Review incoming posts in the Moderation queue before they go public.
   </Card>
-  <Card title="Real-time Collaboration" icon="users" href="#collaboration">
-    Edit together with live updates and version history.
+
+  <Card title="Public Portal" href="/core-concepts/feedback-collection/public-portal" icon="globe" horizontal="false">
+    A branded portal at `https://{your-subdomain}.productbridge.io` with Feedback, Roadmap, and Changelog tabs. Users sign in to post, vote, and comment. White-label it with a custom domain.
   </Card>
-  <Card title="Media Support" icon="image" href="#media">
-    Embed images, videos, and interactive elements seamlessly.
+
+  <Card title="Widgets & Embeds" href="/core-concepts/feedback-collection/widgets" icon="code" horizontal="false">
+    Embed feedback collection in your product: popup, sidebar, inline, custom trigger, iFrame, or a direct link. Identify logged-in users with a signed JWT.
   </Card>
-  <Card title="Customization" icon="settings" href="#customization">
-    Tailor themes, layouts, and components to your needs.
+
+  <Card title="Users & Segments" href="/setup/user-segments" icon="users" horizontal="false">
+    See every end user who has submitted or voted on feedback, and group them into segments to analyze what specific audiences are asking for.
   </Card>
 </Columns>
 
-## Document Structuring and Hierarchies
+## Understand Feedback with AI
 
-Build intuitive documentation hierarchies with nested pages, sidebars, and search. ProductBridge supports unlimited nesting, so you create logical structures like `/docs/introduction` → `/docs/quickstart` → `/docs/api`.
+<Columns cols="3">
+  <Card title="Analytics" href="/core-concepts/insights/overview" icon="bar-chart-3" horizontal="false">
+    Feedback volume and trends across every connected source, filterable by time range, source, and board.
+  </Card>
 
-<Callout kind="tip">
-Use clear, descriptive slugs for URLs to improve SEO and navigation.
-</Callout>
+  <Card title="Insights" href="/core-concepts/insights" icon="lightbulb" horizontal="false">
+    AI distills feedback into themes, observations, and strengths — deduplicated across customers and ranked by reach, with evidence one click away.
+  </Card>
 
-Follow these steps to set up your first hierarchy:
+  <Card title="Ask AI" href="/core-concepts/feedback-intelligence/ask-ai" icon="sparkles" horizontal="false">
+    A conversational assistant that answers questions about your feedback, roadmap, segments, and knowledge base in plain English.
+  </Card>
+</Columns>
 
-<Steps>
-  <Step title="Create Root Page" icon="file">
-    Start with an overview page in your workspace.
-  </Step>
-  <Step title="Add Nested Pages" icon="folder">
-    Drag and drop to organize subtopics under parent pages.
-  </Step>
-  <Step title="Configure Sidebar" icon="menu">
-    Enable automatic sidebar generation from your hierarchy.
-  </Step>
-</Steps>
+<Card title="Knowledge Hub" href="/setup/knowledge-hub" icon="book-open" horizontal="false">
+  Upload product docs, guides, and internal documents at **Settings → Organization → Knowledge Hub** to power AI answers with your own content.
+</Card>
 
-```mermaid
-graph TD
-    A[Introduction] --> B[Quickstart]
-    A --> C[Authentication]
-    B --> D[Installation]
-    B --> E[First Run]
-    C --> F[API Keys]
-    C --> G[OAuth]
-```
+## Plan and Communicate
 
-## Real-time Collaboration Tools
+<Columns cols="2">
+  <Card title="Product Roadmap" href="/core-concepts/product-roadmap" icon="map" horizontal="false">
+    Turn feedback into roadmap items and prioritize them with built-in frameworks: **RICE**, **ICE**, **Impact/Effort**, and **MoSCoW**. Share the roadmap on your public portal or keep it internal.
+  </Card>
 
-Invite team members to edit docs simultaneously. Changes appear instantly, with cursor indicators and conflict resolution. Track history with blame view and rollback options.
+  <Card title="Changelog" href="/core-concepts/changelog" icon="megaphone" horizontal="false">
+    Publish release notes with labels and types, schedule posts, link them to roadmap items, and notify the users who asked for each feature.
+  </Card>
+</Columns>
 
-<Tabs>
-  <Tab title="Team Editing" icon="users">
-    Share edit links or workspace access. See who is online and what they edit.
+## Connect Your Stack
 
-    <Callout kind="info">
-      Up to 50 concurrent editors per doc for enterprise plans.
-    </Callout>
-  </Tab>
-  <Tab title="Version Control" icon="git-branch">
-    Commit changes with messages. Compare diffs side-by-side.
-  </Tab>
-</Tabs>
+<Columns cols="2">
+  <Card title="Integrations" href="/integrations/communication-channels" icon="plug" horizontal="false">
+    Ingest feedback from Intercom, Zendesk, Freshdesk, Slack, Discord, and Gong; import reviews from TrustPilot, the App Store, Play Store, and AppSumo; sync statuses two-way with Jira, Linear, and ClickUp; automate with Zapier, Make, and Pabbly Connect.
+  </Card>
 
-## Media and Embed Support
+  <Card title="Public API & Webhooks" href="/api-reference/introduction" icon="braces" horizontal="false">
+    Manage posts, boards, comments, votes, and changelog entries programmatically. Subscribe to signed webhook events at **Settings → Connect → API & Webhooks**.
+  </Card>
 
-Enhance docs with images, videos, GIFs, and embeds. ProductBridge optimizes media automatically and supports lazy loading.
+  <Card title="MCP Server" href="/integrations/ai-assistants/mcp-server" icon="bot" horizontal="false">
+    Connect Claude and other MCP clients to ProductBridge. 22 tools cover feedback, roadmap, and changelog. Set it up at **Settings → Connect → MCP Server**.
+  </Card>
 
-<Image
-  src="https://via.placeholder.com/800x400/3B82F6/FFFFFF?text=Documentation+Screenshot"
-  alt="ProductBridge editor with embedded media"
-  width="800"
-  height="400"
-/>
+  <Card title="Import Your Data" href="/help-center/guides/import-data" icon="upload" horizontal="false">
+    Migrate from Canny via its API or bring data from any tool with the generic CSV importer at **Settings → Connect → Import Data**.
+  </Card>
+</Columns>
 
-Use standard embeds for third-party content:
+## Where Everything Lives
 
-````mdx
-<Video src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Demo Video" width="560" height="315" />
+The dashboard at `https://app.productbridge.io` is organized into three sidebar sections:
 
-<Iframe src="https://example.com/form" title="Interactive Form" width="100%" height="400" />
-````
+| Section | Items |
+|---|---|
+| **Modules** | Feedback, Roadmap, Changelog, Moderation |
+| **Intelligence** | Analytics, Insights, Ask AI |
+| **Workspace** | Users, Settings, Connect Sources |
 
-## Customization Options
-
-Tailor your docs with themes, custom CSS, and MDX components. Set your brand color like `#3B82F6` and configure layouts.
-
-<CodeGroup tabs="Theme Config,Custom Component">
-  ```json
-  {
-    "theme": {
-      "primaryColor": "#3B82F6",
-      "fontFamily": "Inter, sans-serif"
-    }
-  }
-  ```
-  ```jsx
-  // Custom MDX component example
-  export const CustomCallout = ({ children, kind }) => (
-    <div className={`callout-${kind}`}>
-      {children}
-    </div>
-  );
-  ```
-</CodeGroup>
-
-<Expandable title="Advanced Customization" default-open="false">
-  Override defaults with CSS variables:
-
-  ```css
-  :root {
-    --primary: #3B82F6;
-    --sidebar-width: 280px;
-  }
-  ```
-
-  Integrate via API for dynamic themes based on user preferences.
-</Expandable>
-
-| Feature | Basic Plan | Pro Plan | Enterprise |
-|---------|------------|----------|------------|
-| Custom Domains | No | Yes | Yes |
-| CSS Overrides | Limited | Full | Full |
-| Component Library | Standard | +Custom | Unlimited |
-
-<Callout kind="success">
-Ready to build? Check the [quickstart](/quickstart) for hands-on setup.
+<Callout kind="tip" collapsed="false">
+  New here? Follow the [Quick Start Guide](/quickstart) to create your account, set up your organization, and collect your first feedback in under 5 minutes.
 </Callout>

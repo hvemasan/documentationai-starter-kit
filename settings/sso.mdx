@@ -88,7 +88,7 @@ Click **Test Redirect Flow** to verify the complete loop before going live. Prod
 
 <Steps>
   <Step title="Click Test Redirect Flow" icon="play" title-type="p">
-    ProductBridge opens a popup window and redirects to your configured login page with `test=true` appended to the query parameters.
+    ProductBridge opens a popup window that runs the test flow and redirects to your configured login page with the standard `redirect`, `organizationId`, and `returnTo` query parameters — exactly like a real sign-in.
   </Step>
 
   <Step title="Complete authentication in the popup" icon="log-in" title-type="p">
@@ -96,7 +96,7 @@ Click **Test Redirect Flow** to verify the complete loop before going live. Prod
   </Step>
 
   <Step title="See the result" icon="check-circle" title-type="p">
-    If the JWT is valid, the popup closes and the **SSO Tested** badge turns green. If verification fails, an error message describes what went wrong.
+    If the JWT is valid, the popup closes and the badge next to the test button changes from **Not Tested** to **Tested**. If verification fails, an error message describes what went wrong.
   </Step>
 </Steps>
 
@@ -110,10 +110,10 @@ After a successful test, two toggles become available (visible at the bottom of 
 
 **Enable Single Sign-On Redirect** — When on, all portal Sign In clicks redirect to your login page instead of showing the ProductBridge login form.
 
-**Disable ProductBridge Login** — When on, the native ProductBridge login form is hidden entirely. Users can only sign in via your SSO redirect. Enable this only after confirming SSO works correctly.
+**Disable ProductBridge login** — When on, the native ProductBridge login form is hidden entirely. Users can only sign in via your SSO redirect. Enable this only after confirming SSO works correctly.
 
 <Callout kind="danger" collapsed="false">
-  Enabling "Disable ProductBridge Login" locks out all users who previously signed in with a ProductBridge password. Make sure SSO is fully working before turning this on. You can always disable SSO from the dashboard to restore access.
+  Enabling "Disable ProductBridge login" locks out all users who previously signed in with a ProductBridge password. Make sure SSO is fully working before turning this on. You can always disable SSO from the dashboard to restore access.
 </Callout>
 
 ---
@@ -415,33 +415,19 @@ Go to **Settings → SSO → Widget Auth** to control how the in-app widget hand
 
 <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778333495547-g6d0gidb7qt-pasted-image-1778333485351.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
 
-### Require identify() for Widget
+### Require identify() for widget
 
-When enabled, anonymous users see a locked state in the widget instead of the default feedback form. The widget only accepts submissions from users who have been identified via `ProductBridge.init({ userToken })` or `ProductBridge.identify(token)`.
+When **Require identify() for widget** is enabled, anonymous users see a locked state in the widget instead of the default feedback form. The widget only accepts submissions from users who have been identified via `ProductBridge.init({ userToken })` or `ProductBridge.identify(token)`.
 
 Use this when you want every piece of widget feedback linked to a verified user account.
 
-### Require User Hash
+### Require User Hash for Identify Calls
 
-When enabled, ProductBridge also validates an HMAC-SHA256 hash of the user ID included in the JWT. This prevents a user from crafting a token that impersonates another user — even if they somehow obtain a valid API secret.
+When **Require user hash for identify calls** is enabled, ProductBridge additionally validates a `user_hash` — an HMAC-SHA256 hash of the user ID — sent as a **separate parameter alongside** the JWT (not inside the JWT payload). The JWT must also include a `sub` claim carrying the user ID being hashed.
 
-Generate the hash on your server and include it in the JWT payload:
-
-```javascript
-const crypto = require('crypto');
-
-const userHash = crypto
-  .createHmac('sha256', process.env.PRODUCTBRIDGE_WIDGET_SECRET)
-  .update(String(user.id))
-  .digest('hex');
-
-// Include user_hash in your JWT payload
-jwt.sign(
-  { email: user.email, id: String(user.id), user_hash: userHash },
-  PRODUCTBRIDGE_SECRET,
-  { expiresIn: '1h' }
-);
-```
+<Callout kind="alert" collapsed="false">
+  The current ProductBridge widget SDK does not send a `user_hash` parameter with identify calls. Enabling this setting will cause identify calls made through the shipped SDK to be rejected. Leave it off unless you're integrating against the verify-identity API directly and sending `user_hash` yourself.
+</Callout>
 
 ### Identify Mode
 
@@ -492,10 +478,10 @@ Copy the **SSO Callback URL** and allowlist it on your OAuth provider or CSRF wh
     ProductBridge uses `email` as the identity anchor. If the email value in the JWT changes between sessions (for example, `user@example.com` vs `User@Example.com`), a new record is created. Send a consistent, lowercased canonical email every time.
   </Expandable>
 
-  <Expandable title="'Disable ProductBridge Login' locked me out" default-open="false">
+  <Expandable title="'Disable ProductBridge login' locked me out" default-open="false">
     If SSO breaks after you disabled native login, you can restore access by contacting support at `help@productbridge.io`. Provide your organization ID and they can re-enable the fallback login from the backend.
 
-    To avoid this, always test SSO thoroughly before enabling "Disable ProductBridge Login".
+    To avoid this, always test SSO thoroughly before enabling "Disable ProductBridge login".
   </Expandable>
 
   <Expandable title="Widget shows 'Please log in' even after passing a userToken" default-open="false">

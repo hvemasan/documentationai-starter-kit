@@ -29,7 +29,7 @@ Nolt provides a CSV export of all your feedback posts from the board settings. O
 
 ## Step 2 — Upload to ProductBridge
 
-Navigate to **Settings → Import Data** in ProductBridge and drop your Nolt CSV onto the upload zone.
+Navigate to **Settings → Connect → Import Data** in ProductBridge, select the **CSV import** tab, and drop your Nolt CSV onto the upload zone.
 
 ## Step 3 — Map Nolt columns to ProductBridge fields
 
@@ -47,8 +47,8 @@ Here is how Nolt's standard export columns map to ProductBridge:
 | `tags` | Tags | Comma-separated — auto-created if needed. |
 | `category` | Category | Auto-created if no matching category exists. |
 
-<Callout kind="info">
-  Because Nolt exports one board per file, the **Board** column is usually not in the CSV. During the value-mapping step, all posts in the file can be directed to a single ProductBridge board you choose.
+<Callout kind="alert">
+  Because Nolt exports one board per file, the **Board** column is usually not in the CSV — and the board-mapping step only appears if you map a **Board** column. Without one, all posts silently fall back to your organization's default board. To choose the target board, open your CSV in a spreadsheet app and add a `board` column with the same value in every row (for example, the Nolt board's name) before uploading, then map it to **Board** and assign it to the right ProductBridge board.
 </Callout>
 
 ## Step 4 — Map statuses and boards
@@ -65,7 +65,7 @@ After column mapping, ProductBridge shows every unique status value from your No
 | `complete` | Completed |
 | `declined` | Closed |
 
-If you did not map a **Board** column (common with Nolt exports), all posts fall back to your organization's default board. If you want to send them to a specific board, make sure you have a **Board** column in your CSV or map accordingly.
+If you mapped a **Board** column, its values appear here too — assign each one to the ProductBridge board you want. If you did not map a **Board** column, no board picker appears and all posts go to your organization's default board.
 
 ## Step 5 — Start importing
 
@@ -76,10 +76,11 @@ Click **Start Importing**. ProductBridge processes your posts in the background.
 Because Nolt exports per board, repeat the full import process for each board:
 
 1. Export the board from Nolt.
-2. Go to **Settings → Import Data** and upload that file.
-3. In the column mapping step, map all the same columns as before.
-4. In the value mapping step, point the board to the corresponding ProductBridge board.
-5. Click **Start Importing**.
+2. Add a `board` column to the file with the same value in every row.
+3. Go to **Settings → Connect → Import Data** and upload that file.
+4. In the column mapping step, map all the same columns as before, including the `board` column.
+5. In the value mapping step, point the board value to the corresponding ProductBridge board.
+6. Click **Start Importing**.
 
 ## What transfers from Nolt
 
@@ -89,7 +90,7 @@ Because Nolt exports per board, repeat the full import process for each board:
 | Post description | Yes | Map the description column. |
 | Vote count | Yes | Shown as the post's upvote count. |
 | Status | Yes | Must be mapped to a ProductBridge status. |
-| Board | Yes | Falls back to default board if not in CSV. |
+| Board | Yes | Add a `board` column to choose the target board; otherwise posts go to your default board. |
 | Category | Yes | Auto-created if not found. |
 | Tags | Yes | Auto-created if not found. |
 | Author name & email | Yes | Creates or matches a user account. |

@@ -10,10 +10,10 @@ The public API uses HTTP status codes to signal coarse-grained outcomes (success
 | Code | Meaning | When you see it |
 |------|---------|-----------------|
 | `200` | Success | The endpoint returns its expected response body. |
-| `400` | Bad request | A semantic precondition failed (e.g. `merge_post_id == into_post_id`, parent comment doesn't belong to the same post). The body explains what's wrong. |
+| `400` | Bad request | A semantic precondition failed (e.g. a referenced resource doesn't belong to your organization, parent comment doesn't belong to the same post). The body explains what's wrong. |
 | `401` | Unauthorized | Missing / unknown / inactive `api_key`, or the key doesn't grant `public_api` scope. |
 | `404` | Not found | The referenced resource doesn't exist *for your organization*. ProductBridge returns 404 (not 403) when a resource exists in another org — by design, to avoid leaking the existence of cross-org data. |
-| `422` | Validation error | Pydantic rejected the request body — e.g. missing required field, wrong type, value out of range. The body lists every offending field. |
+| `422` | Validation error | Pydantic rejected the request body — e.g. missing required field, wrong type, value out of range, or a model-level rule such as `merge_post_id == into_post_id`. The body lists every offending field. |
 | `5xx` | Server error | Bug or downstream outage on ProductBridge's side. Retry with backoff; if it persists, contact support. |
 
 ## Error envelope

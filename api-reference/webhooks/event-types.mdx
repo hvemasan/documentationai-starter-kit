@@ -9,7 +9,7 @@ ProductBridge emits 11 canonical event types. Each one is delivered to every act
 
 | Event                 | Description |
 |-----------------------|-------------|
-| `post.created`        | A new feedback or roadmap post is created. |
+| `post.created`        | A new feedback post is created. |
 | `post.edited`         | A post's title, description, board, owner, ETA, category, custom fields, or moderation status changed. |
 | `post.deleted`        | A post is soft-deleted. |
 | `post.tag_added`      | A tag is added to a post. Fires once per tag added. |
@@ -27,7 +27,7 @@ The remainder of this page documents the per-event `data` shape — the inner ob
 
 ## post.created
 
-Fires whenever a feedback or roadmap post is created — including via the public API, dashboard, sidebar integrations (Zendesk, Freshdesk), and the AI processing pipeline.
+Fires whenever a feedback post is created — including via the public API, dashboard, sidebar integrations (Zendesk, Freshdesk), and the AI processing pipeline. Roadmap post creation does not emit this event.
 
 <ResponseField name="id" field-type="string" required="true" deprecated="false">
   UUID of the new post.
@@ -194,6 +194,10 @@ Symmetric to `post.tag_added` — fires once per tag removed. Same `data` shape.
 
 Fires when a post's status moves to a new status row. ProductBridge categorizes statuses into groups (open / in-progress / completed / closed); this event fires on any cross-status transition, regardless of group.
 
+<Callout kind="info">
+  This event does not fire when a post receives its *first* status (a transition from no status to a status). Only changes between two existing statuses emit `post.status_changed`.
+</Callout>
+
 <ResponseField name="id" field-type="string" required="true" deprecated="false">
   UUID of the post.
 </ResponseField>
@@ -260,10 +264,6 @@ Fires when a comment is created on a feedback post — from the dashboard, publi
   UUID of the board the post belongs to.
 </ResponseField>
 
-<ResponseField name="board_name" field-type="string" required="false" deprecated="false">
-  Human-readable name of the board.
-</ResponseField>
-
 <ResponseField name="author_name" field-type="string" required="false" deprecated="false">
   Display name of the comment's author. Empty string when unknown.
 </ResponseField>
@@ -279,7 +279,6 @@ Fires when a comment is created on a feedback post — from the dashboard, publi
     "post_title": "Add dark mode",
     "content": "+1 from the entire data team.",
     "board_id": "553c3ef8b8cdcd1501ba1234",
-    "board_name": "Feature Requests",
     "author_name": "Sally Doe"
   }
 }

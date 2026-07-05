@@ -7,29 +7,31 @@ description: >-
 ---
 ## Your Public Feedback Hub
 
-The Public Portal is a dedicated, branded page where anyone can submit feedback, vote on existing requests, and leave comments. It gives your users a transparent space to share ideas and see what others are requesting — building community and trust around your product.
+The Public Portal is a dedicated, branded page where users can submit feedback, vote on existing requests, and leave comments. It gives your users a transparent space to share ideas and see what others are requesting — building community and trust around your product.
 
-[SSO feature](/settings/sso) is available for users to automatically login, making it the lowest-friction way to collect input.
+<Callout kind="info" collapsed="false">
+  Users sign in to post, vote, and comment — with email and password, Google, or GitHub. You can also configure an [SSO redirect](/settings/sso) so your own users are logged in automatically.
+</Callout>
 
 ## Set Up Your Portal
 
 <Steps>
-  <Step title="Activate the Portal" icon="globe" title-type="p">
-    Navigate to **Settings > Feedback > Public Portal** and click **Enable**.
+  <Step title="Find Your Portal" icon="globe" title-type="p">
+    Your portal is on by default at `https://{your-subdomain}.productbridge.io`.
 
-    ProductBridge generates a unique URL for your portal (e.g., `https://feedback.yourproduct.com` or a custom domain).
+    Configure it under **Settings → Organization → Public Portal**. To take the portal offline, use the **Disable Public Portal** toggle under **Portal access**.
   </Step>
 
-  <Step title="Customize Branding" icon="palette" title-type="p">
+  <Step title="Customize Appearance" icon="palette" title-type="p">
     Configure your portal to match your brand:
 
-    - **Logo** — Upload your product logo
+    - **Visible tabs** — Toggle the Feedback, Roadmap, and Changelog tabs individually, and pick the default landing tab
 
-    - **Brand colors** — Set primary and accent colors
+    - **Brand colors** — Set colors for light and dark mode, plus the default theme
 
-    - **Welcome message** — Add a headline and description that greets visitors
+    - **Custom domain** — Optionally map your own domain (e.g., `feedback.yourproduct.com`) via a CNAME record under **Settings → Custom Domain**
 
-    - **Custom domain** — Optionally map your own domain (e.g., `feedback.yourproduct.com`)
+    Your logo is managed under **Settings → Organization → Brand Settings**.
   </Step>
 
   <Step title="Configure Categories" icon="tag" title-type="p">
@@ -45,11 +47,11 @@ The Public Portal is a dedicated, branded page where anyone can submit feedback,
 
 ### Feedback Submission
 
-Users can submit new feedback with a title, description, and category. Optionally, they can attach screenshots or files to provide more context.
+Signed-in users can submit new feedback with a title, description, and category. Optionally, they can attach screenshots or files to provide more context.
 
 ### Voting
 
-Enable voting to let your community prioritize requests organically. Users can upvote existing feedback items, and the most-requested features rise to the top automatically.
+Voting lets your community prioritize requests organically. Users can upvote existing feedback items, and the most-requested features rise to the top automatically.
 
 <Callout kind="tip" collapsed="false">
   Voting is one of the most powerful feedback signals. A post with 50 votes tells you more than 50 individual submissions saying the same thing.
@@ -59,9 +61,9 @@ Enable voting to let your community prioritize requests organically. Users can u
 
 Users can comment on existing feedback posts to add context, share use cases, or +1 a request with additional detail. Comments create a conversation around each feedback item.
 
-### Roadmap Visibility
+### Roadmap and Changelog Tabs
 
-Optionally expose your [Product Roadmap](/core-concepts/product-roadmap) on the public portal. Users can see what is planned, in progress, and completed — reducing "when will this ship?" questions and building transparency.
+Optionally expose your [Product Roadmap](/core-concepts/product-roadmap) and [Changelog](/core-concepts/changelog) as portal tabs. Users can see what is planned, in progress, completed, and shipped — reducing "when will this ship?" questions and building transparency. Set which tab visitors land on first with the default landing tab setting.
 
 ### Status Updates
 
@@ -69,15 +71,19 @@ When a feedback post's status changes (e.g., from "Under Review" to "Planned"), 
 
 ## Customization Options
 
-| Setting       | Description                                                    |
-| ------------- | -------------------------------------------------------------- |
-| Branding      | Logo, colors, favicon, custom CSS                              |
-| Custom domain | Map your own domain to the portal                              |
-| Categories    | Define feedback categories (Feature Request, Bug, etc.)        |
-| Boards        | Organize feedback into separate boards (e.g., by product area) |
-| Voting        | Enable or disable community voting                             |
-| Roadmap       | Show or hide the public roadmap tab                            |
-| SSO           | Enable single sign-on for authenticated feedback               |
+Configure these under **Settings → Organization → Public Portal**:
+
+| Setting             | Description                                                          |
+| ------------------- | -------------------------------------------------------------------- |
+| Visible tabs        | Show or hide the Feedback, Roadmap, and Changelog tabs individually  |
+| Default landing tab | Which tab visitors see first                                         |
+| Brand colors        | Portal colors for light and dark mode                                |
+| Default theme       | Whether the portal defaults to light or dark                         |
+| Feedback collection | Toggles for the feedback form and feedback agent                     |
+| Analytics           | Portal analytics settings                                            |
+| Support             | Support contact settings for your portal                             |
+
+Your logo lives under **Settings → Organization → Brand Settings**, and custom domains are mapped via CNAME under **Settings → Organization → Custom Domain**. To let your own users sign in automatically, configure [SSO](/settings/sso).
 
 <Callout kind="info" collapsed="false">
   The public portal is fully responsive and works on mobile, tablet, and desktop browsers.

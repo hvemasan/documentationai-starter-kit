@@ -2,8 +2,8 @@
 title: Slack Integration
 description: >-
   Connect ProductBridge to Slack to capture feedback via the /productbridge
-  slash command, @mentions, and AI-powered analysis of channel messages — with
-  optional confirmation replies in the thread.
+  slash command, @mentions, emoji reactions, and AI-powered analysis of channel
+  messages — with optional confirmation replies in the thread.
 ---
 
 <img src="https://cdn.simpleicons.org/slack" width="80" height="80" alt="" />
@@ -12,13 +12,15 @@ description: >-
 
 The Slack integration connects ProductBridge to your Slack workspace so your team can capture product feedback exactly where conversations already happen — no context switching, no separate tools.
 
-There are three ways feedback flows from Slack into ProductBridge:
+There are four ways feedback flows from Slack into ProductBridge:
 
-1. **Slash command&#x20;****`/productbridge`** — A teammate runs the slash command in any channel, fills out a small modal, and the post is created instantly.
+1. **Slash command `/productbridge`** — A teammate runs the slash command in any channel, fills out a small modal, and the post is created instantly.
 
 2. **@Mention** — A teammate mentions the ProductBridge bot in a channel message to submit feedback explicitly. AI detection is skipped and the message is treated as feedback at high confidence.
 
-3. **Passive channel monitoring** — Messages posted in monitored channels are analyzed by AI. Anything that looks like product feedback (feature requests, bug reports, UX complaints, enhancements, pain points) is captured automatically. Casual chat is ignored.
+3. **Emoji reaction** — A teammate reacts to any message with the trigger emoji (default `:feedback:`) and ProductBridge captures that message as feedback.
+
+4. **Passive channel monitoring** — Messages posted in monitored channels are analyzed by AI. Anything that looks like product feedback (feature requests, bug reports, UX complaints, enhancements, pain points) is captured automatically. Casual chat is ignored.
 
 After feedback is captured, ProductBridge can post a confirmation reply in the thread so the submitter knows their input was recorded.
 
@@ -36,7 +38,7 @@ After feedback is captured, ProductBridge can post a confirmation reply in the t
 
 <Steps>
   <Step title="Open the Admin Dashboard" icon="layout-dashboard" title-type="p">
-    Sign in to your ProductBridge admin dashboard and navigate to **Settings > Integrations > Slack**.
+    Sign in to your ProductBridge dashboard, click **Connect Sources** in the sidebar, and select **Slack**.
 
     <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1777407774806-o6xmw436fq-admin_integration_page_framed.png?fm=auto&auto=compress%2Cformat" width="1342" height="608" alt="" />
   </Step>
@@ -57,6 +59,7 @@ After feedback is captured, ProductBridge can post a confirmation reply in the t
     | `channels:read`     | View basic channel info                         |
     | `chat:write`        | Post auto-reply confirmations                   |
     | `commands`          | Register the `/productbridge` slash command     |
+    | `reactions:read`    | Detect trigger-emoji reactions on messages      |
     | `users:read`        | Identify message authors                        |
     | `users:read.email`  | Link Slack users to ProductBridge user profiles |
 
@@ -86,15 +89,15 @@ Immediately after connection:
 
 - The **ProductBridge bot** appears in your workspace and can be invited to channels
 
-- The **`/productbridge`****&#x20;slash command** is available in every channel where the bot is present
+- The **`/productbridge` slash command** is available in every channel where the bot is present
 
-- The **webhook endpoint** is registered so Slack can deliver messages, mentions, and command interactions in real time
+- The **webhook endpoint** is registered so Slack can deliver messages, mentions, reactions, and command interactions in real time
 
 - A confirmation appears in the ProductBridge admin UI showing your workspace name and bot user ID
 
 ## Submit Feedback from Slack
 
-After installation, your team can capture feedback in three ways.
+After installation, your team can capture feedback in four ways.
 
 ### 1. Slash Command `/productbridge`
 
@@ -142,7 +145,19 @@ Mention the ProductBridge bot in any channel to submit feedback explicitly. AI d
 
 ProductBridge captures the message, runs Extract → Deduplicate → Organize, and creates a feedback post. If auto-reply is enabled, ProductBridge replies in the same thread to confirm capture.
 
-### 3. Passive Channel Monitoring
+### 3. Emoji Reaction
+
+React to any message with the trigger emoji to capture that message as feedback — useful when a teammate spots valuable feedback in a conversation they didn't write themselves.
+
+- The default trigger emoji is `:feedback:`; you can change it with the **`trigger_emoji`** setting in the integration configuration
+
+- Reacting with any other emoji does nothing — only the configured trigger emoji captures the message
+
+- Emoji capture works when the capture mode is `active` or `both`
+
+The reacted-to message is treated as explicit feedback, so AI detection is skipped and the message flows straight into extraction, deduplication, and routing.
+
+### 4. Passive Channel Monitoring
 
 For channels you designate, ProductBridge listens to every message and uses AI to decide whether the message contains product feedback. Casual chat, jokes, and unrelated discussion are ignored — only messages with real product input become feedback posts.
 
@@ -168,17 +183,17 @@ ProductBridge analyzes the message, decides it is not feedback, and silently dis
 
 ## Configure Capture Behavior
 
-Settings live in **Settings > Integrations > Slack**.
+Settings live in **Connect Sources > Slack**.
 
 ### Capture Mode
 
 Three modes control which signals generate feedback posts:
 
-| Mode      | Slash Command | @Mention | Passive Channel Monitoring |
-| --------- | ------------- | -------- | -------------------------- |
-| `passive` | ✓             | —        | ✓                          |
-| `active`  | ✓             | ✓        | —                          |
-| `both`    | ✓             | ✓        | ✓                          |
+| Mode      | Slash Command | @Mention | Emoji Reaction | Passive Channel Monitoring |
+| --------- | ------------- | -------- | -------------- | -------------------------- |
+| `passive` | ✓             | —        | —              | ✓                          |
+| `active`  | ✓             | ✓        | ✓              | —                          |
+| `both`    | ✓             | ✓        | ✓              | ✓                          |
 
 The default is `both` — start there to maximize capture, then narrow to `passive` or `active` if you find the AI is over- or under-collecting from regular messages.
 
@@ -193,6 +208,10 @@ For passive mode, choose which channels ProductBridge should listen to:
 <Callout kind="alert" collapsed="false">
   For private channels, you must manually invite the bot using `/invite @ProductBridge` before it can read messages.
 </Callout>
+
+### Trigger Emoji
+
+The **`trigger_emoji`** setting controls which emoji reaction captures a message as feedback. The default is `feedback` (`:feedback:`). Pick an emoji your team doesn't use casually so reactions don't create accidental posts.
 
 ### Auto-Reply
 
@@ -211,7 +230,7 @@ All Slack feedback (regardless of capture path) flows through ProductBridge's AI
 | Stage           | What Happens                                                                                                                                             |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Normalize**   | Message, channel info, user info, thread context, and permalink are combined into a structured format                                                    |
-| **Detect**      | LLM classifies as feedback (skipped for slash command and @mention — auto-confirmed at 0.95 confidence)                                                  |
+| **Detect**      | LLM classifies as feedback (skipped for slash command, @mention, and emoji reaction — auto-confirmed at 0.95 confidence)                                 |
 | **Extract**     | LLM extracts title, description, sentiment, priority, feature area, pain points, and customer impact                                                     |
 | **Deduplicate** | Semantic search (Voyage AI + Qdrant) checks for similar existing posts. If similarity ≥ 0.85, votes on the existing post instead of creating a duplicate |
 | **Organize**    | LLM assigns the right board, category, and tags                                                                                                          |
@@ -244,7 +263,7 @@ ProductBridge automatically ignores noise so only meaningful messages reach the 
   **No historical backfill** — Slack only delivers events in real time. ProductBridge cannot import messages posted before the integration was connected.
 </Callout>
 
-- **Direct messages are not supported** — Only channel messages, mentions, and slash commands are processed
+- **Direct messages are not supported** — Only channel messages, mentions, emoji reactions, and slash commands are processed
 
 - **Private channels require bot invitation** — Use `/invite @ProductBridge` in each private channel
 
@@ -252,7 +271,7 @@ ProductBridge automatically ignores noise so only meaningful messages reach the 
 
 ## Disconnect
 
-To disconnect Slack, navigate to **Settings > Integrations > Slack** and click **Disconnect**. ProductBridge:
+To disconnect Slack, open **Connect Sources > Slack** and click **Disconnect**. ProductBridge:
 
 - Marks the integration as `disconnected`
 
@@ -269,6 +288,8 @@ To fully remove the bot from your workspace, also revoke the app under **Slack W
 
   - **@mentions not working** — Confirm `capture_mode` is set to `active` or `both`. Check that the bot user is correctly mentioned (the `@ProductBridge` autocomplete should appear).
 
+  - **Emoji reactions not capturing** — Confirm `capture_mode` is `active` or `both`, and that you reacted with the exact configured trigger emoji (default `:feedback:`). The bot must be in the channel to see the reaction.
+
   - **Passive monitoring not capturing** — Confirm `capture_mode` is `passive` or `both`, and verify the channel is included in your **Monitored Channels** list (or the list is empty for all channels).
 
   - **Missing user emails** — The `users:read.email` scope is required. If you upgraded ProductBridge after the initial install, disconnect and reconnect to refresh granted scopes.
@@ -277,6 +298,6 @@ To fully remove the bot from your workspace, also revoke the app under **Slack W
 
   - **Duplicate feedback** — ProductBridge deduplicates by Slack event ID and runs semantic similarity checks. If a similar post already exists, the message votes on the existing post rather than creating a duplicate.
 
-  - **Re-authorize** — If the connection stops working, revoke and reconnect from **Settings > Integrations > Slack**. This regenerates the bot token, re-registers the slash command, and re-establishes the webhook.
+  - **Re-authorize** — If the connection stops working, revoke and reconnect from **Connect Sources > Slack**. This regenerates the bot token, re-registers the slash command, and re-establishes the webhook.
 </Expandable>
 

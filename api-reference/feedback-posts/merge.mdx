@@ -104,6 +104,7 @@ POST https://api.productbridge.io/api/external/v1/feedback-posts/merge
 | Status | Body | Cause |
 |---|---|---|
 | `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `400` | `{"detail": "Cannot merge posts. Ensure both posts exist, are active, and neither is already merged."}` | The merge could not be performed — e.g. one of the posts is inactive or already merged. Note: `detail` is a plain string here, not the usual `{"error": ...}` object. |
 | `404` | `{"detail":{"error":"merge_post not found"}}` or `{"detail":{"error":"into_post not found"}}` | Either id doesn't exist, has been deleted, or belongs to another organization. |
 | `422` | Validation error envelope | `merge_post_id` equals `into_post_id`, or required fields missing. |
 

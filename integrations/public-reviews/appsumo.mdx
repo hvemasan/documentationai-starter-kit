@@ -1,63 +1,69 @@
 ---
 title: AppSumo Integration
-description: Connect ProductBridge to AppSumo to import and analyze product reviews from your AppSumo listing.
+description: >-
+  Connect ProductBridge to AppSumo by searching for your product or pasting
+  your listing URL — no credentials required. Reviews import automatically
+  every day.
 ---
 
 <img src="https://cdn.brandfetch.io/idH3eDPjsY/theme/dark/symbol.svg" width="80" height="80" alt="AppSumo" />
 
 ## Overview
 
-The AppSumo integration imports reviews from your AppSumo product listing into ProductBridge. Track what lifetime deal customers say about your product, monitor sentiment after launches, and analyze AppSumo feedback alongside your other channels.
+The AppSumo integration imports reviews from your public AppSumo product listing into ProductBridge. Track what lifetime deal customers say about your product, monitor sentiment after launches, and analyze AppSumo feedback alongside your other channels.
+
+Connecting requires **no credentials** — search for your product by name or paste your public listing URL, and ProductBridge handles the rest.
 
 ## Prerequisites
 
-<Callout kind="info" title="Before you start">
-- An active AppSumo product listing with at least one review
-- Your AppSumo listing URL or API credentials
-- A ProductBridge project to receive imported reviews
+<Callout kind="info" collapsed="false">
+  - A public AppSumo product listing (e.g., `appsumo.com/products/your-product/`)
+
+  - A ProductBridge organization with at least one feedback board configured
 </Callout>
 
 ## Connect AppSumo
 
 <Steps>
-  <Step title="Open Integration Settings" icon="settings">
-    Navigate to **Settings > Integrations > AppSumo** in your ProductBridge dashboard and click **Connect**.
+  <Step title="Open the Integrations catalog" icon="layout-dashboard" title-type="p">
+    Sign in to your ProductBridge dashboard, click **Connect Sources** in the sidebar, and select **AppSumo**.
   </Step>
-  <Step title="Enter Listing Details" icon="link">
-    Provide your AppSumo product URL or enter your AppSumo partner API credentials. ProductBridge validates the connection and displays your listing details.
+  <Step title="Find your product" icon="search" title-type="p">
+    Search for your product by name and pick it from the results. Prefer pasting a link instead? Switch to URL mode and paste your public listing URL or its slug:
+
+    - `https://appsumo.com/products/your-product/`
+    - `your-product`
   </Step>
-  <Step title="Configure Sync" icon="calendar">
-    Choose your sync frequency (daily or weekly) and whether to backfill existing reviews or start with new ones only.
+  <Step title="Optionally import historical data" icon="history" title-type="p">
+    Toggle on **Import historical data** and pick a window between **1 and 30 days** to backfill existing reviews from that period. This is off by default.
   </Step>
-  <Step title="Activate" icon="check">
-    Click **Enable** to start importing reviews. ProductBridge begins pulling reviews immediately based on your settings.
+  <Step title="Click Connect AppSumo" icon="check" title-type="p">
+    The integration status updates to **Connected**. Reviews start syncing automatically — no further configuration needed.
   </Step>
 </Steps>
 
-## Configure Settings
+## How Reviews Sync
 
-| Setting | Options | Description |
-|---------|---------|-------------|
-| Sync frequency | Daily, Weekly | How often new reviews are pulled |
-| Backfill | On, Off | Import historical reviews on first sync |
-| Minimum rating | 1-5 | Only import reviews at or below a specific taco rating |
+- **Automatic daily sync** — ProductBridge pulls new reviews once a day at **02:00 UTC**
+
+- **Sync depth** — Each sync checks your most recent reviews (150 by default) and imports the ones it hasn't seen yet
+
+- **Historical import** — If enabled at connect time, reviews from your chosen 1–30 day window are backfilled once in the background
+
+Each imported review is tagged with its AppSumo source, sentiment is derived by AI from the review text, and the review flows into [Feedback Intelligence](/core-concepts/feedback-intelligence) for categorization and trend analysis.
 
 <Callout kind="tip">
-  AppSumo reviews often come in waves after deal launches. Enable daily sync during launch periods to capture feedback in real time.
+  AppSumo reviews often come in waves after deal launches. Since syncs run daily, feedback from a launch spike lands in ProductBridge within a day — enable historical import if you connect mid-launch.
 </Callout>
 
-## How It Works
+## Disconnect
 
-Once connected:
-
-1. AppSumo reviews are imported on your configured schedule and tagged with "via AppSumo"
-2. Taco ratings are converted to sentiment scores (4-5 = positive, 3 = neutral, 1-2 = negative)
-3. Review text is analyzed by AI to extract specific topics and feature mentions
-4. All imported reviews flow into [Feedback Intelligence](/core-concepts/feedback-intelligence) for categorization and trend analysis
-5. You can compare AppSumo sentiment with other review platforms and direct feedback channels
+To stop syncing, open **Connect Sources > AppSumo** and click **Disconnect**. Reviews already imported stay in ProductBridge.
 
 <Expandable title="Troubleshooting" default-open="false">
-  - **No reviews importing** — Verify your AppSumo listing URL is correct and the product has published reviews
-  - **Authentication errors** — Regenerate your AppSumo partner API credentials and update them in ProductBridge
-  - **Duplicate reviews** — ProductBridge deduplicates by review ID automatically
+  - **Product not found in search** — Try the exact name from your AppSumo listing, or switch to URL mode and paste the listing URL directly
+
+  - **No reviews importing** — Verify your listing URL or slug is correct and the product has published reviews
+
+  - **Duplicate reviews** — ProductBridge deduplicates imported reviews automatically, so re-syncs never create duplicates
 </Expandable>

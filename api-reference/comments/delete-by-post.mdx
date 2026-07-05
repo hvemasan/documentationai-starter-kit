@@ -9,6 +9,8 @@ Bulk soft-deletes every active comment on a single feedback post. After this cal
 - The post itself is **not** affected; only its comments.
 - The deletion count is returned so you can verify the operation.
 
+Unlike deleting a single comment, this bulk operation emits **no** `comment.deleted` webhook events — webhook receivers are not notified of the removed comments.
+
 <Callout kind="danger">
   This is a **destructive bulk operation**. Once executed, individual comments cannot be un-deleted via the API. Use this only when you intentionally want to remove all conversation on a post (e.g. cleaning up a duplicate before merging).
 </Callout>

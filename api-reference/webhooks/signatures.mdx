@@ -13,7 +13,7 @@ When ProductBridge dispatches a webhook, it computes:
 signature = "sha256=" + HMAC-SHA256(signing_secret, raw_request_body).hex()
 ```
 
-…and sends it in the `X-ProductBridge-Signature` header. The signing secret is the per-webhook value returned exactly once when you registered the webhook (the modal in the dashboard's **Settings → API → Webhooks** page).
+…and sends it in the `X-ProductBridge-Signature` header. The signing secret is the per-webhook value returned exactly once when you registered the webhook (the **Signing secret** modal shown when you add an endpoint under **Settings → Connect → API & Webhooks → Webhook endpoints**).
 
 Your receiver verifies by computing the same HMAC with its locally-stored copy of the secret and comparing the two strings in **constant time**.
 
@@ -188,7 +188,7 @@ If a signing secret leaks, **revoke the webhook and create a new one**. There is
 </Steps>
 
 <Callout kind="tip">
-  Plan rotation as a deploy-coordinated step: revoke + recreate + update receiver are not atomic, so during the brief window between revoke and the new secret being live in your receiver, deliveries will fail. ProductBridge's automatic 3× retry-with-backoff usually papers over this if you complete the rotation within ~5 minutes.
+  Plan rotation as a deploy-coordinated step: revoke + recreate + update receiver are not atomic, and ProductBridge does not redeliver failed webhooks. Any events that occur between revoking the old webhook and the new secret being live in your receiver are dropped permanently — keep the window as short as possible, and re-fetch affected resources via the public API afterwards if you need to backfill.
 </Callout>
 
 ## Common pitfalls

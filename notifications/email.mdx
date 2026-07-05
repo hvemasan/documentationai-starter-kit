@@ -1,22 +1,27 @@
 ---
 title: Email Notifications
-description: Reach team members and customers outside the app — with assignment alerts, roadmap status updates, and changelog announcements sent straight to their inbox.
+description: Reach team members and customers outside the app — comment activity, assignment alerts, status updates, and changelog announcements sent straight to their inbox.
 ---
 
 ## What ProductBridge Emails
 
-ProductBridge sends three types of email today:
+ProductBridge can send email for every notification event, plus account lifecycle messages:
 
 | Email | Recipient | Trigger |
 |-------|-----------|---------|
-| **Changelog Announcement** | Subscribed end users | When a changelog post is published with email notifications enabled |
-| **Post Assignment** | Assigned team member | When an admin assigns a post to them |
-| **Roadmap Status Change** | Authors of linked feedback posts | When the linked roadmap item's status changes |
+| **Changelog Announcement** | Subscribed end users | A changelog post is published with email notifications enabled |
+| **Post Assigned / Unassigned** | The (un)assigned team member | An admin assigns or unassigns a post |
+| **Feedback Status Changed** | Followers of the post | A feedback post moves to a new status |
+| **Roadmap Status Changed** | Followers of the roadmap item + authors of linked feedback posts | A roadmap item moves to a new status |
+| **Feedback Linked to Roadmap** | Followers of the feedback post | A feedback post is linked to a roadmap item |
+| **New Comment** | Followers of the post | Someone comments on a post they follow |
+| **Comment Reply** | The parent comment's author | Someone replies to their comment |
+| **Account emails** | The individual | Team invitations, member-added confirmations, email verification, password reset |
 
-The first one targets your **customers**. The other two target your **team**.
+Delivery for the event-based emails is **follower-based** (voting on a post auto-follows it) and respects each recipient's [Channel preferences](/notifications/in-app#channel-preferences).
 
 <Callout kind="info">
-  Assignment and roadmap status emails only send if your workspace has [custom SMTP configured](/settings/custom-email-and-smtp). Changelog announcements work either way — they use the system mailer as a fallback.
+  No email type requires custom SMTP. Everything sends through your [custom SMTP](/settings/custom-email-and-smtp) when configured, and falls back to the system mailer otherwise — nothing is silently skipped.
 </Callout>
 
 ## Changelog Announcement Emails
@@ -29,10 +34,6 @@ End users subscribe directly from the public changelog page on your portal — b
 
 When someone subscribes, they immediately receive a **confirmation email** so they know it worked.
 
-<Callout kind="info">
-  **Allow Email Subscriptions** is admin-only — there's no per-end-user opt-out beyond the unsubscribe path (which is portal-based today). Toggle it from your changelog settings to enable or disable subscriber sign-ups workspace-wide.
-</Callout>
-
 ### Triggering an Announcement
 
 <Steps>
@@ -43,10 +44,7 @@ When someone subscribes, they immediately receive a **confirmation email** so th
     On the post editor, toggle **Send Email Notification** to on. (You can also configure scheduled publishing — the email fires when the scheduled post auto-publishes.)
   </Step>
   <Step title="Publish" icon="send">
-    ProductBridge queues the email send. Recipients are batched in chunks for efficiency — large subscriber lists are processed in waves, but the entire send typically completes in minutes.
-  </Step>
-  <Step title="Track delivery" icon="bar-chart-3">
-    Every send is logged per-recipient with status (sent / failed) and error message if any. Open the post in the admin to see delivery results.
+    ProductBridge queues and sends the email to every subscriber.
   </Step>
 </Steps>
 
@@ -55,8 +53,8 @@ When someone subscribes, they immediately receive a **confirmation email** so th
 | Field | Value |
 |-------|-------|
 | **From** | Your organization name + sender email (from your [email settings](/settings/custom-email-and-smtp) or system default) |
-| **Subject** | `{Org Name}: {Post Title}` |
-| **Body** | Rendered changelog content (HTML), with a link back to the public changelog |
+| **Subject** | `{Org Name}: {Post Title}` by default — editable as a template |
+| **Body** | Branded HTML with your logo, brand color, featured image, and the rendered changelog content, plus a link back to the public changelog |
 | **Unsubscribe** | Footer note pointing back to your changelog page (no token-based one-click unsubscribe today) |
 
 ### Unsubscribing
@@ -75,80 +73,54 @@ When an admin assigns a post to a team member, the assignee gets an email so the
 |-------|-------|
 | **Trigger** | Admin assigns or unassigns a post (feedback or roadmap) |
 | **Recipient** | The assignee (or unassigned user) — one email per event |
-| **Subject** | `{Actor} assigned you a post` or `You were unassigned from a post` |
-| **Body** | Post title, board, description preview, direct link to the post |
+| **Subject** | `You were assigned to a post` / `You were unassigned from a post` by default |
+| **Body** | Post title with a direct link to the post |
 
-### Requires Custom SMTP
+The in-app notification fires alongside the email. Assignees who prefer inbox-only can turn the Email switch off for assignment events in their [Channel preferences](/notifications/in-app#channel-preferences).
 
-Assignment emails only send when your workspace has [Custom SMTP configured and active](/settings/custom-email-and-smtp). If SMTP isn't set up, the email is silently skipped — the in-app notification still fires either way.
+## Status Change Emails
 
-<Callout kind="tip">
-  Set up custom SMTP early if your team relies on assignment workflows. Otherwise team members will only see assignments when they happen to check the app.
-</Callout>
+When a feedback post or roadmap item moves to a new status, followers of the post get an email (default subject: `Status update: {Post Title}`). Because voting auto-follows a post, this is how you **close the feedback loop** — customers who asked for a feature get notified when it ships.
 
-## Roadmap Status Change Emails
+Roadmap status changes additionally email the **authors of all feedback posts linked** to that roadmap item, with the subject `Roadmap update: {Title} is now {New Status}`.
 
-When a roadmap item moves to a new status (e.g., **Planned → In Progress**, or **In Progress → Completed**), authors of all feedback posts linked to that roadmap item get an email.
+## Comment Emails
 
-This is how you **close the feedback loop** — customers who asked for a feature get notified when it ships.
+Comment activity is emailed too:
 
-| Field | Value |
-|-------|-------|
-| **Trigger** | Roadmap post status changes |
-| **Recipients** | Authors of all feedback posts linked to the roadmap item (batch send) |
-| **Subject** | `Roadmap update: {Title} is now {New Status}` |
-| **Body** | Roadmap item title, the new status, and a link back to the post |
+- **New comment** — followers of the post get `{Actor} commented on "{Post Title}"` with an excerpt of the comment
+- **Comment reply** — the parent comment's author gets `{Actor} replied to your comment`
 
-### Requires Custom SMTP
+Recipients can switch comment emails off (and keep in-app only) via Channel preferences.
 
-Like assignment emails, roadmap status emails only send when custom SMTP is configured. If it isn't, the in-app notification still fires for linked feedback authors, but no email is sent.
+## Email Templates
 
-### Batched Delivery
-
-All recipients for a single status change are sent in one batch send (one SMTP connection, many recipients). Each recipient's delivery is logged individually.
+Every event email's subject and body is an **admin-editable template**. Go to **Settings → Organization → Notifications** and open the **Email Templates** section to customize them per event. Templates support `{{placeholder}}` tokens — for example `{{post_title}}`, `{{actor_name}}`, `{{new_status}}`, `{{post_url}}`, and (for changelog) `{{organization_name}}`, `{{post_content}}`, `{{brand_color}}`. The available placeholders are listed alongside each template in the editor.
 
 ## How ProductBridge Sends Email
 
-Behind the scenes, email is sent via SMTP using a two-tier resolution:
+Behind the scenes, every email is sent via SMTP using a two-tier resolution:
 
 1. **Custom org SMTP** — if your workspace has [Custom SMTP configured and active](/settings/custom-email-and-smtp), it's tried first
 2. **System SMTP fallback** — if your custom SMTP fails (or isn't configured), the system mailer is used
 
-This means changelog announcement emails always go out — even if your custom SMTP is misconfigured, your subscribers still get the message via our fallback. Assignment and roadmap status emails are stricter: they require active custom SMTP and skip silently otherwise.
-
-| Email | Custom SMTP Required? | Fallback to System SMTP? |
-|-------|----------------------|---------------------------|
-| Changelog Announcement | No | Yes |
-| Post Assignment | **Yes** | No |
-| Roadmap Status Change | **Yes** | No |
+This applies to every email type — a misconfigured custom SMTP never blocks delivery.
 
 ## User-Level Email Preferences
 
-ProductBridge does **not** currently support per-user notification preferences for emails. Email behavior is determined by:
+Email delivery is layered:
 
-- **Workspace-level toggles** (e.g., "Enable email subscriptions on the changelog")
-- **Per-post toggles** (e.g., "Send email for this changelog entry")
-- **Whether custom SMTP is configured** (for assignment and roadmap status emails)
+- **Per-user Channel preferences** — each team member toggles the Email switch per event from the bell inbox gear icon (see [In-App Notifications](/notifications/in-app#channel-preferences))
+- **Workspace-level toggles** — e.g., **Allow Email Subscriptions** for the changelog
+- **Per-post toggles** — e.g., **Send Email Notification** on a changelog entry
 
-End users can unsubscribe from changelog emails via the changelog page on your portal. Team members currently can't opt out of assignment or roadmap status emails individually — those are workspace-wide.
-
-## Email Delivery Logs
-
-For every email send, ProductBridge logs the per-recipient outcome — success or failure — along with any error message. Use these logs to:
-
-- Diagnose deliverability issues (bounces, hard fails)
-- Audit who was actually notified about a changelog
-- Investigate why a specific recipient didn't get an email
-
-Logs are visible in the admin dashboard for changelog sends; assignment and roadmap status logs are available via the system tools.
+End users unsubscribe from changelog emails via the changelog page on your portal.
 
 ## What's Not (Yet) Emailed
 
 A few flows you might expect that don't currently send emails:
 
-- **Comment activity** — comments and replies are in-app only
-- **New post notifications to admins** — in-app only
-- **Vote milestones** — in-app only
+- **New post notifications to admins** — new submissions don't email the team
 - **@ mentions** — not implemented
 - **Moderation alerts** — pending content doesn't trigger emails to admins
 

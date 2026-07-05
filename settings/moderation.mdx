@@ -1,20 +1,20 @@
 ---
 title: Moderation
-description: Keep your public portal clean — review posts and comments before they go live, let AI flag risky content, and anonymize users when needed.
+description: Keep your public portal clean — review posts and comments before they go live, park AI-processed integration posts for review, and anonymize users when needed.
 ---
 
 ## Why Moderation Matters
 
-A public feedback portal is a magnet for everything from genuine product ideas to spam, off-topic complaints, and the occasional sensitive customer story. ProductBridge gives you three independent moderation controls so you can pick exactly how much friction is appropriate for your community.
+A public feedback portal is a magnet for everything from genuine product ideas to spam, off-topic complaints, and the occasional sensitive customer story. ProductBridge gives you four independent moderation controls — found at **Settings → Organization → Moderation** (the page is titled **Moderation & Permissions**) — so you can pick exactly how much friction is appropriate for your community.
 
 | Control | What It Does | Default |
 |---------|--------------|---------|
-| **Post Moderation** | New feedback posts require admin approval before going public | On |
-| **Comment Moderation** | New comments require admin approval before going public | On |
-| **Enable AI Moderation Queue** | Parks posts arriving from integrations (Intercom, Zendesk, Trustpilot, etc.) for manual review before publishing or auto-merging | Off |
-| **Hide User Identities** | Anonymize user names on public posts and comments | Off |
+| **Require approval for posts** | New posts and post edits require admin approval before going public | Off |
+| **Require approval for comments** | New comments and comment edits require admin approval before going public | Off |
+| **Enable AI moderation queue** | Parks posts arriving from integrations (Intercom, Zendesk, Trustpilot, etc.) for manual review before publishing or auto-merging | Off |
+| **Hide user identities** | Replace user names and avatars with random ones on the public portal | Off |
 
-Toggle any of them independently — they don't depend on each other.
+The settings page groups these under **Posts**, **Comments**, **User Details**, and **AI Integration Moderation**. Toggle any of them independently — they don't depend on each other.
 
 ## Moderation States
 
@@ -25,33 +25,31 @@ Every post and comment carries a **moderation status** that determines whether i
 | **Pending** | No | Created while moderation is enabled, awaiting admin action |
 | **Accepted** | Yes | Approved by an admin, or auto-accepted when moderation is off |
 | **Rejected** | No | Manually rejected by an admin (kept for audit) |
-| **Spam** | No | Marked as spam (kept for audit and learning) |
 
 ## Post Moderation
 
-When enabled, every new feedback post lands in your **moderation queue** with status `Pending`. It stays invisible to the public until an admin accepts, rejects, or marks it as spam.
+When **Require approval for posts** is enabled, every new post (and post edit) lands in your **moderation queue** with status `Pending`. It stays invisible to the public until an admin accepts or rejects it.
 
 <Steps>
-  <Step title="Enable Post Moderation" icon="shield">
-    Go to **Settings → Moderation** and toggle **Post Moderation** on.
+  <Step title="Enable post approval" icon="shield">
+    Go to **Settings → Moderation** and turn on **Require approval for posts**.
   </Step>
   <Step title="Review the queue" icon="inbox">
-    Open the **Moderation** queue from your admin dashboard. New posts appear here with full context — title, description, submitter, source.
+    Open **Moderation** from the dashboard sidebar. New posts appear here with full context — title, description, submitter, source.
   </Step>
   <Step title="Act on each post" icon="check-circle">
     - **Accept** — publishes the post to the portal
     - **Reject** — keeps the post hidden but preserved for audit
-    - **Mark as spam** — hides the post and helps train the AI moderation model
   </Step>
 </Steps>
 
 <Callout kind="tip">
-  Turn post moderation **off** for trusted internal portals or when you want frictionless community submission. Turn it **on** for high-visibility public portals where one bad post can hurt your brand.
+  Leave post approval **off** for trusted internal portals or when you want frictionless community submission. Turn it **on** for high-visibility public portals where one bad post can hurt your brand.
 </Callout>
 
 ## Comment Moderation
 
-Identical behavior to post moderation, but for comments on existing posts. New comments stay `Pending` until you approve them.
+**Require approval for comments** behaves identically to post approval, but for comments on existing posts. New comments and comment edits stay `Pending` until you approve them.
 
 This is especially useful on high-traffic posts where a back-and-forth thread can derail quickly.
 
@@ -60,7 +58,7 @@ This is especially useful on high-traffic posts where a back-and-forth thread ca
 This control specifically affects **posts arriving from integrations** — Intercom, Zendesk, Trustpilot, App Store reviews, and similar sources. When enabled, every integration-sourced post is parked in the moderation queue for manual review before the AI pipeline auto-creates or merges it. When disabled, the AI pipeline processes integration posts automatically.
 
 <Callout kind="info">
-  This setting **only gates integration-sourced posts.** Posts submitted directly by end users through your portal or widget go through **Post Moderation** instead (or skip moderation if that's off). The two controls are independent.
+  This setting **only gates integration-sourced posts.** Posts submitted directly by end users through your portal or widget go through **Require approval for posts** instead (or skip moderation if that's off). The two controls are independent.
 </Callout>
 
 ### When to Enable the AI Moderation Queue
@@ -76,11 +74,10 @@ Any post arriving from a connected integration — typically the title and body 
 - Accept it as a new feedback post
 - Accept it as a merge into an existing post (when the AI suggests one)
 - Reject it
-- Mark it as spam
 
 ## Hide User Identities
 
-When enabled, end-user names are replaced with a generic label (e.g., "Anonymous") on the public portal. Their internal identity is preserved in your admin dashboard — only the public-facing display changes.
+When **Hide user identities** is enabled, real user details are replaced with a **random name and avatar** for all interactions on the public portal. Their internal identity is preserved in your admin dashboard — only the public-facing display changes.
 
 Use this when:
 
@@ -95,35 +92,35 @@ Use this when:
 ## Recommended Configurations
 
 <ExpandableGroup>
-  <Expandable title="High-trust internal portal" default-open="false">
-    - Post Moderation: **Off**
-    - Comment Moderation: **Off**
-    - Enable AI Moderation Queue: **Off**
-    - Hide User Identities: **Off**
+  <Expandable title="High-trust internal portal (default settings)" default-open="false">
+    - Require approval for posts: **Off**
+    - Require approval for comments: **Off**
+    - Enable AI moderation queue: **Off**
+    - Hide user identities: **Off**
 
-    All content goes live immediately. Best for company-internal portals where everyone is identified and accountable.
+    All content goes live immediately. This matches ProductBridge's defaults — best for company-internal portals where everyone is identified and accountable.
   </Expandable>
-  <Expandable title="Public SaaS portal (default)" default-open="false">
-    - Post Moderation: **On**
-    - Comment Moderation: **On**
-    - Enable AI Moderation Queue: **Off**
-    - Hide User Identities: **Off**
+  <Expandable title="Public SaaS portal" default-open="false">
+    - Require approval for posts: **On**
+    - Require approval for comments: **On**
+    - Enable AI moderation queue: **Off**
+    - Hide user identities: **Off**
 
     Every post and comment is admin-reviewed. Manageable for small-to-medium traffic.
   </Expandable>
   <Expandable title="High-integration-volume portal" default-open="false">
-    - Post Moderation: **On**
-    - Comment Moderation: **On**
-    - Enable AI Moderation Queue: **On**
-    - Hide User Identities: **Off**
+    - Require approval for posts: **On**
+    - Require approval for comments: **On**
+    - Enable AI moderation queue: **On**
+    - Hide user identities: **Off**
 
     Recommended when you connect multiple integrations (Intercom + Zendesk + reviews). The AI moderation queue lets you review every integration-sourced post before it lands on your boards.
   </Expandable>
   <Expandable title="Privacy-sensitive industry" default-open="false">
-    - Post Moderation: **On**
-    - Comment Moderation: **On**
-    - Enable AI Moderation Queue: **On**
-    - Hide User Identities: **On**
+    - Require approval for posts: **On**
+    - Require approval for comments: **On**
+    - Enable AI moderation queue: **On**
+    - Hide user identities: **On**
 
     Strict review plus public anonymity. Good for healthcare, finance, legal, or any regulated context.
   </Expandable>

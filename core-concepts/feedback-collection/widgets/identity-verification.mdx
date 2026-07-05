@@ -9,7 +9,7 @@ description: >-
 
 ## Why Identify Users?
 
-By default the widget works anonymously. When you add identity verification:
+By default, users are prompted to sign in inside the widget before they can post. When you add identity verification:
 
 - Feedback is automatically linked to the real user's profile — name, email, company, and plan
 - Your team sees **who** submitted each piece of feedback, not just what they said
@@ -43,7 +43,7 @@ The JWT is signed server-side so the widget can trust its contents. Your Widget 
 
 <Steps>
   <Step title="Open Widget Settings" icon="settings" title-type="p">
-    In your ProductBridge dashboard go to **Settings > Widget & Embeds > API Keys**.
+    In your ProductBridge dashboard go to **Settings → Connect → Widget & Embeds** and open the **API Keys** tab.
   </Step>
 
   <Step title="Generate a new key" icon="key" title-type="p">
@@ -342,7 +342,7 @@ export default function ProductBridgeWidget({
     // Fetch the token from your backend (user must be logged in)
     fetch('/api/productbridge-token')
       .then((res) => {
-        if (!res.ok) return { token: null }; // anonymous if not logged in
+        if (!res.ok) return { token: null }; // no token — users sign in inside the widget
         return res.json();
       })
       .then(({ token }) => {
@@ -400,7 +400,7 @@ onMounted(async () => {
     const res = await fetch('/api/productbridge-token');
     if (res.ok) ({ token } = await res.json());
   } catch {
-    // proceed anonymously if the request fails
+    // no token — users sign in inside the widget
   }
 
   const script = document.createElement('script');
@@ -455,7 +455,7 @@ export class ProductBridgeWidgetComponent implements OnInit, OnDestroy {
     // Fetch the token from your backend
     this.http.get<{ token: string }>('/api/productbridge-token').subscribe({
       next: ({ token }) => this.loadWidget(token),
-      error: () => this.loadWidget(null), // load anonymously on error
+      error: () => this.loadWidget(null), // no token — users sign in inside the widget
     });
   }
 
@@ -499,8 +499,10 @@ export class ProductBridgeWidgetComponent implements OnInit, OnDestroy {
 | `customer_status` | string | No | `active`, `trial`, `churned`, or any custom status |
 | `renewal_date` | string | No | ISO date string of the next renewal |
 | `renewal_risk` | string | No | `low`, `medium`, or `high` |
+| `account_owner_id` | string | No | Your internal ID of the account manager or CSM |
 | `account_owner_email` | string | No | Email of the account manager or CSM |
 | `external_user_id` | string | No | Any external system ID (CRM, Salesforce, etc.) |
+| `company_created_at` | string | No | ISO date string of when the company account was created |
 
 <Callout kind="info" collapsed="false">
   All fields except `email` are optional. Start with just `email`, `name`, and `sub`. Add company fields later if you want segmentation and prioritization data in your ProductBridge dashboard.
@@ -510,33 +512,14 @@ export class ProductBridgeWidgetComponent implements OnInit, OnDestroy {
 
 Tokens are valid for **1 hour** (`expiresIn: '1h'`). This is a short-lived token by design — it prevents stolen tokens from being reused indefinitely.
 
-Your frontend should fetch a fresh token on each page load or session start. Since the token endpoint is behind your own authentication middleware, unauthenticated users automatically get no token, and the widget falls back to anonymous mode.
-
-## Advanced: User Hash Verification
-
-For extra security, you can enable **user hash verification** in **Settings > Widget & Embeds > Security**. When enabled, ProductBridge requires your server to also send a hash of the user's ID:
-
-```javascript
-const crypto = require('crypto');
-
-// Compute HMAC-SHA256 of the user's ID with your Widget API Secret
-const userHash = crypto
-  .createHmac('sha256', process.env.PRODUCTBRIDGE_WIDGET_SECRET)
-  .update(String(user.id))
-  .digest('hex');
-
-// Include it in the JWT payload
-jwt.sign({ email: user.email, sub: String(user.id), user_hash: userHash }, ...);
-```
-
-With user hash enabled, any JWT that does not contain the correct hash is rejected — even if the signature is valid. This prevents one user from crafting a token that impersonates another.
+Your frontend should fetch a fresh token on each page load or session start. Since the token endpoint is behind your own authentication middleware, unauthenticated users automatically get no token, and the widget prompts them to sign in instead.
 
 ## Advanced: Identify After Init
 
 If the widget loads before the user logs in (e.g. on a public page with a login modal), you can identify the user after the fact with `ProductBridge.identify()`:
 
 ```javascript
-// 1. Init without a token (anonymous)
+// 1. Init without a token — users would be prompted to sign in
 ProductBridge.init({ organizationId: 'YOUR_ORGANIZATION_ID' });
 
 // 2. After the user logs in, fetch a token and identify
@@ -549,7 +532,7 @@ async function onLoginSuccess() {
 <Expandable title="Troubleshooting" default-open="false">
   **Widget shows "Please log in" even though I passed a token**
 
-  The most common cause is a signature mismatch — the secret used to sign the JWT doesn't match the Widget API Secret stored in ProductBridge. Double-check that `PRODUCTBRIDGE_WIDGET_SECRET` on your server matches the key in **Settings > Widget & Embeds > API Keys**.
+  The most common cause is a signature mismatch — the secret used to sign the JWT doesn't match the Widget API Secret stored in ProductBridge. Double-check that `PRODUCTBRIDGE_WIDGET_SECRET` on your server matches the key in the **API Keys** tab of **Settings → Connect → Widget & Embeds**.
 
   **Token rejected: expired**
 

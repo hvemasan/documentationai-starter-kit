@@ -1,45 +1,50 @@
 ---
 title: Members & Roles
-description: Invite your team to ProductBridge, assign roles to control who can do what, and manage workspace membership over time.
+description: Add your team to ProductBridge, assign roles to control who can do what, and manage workspace membership over time.
 ---
 
 ## Workspace Membership
 
 Every ProductBridge workspace has a set of **team members** — your internal users who manage feedback, integrations, and the public portal. Team members are distinct from [end users](/setup/end-users), who are the customers submitting feedback through your portal.
 
-Each team member has one of three roles, granting different levels of access.
+Each team member has one of four roles, granting different levels of access.
 
 ## Roles
 
 | Role | What They Can Do |
 |------|-------------------|
-| **Owner** | Full access to everything. Can manage all settings, billing, members, and roles. Owners cannot be removed by anyone except another owner. |
-| **Admin** | Manage projects, integrations, settings, and add/remove other members (except owners). Cannot modify billing. |
-| **Member** | Can create and manage feedback, roadmap items, comments, and changelog entries. No access to organization settings or member management. |
+| **Owner** | Full access to everything. |
+| **Admin** | Manage members and settings. Cannot manage billing. |
+| **Editor** | Create and edit content. Cannot manage team or settings. |
+| **Viewer** | Read-only access to all content. |
 
 <Callout kind="info">
-  Every workspace must have at least one Owner. The user who created the workspace is the initial Owner. Owners can promote any Admin to Owner.
+  Every workspace has an Owner — the user who created it. Owner is not an assignable role: you can't select it when adding a member or changing someone's role.
 </Callout>
 
-## Invite a Team Member
+## Add a Team Member
 
 <Steps>
-  <Step title="Open Members settings" icon="users">
-    Go to **Settings → Members**.
+  <Step title="Open Team Members settings" icon="users">
+    Go to **Settings → Organization → Team Members**.
   </Step>
-  <Step title="Click Invite Member" icon="user-plus">
-    Enter the person's email address and select their role (Admin or Member). Only an Owner can promote another user to Owner — and that's done after the invite is accepted.
+  <Step title="Click Add Member" icon="user-plus">
+    In the **Add Team Member** modal, enter the person's email address and select their role (Admin, Editor, or Viewer).
   </Step>
-  <Step title="Send the invitation" icon="mail">
-    ProductBridge sends an email invitation to the address you entered. The invite links to a sign-up page where they'll accept and create their account.
+  <Step title="Add or invite" icon="mail">
+    If the person already has a ProductBridge account, they're added to your workspace immediately. Otherwise, ProductBridge sends an email invitation linking to a sign-up page where they'll accept and create their account.
   </Step>
   <Step title="Track pending invites" icon="clock">
-    Open the **Invitations** tab to see who's been invited but hasn't accepted yet. Each pending invite shows its **Expires** date so you can spot ones that are about to lapse. You can resend or cancel a pending invite at any time.
+    Outstanding invitations appear in the **Pending Invites** section of the Team Members page. Each pending invite shows its **Expires** date so you can spot ones that are about to lapse. Use **Cancel invitation** to withdraw a pending invite.
   </Step>
 </Steps>
 
 <Callout kind="alert">
-  Invitations expire after **7 days**. If a team member doesn't accept in time, you'll need to send a fresh invite.
+  Invitations expire after **7 days** and can't be resent. If a team member doesn't accept in time, cancel the old invite and add them again.
+</Callout>
+
+<Callout kind="info">
+  Adding members is subject to your plan's seat limit. If you're at the limit, the **Add Member** button prompts you to upgrade.
 </Callout>
 
 ## Invitation Lifecycle
@@ -53,15 +58,15 @@ Every invite moves through these states:
 | **Rejected** | The recipient declined the invite |
 | **Canceled** | The inviter or another admin canceled before acceptance |
 
-Once accepted, the user shows up in the **Members** tab with their assigned role.
+Once accepted, the user shows up in the members list with their assigned role.
 
 ## Change a Member's Role
 
-Admins and Owners can change another member's role at any time.
+Team members with member-management permission (Owners and Admins) can change another member's role.
 
 <Steps>
   <Step title="Open the member" icon="user">
-    Go to **Settings → Members** and find the team member in the list.
+    Go to **Settings → Team Members** and find the team member in the list.
   </Step>
   <Step title="Update the role" icon="shield">
     Click the role dropdown next to their name and select the new role. Changes take effect immediately.
@@ -70,23 +75,18 @@ Admins and Owners can change another member's role at any time.
 
 A few rules:
 
-- An Admin can change other Members to Admin, but cannot change Owners
-- Only an Owner can change another user to or from Owner
-- You can't remove the last Owner from a workspace — promote someone else first
+- Assignable roles are **Admin**, **Editor**, and **Viewer** — Owner can't be assigned from the dashboard
+- Role changes require member-management permission, so Editors and Viewers can't change roles
 
-## Remove a Member
+## Deactivate or Remove a Member
 
-To remove a team member from the workspace:
+Owners can temporarily suspend a member's access without removing them:
 
-1. Go to **Settings → Members** and find the user
-2. Click **Remove**
-3. Confirm
+1. Go to **Settings → Team Members** and open the member's actions menu
+2. Click **Deactivate Member** and confirm
+3. To restore access later, use **Activate Member**
 
-Removed members lose all access immediately. Their historical actions (posts created, comments left) remain visible — attribution is preserved.
-
-<Callout kind="alert">
-  Removing the last Owner is blocked. Transfer ownership to another team member first.
-</Callout>
+To permanently remove a team member, use the remove action in the same menu. Removed members lose all access immediately. Their historical actions (posts created, comments left) remain visible — attribution is preserved.
 
 ## Member Profiles
 
@@ -95,17 +95,18 @@ Every team member has a profile with:
 - **Display name** — what other users see across the app
 - **Email** — used for login and notifications
 - **Avatar** — uploaded image or default initial
-- **SSO identity** — if your workspace uses [SSO](/settings/sso), the linked external identity
 
-Members can update their own display name and avatar from their account dropdown. Email is managed by your authentication provider and can't be changed in-app.
+Members can update their own display name and avatar from their account dropdown.
 
 ## What's Not Currently Supported
 
 A few capabilities you might expect that don't exist today:
 
-- **Bulk invite** — invitations are sent one at a time
-- **Per-board or per-project role scoping** — roles are workspace-wide; a Member is a Member everywhere in the workspace
-- **Custom roles** — only Owner / Admin / Member; no custom permission sets
-- **Per-user notification preferences** — notifications go to all team members based on event type, not per-user opt-in
+- **Bulk invite** — members are added one at a time
+- **Resending invites** — a pending invite can only be canceled; add the member again to send a fresh one
+- **Per-board or per-project role scoping** — roles are workspace-wide; an Editor is an Editor everywhere in the workspace
+- **Custom roles** — only Owner / Admin / Editor / Viewer; no custom permission sets
 
-If any of these would meaningfully change how your team uses ProductBridge, let us know.
+<Callout kind="info">
+  Team members **can** control their own notification delivery. Open the bell inbox, click the gear icon, and use **Channel preferences** to switch each notification event on or off per channel (In-app / Email). See [In-App Notifications](/notifications/in-app).
+</Callout>

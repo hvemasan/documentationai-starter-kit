@@ -22,7 +22,7 @@ The API lets you list, retrieve, and create tags. To add or remove a tag from a 
 </ResponseField>
 
 <ResponseField name="code" field-type="string" required="false" deprecated="false">
-  Auto-generated slug-like identifier derived from the name. May be `null`.
+  Optional slug-like identifier. Not auto-generated — tags created via the API have `code: null`. May be populated for tags created through other flows (e.g. system-seeded tags).
 </ResponseField>
 
 <ResponseField name="color" field-type="string" required="false" deprecated="false">
@@ -47,7 +47,7 @@ The API lets you list, retrieve, and create tags. To add or remove a tag from a 
 {
   "id": "773c3ef8-b8cd-cd15-01ba-tag00000001",
   "name": "mobile",
-  "code": "mobile",
+  "code": null,
   "color": "#10B981",
   "show_on_feedback": true,
   "show_on_roadmap": true,

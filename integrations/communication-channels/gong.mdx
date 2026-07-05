@@ -21,20 +21,20 @@ This is a **one-way ingestion** integration: feedback flows from Gong into Produ
 <Callout kind="info" collapsed="false">
   - A Gong account with **technical administrator** access (Gong authorizes at the company level — one admin connects the whole workspace)
 
-  - A Gong OAuth app with a **Client ID** and **Client Secret**, created in **Admin center → Settings → Ecosystem → API**. Listing an app on the Gong Collective requires Gong partner approval
-
   - A ProductBridge organization with at least one feedback board configured
+
+  You don't need to create a Gong OAuth app or provide any credentials — clicking **Connect Gong** handles the whole authorization.
 </Callout>
 
 ## Connect Gong
 
 <Steps>
-  <Step title="Open the Integration Settings" icon="layout-dashboard" title-type="p">
-    Sign in to your ProductBridge admin dashboard and navigate to **Settings → Integrations → Gong**.
+  <Step title="Open the Integrations catalog" icon="layout-dashboard" title-type="p">
+    Sign in to your ProductBridge dashboard, click **Connect Sources** in the sidebar, and select **Gong**.
   </Step>
 
   <Step title="Choose a Historical Sync Window" icon="history" title-type="p">
-    Optionally enable **historical sync** and pick a lookback window between **1 and 60 days**. When enabled, ProductBridge backfills your existing call transcripts from that window right after you connect.
+    Optionally enable **Import historical data** and pick a lookback window between **1 and 30 days**. When enabled, ProductBridge backfills your existing call transcripts from that window right after you connect.
   </Step>
 
   <Step title="Authorize in Gong" icon="shield" title-type="p">
@@ -65,7 +65,7 @@ Immediately after connection, ProductBridge:
 
 - Runs a **historical backfill** over your chosen lookback window (if historical sync was enabled), queuing each call's transcript for AI analysis
 
-- Begins **polling Gong every few hours** for newly recorded calls, since Gong has no call webhooks
+- Begins **polling Gong every 6 hours** for newly recorded calls, since Gong has no call webhooks
 
 Each call becomes a single item that flows through ProductBridge's AI pipeline. Calls that contain product feedback become posts; the rest are discarded.
 
@@ -99,11 +99,11 @@ Every Gong call runs through the same AI pipeline used across ProductBridge's co
 
 ## Limitations
 
-- **Not real time** — Gong has no call webhooks, so new calls are imported on the poll interval (every few hours) rather than the instant a call ends.
+- **Not real time** — Gong has no call webhooks, so new calls are imported on the poll interval (every 6 hours) rather than the instant a call ends.
 
 - **Transcript required** — Only calls that have a transcript in Gong are analyzed. Calls awaiting transcription are picked up on a later poll.
 
-- **Backfill window** — Historical backfill covers only your chosen lookback window (1–60 days). Older calls are not imported retroactively.
+- **Backfill window** — Historical backfill covers only your chosen lookback window (1–30 days). Older calls are not imported retroactively.
 
 - **One Gong workspace per organization** — Connect a different ProductBridge organization for each Gong workspace.
 
@@ -111,7 +111,7 @@ Every Gong call runs through the same AI pipeline used across ProductBridge's co
 
 ## Disconnect
 
-To disconnect Gong, navigate to **Settings → Integrations → Gong** and click **Disconnect**. ProductBridge:
+To disconnect Gong, open **Connect Sources > Gong** and click **Disconnect**. ProductBridge:
 
 - Marks the integration as `disconnected`
 
@@ -130,5 +130,5 @@ Existing feedback posts remain in ProductBridge — only the live connection is 
 
   - **A private call wasn't imported** — This is expected. Calls marked private in Gong are never ingested.
 
-  - **Connection stopped working / token errors** — Reconnect from **Settings → Integrations → Gong** to refresh credentials. ProductBridge normally refreshes the rotating token automatically before it expires.
+  - **Connection stopped working / token errors** — Reconnect from **Connect Sources > Gong** to refresh credentials. ProductBridge normally refreshes the rotating token automatically before it expires.
 </Expandable>

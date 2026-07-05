@@ -1,21 +1,25 @@
 ---
 title: In-App Notifications
-description: Stay on top of everything happening in your workspace — new posts, comments, assignments, status changes, and vote milestones — all from your in-app notification inbox.
+description: Stay on top of everything happening in your workspace — comments, assignments, status changes, and roadmap updates — all from your in-app notification inbox.
 ---
 
 ## Your Inbox at a Glance
 
-Every team member has an in-app notification inbox accessed from the bell icon in the admin dashboard. Notifications appear in real time as things happen across your workspace — no refresh required.
+Every team member has an in-app notification **Inbox** accessed from the bell icon in the admin dashboard. Notifications appear as things happen on the posts you follow across your workspace.
 
 End users on the public portal also have a notification inbox, scoped to posts and comments they're involved in.
 
+## Follower-Based Delivery
+
+ProductBridge notifications are **follower-based**: you get notified about activity on posts you follow. You follow a post by clicking the bell icon on the post — and some actions follow it for you automatically. For example, **voting on a post auto-follows it**, which is how customers who voted for a feature hear about it when it ships.
+
 ## Four Tabs
 
-Notifications are grouped into four tabs in the inbox: **All**, **Comments**, **Posts**, and **Assignments**. Each category tab carries its own unread badge so you can scan what needs attention.
+Notifications are grouped into four tabs in the inbox: **All**, **Comments**, **Posts**, and **Assignments**. Each tab carries its own unread badge (capped at **99+**) so you can scan what needs attention.
 
-<Columns cols={3}>
+<Columns cols="3">
   <Card title="Posts" icon="file-text" href="#posts">
-    New feedback, roadmap links, status changes, vote milestones.
+    Status changes, roadmap links, roadmap updates.
   </Card>
   <Card title="Comments" icon="message-circle" href="#comments">
     New comments and replies.
@@ -25,28 +29,23 @@ Notifications are grouped into four tabs in the inbox: **All**, **Comments**, **
   </Card>
 </Columns>
 
-The **All** tab shows everything in a single chronological feed.
+The **All** tab shows everything in a single feed, grouped into **Today**, **Yesterday**, and **Earlier**.
 
 ## Posts
 
-Notifications about post activity across your workspace.
+Notifications about activity on posts you follow.
 
 | Event | Trigger | Who Gets Notified |
 |-------|---------|-------------------|
-| **New Feedback Post** | A new feedback post is created | All team members except the post author |
-| **Feedback → Roadmap Link** | A feedback post is linked to a roadmap item | The feedback post's author |
-| **Roadmap Status Changed** | A roadmap item moves to a new status | Authors of all feedback posts linked to that roadmap item |
-| **Vote Milestone** | A feedback post crosses 5, 10, 25, 50, 100, 250, 500, or 1,000 votes | The feedback post's author |
-
-<Callout kind="tip">
-  Vote milestone notifications surface trending feedback early. When a post hits 25 votes within a week, that's a strong signal to dig in.
-</Callout>
+| **Feedback Status Changed** | A feedback post moves to a new status | Followers of the post |
+| **Roadmap Status Changed** | A roadmap item moves to a new status | Followers of the roadmap item (and authors of linked feedback posts by email) |
+| **Feedback Linked to Roadmap** | A feedback post is linked to a roadmap item | Followers of the feedback post |
 
 ## Comments
 
 | Event | Trigger | Who Gets Notified |
 |-------|---------|-------------------|
-| **Comment on Post** | Someone comments on a feedback or roadmap post | The post's author (excluding self-comments) |
+| **Comment on Post** | Someone comments on a feedback or roadmap post | Followers of the post (excluding the commenter) |
 | **Comment Reply** | Someone replies to an existing comment | The parent comment's author (excluding self-replies) |
 
 Each notification includes a preview of the comment so you can decide whether to act on it without clicking through.
@@ -61,7 +60,24 @@ Assignment notifications are admin-only — end users don't see them.
 | **Post Unassigned** | An admin removes a team member from a post | The unassigned user |
 
 <Callout kind="info">
-  Assignment notifications also trigger an **email** to the assignee when your workspace has [custom SMTP configured](/settings/custom-email-and-smtp). See [Email Notifications](/notifications/email).
+  Assignment events can also reach you by **email** — control that per event in Channel preferences. See [Email Notifications](/notifications/email).
+</Callout>
+
+## Channel Preferences
+
+Each team member controls their own delivery per event and channel:
+
+<Steps>
+  <Step title="Open Channel preferences" icon="settings">
+    Click the bell icon to open the inbox, then click the gear icon in the header. The panel switches to **Channel preferences**.
+  </Step>
+  <Step title="Toggle events per channel" icon="sliders">
+    Under **Notify me about**, each event row has an **In-app** switch and an **Email** switch. Turn either off to stop that event on that channel. A dash means the channel isn't supported for that event.
+  </Step>
+</Steps>
+
+<Callout kind="info">
+  You'll only be notified about posts you follow — Channel preferences control *how* you're notified, and following controls *what* you're notified about.
 </Callout>
 
 ## What Each Notification Looks Like
@@ -80,16 +96,16 @@ Assignment notifications are admin-only — end users don't see them.
   <Step title="Open a notification" icon="check">
     Clicking any notification marks it as read and opens the linked post or comment.
   </Step>
-  <Step title="Mark all as read" icon="check-check">
-    Use **Mark all as read** in the inbox header to clear all unread notifications.
+  <Step title="Mark all read" icon="check-check">
+    Use **Mark all read** in the inbox header to clear all unread notifications.
   </Step>
 </Steps>
 
-Unread notifications are marked with a blue indicator dot; opening or marking-all-as-read removes it.
+Unread notifications are marked with an indicator dot; opening or marking all read removes it.
 
 ## Filtering
 
-Switch between the **All / Comments / Posts / Assignments** tabs in the inbox header to focus on what matters. The list scrolls in chronological order and loads more entries automatically as you scroll to the bottom.
+Switch between the **All / Comments / Posts / Assignments** tabs in the inbox header to focus on what matters. The list loads more entries automatically as you scroll to the bottom.
 
 ## Admin vs. End User Inboxes
 
@@ -98,7 +114,7 @@ Switch between the **All / Comments / Posts / Assignments** tabs in the inbox he
     Admins receive every notification type, including assignments. Open a notification to jump straight to the relevant post or comment.
   </Tab>
   <Tab title="End Users" icon="user">
-    End users see notifications scoped to their own activity — comments on posts they created, status changes on posts they voted for, replies to their comments. Assignment notifications don't apply.
+    End users see notifications scoped to their own activity — comments and status changes on posts they follow (including posts they voted on), and replies to their comments. Assignment notifications don't apply.
   </Tab>
 </Tabs>
 
@@ -106,9 +122,10 @@ Switch between the **All / Comments / Posts / Assignments** tabs in the inbox he
 
 ProductBridge intentionally keeps the in-app notification set focused. The following are **not** in-app notifications today:
 
+- **New feedback posts** — new submissions don't notify the team; watch the inbox or moderation queue instead
 - **@ mentions in comments** — no mention parsing or alerts
 - **Moderation flags** — pending posts/comments don't trigger a notification (use the moderation queue instead)
-- **Vote changes** — voters aren't notified when posts they voted on change status
+- **Vote milestones** — vote-count thresholds don't trigger inbox notifications (a vote-milestone event exists only for the Discord integration)
 - **Integration sync errors** — surfaced in the integration settings page, not the inbox
 
 If any of these would meaningfully change your workflow, let us know.

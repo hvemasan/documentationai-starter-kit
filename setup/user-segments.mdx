@@ -1,112 +1,107 @@
 ---
 title: User Segments
-description: Group your end users into reusable audiences — Beta Customers, Enterprise, Power Users — then use those segments to gate visibility, filter your inbox, and scope AI queries.
+description: Group your end users into reusable audiences — Enterprise, At-Risk Renewals, Acme Team — then use those segments to gate board visibility and filter your user list.
 ---
 
 ## What Is a User Segment?
 
-A user segment is a saved group of [end users](/setup/end-users) defined by a set of rules. Instead of repeatedly filtering by "users where company MRR > 5000 AND tier = enterprise," you define that group once as **Enterprise Customers** and reuse it everywhere.
+A user segment is a saved group of [end users](/setup/end-users) defined by a set of rules. Instead of repeatedly filtering by "users where MRR > 5000 AND status is Active," you define that group once as **Enterprise Customers** and reuse it everywhere.
 
 Segments are **organization-scoped** and **dynamic** — when new end users match the rules, they're automatically included.
+
+<Callout kind="info">
+  User segments are a paid feature — the Segments section is locked until your plan includes the `user_segments` entitlement.
+</Callout>
 
 ## Where Segments Are Used
 
 | Use Case | How It Works |
 |----------|--------------|
-| **Visibility gating** | Make a board or post visible only to a specific segment |
+| **Board visibility gating** | Make a board visible only to a specific segment ("Segmented Users" visibility) |
 | **Post-creation access** | Only let users in a segment submit to a board |
-| **Inbox filtering** | Filter feedback to see only posts from a segment |
-| **Ask AI scoping** | "What are Enterprise Customers asking for?" |
-| **Custom field defaults** | Set defaults conditional on segment membership |
+| **Users page filtering** | Click a segment in the left rail to see only matching users |
+| **Inbox filtering** | Filter feedback by submitter segment, including in [saved views](/setup/saved-views) |
 
 This is what makes segments the connective tissue between your customer data and your portal experience.
 
 ## Create a Segment
 
+Segments live on the **Users** page, not in Settings.
+
 <Steps>
-  <Step title="Open User Segments" icon="users-round">
-    Go to **Settings → User Segments** and click **New Segment**.
+  <Step title="Open Segments" icon="users-round">
+    Go to **Users** in the dashboard sidebar. In the left rail, find the **Segments** section and click **New segment**.
   </Step>
   <Step title="Name your segment" icon="type">
-    Give it:
-
-    - **Name** — what the segment is (e.g., "Enterprise Customers")
-    - **Description** *(optional)* — a one-line hint of what defines membership
-    - **Color** *(optional)* — used as a chip in admin
+    Enter a **Segment name** (e.g., "Enterprise Customers").
   </Step>
   <Step title="Choose match type" icon="filter">
     Decide how rules combine:
 
-    - **All (AND)** — user must match every rule
-    - **Any (OR)** — user matches if at least one rule fits
-
-    Default is **All**, which is right for most segments.
+    - **All** — user must match every rule
+    - **Any** — user matches if at least one rule fits
   </Step>
   <Step title="Add rules" icon="plus">
     Each rule has three parts:
 
-    - **Attribute** — what user property to check (email, company MRR, country, custom field, etc.)
-    - **Operator** — how to compare (equals, contains, greater than, etc.)
-    - **Value** — what to compare against
+    - **Attribute** — the user property to check
+    - **Operator** — how to compare
+    - **Value** — what to compare against (some operators, like "is null", don't need one)
 
-    Add as many rules as you need. ProductBridge shows the **matching count** live as you build.
+    Add as many rules as you need.
   </Step>
   <Step title="Save" icon="check">
-    Your segment is live immediately. Membership is evaluated dynamically — new end users matching the rules are automatically included.
+    Your segment is live immediately and appears in the Segments rail with its member count. Membership is evaluated dynamically — new end users matching the rules are automatically included.
   </Step>
 </Steps>
 
 ## Available Attributes
 
-Segments can be defined on any of these dimensions:
+Segments can be defined on these end-user attributes:
 
-| Dimension | Examples |
-|-----------|----------|
-| **User identity** | Email (contains, ends_with, equals), Name, Avatar present |
-| **Company** | Company name, MRR, customer status, renewal risk |
-| **Activity** | Posts created, votes cast, comments made |
-| **Custom fields** | Any custom field value on the user's profile |
-| **Integration source** | Where they came from (Intercom, Slack, portal, etc.) |
+| Attribute | Type |
+|-----------|------|
+| **Name** | Text |
+| **Email** | Text |
+| **Company** | Text |
+| **MRR** | Number |
+| **Status** | Text |
+| **Risk** | Text |
+| **Renewal Date** | Date |
+| **Joined** | Date |
 
-<Callout kind="info">
-  The available attributes are defined globally and may expand over time. If you need to filter on something we don't yet support, let us know.
-</Callout>
+Company data (MRR, status, risk, renewal date) is populated via [identity verification](/core-concepts/feedback-collection/widgets/identity-verification) or SSO JWT claims.
 
 ## Operators
 
 The operator options depend on the attribute type:
 
-| Operator | Works With |
-|----------|-----------|
-| **equals / not equals** | Strings, numbers, enums |
-| **contains / does not contain** | Strings |
-| **starts with / ends with** | Strings (e.g., email) |
-| **greater than / less than** | Numbers, dates |
-| **between** | Numbers, dates |
-| **is empty / is not empty** | Any attribute |
+| Type | Operators |
+|------|-----------|
+| **Text** | is, is not, is null, is not null, contains, does not contain, starts with |
+| **Number** | is, is not, greater than, less than, between, is null, is not null |
+| **Date** | after date, before date, on date, less than x days ago, more than x days ago, exactly x days ago, is null, is not null |
 
 ## Examples
 
 <ExpandableGroup>
   <Expandable title="Enterprise Customers">
     - Match: **All**
-    - Rule 1: `Company MRR` `greater than` `5000`
-    - Rule 2: `Customer Status` `equals` `Active`
+    - Rule 1: `MRR` `greater than` `5000`
+    - Rule 2: `Status` `is` `active`
   </Expandable>
-  <Expandable title="Beta Program">
-    - Match: **Any**
-    - Rule 1: `Email` `ends with` `@acme.com`
-    - Rule 2: `Custom field: Beta Opted In` `equals` `Yes`
-  </Expandable>
-  <Expandable title="Power Users">
+  <Expandable title="Acme Team">
     - Match: **All**
-    - Rule 1: `Posts created` `greater than` `5`
-    - Rule 2: `Votes cast` `greater than` `20`
+    - Rule 1: `Email` `contains` `@acme.com`
   </Expandable>
   <Expandable title="Churn Risk">
     - Match: **Any**
-    - Rule 1: `Renewal Risk` `equals` `High`
-    - Rule 2: `Last activity` `more than` `60 days ago`
+    - Rule 1: `Risk` `is` `high`
+    - Rule 2: `Status` `is` `churned`
+  </Expandable>
+  <Expandable title="New Sign-Ups This Month">
+    - Match: **All**
+    - Rule 1: `Joined` `less than x days ago` `30`
   </Expandable>
 </ExpandableGroup>
 
@@ -115,18 +110,16 @@ The operator options depend on the attribute type:
 The most common use of segments is restricting which end users see specific content:
 
 - Create a **Beta Customers** segment
-- Create a **Beta Board** with visibility = User Segments → Beta Customers
+- Create a **Beta Board** with **Who can see posts** set to Segmented Users → Beta Customers
 - Only end users matching the segment see the board on the portal
 
 This is how teams run private beta programs, enterprise-only feedback channels, or staged feature rollouts — without any custom code.
 
 See [Visibility & SEO](/settings/visibility-and-seo) for the full visibility model.
 
-## Live Match Count
+## Viewing Segment Members
 
-When viewing a segment, ProductBridge shows a **Matching Users** count. This count is cached for performance and refreshes periodically — it may lag real-time membership by a few minutes.
-
-For exact, real-time membership, click **View Users** on the segment to see the current matching list.
+Each segment row in the left rail shows its current member count. Click a segment to filter the user list to its members — there's no separate segment detail page.
 
 <Callout kind="tip">
   Segments work best when they're **stable definitions** of customer groups, not one-off filters. Use [saved views](/setup/saved-views) for ad-hoc filtering of your inbox. Use segments when you want to **reuse the same group definition across multiple features**.

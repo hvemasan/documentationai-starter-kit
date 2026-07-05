@@ -5,7 +5,11 @@ description: "Patch any combination of fields on an existing feedback post — o
 
 Updates a feedback post. The endpoint is patch-style: any subset of the optional body fields may be present, and only those fields are applied. Omitted fields keep their current values.
 
-Status changes (passing `status_id`) emit a `post.status_changed` webhook event in addition to `post.edited`. Tag changes (passing `tag_ids`) emit `post.tag_added` or `post.tag_removed` per tag delta.
+Status changes (passing `status_id`) emit a `post.status_changed` webhook event. A status-only update emits *only* `post.status_changed` — `post.edited` fires only when a content field changes (`title`, `details`, `board_id`, `eta`, `owner_id`, `category_id`, or `moderation_status_code`). Tag changes (passing `tag_ids`) emit `post.tag_added` or `post.tag_removed` per tag delta.
+
+<Callout kind="info">
+  This endpoint sets values — it cannot clear them. Passing `null` for a field is treated the same as omitting it, so there is no way to unset `category_id`, `owner_id`, or other fields via the v1 API.
+</Callout>
 
 ## Endpoint
 
@@ -44,7 +48,7 @@ POST https://api.productbridge.io/api/external/v1/feedback-posts/update
 </ParamField>
 
 <ParamField body="category_id" param-type="string" required="false" deprecated="false">
-  Set the post's category. Validated to belong to your organization. Pass an empty / null value to clear.
+  Set the post's category. Validated to belong to your organization. Clearing an existing category is not supported — `null` is ignored.
 </ParamField>
 
 <ParamField body="tag_ids" param-type="array of strings" required="false" deprecated="false">
@@ -52,7 +56,7 @@ POST https://api.productbridge.io/api/external/v1/feedback-posts/update
 </ParamField>
 
 <ParamField body="owner_id" param-type="string" required="false" deprecated="false">
-  Assign an owner. Pass null/empty to clear.
+  Assign an owner. Clearing an existing owner is not supported — `null` is ignored.
 </ParamField>
 
 <ParamField body="eta" param-type="string" required="false" deprecated="false">

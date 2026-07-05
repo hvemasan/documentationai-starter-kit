@@ -8,6 +8,8 @@ Toggles a vote on a feedback or roadmap post. The endpoint examines the user's c
 - If the user has **no active vote** on the post → adds an upvote and returns `{ "voted": true }`. Triggers a `vote.created` webhook.
 - If the user **already has** an active vote → removes it and returns `{ "voted": false }`. Triggers a `vote.deleted` webhook.
 
+The `vote.created` / `vote.deleted` webhooks fire for **feedback** posts only — toggling a vote on a roadmap post emits no webhook events.
+
 Calling toggle twice in succession leaves the user back where they started.
 
 ## Endpoint

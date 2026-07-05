@@ -1,6 +1,6 @@
 ---
 title: MCP Server
-description: Connect Claude — or any MCP-compatible AI assistant — to ProductBridge with a single bearer token. Let Claude read your feedback, search semantically, create posts, and update the roadmap from any conversation.
+description: Connect Claude — or any MCP-compatible AI assistant — to ProductBridge with a bearer token, capability URL, or OAuth 2.1. Let Claude read your feedback, search semantically, create posts, and update the roadmap from any conversation.
 ---
 
 ## What Is the MCP Server?
@@ -14,7 +14,7 @@ ProductBridge ships an **MCP (Model Context Protocol) Server** that exposes your
 - Filter feedback by user segment ("what are Enterprise customers asking for?")
 - Upvote feedback on behalf of a user
 
-The connection is **bearer-token authenticated** and **scoped to your organization** — Claude only ever sees your workspace's data.
+The connection is **scoped to your organization** — Claude only ever sees your workspace's data. Authenticate with a bearer token, a capability URL (for clients that can't set headers), or OAuth 2.1.
 
 <Callout kind="info">
   MCP is an open protocol from Anthropic. While these docs focus on Claude Desktop and Claude.ai, the same connection works with any MCP-compatible client.
@@ -48,17 +48,16 @@ Claude calls a tool, the MCP server verifies your bearer token, scopes the call 
   <Step title="Generate your connection config" icon="key">
     In the ProductBridge admin, go to **Settings → Connect → MCP Server** and click **Generate MCP Config**.
 
-    Optionally name the connection (the **Credential name** field) so you can identify it later — useful if you create multiple connections for different machines or pipelines.
-
     ProductBridge generates:
 
-    - A **Server URL** to connect to
+    - A **Server URL** to connect to (`https://mcp.productbridge.io/mcp`, Streamable HTTP transport)
     - A **Bearer token** (shown with a reveal/hide toggle — copy it from the field)
+    - A **Capability URL** — a secret-embedded URL for clients that can't set headers, like Claude.ai
     - A **Key prefix** — a short identifier for the token used in audit displays
     - Ready-to-paste config snippets for Claude Desktop and Claude Code
 
     <Callout kind="alert">
-      Treat the bearer token as a production secret. If you suspect it's exposed, click **Regenerate** to issue a fresh one — the old key becomes invalid immediately.
+      Treat the bearer token and capability URL as production secrets. If you suspect either is exposed, click **Regenerate** to issue fresh ones — the old credential becomes invalid immediately.
     </Callout>
   </Step>
   <Step title="Paste into your Claude client" icon="clipboard">
@@ -66,7 +65,7 @@ Claude calls a tool, the MCP server verifies your bearer token, scopes the call 
       <Tab title="Claude Desktop" icon="monitor">
         Open your Claude Desktop config file:
 
-        - **macOS / Linux:** `~/.claude/claude_desktop_config.json`
+        - **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
         - **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
 
         Paste the config snippet ProductBridge generated:
@@ -76,7 +75,7 @@ Claude calls a tool, the MCP server verifies your bearer token, scopes the call 
           "mcpServers": {
             "productbridge": {
               "type": "http",
-              "url": "https://api.productbridge.io/mcp",
+              "url": "https://mcp.productbridge.io/mcp",
               "headers": {
                 "Authorization": "Bearer pb_your_token_here"
               }
@@ -88,20 +87,29 @@ Claude calls a tool, the MCP server verifies your bearer token, scopes the call 
         Restart Claude Desktop for the change to take effect.
       </Tab>
       <Tab title="Claude.ai" icon="cloud">
-        Open Claude.ai in your browser. Go to **Settings → Connected apps** and add a new MCP server.
+        Claude.ai can't set custom headers, so it uses the **Capability URL** instead of the bearer token.
 
-        Paste the **MCP URL** and **bearer token** from ProductBridge into the connector form.
+        1. Copy the **Capability URL** from the MCP Server settings page (`https://mcp.productbridge.io/c/{secret}/mcp`)
+        2. In Claude.ai, go to **Settings → Connectors → Add custom connector**
+        3. Paste the Capability URL as the server URL
 
         Claude.ai picks up the connection immediately — no restart needed.
+
+        <Callout kind="alert">
+          The capability URL embeds your credential. Treat it like a password — anyone with the URL can access your workspace's tools.
+        </Callout>
       </Tab>
       <Tab title="Other MCP clients" icon="terminal">
         Any client that speaks MCP can connect:
 
-        - **Transport:** HTTP (stateless)
-        - **URL:** the MCP URL ProductBridge provided
-        - **Auth:** `Authorization: Bearer <your-token>` header
+        - **Transport:** Streamable HTTP (stateless)
+        - **URL:** `https://mcp.productbridge.io/mcp`
+        - **Auth:** pick whichever method your client supports:
+          - **Bearer token** — `Authorization: Bearer pb_...` header
+          - **Capability URL** — use `https://mcp.productbridge.io/c/{secret}/mcp` as the server URL when headers aren't configurable
+          - **OAuth 2.1** — for clients with built-in MCP OAuth support; the server advertises itself via `/.well-known/oauth-protected-resource` and issues tokens with the `mcp:tools` scope
 
-        That's all that's needed — point your client at the URL with the bearer header and the tools become available.
+        Point your client at the URL with one of these credentials and the tools become available.
       </Tab>
     </Tabs>
   </Step>
@@ -118,7 +126,7 @@ Claude calls a tool, the MCP server verifies your bearer token, scopes the call 
 
 ## What Claude Can Do
 
-The MCP Server exposes 27 tools across four areas. Claude picks the right ones automatically based on your prompt.
+The MCP Server exposes 22 tools across four areas. Claude picks the right ones automatically based on your prompt.
 
 ### Feedback
 
@@ -197,15 +205,15 @@ If your token is exposed or you want to refresh it:
 1. Go to **Settings → Connect → MCP Server**
 2. Click **Regenerate**
 
-The old token is invalidated immediately. You'll need to update your Claude config with the new one.
+The old token — and the capability URL derived from it — is invalidated immediately. You'll need to update your Claude config with the new credential.
 
 ### Credential Name & Key Prefix
 
-Each connection carries a **Credential name** (for your own identification) and a **Key prefix** — a short identifier shown in the UI so you can recognize the token without revealing it. Use the show/hide toggle next to the bearer token field when you need to copy it.
+Each connection carries a read-only **Credential name** (`mcp` by default) and a **Key prefix** — a short identifier shown in the UI so you can recognize the token without revealing it. Use the show/hide toggle next to the bearer token field when you need to copy it.
 
-### Multiple Connections
+### One Active Credential per User
 
-You can create multiple MCP connections per user (e.g., one for your laptop, one for a CI pipeline). Each gets its own bearer token.
+Each user has **one active MCP credential per organization**. You can't create multiple parallel keys — clicking **Regenerate** rotates the credential, invalidating the old token and issuing a new one. If several machines share your credential, update all of them after a rotation.
 
 ---
 
@@ -213,10 +221,10 @@ You can create multiple MCP connections per user (e.g., one for your laptop, one
 
 | | Detail |
 |---|--------|
-| **Organization scope** | Every tool call is scoped to the organization the token belongs to. Claude can never see another workspace's data. |
-| **Bearer token auth** | HTTP `Authorization: Bearer pb_...` header on every request |
+| **Organization scope** | Every tool call is scoped to the organization the credential belongs to. Claude can never see another workspace's data. |
+| **Auth methods** | Bearer token (`Authorization: Bearer pb_...` header), capability URL (`/c/{secret}/mcp` for header-less clients), or OAuth 2.1 (`mcp:tools` scope, discovery via `/.well-known/oauth-protected-resource`) |
 | **Token storage** | Tokens are SHA-256 hashed and encrypted at rest. We never log raw tokens. |
-| **Read + write** | MCP tools can create and update content. Regenerate the token immediately if exposed. |
+| **Read + write** | MCP tools can create and update content. Regenerate the credential immediately if exposed. |
 | **Audit trail** | Errors and key activity are logged on the server side for support investigation. |
 
 <Callout kind="alert">
@@ -230,15 +238,14 @@ You can create multiple MCP connections per user (e.g., one for your laptop, one
 <ExpandableGroup>
   <Expandable title="Claude doesn't see the ProductBridge tools">
     - **Claude Desktop:** confirm you restarted the app after editing `claude_desktop_config.json`
-    - **Claude.ai:** check the **Connected apps** page — the connector should show as active. Re-add it if not.
+    - **Claude.ai:** check **Settings → Connectors** — the connector should show as active. Re-add it with the capability URL if not.
     - **Config syntax:** validate the JSON snippet — a missing comma or quote silently breaks tool discovery
     - **Token:** make sure the bearer token starts with `pb_` and matches exactly what ProductBridge generated (no leading whitespace)
   </Expandable>
   <Expandable title="Tools return 'Unauthorized' or 401">
-    The bearer token isn't valid. Either:
+    The credential isn't valid. Either:
     - You pasted a different token (check the `Authorization` header in your config)
-    - The token has been regenerated — generate a fresh one and update your config
-    - The token was revoked manually from the connections list
+    - The credential has been regenerated — the old token and capability URL stop working immediately; copy the new ones from the settings page and update your config
   </Expandable>
   <Expandable title="Tools work but Claude doesn't pick them up automatically">
     Be explicit in your prompt — "Use the ProductBridge MCP server to ..." helps Claude pick the right tools when it's juggling several. After a couple of turns, Claude usually starts reaching for them without prompting.

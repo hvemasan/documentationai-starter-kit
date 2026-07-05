@@ -1,168 +1,210 @@
 ---
 title: Linear Integration
-description: Connect ProductBridge with Linear to track documentation tasks, link pages to issues, and keep your docs in sync with your development workflow.
+description: >-
+  Connect ProductBridge to Linear to link feedback posts with issues, create
+  Linear issues directly from feedback, and automatically update post status
+  when linked issues move through your Linear workflow.
 ---
-
-<img src="https://cdn.simpleicons.org/linear" width="80" height="80" alt="Linear" />
-
 ## Overview
 
-The Linear integration connects ProductBridge to your Linear workspace so you can link documentation pages to Linear issues, automate doc task creation, and keep your team aligned across both platforms.
+The Linear integration is a **two-way tracker link** between ProductBridge feedback and Linear issues. It does not import issues as feedback — instead, it gives your product and engineering teams a clean handoff once a piece of feedback is ready to be acted on.
 
-<Callout kind="info">
-  You need workspace admin access in Linear to configure this integration.
+Once connected, you can:
+
+- **Search Linear issues** from any feedback post and link them in one click
+
+- **Create a new Linear issue** directly from a feedback post — complete with team and workflow-state pickers
+
+- **Auto-sync post status** — when a linked issue's workflow state changes in Linear, ProductBridge updates the corresponding post status based on rules you define
+
+- **Notify voters automatically** when a post status changes because of a linked issue update
+
+The sync runs in real time over webhooks. There is nothing to poll, no manual refresh.
+
+## Prerequisites
+
+<Callout kind="info" collapsed="false">
+  - A Linear workspace where you can authorize applications
+
+  - A ProductBridge organization with at least one feedback board and configured post statuses
+
+  - A user with **Owner-level admin** permissions in ProductBridge to install integrations
 </Callout>
 
-## Setup
+## Connect Linear
 
 <Steps>
-  <Step title="Connect your Linear workspace" icon="link">
-    Navigate to **Settings > Integrations > Linear** in your ProductBridge dashboard.
+  <Step title="Open the Integrations page" icon="layout-dashboard" title-type="p">
+    Sign in to your ProductBridge dashboard and click **Connect Sources** in the sidebar, then select **Linear** from the **Project Management** section.
+  </Step>
 
-    Click **Connect Linear** and authorize ProductBridge via OAuth.
+  <Step title="Click Connect Linear" icon="plug" title-type="p">
+    On the Linear integration page, click **Connect Linear**. ProductBridge starts the Linear OAuth flow and redirects you to Linear's authorization screen.
+  </Step>
 
-    <Callout kind="tip">
-      Linear's OAuth flow grants scoped access. ProductBridge only requests permissions for issues, comments, and webhooks.
+  <Step title="Authorize ProductBridge in Linear" icon="shield" title-type="p">
+    On Linear's authorization screen, review the requested access and approve it for your workspace.
+
+    <Callout kind="tip" collapsed="false">
+      Use a service account rather than a personal account so the connection persists if team members leave.
     </Callout>
   </Step>
 
-  <Step title="Select your team" icon="users">
-    Choose the Linear team you want to sync with ProductBridge.
+  <Step title="Confirm the connection" icon="check-circle" title-type="p">
+    After you approve, Linear redirects you back to ProductBridge. The integration status updates to **Connected** and the page shows the connected workspace and the disconnect option.
 
-    You can connect multiple teams and map each to a specific documentation section.
-
-    ```json
-    {
-      "linear_team": "Documentation",
-      "doc_section": "getting-started",
-      "sync_enabled": true,
-      "auto_create_issues": false
-    }
-    ```
-  </Step>
-
-  <Step title="Configure sync settings" icon="settings">
-    Choose which events trigger syncs between ProductBridge and Linear.
-
-    | Event | Direction | Description |
-    |-------|-----------|-------------|
-    | Issue created | Linear → ProductBridge | Creates a linked doc task |
-    | Doc published | ProductBridge → Linear | Moves the linked issue to Done |
-    | Status changed | Linear → ProductBridge | Updates the doc task status |
-    | Comment added | Bidirectional | Syncs comments between platforms |
+    Behind the scenes, ProductBridge encrypts and stores the access token and sets up a webhook so Linear can deliver issue updates in real time.
   </Step>
 </Steps>
 
-## Linking docs to Linear issues
+## Link a feedback post to a Linear issue
 
-Link documentation pages to Linear issues for full traceability between your docs and development work.
+Once connected, every feedback post in your dashboard gets a **Linear Issues** section in the post detail view.
 
-<Tabs>
-  <Tab title="From ProductBridge" icon="file-text">
-    Open a documentation page and click **Link Issue** in the sidebar.
+<Steps>
+  <Step title="Open a feedback post" icon="message-square" title-type="p">
+    Click any post in the **Feedback** view to open the post detail panel. Scroll the right sidebar to find the **Linear Issues** section.
+  </Step>
 
-    Search by issue identifier (e.g., `DOC-42`) or title.
+  <Step title="Click Link" icon="link" title-type="p">
+    Click the **Link** button next to **Linear Issues**. A dialog opens with two tabs: **Search** and **Create**.
+  </Step>
 
-    ```
-    Linked: DOC-42 — Write onboarding guide
-    Status: In Progress
-    Assignee: Alex
-    Priority: High
-    ```
-  </Tab>
+  <Step title="Choose how to link the issue" icon="search" title-type="p">
+    Use the tab that fits how you usually work in Linear.
 
-  <Tab title="From Linear" icon="layout">
-    Install the ProductBridge integration from the Linear settings page.
+    <Tabs>
+      <Tab title="Search" icon="search">
+        Type any text to search across issues in your workspace. Each result shows the issue identifier (for example `ENG-142`), current state, and title. Click any result to link it instantly.
+      </Tab>
 
-    In any issue, use the **ProductBridge** attachment to link or create a doc page directly.
-  </Tab>
-</Tabs>
+      <Tab title="Create" icon="plus">
+        Pick a **team**, then optionally a starting **workflow state** for that team, and fill in a title and description. ProductBridge creates the issue in Linear and links it to the post in one step.
+      </Tab>
+    </Tabs>
+  </Step>
 
-## Automations
+  <Step title="Verify the link" icon="check" title-type="p">
+    The linked issue appears in the post's **Linear Issues** section with its identifier and current state. From there you can **open it in Linear** or **unlink it**.
+  </Step>
+</Steps>
 
-Set up automations to reduce manual work when managing docs alongside Linear issues.
+## Status sync rules
 
-<CodeGroup tabs="Auto-create issue,Auto-update status">
-```json
-{
-  "trigger": "doc.published",
-  "action": "linear.create_issue",
-  "config": {
-    "team": "Documentation",
-    "title": "Review: {doc_title}",
-    "label": "review",
-    "priority": 2
-  }
-}
-```
+Linking is most powerful when Linear state changes flow back into ProductBridge automatically. **Status sync rules** translate Linear workflow states into ProductBridge post statuses.
 
-```json
-{
-  "trigger": "linear.issue.completed",
-  "action": "doc.update_status",
-  "config": {
-    "set_status": "reviewed",
-    "add_label": "approved"
-  }
-}
-```
-</CodeGroup>
+A rule answers three questions:
 
-## Webhook events
+1. **When** a linked Linear issue changes to workflow state X
 
-ProductBridge sends webhook payloads for Linear-related events.
+2. **Should** the post change to a specific ProductBridge status (for example, *Planned* → *In Progress* → *Complete*)?
 
-<Request tabs="cURL" show-lines="true">
-```bash
-curl -X POST https://api.productbridge.io/integrations/linear/webhook \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "event": "issue.linked",
-    "issue_id": "DOC-42",
-    "doc_id": "doc_789",
-    "timestamp": "2025-03-10T14:00:00Z"
-  }'
-```
-</Request>
+3. **And** should we notify everyone who voted for this post?
 
-<Response tabs="200,400">
-```json
-{
-  "status": "ok",
-  "message": "Webhook received",
-  "linked": true
-}
-```
+If a post has multiple linked issues, you also pick whether the rule fires when **any** issue reaches the trigger state, or only when **all** issues do.
 
-```json
-{
-  "error": "Issue not found",
-  "code": "LINEAR_ISSUE_NOT_FOUND"
-}
-```
-</Response>
+### Create a rule
+
+<Steps>
+  <Step title="Open the Linear settings page" icon="settings" title-type="p">
+    Go back to **Connect Sources > Linear**. Below the connection details, you'll see the **Rules** section.
+  </Step>
+
+  <Step title="Click Create New Rule" icon="plus" title-type="p">
+    Click **Create New Rule**. A sentence-style builder appears so you can read the rule in plain English as you build it.
+  </Step>
+
+  <Step title="Build the rule" icon="wand-2" title-type="p">
+    Pick the values left to right:
+
+    | Field                             | What it does                                                                                                                          |
+    | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+    | **any / all**                     | Whether the rule fires when *any* linked Linear issue hits the trigger state, or only when *all* do                                   |
+    | **Linear state**                  | The workflow state from Linear that triggers the rule (e.g. `In Progress`, `Done`) — populated from your teams' real workflow states  |
+    | **Post status**                   | The ProductBridge feedback status the post should change to                                                                           |
+    | **Notify / Do not notify voters** | Whether to send in-app and email notifications to voters when the rule fires                                                          |
+
+    <Callout kind="info" collapsed="false">
+      Workflow states in Linear are defined **per team**. The dropdown merges states from all teams in your workspace, so identically named states (like `Done`) match across teams.
+    </Callout>
+  </Step>
+
+  <Step title="Save the rule" icon="check-circle" title-type="p">
+    Click **Create**. The rule appears in the list and is active immediately. New Linear state changes that match it start syncing right away.
+  </Step>
+</Steps>
+
+### How rule evaluation works
+
+When a linked issue's state changes in Linear:
+
+1. Linear sends an issue update webhook to ProductBridge
+
+2. ProductBridge finds every feedback post that links to that issue
+
+3. For each rule on the integration, it checks whether the **any/all** condition is satisfied
+
+4. If a rule matches, the post status is updated and (optionally) voters are notified
+
+Rules are evaluated independently per post, so a single Linear state change can update many posts at once.
+
+## Behavior to expect
+
+| Action in Linear                | Effect in ProductBridge                                                                    |
+| ------------------------------- | ------------------------------------------------------------------------------------------ |
+| State change on a linked issue  | Linked issue badge on the post updates; rules evaluated; notifications fired if configured |
+
+| Action in ProductBridge     | Effect in Linear                                                                              |
+| --------------------------- | ---------------------------------------------------------------------------------------------- |
+| Link an existing issue      | A reference is stored on the feedback post; nothing changes inside Linear                      |
+| Create an issue from a post | A new issue appears in the chosen team with the title and description you provided            |
+| Unlink an issue             | The reference is removed; the Linear issue itself is not deleted or modified                   |
+| Disconnect the integration  | Syncing stops; existing post-issue links remain on the post but stop receiving status updates |
+
+## Disconnect Linear
+
+To stop syncing:
+
+<Steps>
+  <Step title="Go to the Linear integration page" icon="settings" title-type="p">
+    Open **Connect Sources > Linear** and click **Disconnect**.
+  </Step>
+
+  <Step title="Confirm disconnection" icon="check" title-type="p">
+    ProductBridge marks the integration as disconnected so no new syncs run, and leaves the existing per-post issue links in place — your feedback posts keep their reference to the Linear issue even after disconnect, so you don't lose history. They simply stop receiving status updates.
+
+    To revoke ProductBridge from inside Linear as well, remove it under **Linear Settings > API > Applications** — Linear cleans up the associated webhook automatically when the app is revoked.
+  </Step>
+</Steps>
 
 <ExpandableGroup>
-  <Expandable title="Supported Linear features" default-open="false">
-    - Issues and sub-issues
+  <Expandable title="Why don't I see my workflow states in the rule dropdown?" default-open="false">
+    ProductBridge reads workflow states from every team in your Linear workspace. If your dropdown is empty:
 
-    - Labels and priorities
+    - Confirm the integration shows as **Connected** on **Connect Sources > Linear**
 
-    - Cycles and projects
+    - Confirm your teams have workflow states configured in Linear
 
-    - Comments and reactions
-
-    - Custom views and filters
+    - Reconnect the integration if you recently changed workspaces
   </Expandable>
 
-  <Expandable title="Troubleshooting connection issues" default-open="false">
-    - Verify your Linear workspace URL and that the OAuth token is still valid
+  <Expandable title="Why isn't my post status updating when I change a Linear issue?" default-open="false">
+    Walk through the chain:
 
-    - Ensure the authorized account has member-level access or higher
+    - Confirm the issue is actually **linked** to the post (open the post; the Linear Issues section should list it)
 
-    - Check that webhook delivery is not paused in Linear's settings
+    - Confirm a **rule exists** that matches the new Linear state
 
-    - Revoke and re-authorize the connection if you see authentication errors
+    - Confirm the rule's **any/all** mode fits — if the rule is set to **all** and the post links to multiple issues, every linked issue must reach the trigger state
+
+    - If a rule is set to **notify**, in-app notifications appear instantly; email delivery follows your organization's notification settings
+  </Expandable>
+
+  <Expandable title="Can I link the same Linear issue to multiple feedback posts?" default-open="false">
+    Yes. A single Linear issue can be referenced from many feedback posts. When the issue's state changes, every post that links to it is evaluated against your rules independently.
+  </Expandable>
+
+  <Expandable title="Does the integration import issues as feedback?" default-open="false">
+    No. The integration is intentionally **link-only**. Issues already in Linear don't appear as posts in ProductBridge — that would clutter your feedback inbox. Linking is initiated from a feedback post.
   </Expandable>
 </ExpandableGroup>

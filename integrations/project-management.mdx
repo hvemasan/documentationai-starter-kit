@@ -1,48 +1,52 @@
 ---
 title: Project Management Integrations
-description: Connect ProductBridge to project management tools like Jira and Linear to sync roadmap items, link feedback to issues, and streamline your workflow.
+description: Connect ProductBridge to Jira, Linear, and ClickUp to link feedback posts to issues, create issues from feedback, and update post statuses automatically as work progresses.
 ---
 
 ## Bridge Feedback and Development
 
-ProductBridge integrates with the project management tools your engineering team already uses. Sync roadmap items to issues, link user feedback to development tasks, and keep both teams aligned without switching between platforms.
+ProductBridge integrates with the project management tools your engineering team already uses. Link feedback posts to the issues that implement them, create new issues pre-filled from a post, and let status changes in your tracker update the post — and notify its voters — automatically.
 
 ## Supported Tools
 
-<Columns cols={2}>
+<Columns cols={3}>
   <Card title="Jira" icon="ticket" href="/integrations/project-management/jira">
-    Sync with Atlassian Jira to link feedback to Jira issues.
+    Link feedback posts to Jira Cloud issues and sync issue statuses back.
   </Card>
   <Card title="Linear" icon="layout" href="/integrations/project-management/linear">
-    Connect Linear to track feedback alongside your development workflow.
+    Link feedback posts to Linear issues across your teams and workflow states.
+  </Card>
+  <Card title="ClickUp" icon="check-square" href="/integrations/project-management/clickup">
+    Link feedback posts to ClickUp tasks and sync task statuses back.
   </Card>
 </Columns>
 
 ## How It Works
 
-When you connect a project management tool, ProductBridge enables a two-way sync between your roadmap and your issue tracker:
+Project management integrations link **feedback posts** to issues or tasks in your tracker. They do not push roadmap items or import issues as feedback — linking is always initiated from a feedback post.
 
 ```mermaid
 graph LR
-    A[ProductBridge Roadmap] -->|Push| B[Issue Tracker]
-    B -->|Pull| A
-    C[User Feedback] --> A
-    B --> D[Development Work]
+    A[Feedback Post] -->|Link or create| B[Issue / Task]
+    B -->|Status change webhook| C[Status Sync Rules]
+    C -->|Update post status| A
+    C -->|Notify| D[Voters]
 ```
 
-- **Roadmap to Issues** — When you create or update a roadmap item, a corresponding issue is created or updated in your issue tracker
-- **Issues to Roadmap** — When an issue's status changes (e.g., moved to Done), the linked roadmap item updates automatically
-- **Feedback Context** — Linked feedback items are visible in the issue description or as comments, so developers understand the user need behind every task
+- **Link from a post** — Open any feedback post, search your tracker, and link an existing issue in one click
+- **Create from a post** — Create a new issue pre-filled from the post, directly in the tracker project or team you choose
+- **Status sync rules** — When a linked issue's status changes, rules you define update the post's status (for example, issue moves to *Done* → post becomes *Complete*)
+- **Voter notifications** — Each rule can optionally notify everyone who voted for the post when it fires
 
 ## Shared Capabilities
 
 All project management integrations share these features:
 
-- **Status mapping** — Map your roadmap statuses to your issue tracker's workflow states
-- **Automatic linking** — When a roadmap item is pushed to an issue tracker, the link is stored in both systems
-- **Feedback forwarding** — User feedback linked to a roadmap item is included in the issue description or as a comment
-- **Notification sync** — Status changes in the issue tracker trigger notifications in ProductBridge for stakeholders following the roadmap item
+- **OAuth connection** — Authorize once from **Connect Sources**; no API keys to manage
+- **Search, link, and create** — Attach existing issues or create new ones without leaving the feedback post
+- **Status sync rules** — Sentence-style rules with **any/all** matching across multiple linked issues, a target post status, and an optional voter notification
+- **Real-time updates** — Trackers deliver status changes via webhooks, so posts update without polling
 
 <Callout kind="info">
-  All project management integrations support bidirectional sync by default. You can configure them as one-way (push or pull only) in the integration settings if needed.
+  Status sync direction is fixed: changes flow from your tracker into ProductBridge post statuses. Linking or unlinking never modifies the issue in your tracker.
 </Callout>

@@ -1,104 +1,82 @@
 ---
 title: Migrating from Canny
-description: Step-by-step guide to export your Canny posts and import them into ProductBridge using the CSV import tool.
+description: Connect your Canny workspace with an API key and import your boards, posts, votes, and comments directly into ProductBridge.
 ---
 
 ## Overview
 
-Canny lets you export all of your posts as a CSV file from the admin dashboard. Once you have that file, ProductBridge's import wizard maps each Canny column to the right field so your posts, votes, statuses, and author details transfer cleanly.
+ProductBridge imports directly from Canny over the Canny API — there is no CSV export to wrangle. You connect your Canny workspace with its secret API key, and ProductBridge pulls your users, boards, categories, tags, posts, votes, and comments in one background job. Original boards, tags, and dates are preserved.
 
-## Step 1 — Export your posts from Canny
+<Callout kind="info">
+  The importer lives at **Settings → Connect → Import Data**. Availability depends on your plan — if you don't see the Import Data tab, check your plan on the Billing page.
+</Callout>
+
+## Step 1 — Find your Canny API key
 
 <Steps>
   <Step title="Open Settings in Canny" icon="settings">
-    Log in to your Canny workspace and click **Settings** in the left sidebar.
+    Log in to your Canny workspace and open **Settings**.
   </Step>
 
-  <Step title="Go to Export" icon="download">
-    Under the **Data** section, click **Export**. Canny will generate a `.csv` file containing all posts across all boards.
-  </Step>
+  <Step title="Go to the API section" icon="key">
+    Navigate to **Settings → API** and copy the **Secret key**.
 
-  <Step title="Download the file" icon="file-down">
-    Click **Download CSV**. The file is exported immediately and saved to your downloads folder.
-
-    <Callout kind="info">
-      Canny exports all boards into a single CSV. You do not need to export board by board.
+    <Callout kind="alert">
+      Treat this key like a password — it grants full access to your Canny data. Don't share it or commit it anywhere.
     </Callout>
+  </Step>
+
+  <Step title="Note your Canny subdomain" icon="link">
+    Your subdomain is the first part of your Canny URL — the `acme` in `acme.canny.io`.
   </Step>
 </Steps>
 
-## Step 2 — Upload to ProductBridge
+## Step 2 — Start the import in ProductBridge
 
-Navigate to **Settings → Import Data** in ProductBridge and drop your Canny CSV onto the upload zone.
+<Steps>
+  <Step title="Open the Third Party importer" icon="upload">
+    In ProductBridge, go to **Settings → Connect → Import Data** and switch to the **Third Party import** (API) tab.
+  </Step>
 
-## Step 3 — Map Canny columns to ProductBridge fields
+  <Step title="Enter your Canny credentials" icon="key-round">
+    Enter your **Canny subdomain** and paste your **Secret API key**.
+  </Step>
 
-Canny's export includes many columns. Here is how the most common ones map to ProductBridge:
+  <Step title="Import from Canny" icon="download">
+    Click **Import from Canny**. The import runs as a background job and shows progress through each stage:
 
-| Canny column | ProductBridge field | Notes |
-|---|---|---|
-| `title` | **Title** *(required)* | Map this first. |
-| `details` | Content | The full post description. |
-| `score` | Upvotes | Preserved as the imported vote count. |
-| `status` | Status | Maps to your org's statuses in the next step. |
-| `board` | Board | Maps to your org's boards in the next step. |
-| `category` | Category | Auto-created if it doesn't exist. |
-| `tags` | Tags | Comma-separated — each tag is auto-created if needed. |
-| `_Due date` | ETA / Due Date | Parsed automatically. |
-| `authorName` | Author Name | Stored with the post. |
-| `authorEmail` | Author Email | Matches or creates a user account. |
-| `ownerEmail` | Owner Email | Assigned if the person is already a team member. |
-| `created` | Created At | Preserves the original Canny creation date. |
-| `id` | *(leave unselected)* | Not used directly. |
+    1. Users
+    2. Boards
+    3. Categories
+    4. Tags
+    5. Posts
+    6. Votes
+    7. Comments
 
-<Callout kind="tip">
-  Any column you do not need can be left as **Unselected**. Only **Title** is required to proceed.
-</Callout>
-
-## Step 4 — Map statuses and boards
-
-After column mapping, ProductBridge shows every unique status and board value from your Canny CSV. Assign each one to an existing status and board in your ProductBridge organization.
-
-**Common Canny status values and suggested mappings:**
-
-| Canny status | Suggested ProductBridge status |
-|---|---|
-| `open` | Open |
-| `under review` | Under Review |
-| `in progress` | In Progress |
-| `complete` | Completed |
-| `closed` | Closed |
-
-Create any missing statuses in **Settings → Statuses** before starting the import if you want a one-to-one match.
-
-## Step 5 — Start importing
-
-Click **Start Importing**. ProductBridge processes your posts in the background. When the import finishes, a summary shows how many posts were successfully imported and how many were skipped with the reasons.
+    You can refresh the page — progress is preserved and the job keeps running.
+  </Step>
+</Steps>
 
 ## What transfers from Canny
 
 | Data | Transferred | Notes |
 |---|---|---|
-| Post title | Yes | Required field. |
-| Post description | Yes | Map the `details` column. |
-| Vote count / score | Yes | Shown as the post's upvote count. |
-| Status | Yes | Must be mapped to a ProductBridge status. |
-| Board | Yes | Must be mapped to a ProductBridge board. |
-| Category | Yes | Auto-created if not found. |
-| Tags | Yes | Auto-created if not found. |
-| Author name & email | Yes | Creates or matches a user account. |
-| Creation date | Yes | Map the `created` column. |
-| Due date | Yes | Map the `_Due date` column. |
-| Comments | No | Comments are not included in Canny's CSV export. |
-| Attachments | No | Only text content transfers. |
-| Voter list | No | The total vote count transfers, not individual voter identities. |
+| Boards | Yes | Your Canny boards are recreated in ProductBridge. |
+| Posts | Yes | Titles, descriptions, and original creation dates are preserved. |
+| Categories | Yes | Recreated in ProductBridge. |
+| Tags | Yes | Recreated in ProductBridge. |
+| Users | Yes | Canny users are imported before their posts, votes, and comments. |
+| Votes | Yes | Voters with an email address become individual votes; voters without an email are preserved through the post's vote score, so no votes are lost. |
+| Comments | Yes | Comments are imported in the final stage. |
+| Statuses | Partially | Imported posts land on your organization's default status. The original Canny status is stored in the post's metadata so nothing is lost. |
 
 ## After the import
 
-- Review **Settings → Statuses** and **Settings → Boards** to confirm everything mapped correctly.
-- Check **Settings → Categories** and **Settings → Tags** for any auto-created items.
-- Imported posts appear on the board immediately.
+- Review **Settings → Statuses** and update imported posts to the statuses you use — the importer places every post on your default status and keeps the original Canny status in the post's metadata.
+- Review **Settings → Feedback** to confirm your imported boards look correct.
+- Check **Settings → Categories** and **Settings → Tags** for the imported items.
+- Imported posts appear on your boards immediately.
 
 <Callout kind="tip">
-  Looking for a more detailed walkthrough? See the main [Import Feedback with a CSV](/help-center/guides/import-data) guide.
+  Migrating from a tool without a direct importer? Use the [CSV import guide](/help-center/guides/import-data) instead.
 </Callout>

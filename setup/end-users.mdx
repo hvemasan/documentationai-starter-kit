@@ -12,7 +12,7 @@ ProductBridge has two distinct user types:
 | **Team Members** | Your internal team — PMs, engineers, support | Admin dashboard |
 | **End Users** | Your customers and prospects | Public portal |
 
-This page is about **end users** — the people on the other side of your portal. For team members and roles, see Members & Roles in [Configurations & Settings](/settings/branding-and-custom-domain).
+This page is about **end users** — the people on the other side of your portal. For team members and roles, see [Members & Roles](/settings/members-and-roles).
 
 ## How End Users Get Created
 
@@ -24,19 +24,22 @@ End users land in ProductBridge through three channels:
 
 All three paths converge on the same user record, so a customer who emails you on Intercom, votes on your public portal, and signs in via your app shows up as **one** end user — not three.
 
-## Identified vs. Anonymous Visitors
+## Signed-In vs. Anonymous Visitors
 
-When someone interacts with your portal or widget, they fall into one of two buckets:
+Signing in is required to participate. Anonymous visitors can browse public boards, but every write action requires an account:
 
-| Type | Who They Are | What Gets Tracked |
-|------|--------------|-------------------|
-| **Identified** | Signed in (via portal account, [identity verification](/core-concepts/feedback-collection/widgets/identity-verification), or integration source) | Linked to a persistent end-user profile, with full history |
-| **Anonymous** | Submitting feedback or voting without signing in | Tracked by session — not linked to a profile, no history across visits |
+| Action | Anonymous Visitor | Signed-In End User |
+|--------|-------------------|--------------------|
+| Browse public boards and posts | Yes | Yes |
+| Submit a post | No — prompted to sign in | Yes |
+| Vote | No — prompted to sign in | Yes |
+| Comment | No — prompted to sign in | Yes |
+| React | No — prompted to sign in | Yes |
 
-Identified users let you do everything segments, history, and Ask AI promise. Anonymous users get the work done but you lose the link between sessions.
+The same rule applies in the widget: anonymous feedback is not supported, so widget submissions come from identified users.
 
 <Callout kind="tip">
-  If your product already has authenticated users, set up [identity verification](/core-concepts/feedback-collection/widgets/identity-verification) so every widget interaction is identified — even if customers never explicitly sign in to ProductBridge.
+  If your product already has authenticated users, set up [identity verification](/core-concepts/feedback-collection/widgets/identity-verification) so every widget interaction is identified automatically — your customers never see a second sign-in.
 </Callout>
 
 ## End User Profile
@@ -47,32 +50,20 @@ Every end user has:
 |-------|--------|
 | **Email** | Required, globally unique |
 | **Name** | Provided by user or pulled from integration |
-| **Avatar** | Uploaded, gravatar-derived, or pulled from integration |
-| **External identities** | Integration-specific IDs (Slack user, Intercom contact, etc.) |
-| **Display name** | What you show internally (defaults to name) |
-| **Company info** | Company name, MRR, customer status, renewal risk |
-| **Verification status** | Whether email has been verified |
-| **Browser / OS** | Captured at sign-up |
-| **Activity history** | All posts, votes, comments, and reactions |
+| **Avatar** | Uploaded or pulled from integration |
+| **Company info** | Company name, MRR, customer status, renewal risk, renewal date |
+| **Joined** | When the user was first created |
+| **Activity counts** | Posts, comments, and upvotes |
 
-Click any end user in the admin to see their full profile and engagement history.
+Click any end user on the **Users** page to see their profile and engagement.
 
 ## Identifying Users in the Widget
 
 If you're using the [ProductBridge widget](/core-concepts/feedback-collection/widgets/floating-button), you can tell ProductBridge who the current signed-in user is so their feedback is attributed correctly.
 
-You have two options:
-
-| Method | Use When |
-|--------|----------|
-| **Plain identity** | Quick to set up, but users can spoof identities |
-| **Signed identity (JWT)** | Recommended for production. Your server signs a token that proves the user is who they claim |
+Identification uses a **signed JWT**: your server signs a token that proves the user is who they claim, and you pass it to the widget as `userToken`. There is no unsigned "plain identity" mode — every identify call is verified against your widget secret.
 
 See [Identity Verification](/core-concepts/feedback-collection/widgets/identity-verification) for the full setup.
-
-<Callout kind="tip">
-  Always use signed identity in production. Without it, anyone visiting your portal could submit feedback as someone else — which messes up your analytics and trust.
-</Callout>
 
 ## External User Resolution
 
@@ -86,7 +77,7 @@ This is what lets you see "Sarah from Acme submitted 3 posts via Intercom, voted
 
 ## Hiding User Identity
 
-If your organization has [Hide User Identity](/settings/moderation) enabled, end users are still tracked internally with full profile data — but their names are replaced with "Anonymous" on the public portal.
+If your organization has [Hide user identities](/settings/moderation) enabled, end users are still tracked internally with full profile data — but their names and avatars are replaced with random ones on the public portal.
 
 This is public-facing only. Your admin dashboard still shows who submitted what, so you can follow up privately.
 
@@ -94,18 +85,14 @@ This is public-facing only. Your admin dashboard still shows who submitted what,
 
 Once you have end users, the natural next step is **grouping them**:
 
-- **Beta customers** — users with a `beta = true` flag
-- **Enterprise** — users where company MRR > $5k
-- **Power users** — users with more than 10 votes or posts
+- **Enterprise** — users where company MRR is greater than $5k
+- **At-risk accounts** — users where renewal risk is High
+- **Acme team** — users whose email contains `@acme.com`
 
-These groups are called [User Segments](/setup/user-segments). Segments power audience gating (which boards can a user see?), filtering in your inbox, and Ask AI scoping.
+These groups are called [User Segments](/setup/user-segments). Segments power audience gating (which boards can a user see?) and filtering on the Users page.
 
 ## Privacy & Data
 
 - End user data is **scoped to your organization** — no other workspace can see it.
 - Email is **always required** for an end user to exist. Even integration-sourced users need an email tied to their external ID.
-- End users can request data deletion via your support process — once removed, their posts become anonymous in the admin but the post content itself is retained.
-
-<Callout kind="info">
-  Need to delete an end user's data for a GDPR or similar request? Use the **Delete User** action in the admin. Their posts remain (so vote counts stay accurate) but author attribution is removed.
-</Callout>
+- Need to delete an end user's data for a GDPR or similar request? There's no self-serve delete in the dashboard today — contact support and they'll process the removal.

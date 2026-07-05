@@ -27,17 +27,14 @@ Auto-ingestion runs continuously. New feedback from connected tools appears in y
   <Card title="Freshdesk" icon="inbox" href="/integrations/communication-channels/freshdesk">
     Import tickets filtered by category or priority.
   </Card>
+  <Card title="Gong" icon="phone" href="/integrations/communication-channels/gong">
+    Turn sales and customer call transcripts into feedback.
+  </Card>
 </Columns>
 
 ### Review Platforms
 
 <Columns cols={3}>
-  <Card title="G2" icon="star" href="/integrations/public-reviews/g2">
-    Import reviews from your G2 product profile.
-  </Card>
-  <Card title="Capterra" icon="award" href="/integrations/public-reviews/capterra">
-    Sync reviews from your Capterra listing.
-  </Card>
   <Card title="TrustPilot" icon="shield-check" href="/integrations/public-reviews/trustpilot">
     Import reviews from your TrustPilot business profile.
   </Card>
@@ -56,13 +53,13 @@ Auto-ingestion runs continuously. New feedback from connected tools appears in y
 
 <Steps>
   <Step title="Connect a tool" icon="plug">
-    Navigate to **Settings > Integrations** and connect the tools you want to import feedback from. Each integration has its own setup guide with authentication and configuration steps.
+    Navigate to **Connect Sources** in the sidebar and connect the tools you want to import feedback from. Each integration has its own setup guide with authentication and configuration steps.
   </Step>
   <Step title="Configure import rules" icon="filter">
     Define which messages, tickets, or reviews get imported as feedback. Use tags, categories, channels, or AI-based detection to control the flow.
   </Step>
   <Step title="Feedback flows in automatically" icon="inbox">
-    Once configured, feedback is imported continuously. Each item is tagged with its source (e.g., "via Intercom", "via G2") and linked to a user profile when possible.
+    Once configured, feedback is imported continuously. Each item is tagged with its source (e.g., "via Intercom", "via TrustPilot") and linked to a user profile when possible.
   </Step>
 </Steps>
 
