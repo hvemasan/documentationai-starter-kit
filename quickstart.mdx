@@ -1,16 +1,20 @@
 ---
 title: Quick Start Guide
-description: Get up and running with ProductBridge by creating your account, setting up a project, collecting your first feedback, and viewing the dashboard in under 5 minutes.
+description: >-
+  Get up and running with ProductBridge by creating your account, setting up a
+  project, collecting your first feedback, and viewing the dashboard in under 5
+  minutes.
 ---
-
 ## Prerequisites
 
 Before starting, ensure you have the following:
 
-<Callout kind="info" title="Requirements">
-- A modern web browser like Chrome, Firefox, or Safari
-- A valid email address for account verification
-- About 5 minutes of time
+<Callout kind="info" collapsed="false">
+  - A modern web browser like Chrome, Firefox, or Safari
+
+  - A valid email address for account creation
+
+  - About 5 minutes of time
 </Callout>
 
 No software installation required — ProductBridge runs entirely in your browser.
@@ -18,54 +22,50 @@ No software installation required — ProductBridge runs entirely in your browse
 ## Create Your Account
 
 <Steps>
-  <Step title="Register for an Account" icon="user-plus">
-    Visit `https://app.productbridge.io/signup` and enter your email, name, and a secure password.
+  <Step title="Register for an Account" icon="user-plus" title-type="p">
+    Visit `https://app.productbridge.com/signup` and enter your email, name, and a secure password.
 
-    Click **Create Account**. You receive a verification email — check your inbox (and spam folder if needed).
+    Click **Create Account**.
 
-    <Callout kind="tip">
+    <Callout kind="tip" collapsed="false">
       Use a strong password with at least 12 characters, including uppercase, lowercase, numbers, and symbols.
     </Callout>
   </Step>
 
-  <Step title="Verify Email and Log In" icon="mail">
-    Open the verification link from your email.
-
-    Return to `https://app.productbridge.io/login`, enter your credentials, and click **Sign In**.
-
+  <Step title="Verify Email and Log In" icon="mail" title-type="p">
     You land on the dashboard, where you can see your projects and recent activity.
   </Step>
 
-  <Step title="Complete Your Profile" icon="settings">
-    On first login, configure your preferences:
+  <Step title="Complete Onboarding" icon="settings" title-type="p">
+    Once you create an account, you need to complete the onboarding flow:
 
-    - Set your timezone in **Account Settings > Profile**
-    - Choose a theme (light/dark) in **Appearance**
-    - Enable two-factor authentication (2FA) under **Security** for added protection
+    - Enter your **Domain URL&#x20;**(Ignore if you don't have one)
 
-    Save changes to personalize your experience.
+    - Our AI automatically fetches the **brand details** based on the URL and auto-fill. Verify the details and proceed.
+
+    - Select the list of **Feedback boards** you would like to start with.
+
+    - Once done, we will scan the web to understand your brand and personalize the feedback items.
+
+    Platform takes you to the feedback list view where you can manage all the feedback boards/items.
   </Step>
 </Steps>
 
 ## Set Up Your First Project
 
+Once done with the onboarding, the next step is to configure things and add integration sources.
+
 <Steps>
-  <Step title="Create a New Project" icon="plus">
-    From the dashboard, click **New Project**.
-
-    Enter a project name like "My Product", add an optional description, and select your project visibility (Public or Private).
-
-    Click **Create Project** to get started.
-  </Step>
-
-  <Step title="Configure Feedback Channels" icon="message-square">
+  <Step title="Configure Feedback Channels" icon="message-square" title-type="p">
     ProductBridge collects feedback from multiple sources. Enable the channels that work for you:
 
     - **Public Portal** — Share a link where users can submit feedback directly
+
     - **In-App Widget** — Embed a feedback widget inside your product
+
     - **Integrations** — Connect tools like Intercom, Slack, or Zendesk to auto-import feedback
 
-    <Callout kind="tip">
+    <Callout kind="tip" collapsed="false">
       Start with the Public Portal — it takes just one click to activate and gives you a shareable feedback page immediately.
     </Callout>
   </Step>
@@ -77,7 +77,11 @@ With your project created and a feedback channel enabled, you are ready to recei
 
 <Tabs>
   <Tab title="Public Portal" icon="globe">
-    Share your portal link (`https://feedback.productbridge.io/your-project`) with users or teammates.
+    Share your portal link (`https://yourdomain.productbridge.io/`) with users or teammates.
+
+    <Callout kind="success" collapsed="false" color="#f59e0b">
+      You can also configure your custom domain from Settings to access public portal on your subdomain (`https://feedback.yourdomain.com/`)&#x20;
+    </Callout>
 
     They can submit feedback, vote on existing items, and add comments — no account required.
   </Tab>
@@ -87,7 +91,7 @@ With your project created and a feedback channel enabled, you are ready to recei
 
     ```html
     <script
-      src="https://widget.productbridge.io/v1/widget.js"
+      src="https://widget.productbridge.com/v1/widget.js"
       data-project="YOUR_PROJECT_ID"
       async>
     </script>
@@ -106,26 +110,30 @@ With your project created and a feedback channel enabled, you are ready to recei
 Once feedback starts flowing in, your project dashboard gives you an overview of everything happening:
 
 - **Feedback Inbox** — All submitted feedback in one place, sorted by recency
+
 - **Trends** — See which topics are getting the most attention
+
 - **Sentiment** — Understand how users feel about your product at a glance
+
 - **Roadmap** — Plan and prioritize features based on real user demand
 
-<Callout kind="success">
+<Callout kind="success" collapsed="false">
   Congratulations! You have set up ProductBridge and are ready to start making data-driven product decisions.
 </Callout>
 
 ## Next Steps
 
-<Columns cols={3}>
-  <Card title="Core Concepts" icon="layers" href="/core-concepts">
+<Columns cols="3">
+  <Card title="Core Concepts" href="/core-concepts" icon="layers" horizontal="false">
     Learn the four pillars of ProductBridge in depth.
   </Card>
 
-  <Card title="Feedback Intelligence" icon="brain" href="/core-concepts/feedback-intelligence">
+  <Card title="Feedback Intelligence" href="/core-concepts/feedback-intelligence" icon="brain" horizontal="false">
     Discover how AI analyzes your feedback automatically.
   </Card>
 
-  <Card title="Integrations" icon="plug" href="/integrations/communication-channels">
+  <Card title="Integrations" href="/integrations/customer-support" icon="plug" horizontal="false">
     Connect your support tools and project management apps.
   </Card>
 </Columns>
+
