@@ -5,7 +5,7 @@ description: "End-users of your product who interact with feedback, comments, an
 
 A user in this API represents an **end-user of your product** — the people who file feedback, vote on posts, and leave comments. These are stored in ProductBridge's `organization_user` table, which is per-org and independent of the underlying SaaS account.
 
-The API lets you retrieve and soft-delete users. **Creating users is not exposed via the public API in v1** — users are created via your portal (when they sign in to vote/comment), via integrations (Zendesk, Freshdesk, etc.), or via the AI ingestion pipeline.
+The API lets you create, retrieve, and soft-delete users. Users are also created automatically via your portal (when they sign in to vote/comment), via integrations (Zendesk, Freshdesk, etc.), and via the AI ingestion pipeline — [Create user](/api-reference/users/create) is idempotent, so it is safe to call for emails that may already exist.
 
 <Callout kind="info">
   **Three user concepts to keep straight.** ProductBridge has end-users (this resource), admin users (your team), and external users (imported from integrations). The public API only exposes end-users.
@@ -70,6 +70,10 @@ The API lets you retrieve and soft-delete users. **Creating users is not exposed
 <Columns cols="2">
   <Card title="Retrieve a user" href="/api-reference/users/retrieve" icon="search" horizontal="false">
     Look up a user by `user_id` or by `email`.
+  </Card>
+
+  <Card title="Create a user" href="/api-reference/users/create" icon="plus" horizontal="false">
+    Create an end-user by email, or resolve them if they already exist. Idempotent.
   </Card>
 
   <Card title="Delete a user" href="/api-reference/users/delete" icon="trash-2" horizontal="false">

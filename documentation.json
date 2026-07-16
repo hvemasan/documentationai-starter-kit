@@ -687,6 +687,11 @@
                 "icon": "search"
               },
               {
+                "title": "Create",
+                "path": "api-reference/users/create",
+                "icon": "plus"
+              },
+              {
                 "title": "Delete",
                 "path": "api-reference/users/delete",
                 "icon": "trash-2"

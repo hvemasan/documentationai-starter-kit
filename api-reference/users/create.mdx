@@ -1,0 +1,144 @@
+---
+title: "Create a user"
+description: "Create an end-user by email, or resolve them if they already exist. Scoped to the authenticated organization."
+---
+
+Creates an end-user in your organization, keyed on `email`. The endpoint is **idempotent** — if a user with that email already exists in your organization, their existing IDs are returned and nothing is modified. This makes it safe to call before attributing a post, comment, or vote to a customer.
+
+Under the hood the endpoint resolves two records:
+
+- The **global user** — created if no user with this email exists anywhere on ProductBridge.
+- The **organization link** — created if the user isn't yet linked to your organization.
+
+<Callout kind="info">
+  **Resolve-only semantics.** When the user already exists in your organization, the `name` and `avatar_url` you send are ignored — the existing display name wins. This endpoint never updates an existing user's profile.
+</Callout>
+
+<Callout kind="tip">
+  A user previously removed with [Delete user](/api-reference/users/delete) is **reactivated** by this call, so delete → create round-trips cleanly. The response's `reactivated` flag tells you when this happened.
+</Callout>
+
+Users created here cannot log in to your portal yet — they have no credentials. If they later sign up with the same email, their sign-up attaches to the same `user_id`, so everything attributed to them via the API is preserved.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/users/create
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="email" param-type="string" required="true" deprecated="false">
+  The user's email address. Must be a valid email. Normalized server-side (trimmed, lowercased) before lookup and storage.
+</ParamField>
+
+<ParamField body="name" param-type="string" required="true" deprecated="false">
+  The user's display name in your organization. 1–512 characters; must not be blank. Only used when a new user or organization link is created — ignored when the user already exists in your org.
+</ParamField>
+
+<ParamField body="avatar_url" param-type="string" required="false" deprecated="false">
+  URL of the user's avatar image. Max 512 characters. Only used on creation; ignored when the user already exists in your org.
+</ParamField>
+
+## Returns
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  The global user UUID — use this as `author_id` / `user_id` in other endpoints such as [Create comment](/api-reference/comments/create) and [Toggle vote](/api-reference/votes/toggle).
+</ResponseField>
+
+<ResponseField name="organization_user_id" field-type="string" required="true" deprecated="false">
+  The org-scoped membership row's UUID — the same `id` returned by [Retrieve user](/api-reference/users/retrieve).
+</ResponseField>
+
+<ResponseField name="created" field-type="boolean" required="true" deprecated="false">
+  `true` when a new user or organization link was created; `false` when the user already existed in your organization.
+</ResponseField>
+
+<ResponseField name="reactivated" field-type="boolean" required="true" deprecated="false">
+  `true` when a previously deleted organization link was reactivated by this call.
+</ResponseField>
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/users/create \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "email": "sally@acme.example.com",
+      "name": "Sally Doe",
+      "avatar_url": "https://acme.example.com/avatars/sally.png"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/users/create",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        email: "sally@acme.example.com",
+        name: "Sally Doe",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { id, created } = await res.json();
+  // `id` is safe to use as author_id immediately, whether or not
+  // the user was just created.
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/users/create",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "email": "sally@acme.example.com",
+          "name": "Sally Doe",
+      },
+  )
+  resp.raise_for_status()
+  user_id = resp.json()["id"]
+  # user_id is safe to use as author_id immediately.
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "id": "bb3c3ef8-b8cd-cd15-01ba-useruser0001",
+  "organization_user_id": "ff3c3ef8-b8cd-cd15-01ba-orguser000001",
+  "created": true,
+  "reactivated": false
+}
+```
+
+When the user already existed in your organization:
+
+```json
+{
+  "id": "bb3c3ef8-b8cd-cd15-01ba-useruser0001",
+  "organization_user_id": "ff3c3ef8-b8cd-cd15-01ba-orguser000001",
+  "created": false,
+  "reactivated": false
+}
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `422` | Validation error envelope | Missing or invalid `email`, missing or blank `name`, or `name`/`avatar_url` longer than 512 characters. |
+
+See [Errors](/api-reference/errors) for the full envelope shape.
