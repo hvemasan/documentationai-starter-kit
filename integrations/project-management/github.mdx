@@ -1,0 +1,226 @@
+---
+title: GitHub Integration
+description: >-
+  Connect ProductBridge to GitHub to link feedback posts with issues, create
+  GitHub issues directly from feedback, and automatically update post status
+  when linked issues are closed or reopened.
+---
+
+<img src="https://raw.githubusercontent.com/hvemasan/documentationai-starter-kit/main/images/logos/github.svg" width="80" height="80" alt="GitHub" />
+## Overview
+
+The GitHub integration is a **two-way tracker link** between ProductBridge feedback and GitHub issues. It does not import issues as feedback — instead, it gives your product and engineering teams a clean handoff once a piece of feedback is ready to be acted on.
+
+Once connected, you can:
+
+- **Search GitHub issues** from any feedback post and link them in one click
+
+- **Create a new GitHub issue** directly from a feedback post — complete with a repository picker
+
+- **Auto-sync post status** — when a linked issue is closed or reopened in GitHub, ProductBridge updates the corresponding post status based on rules you define
+
+- **Notify voters automatically** when a post status changes because of a linked issue update
+
+The sync runs in real time over webhooks. There is nothing to poll, no manual refresh.
+
+<Callout kind="info" collapsed="false">
+  The integration works with **GitHub.com** accounts and organizations via a GitHub App installation.
+</Callout>
+
+## Prerequisites
+
+<Callout kind="info" collapsed="false">
+  - A GitHub account that can install apps on the target account or organization — installing into an organization may require an organization owner's approval
+
+  - A ProductBridge organization with at least one feedback board and configured post statuses
+
+  - A user with **Owner-level admin** permissions in ProductBridge to install integrations
+</Callout>
+
+## Connect GitHub
+
+<Steps>
+  <Step title="Open the Integrations page" icon="layout-dashboard" title-type="p">
+    Sign in to your ProductBridge dashboard and click **Connect Sources** in the sidebar, then select **GitHub** from the **Project Management** section.
+  </Step>
+
+  <Step title="Click Connect GitHub" icon="plug" title-type="p">
+    On the GitHub integration page, click **Connect GitHub**. ProductBridge redirects you to GitHub to install the **ProductBridge GitHub App**.
+  </Step>
+
+  <Step title="Install the app and choose repositories" icon="shield" title-type="p">
+    Pick the account or organization to install into, then choose **All repositories** or **Only select repositories**. ProductBridge can only see and work with the repositories you grant here.
+
+    <Callout kind="tip" collapsed="false">
+      Start with only the repositories your engineering team files feedback-related issues in — you can adjust repository access later from GitHub's app settings.
+    </Callout>
+  </Step>
+
+  <Step title="Confirm the connection" icon="check-circle" title-type="p">
+    After you authorize, GitHub redirects you back to ProductBridge. The integration status updates to **Connected** and the page shows the connected account and the disconnect option.
+
+    Behind the scenes, ProductBridge verifies and stores the app installation — access uses short-lived tokens, and GitHub delivers issue updates to ProductBridge in real time.
+  </Step>
+</Steps>
+
+## Link a feedback post to a GitHub issue
+
+Once connected, every feedback post in your dashboard gets a **GitHub Issues** section in the post detail view.
+
+<Steps>
+  <Step title="Open a feedback post" icon="message-square" title-type="p">
+    Click any post in the **Feedback** view to open the post detail panel. Scroll the right sidebar to find the **GitHub Issues** section.
+  </Step>
+
+  <Step title="Click Link" icon="link" title-type="p">
+    Click the **Link** button next to **GitHub Issues**. A dialog opens with two tabs: **Search** and **Create**.
+  </Step>
+
+  <Step title="Choose how to link the issue" icon="search" title-type="p">
+    Use the tab that fits how you usually work in GitHub.
+
+    <Tabs>
+      <Tab title="Search" icon="search">
+        Type any text to search across the repositories the app can access. Each result shows the issue number (for example `#142`), its repository, and title. Click any result to link it instantly.
+
+        <Callout kind="info" collapsed="false">
+          Only **open** issues can be linked. To link a closed issue, reopen it in GitHub first.
+        </Callout>
+      </Tab>
+
+      <Tab title="Create" icon="plus">
+        Pick a **repository**, then fill in a title and description. ProductBridge creates the issue in GitHub and links it to the post in one step.
+      </Tab>
+    </Tabs>
+  </Step>
+
+  <Step title="Verify the link" icon="check" title-type="p">
+    The linked issue appears in the post's **GitHub Issues** section with its number, repository, and current state. From there you can **open it on GitHub** or **unlink it**.
+  </Step>
+</Steps>
+
+## Status sync rules
+
+Linking is most powerful when GitHub issue changes flow back into ProductBridge automatically. **Status sync rules** translate GitHub issue states into ProductBridge post statuses.
+
+A rule answers three questions:
+
+1. **When** a linked GitHub issue changes to state X
+
+2. **Should** the post change to a specific ProductBridge status (for example, *In Progress* → *Complete*)?
+
+3. **And** should we notify everyone who voted for this post?
+
+If a post has multiple linked issues, you also pick whether the rule fires when **any** issue reaches the trigger state, or only when **all** issues do.
+
+### Create a rule
+
+<Steps>
+  <Step title="Open the GitHub settings page" icon="settings" title-type="p">
+    Go back to **Connect Sources > GitHub**. Below the connection details, you'll see the **Rules** section.
+  </Step>
+
+  <Step title="Click Create New Rule" icon="plus" title-type="p">
+    Click **Create New Rule**. A sentence-style builder appears so you can read the rule in plain English as you build it.
+  </Step>
+
+  <Step title="Build the rule" icon="wand-2" title-type="p">
+    Pick the values left to right:
+
+    | Field                             | What it does                                                                                        |
+    | --------------------------------- | ---------------------------------------------------------------------------------------------------- |
+    | **any / all**                     | Whether the rule fires when *any* linked GitHub issue hits the trigger state, or only when *all* do |
+    | **GitHub state**                  | The issue state that triggers the rule — GitHub issues have exactly two: `open` and `closed`        |
+    | **Post status**                   | The ProductBridge feedback status the post should change to                                         |
+    | **Notify / Do not notify voters** | Whether to send in-app and email notifications to voters when the rule fires                        |
+
+    <Callout kind="info" collapsed="false">
+      Unlike Jira or Linear, GitHub has no custom workflow states — an issue is either **open** or **closed**. The most common rule is: when **any** linked issue becomes `closed`, mark the post **Complete** and notify voters.
+    </Callout>
+  </Step>
+
+  <Step title="Save the rule" icon="check-circle" title-type="p">
+    Click **Create**. The rule appears in the list and is active immediately. New GitHub issue changes that match it start syncing right away.
+  </Step>
+</Steps>
+
+### How rule evaluation works
+
+When a linked issue is closed or reopened in GitHub:
+
+1. GitHub sends an issue webhook to ProductBridge
+
+2. ProductBridge finds every feedback post that links to that issue
+
+3. For each rule on the integration, it checks whether the **any/all** condition is satisfied
+
+4. If a rule matches, the post status is updated and (optionally) voters are notified
+
+Rules are evaluated independently per post, so closing a single GitHub issue can update many posts at once.
+
+## Behavior to expect
+
+| Action in GitHub                    | Effect in ProductBridge                                                                    |
+| ----------------------------------- | ------------------------------------------------------------------------------------------ |
+| Close or reopen a linked issue      | Linked issue badge on the post updates; rules evaluated; notifications fired if configured |
+
+| Action in ProductBridge     | Effect in GitHub                                                                              |
+| --------------------------- | ---------------------------------------------------------------------------------------------- |
+| Link an existing issue      | A reference is stored on the feedback post; nothing changes inside GitHub — no comments added  |
+| Create an issue from a post | A new issue appears in the chosen repository with the title and description you provided       |
+| Unlink an issue             | The reference is removed; the GitHub issue itself is not deleted or modified                   |
+| Disconnect the integration  | Syncing stops; existing post-issue links remain on the post but stop receiving status updates  |
+
+## Disconnect GitHub
+
+To stop syncing:
+
+<Steps>
+  <Step title="Go to the GitHub integration page" icon="settings" title-type="p">
+    Open **Connect Sources > GitHub** and click **Disconnect**.
+  </Step>
+
+  <Step title="Confirm disconnection" icon="check" title-type="p">
+    ProductBridge marks the integration as disconnected so no new syncs run, and leaves the existing per-post issue links in place — your feedback posts keep their reference to the GitHub issue even after disconnect, so you don't lose history. They simply stop receiving status updates.
+
+    To revoke ProductBridge's repository access as well, uninstall the app from GitHub under **Settings > Integrations > Applications** on the account or organization where you installed it.
+  </Step>
+</Steps>
+
+<ExpandableGroup>
+  <Expandable title="Why can't I find an issue in search?" default-open="false">
+    Two common reasons:
+
+    - The issue is **closed** — only open issues can be linked. Reopen it in GitHub, link it, and it will follow your sync rules from there.
+
+    - The issue's repository wasn't granted to the app. Adjust repository access under the app's settings in GitHub, then search again.
+  </Expandable>
+
+  <Expandable title="Why isn't my post status updating when I close a GitHub issue?" default-open="false">
+    Walk through the chain:
+
+    - Confirm the issue is actually **linked** to the post (open the post; the GitHub Issues section should list it)
+
+    - Confirm a **rule exists** for the `closed` state
+
+    - Confirm the rule's **any/all** mode fits — if the rule is set to **all** and the post links to multiple issues, every linked issue must be closed
+
+    - If a rule is set to **notify**, in-app notifications appear instantly; email delivery follows your organization's notification settings
+  </Expandable>
+
+  <Expandable title="Can I link the same GitHub issue to multiple feedback posts?" default-open="false">
+    Yes. A single GitHub issue can be referenced from many feedback posts. When the issue is closed or reopened, every post that links to it is evaluated against your rules independently.
+  </Expandable>
+
+  <Expandable title="Does the integration import issues as feedback?" default-open="false">
+    No. The integration is intentionally **link-only**. Issues already in GitHub don't appear as posts in ProductBridge — that would clutter your feedback inbox. Linking is initiated from a feedback post.
+  </Expandable>
+
+  <Expandable title="What permissions does the GitHub App get?" default-open="false">
+    The app requests **Issues (read and write)** and repository **metadata (read-only)** — only on the repositories you select during installation. It cannot read your code.
+  </Expandable>
+
+  <Expandable title="Does it work with GitHub Enterprise Server?" default-open="false">
+    The integration connects to **GitHub.com** via a GitHub App installation. Self-hosted GitHub Enterprise Server instances are not supported.
+  </Expandable>
+</ExpandableGroup>
