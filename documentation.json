@@ -356,6 +356,11 @@
                     "title": "ClickUp",
                     "path": "integrations/project-management/clickup",
                     "icon": "check-square"
+                  },
+                  {
+                    "title": "GitHub",
+                    "path": "integrations/project-management/github",
+                    "icon": "github"
                   }
                 ]
               },
