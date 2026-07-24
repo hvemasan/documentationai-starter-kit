@@ -145,6 +145,11 @@
                 "title": "Changelog",
                 "path": "core-concepts/changelog",
                 "icon": "megaphone"
+              },
+              {
+                "title": "Help Center",
+                "path": "core-concepts/help-center",
+                "icon": "life-buoy"
               }
             ]
           },
