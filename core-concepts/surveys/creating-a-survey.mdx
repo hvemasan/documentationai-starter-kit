@@ -1,0 +1,97 @@
+---
+title: Creating a Survey
+description: >-
+  Walk through the survey editor step by step — pick a type, write your
+  question, choose a display and rating style, add a follow-up, and set up
+  detractor routing or a promoter nudge.
+---
+
+## Before You Start
+
+Open **Surveys** from the dashboard sidebar and select **New survey**. Creating a survey is a two-step flow: first you pick a type, then you configure it. The type is locked once the survey exists, so choose it deliberately — see [Survey Types](/core-concepts/surveys/survey-types) if you're unsure.
+
+## Step 1 — Pick a Type
+
+Choose one of the five types. Each card shows a one-line description and seeds sensible defaults for the question, scale, and rating style so you have a working survey immediately.
+
+<Steps>
+  <Step title="Select a type" icon="mouse-pointer-click" title-type="h3">
+    Click **NPS**, **CSAT**, **CES**, **Poll**, or **Open feedback**. The editor pre-fills the question and scale for that type.
+  </Step>
+  <Step title="Continue to configuration" icon="arrow-right" title-type="h3">
+    Move to step 2 to name the survey and tailor its content, behavior, and audience.
+  </Step>
+</Steps>
+
+## Step 2 — Configure
+
+The configuration screen is organized into collapsible sections next to a live preview that updates as you type. The preview uses your organization's brand color, so it matches what recipients actually see.
+
+### General
+
+The core content of the survey.
+
+| Field | Applies to | Description |
+|---|---|---|
+| Survey name (internal) | All | A private label for your team — never shown to users. |
+| Question | All | The single question shown in the card. |
+| Answer options | Poll | Two or more choices; drag to reorder. |
+| Selection | Poll | **Single choice** or **Multiple choice**. |
+| Low / high score label | NPS, CSAT, CES | Text anchors shown at each end of the scale. |
+| Rating style | NPS, CSAT, CES | **Numbered**, **Stars**, or **Emoji faces**. |
+| Lowest / highest value | CES | The editable scale range (lowest 0–9, highest 2–10). |
+| Ask an open-ended follow-up | All | Adds a free-text prompt after the main answer. |
+
+<Callout kind="tip">
+  For scored surveys, enabling a follow-up captures the reasoning behind a score without launching a second survey — the follow-up appears in the same card once the user answers.
+</Callout>
+
+### Behavior
+
+Controls how the survey displays and when it can reappear.
+
+| Field | Description |
+|---|---|
+| Display | **Popover** (a card in the bottom corner) or **Modal** (centered, dims the page). |
+| Status | **Draft**, **Published**, or **Archived**. Only published surveys are shown to users. |
+| Trigger | **Auto** (on page load) or **Event** (when your app fires a named event). |
+| Event name | The event that triggers the survey — used with the SDK's `track()` call. |
+| Delay (seconds) | How long to wait after load or the event before showing the survey. `0` shows it immediately. |
+
+The **Frequency** controls decide how often a user can see the survey after they interact with it:
+
+- **If the user responds** — never show again, or show again after a set number of days.
+- **If the user closes** — never show again, or show again after a set number of days.
+
+<Callout kind="alert">
+  Frequency is enforced for **identified users only**. Anonymous visitors have no stable identity to remember, so recurrence and "show again after" rules don't apply to them.
+</Callout>
+
+### Audience
+
+Who is eligible to see the survey — everyone, or a specific user segment — plus an option to restrict it to identified users and rules for which pages it appears on. This section is covered in depth in [Targeting & Triggers](/core-concepts/surveys/targeting-and-triggers).
+
+### Advanced
+
+Available for scored survey types (**NPS** and **CSAT**), the Advanced section turns a rating into an action.
+
+<Columns cols="2">
+  <Card title="Route detractors" icon="git-branch" href="#" horizontal={false}>
+    Send low scores straight to a feedback board so unhappy users become trackable feedback you can follow up on.
+  </Card>
+  <Card title="Nudge promoters" icon="star" href="#" horizontal={false}>
+    Show high scorers a call to action — for example, a link to leave a public review — with your own nudge text and URL.
+  </Card>
+</Columns>
+
+### Share by link
+
+Once a survey is saved, the editor gains a **Share by link** section with a public URL you can copy and send. See [Distribution](/core-concepts/surveys/distribution#share-by-link) for how the link behaves.
+
+## Publish
+
+Set the **Status** to **Published** to make the survey live. Eligible users start seeing it on their next matching visit or event. Keep it as a **Draft** while you're still editing — drafts are never shown, though you can still copy the share link to preview it yourself.
+
+<Callout kind="success">
+  You don't need to redeploy anything to publish. Once your app has the surveys script installed, publishing a survey is enough for it to start appearing.
+</Callout>

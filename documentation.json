@@ -96,6 +96,44 @@
                 ]
               },
               {
+                "group": "Surveys",
+                "icon": "clipboard-list",
+                "expandable": true,
+                "path": "core-concepts/surveys",
+                "pages": [
+                  {
+                    "title": "Survey Types",
+                    "path": "core-concepts/surveys/survey-types",
+                    "icon": "layers"
+                  },
+                  {
+                    "title": "Creating a Survey",
+                    "path": "core-concepts/surveys/creating-a-survey",
+                    "icon": "pencil"
+                  },
+                  {
+                    "title": "Targeting & Triggers",
+                    "path": "core-concepts/surveys/targeting-and-triggers",
+                    "icon": "crosshair"
+                  },
+                  {
+                    "title": "Installation & SDK",
+                    "path": "core-concepts/surveys/installation",
+                    "icon": "terminal"
+                  },
+                  {
+                    "title": "Distribution",
+                    "path": "core-concepts/surveys/distribution",
+                    "icon": "share-2"
+                  },
+                  {
+                    "title": "Analytics",
+                    "path": "core-concepts/surveys/analytics",
+                    "icon": "bar-chart-3"
+                  }
+                ]
+              },
+              {
                 "group": "Feedback Intelligence",
                 "icon": "brain",
                 "expandable": true,
@@ -304,6 +342,11 @@
                   {
                     "title": "Gong",
                     "path": "integrations/communication-channels/gong",
+                    "icon": "phone-call"
+                  },
+                  {
+                    "title": "Modjo",
+                    "path": "integrations/communication-channels/modjo",
                     "icon": "phone-call"
                   }
                 ]

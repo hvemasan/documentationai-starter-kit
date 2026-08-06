@@ -1,0 +1,72 @@
+---
+title: Analytics
+description: >-
+  Read survey results with a view tailored to each type — NPS and CSAT bands,
+  CES effort averages, poll tallies, and open-feedback quote lists — filtered by
+  date range.
+---
+
+## Opening Analytics
+
+Select any survey from the **Surveys** list to open its analytics dashboard. The header carries three controls:
+
+- **Refresh** — reload the latest responses.
+- **Share by link** — copy or open the survey's public link (see [Distribution](/core-concepts/surveys/distribution#share-by-link)).
+- **Date range** — scope every metric to a window; it defaults to the last 90 days.
+
+The layout adapts to the survey type, so you always see the metrics that make sense for the question you asked.
+
+## NPS
+
+| Metric | What it shows |
+|---|---|
+| Score | The headline NPS from −100 to +100, with the change versus the prior period. |
+| Responses | Total responses in the selected window. |
+| Response rate | Share of shown surveys that were answered. |
+| Composition | The split of promoters, passives, and detractors. |
+
+Below the tiles, a **score distribution** histogram plots responses across 0–10, colored by band, and a **daily score trend** tracks the score over time.
+
+## CSAT
+
+CSAT mirrors NPS but reads in satisfaction language:
+
+| Metric | What it shows |
+|---|---|
+| Satisfied | Percentage of respondents who rated 4–5. |
+| Responses | Total responses in the window. |
+| Response rate | Share of shown surveys that were answered. |
+| Composition | The split of satisfied, neutral, and dissatisfied. |
+
+A score distribution histogram and daily trend accompany the tiles, banded the same way.
+
+## CES
+
+CES is average-based rather than banded:
+
+| Metric | What it shows |
+|---|---|
+| Avg rating | The mean effort score, shown out of the scale maximum. |
+| Responses | Total responses in the window. |
+
+An **effort distribution** histogram plots responses across the configured scale in a single neutral color — there are no promoter/detractor bands for effort.
+
+## Poll
+
+A poll shows a **Responses** tile plus a **Results** breakdown: each option with its vote count and percentage as a progress bar.
+
+<Callout kind="info">
+  Percentages are the share of respondents who picked each option. In a multiple-choice poll, respondents can pick more than one option, so the percentages can add up to more than 100%.
+</Callout>
+
+## Open feedback
+
+Open feedback shows a **Responses** tile and a scrollable list of every answer as a readable quote, each tagged with the respondent and the date. Anonymous responses are labeled accordingly. The list loads more as you scroll.
+
+## Recent Responses
+
+For scored and poll surveys, a **Recent responses** table lists individual answers with their score or selected options, any follow-up comment, the respondent, and the date. NPS and CSAT rows also show the band each answer falls into.
+
+<Callout kind="tip">
+  Combine analytics with the **Advanced** routing options on NPS and CSAT — send detractors to a feedback board and nudge promoters to leave a review — so the numbers here turn directly into action. See [Creating a Survey](/core-concepts/surveys/creating-a-survey#advanced).
+</Callout>

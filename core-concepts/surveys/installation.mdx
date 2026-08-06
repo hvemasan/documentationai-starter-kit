@@ -1,0 +1,284 @@
+---
+title: Installation & SDK
+description: >-
+  Add the standalone surveys script to your app in one snippet, then drive
+  surveys from your own code — identify users, fire event-triggered surveys,
+  start a specific survey, and reset on sign-out.
+---
+
+## Overview
+
+Surveys load through a standalone script, `pb-surveys.js`, that exposes a global `ProductBridgeSurveys` object. It's decoupled from the feedback widget — a surveys-only customer never ships the widget bundle. Add the script once, and any published survey reveals itself whenever a visitor is eligible.
+
+### The survey script at a glance
+
+| | |
+|---|---|
+| **Script URL** | `https://app.productbridge.io/sdk/pb-surveys.js` |
+| **Global object** | `ProductBridgeSurveys` |
+| **Load** | Async, once, near the end of `<head>` |
+| **What it does** | Shows eligible published surveys as a popover or modal, and exposes a runtime API to identify users and fire surveys |
+| **Requires a build step?** | No — it's a plain `<script>` tag, framework-agnostic |
+
+## Prerequisites
+
+You need your **Organization ID**. Open the **Surveys** page in your dashboard and expand **Install the survey script** — the snippet there is pre-filled with your organization ID, ready to copy.
+
+## Quick Start
+
+<Steps>
+  <Step title="Copy your organization ID" icon="clipboard" title-type="h3">
+    On the **Surveys** page, expand **Install the survey script** and copy the pre-filled snippet — it already contains your organization ID.
+  </Step>
+  <Step title="Add the script to your app" icon="code" title-type="h3">
+    Paste the snippet near the end of your `<head>`, on every page where surveys should be able to appear. Loading it once per page is enough.
+  </Step>
+  <Step title="Identify signed-in users" icon="user-check" title-type="h3">
+    After a user logs in, call `ProductBridgeSurveys.identify(jwt)` with a JWT signed on your server. This is required for targeted surveys, the "identified users only" restriction, and frequency caps.
+  </Step>
+  <Step title="Publish a survey" icon="send" title-type="h3">
+    Create a survey and set its status to **Published**. No redeploy is needed — the installed script picks it up automatically.
+  </Step>
+  <Step title="Verify it appears" icon="check-circle" title-type="h3">
+    Visit a page that matches the survey's targeting and trigger. The survey card should appear. If it doesn't, see [Troubleshooting](#troubleshooting).
+  </Step>
+</Steps>
+
+## Install the Script
+
+Add the snippet once, near the end of your `<head>`. It loads the surveys script asynchronously and initializes it with your organization ID.
+
+<CodeGroup tabs="HTML, React, Vue, Angular">
+```html title="index.html"
+<!-- Paste near the end of <head> -->
+<script>
+  (function () {
+    var s = document.createElement('script');
+    s.src = 'https://app.productbridge.io/sdk/pb-surveys.js';
+    s.async = true;
+    s.onload = function () {
+      ProductBridgeSurveys.init({
+        organizationId: 'YOUR_ORGANIZATION_ID',
+        // position: 'bottom-left', // bottom-right (default) | bottom-left
+      });
+    };
+    document.head.appendChild(s);
+  })();
+</script>
+```
+
+```jsx title="ProductBridgeSurveys.jsx"
+// Drop this component into your app root. It renders nothing visible —
+// eligible surveys are injected by the script.
+import { useEffect } from 'react';
+
+export default function ProductBridgeSurveys() {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://app.productbridge.io/sdk/pb-surveys.js';
+    script.async = true;
+    script.onload = () => {
+      window.ProductBridgeSurveys.init({
+        organizationId: 'YOUR_ORGANIZATION_ID',
+      });
+    };
+    document.head.appendChild(script);
+  }, []);
+
+  return null;
+}
+```
+
+```vue title="ProductBridgeSurveys.vue"
+<!-- Add <ProductBridgeSurveys /> to your App.vue or root layout. -->
+<script setup>
+import { onMounted } from 'vue';
+
+onMounted(() => {
+  const script = document.createElement('script');
+  script.src = 'https://app.productbridge.io/sdk/pb-surveys.js';
+  script.async = true;
+  script.onload = () => {
+    window.ProductBridgeSurveys.init({
+      organizationId: 'YOUR_ORGANIZATION_ID',
+    });
+  };
+  document.head.appendChild(script);
+});
+</script>
+
+<template><!-- No visible output --></template>
+```
+
+```typescript title="productbridge-surveys.component.ts"
+// Add <app-productbridge-surveys /> to your root AppComponent template.
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-productbridge-surveys',
+  template: '',
+  standalone: true,
+})
+export class ProductBridgeSurveysComponent implements OnInit {
+  ngOnInit(): void {
+    const script = document.createElement('script');
+    script.src = 'https://app.productbridge.io/sdk/pb-surveys.js';
+    script.async = true;
+    script.onload = () => {
+      (window as any).ProductBridgeSurveys.init({
+        organizationId: 'YOUR_ORGANIZATION_ID',
+      });
+    };
+    document.head.appendChild(script);
+  }
+}
+```
+</CodeGroup>
+
+### Init options
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `organizationId` | string | — | **Required.** Your organization ID. |
+| `position` | string | `bottom-right` | Where the popover survey card anchors — `bottom-right` or `bottom-left`. |
+
+## Runtime API
+
+After `init()`, call these methods from your own code to identify users and drive surveys.
+
+### Identify a signed-in user
+
+Pass a signed JWT so ProductBridge knows who the visitor is. Identity is **required** for targeted surveys — segment targeting, the "identified users only" restriction, and frequency caps all depend on it.
+
+```javascript
+ProductBridgeSurveys.identify('USER_JWT_TOKEN');
+```
+
+<Callout kind="tip">
+  Call `identify()` as soon as your user is authenticated — for example, right after login — so the very first eligible survey can be targeted correctly.
+</Callout>
+
+### Fire an event-triggered survey
+
+Trigger any survey configured with the matching event name. The survey still respects its audience, location, and frequency rules — the event only opens the door.
+
+```javascript
+ProductBridgeSurveys.track('ticket_closed');
+```
+
+### Start a specific survey by ID
+
+Show a particular survey on demand — for example, from a "Give feedback" button in your own UI. Eligibility (targeting and frequency) is still enforced.
+
+```javascript
+ProductBridgeSurveys.startSurvey('SURVEY_ID');
+```
+
+### Reset on sign-out
+
+Clear the identified user and any pending triggers when someone logs out, so the next user on the same browser starts clean.
+
+```javascript
+ProductBridgeSurveys.reset();
+```
+
+## API Reference
+
+| Method | Description |
+|---|---|
+| `init(options)` | Loads and configures the surveys script. Call once. |
+| `identify(jwt)` | Identifies the current user with a signed JWT. Required for targeted surveys. |
+| `track(eventName)` | Fires any survey configured for that event. |
+| `startSurvey(surveyId)` | Starts a specific survey by ID, subject to eligibility. |
+| `reset()` | Clears identity and pending triggers — call on sign-out. |
+
+<Callout kind="alert">
+  Generate the `identify()` JWT on your **server**, signed with your Widget API secret. Never expose the secret in client-side code.
+</Callout>
+
+## A Complete Example
+
+This example wires the script into a typical authenticated app: it initializes on load, identifies the user after login, fires an event-triggered survey when a task completes, and resets on sign-out.
+
+```javascript title="surveys.js"
+// 1. Initialize once, as early as possible.
+ProductBridgeSurveys.init({
+  organizationId: 'YOUR_ORGANIZATION_ID',
+  position: 'bottom-right',
+});
+
+// 2. After the user authenticates, identify them with a server-signed JWT.
+//    Fetch the token from your backend — never sign it in the browser.
+async function onLogin() {
+  const res = await fetch('/api/productbridge/survey-token');
+  const { token } = await res.json();
+  ProductBridgeSurveys.identify(token);
+}
+
+// 3. Fire an event-triggered survey at the right moment (e.g. a CSAT
+//    after a support ticket is resolved). The survey still respects its
+//    audience, location, and frequency rules.
+function onTicketResolved() {
+  ProductBridgeSurveys.track('ticket_closed');
+}
+
+// 4. Offer a specific survey on demand — e.g. from a "Give feedback" button.
+function openFeedbackSurvey() {
+  ProductBridgeSurveys.startSurvey('SURVEY_ID');
+}
+
+// 5. Clear identity and pending triggers when the user signs out.
+function onLogout() {
+  ProductBridgeSurveys.reset();
+}
+```
+
+<Callout kind="tip">
+  The order matters for targeting: call `identify()` **before** you expect the first targeted survey to appear. Initialize the script on load, then identify as soon as authentication completes.
+</Callout>
+
+## Single-Page Apps
+
+The script initializes once and stays resident, so you don't reload it on every route change. In an SPA:
+
+- Call `init()` a single time when your app mounts.
+- Call `identify()` once after login (and again if the signed-in user changes).
+- Use `track()` for moment-based surveys instead of relying on route changes.
+- Call `reset()` on logout so the next user starts clean.
+
+## Troubleshooting
+
+<a id="troubleshooting"></a>
+<ExpandableGroup>
+  <Expandable title="The survey doesn't appear" default-open="false">
+    - Confirm the survey's **Status** is **Published** — drafts never show.
+
+    - Check that the current page matches the survey's [location rules](/core-concepts/surveys/targeting-and-triggers#location-rules).
+
+    - For an **event** trigger, make sure your app actually calls `track()` with the exact event name configured on the survey.
+
+    - Verify the visitor is in the target [audience](/core-concepts/surveys/targeting-and-triggers#audience). Segment-targeted and "identified only" surveys require a successful `identify()` call first.
+
+    - Remember the **delay** — the survey waits the configured number of seconds after load (or after the event) before appearing.
+  </Expandable>
+
+  <Expandable title="A targeted survey shows to the wrong users (or not at all)" default-open="false">
+    - Ensure `identify()` runs **before** the survey is expected, with a valid, unexpired JWT signed on your server.
+
+    - If the signed-in user changes without a full page reload, call `identify()` again with the new token.
+
+    - After sign-out, call `reset()` so a returning anonymous visitor isn't treated as the previous user.
+  </Expandable>
+
+  <Expandable title="The same survey keeps reappearing" default-open="false">
+    - Frequency caps are enforced for **identified users only**. Anonymous visitors have no stable identity, so "show again after" and "never show again" can't apply to them — identify your users to enforce frequency.
+
+    - Check the **Frequency** settings in the survey's **Behavior** section for both the "responds" and "closes" outcomes.
+  </Expandable>
+
+  <Expandable title="ProductBridgeSurveys is undefined" default-open="false">
+    - The global is only available **after** the script finishes loading. Call `init()` inside the script's `onload` handler (as shown in the install snippet), not immediately after appending the tag.
+
+    - Make sure the script URL is exactly `https://app.productbridge.io/sdk/pb-surveys.js` and isn't blocked by a content-security policy or ad blocker.
+  </Expandable>
+</ExpandableGroup>

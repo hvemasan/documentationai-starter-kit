@@ -1,0 +1,67 @@
+---
+title: Distribution
+description: >-
+  Reach users three ways — inside your app with the surveys script, on your
+  public portal, or with a standalone shareable link that opens the survey as
+  its own page.
+---
+
+## Three Ways to Reach Users
+
+A single survey can be delivered through any of three channels without reconfiguring it. Eligibility rules — audience, location, triggers, and frequency — apply consistently across all of them, so a survey behaves the same no matter how a user arrives.
+
+<Columns cols="3">
+  <Card title="In your app" icon="code" href="#in-app" horizontal={false}>
+    The surveys script surfaces eligible surveys inside your product.
+  </Card>
+  <Card title="Public portal" icon="globe" href="#public-portal" horizontal={false}>
+    Eligible surveys appear to signed-in visitors on your ProductBridge portal.
+  </Card>
+  <Card title="Share by link" icon="link" href="#share-by-link" horizontal={false}>
+    A standalone URL that opens the survey as its own full page.
+  </Card>
+</Columns>
+
+<a id="in-app"></a>
+## In Your App
+
+The most common channel. Once the surveys script is installed, published surveys reveal themselves as a popover or modal card whenever a visitor is eligible and the trigger fires.
+
+This is the channel to use for auto-triggered surveys (like a recurring NPS) and event-triggered surveys (like a CSAT after a completed task). See [Installation & SDK](/core-concepts/surveys/installation) to add the script and [Targeting & Triggers](/core-concepts/surveys/targeting-and-triggers) to control when surveys appear.
+
+<a id="public-portal"></a>
+## Public Portal
+
+If you run a ProductBridge [public portal](/core-concepts/feedback-collection/public-portal), eligible surveys also appear there for signed-in visitors. This reaches users who engage with your feedback boards and roadmap even when they're not inside your product, with no extra setup beyond publishing the survey.
+
+<a id="share-by-link"></a>
+## Share by Link
+
+Every survey has a public, standalone URL that opens it as its own full-page experience — no widget or portal required. Use it in an email, a Slack message, a QR code, or anywhere you can paste a link.
+
+The link looks like:
+
+```text
+https://app.productbridge.io/s/<organizationId>/<surveyId>
+```
+
+### Where to find the link
+
+<Steps>
+  <Step title="From the survey editor" icon="pencil" title-type="h3">
+    Open a saved survey and expand the **Share by link** section to copy its URL.
+  </Step>
+  <Step title="From the analytics dashboard" icon="bar-chart-3" title-type="h3">
+    Open a survey's analytics and use the **Share by link** button in the header to copy or open the link.
+  </Step>
+</Steps>
+
+### How the link behaves
+
+- **Eligible recipients** see the survey and can respond.
+- **Everyone else** gets a friendly "not available" message — the link respects the same targeting and frequency rules as every other channel.
+- The link only goes live once the survey is **published**. You can copy it beforehand, but it starts working after you publish.
+
+<Callout kind="tip">
+  For a survey targeted to a segment or restricted to identified users, recipients need to be recognized to be eligible. Share links work best for surveys aimed at **everyone**, or when recipients are already signed in.
+</Callout>

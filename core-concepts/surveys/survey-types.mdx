@@ -1,0 +1,93 @@
+---
+title: Survey Types
+description: >-
+  Understand the five survey types — NPS, CSAT, CES, Poll, and Open feedback —
+  their scales, scoring, rating styles, and when to reach for each one.
+---
+
+## One Engine, Five Questions
+
+Every survey type is built on the same single-card engine. They differ in **what they ask** and **how the answer is scored** — but they share the same targeting, triggering, follow-up, and analytics machinery. You pick the type when you create a survey; the type is locked once the survey exists, so responses always mean the same thing.
+
+<a id="nps"></a>
+## NPS — Net Promoter Score
+
+NPS measures loyalty with a single 0–10 question: *"How likely are you to recommend us to a friend or colleague?"*
+
+Responses are grouped into three bands:
+
+| Band | Score range | Meaning |
+|---|---|---|
+| Detractors | 0–6 | Unhappy users at risk of churn |
+| Passives | 7–8 | Satisfied but unenthusiastic |
+| Promoters | 9–10 | Loyal advocates likely to refer |
+
+Your headline **NPS score** is the percentage of promoters minus the percentage of detractors, on a scale from −100 to +100.
+
+<Callout kind="tip">
+  Ask NPS on a recurring cadence (for example, every 90 days) so you can watch the trend over time rather than reading a single snapshot.
+</Callout>
+
+<a id="csat"></a>
+## CSAT — Customer Satisfaction
+
+CSAT captures how a specific interaction felt, on a 1–5 scale: *"How satisfied are you with your experience?"* It defaults to a **star** rating style.
+
+| Band | Score | Meaning |
+|---|---|---|
+| Dissatisfied | 1–2 | The interaction fell short |
+| Neutral | 3 | Neither good nor bad |
+| Satisfied | 4–5 | The interaction went well |
+
+CSAT works best fired right after a discrete moment — a completed purchase, a resolved ticket, or a finished setup step — while the experience is fresh.
+
+<a id="ces"></a>
+## CES — Customer Effort Score
+
+CES asks how much effort a task took: *"How easy was it to get what you needed?"* It uses an editable **1–7** scale by default, where higher means easier.
+
+Unlike NPS and CSAT, CES is not banded. It reports an **average effort score**, so a rising average means your product is getting easier to use.
+
+You can change the range in the editor — set any **lowest** value (0–9) and **highest** value (2–10), as long as the lowest is below the highest.
+
+<Callout kind="info">
+  Existing CES surveys keep whatever range they were created with. Only newly created CES surveys default to 1–7.
+</Callout>
+
+<a id="poll"></a>
+## Poll
+
+A poll asks one multiple-choice question and tallies the votes. Add two or more answer options, reorder them by dragging, and choose how respondents answer:
+
+- **Single choice** — the respondent picks exactly one option.
+- **Multiple choice** — the respondent can pick several options.
+
+Results appear as a per-option breakdown with vote counts and percentages. Because a multiple-choice respondent can pick more than one option, the percentages in a multi-select poll can add up to more than 100% — each percentage is the share of respondents who picked that option.
+
+<a id="open"></a>
+## Open feedback
+
+Open feedback collects free-text responses in the customer's own words. The question shows as the heading, and the answer box invites a written reply (for example, *"Write your feedback…"*).
+
+There is no score to compute — instead, analytics presents every response as a readable, scrollable list of quotes with the respondent and date attached.
+
+<Callout kind="tip">
+  Pair a scored survey with an open follow-up. On NPS, CSAT, and CES you can enable a follow-up question so a low score also captures the *why* in the same card.
+</Callout>
+
+## Choosing a Type
+
+<Columns cols="2">
+  <Card title="Measuring loyalty over time" icon="gauge" href="#nps" horizontal={false}>
+    Use **NPS** on a recurring cadence to track advocacy trends.
+  </Card>
+  <Card title="Rating a specific moment" icon="smile" href="#csat" horizontal={false}>
+    Use **CSAT** right after a purchase, ticket, or onboarding step.
+  </Card>
+  <Card title="Finding friction" icon="zap" href="#ces" horizontal={false}>
+    Use **CES** after a task to see how hard it was to complete.
+  </Card>
+  <Card title="Making a decision" icon="list-checks" href="#poll" horizontal={false}>
+    Use a **Poll** to put options in front of users and count votes.
+  </Card>
+</Columns>
