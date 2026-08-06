@@ -305,6 +305,47 @@
             ]
           },
           {
+            "group": "Support Chat",
+            "icon": "message-circle",
+            "pages": [
+              {
+                "title": "Overview",
+                "path": "support-chat",
+                "icon": "message-circle"
+              },
+              {
+                "title": "The Messenger",
+                "path": "support-chat/messenger",
+                "icon": "messages-square"
+              },
+              {
+                "title": "Agent Inbox",
+                "path": "support-chat/agent-inbox",
+                "icon": "inbox"
+              },
+              {
+                "title": "Messenger Settings",
+                "path": "support-chat/messenger-settings",
+                "icon": "settings-2"
+              },
+              {
+                "title": "Email Channel",
+                "path": "support-chat/email-channel",
+                "icon": "mail"
+              },
+              {
+                "title": "Teams, Macros & Labels",
+                "path": "support-chat/teams-macros-labels",
+                "icon": "users"
+              },
+              {
+                "title": "SLA & Reports",
+                "path": "support-chat/sla-and-reports",
+                "icon": "chart-no-axes-column"
+              }
+            ]
+          },
+          {
             "group": "Integrations",
             "icon": "plug",
             "pages": [

@@ -1,0 +1,125 @@
+---
+title: Agent Inbox
+description: >-
+  Your team's daily workspace — views, filters, a fast composer with macros and
+  mentions, a customer-context rail, table mode, and keyboard shortcuts for
+  everything that matters.
+---
+
+## Overview
+
+Open **Support** in the dashboard sidebar to reach the inbox. It's a three-pane workspace — views on the left, the conversation list, the thread in the middle, and a customer-context rail on the right. Every pane boundary is **draggable**, your widths are remembered, and the views rail collapses to an icon strip when you want more room.
+
+{/* SCREENSHOT PLACEHOLDER — images/support-chat/inbox-overview.png
+    Capture: full inbox, list mode, one conversation open.
+    <Image src="https://raw.githubusercontent.com/hvemasan/documentationai-starter-kit/main/images/support-chat/inbox-overview.png" width="1865" height="940" alt="The agent inbox: views rail, conversation list, open thread, and details rail" /> */}
+
+## Views
+
+The left rail is how work gets divided:
+
+- **Your inbox.** Conversations assigned to you.
+
+- **Unassigned.** New conversations nobody has picked up — with a live count.
+
+- **All.** Everything that isn't spam or archived.
+
+- **Starred.** Your personal bookmarks — stars are per-agent, not shared.
+
+- **Mentions.** Threads where a teammate @mentioned you in an internal note.
+
+- **Teams.** One view per [team](/support-chat/teams-macros-labels), with counts.
+
+- **Views.** Your saved custom filters. Set up any combination of status, label, channel, and search, then choose **Add view** to save it — for yourself or shared with the whole team.
+
+- **Spam, Archived, Reports.** The quiet shelves at the bottom. Spam and archived conversations never appear in the working views or counts.
+
+## The Conversation List
+
+Above the list: search, a status filter (**All / Open / Pending / Snoozed / Resolved**), an **Unread** toggle, a label filter, and four sort orders (latest or oldest activity, newest or oldest first). The list loads more as you scroll.
+
+Each row shows the contact, the last message, the channel and conversation number, a status chip, priority when it's high or urgent, an SLA badge when a target is due or breached, label dots, and the assignee.
+
+## The Thread
+
+The header carries the subject (or contact name), a star, the **status control** (open, pending, resolved, snoozed), and an actions menu: edit the subject, snooze with presets (later today, tomorrow morning, next week), archive, mark as spam — optionally blocking the contact — view history, forward the transcript, or delete.
+
+Messages render chronologically with day separators; internal notes are visually distinct and **never visible to the customer**. Email conversations show a caution line with the address replies will go to.
+
+## The Composer
+
+- **Reply or Note.** A pill toggle switches between replying to the customer and writing an internal note for your team.
+
+- **Macros.** Type `/` to search your [saved replies](/support-chat/teams-macros-labels#macros) inline, or use the ⚡ picker. Variables like `{{contact.name}}` fill in automatically.
+
+- **Mentions.** In notes, type `@` to mention a teammate — they get an in-app notification and an email pointing at the thread.
+
+- **Attachments.** Images and PDFs up to 10 MB.
+
+- **Send options.** The Send split-button offers **Send & close**, **Send & archive**, and **Schedule send** — pick a future time and the reply goes out on its own, even if you're offline.
+
+{/* SCREENSHOT PLACEHOLDER — images/support-chat/composer-send-menu.png
+    Capture: the composer with the Send options menu open.
+    <Image src="https://raw.githubusercontent.com/hvemasan/documentationai-starter-kit/main/images/support-chat/composer-send-menu.png" width="1865" height="940" alt="The composer with the send options menu open, showing Send & close, Send & archive, and Schedule send" /> */}
+
+### Keyboard Shortcuts
+
+| Shortcut | Action |
+|---|---|
+| `Ctrl` + `Enter` | Send |
+| `Ctrl` + `Shift` + `Enter` | Send & close |
+| `Ctrl` + `Shift` + `A` | Send & archive |
+| `/` | Search macros |
+| `@` | Mention a teammate (notes) |
+
+## The Details Rail
+
+Everything about the conversation and the person, in collapsible cards:
+
+- **Assignment.** Assignee, team, and priority — editable inline.
+
+- **Conversation.** Status, start time, first reply time, and label chips with an add-tag control.
+
+- **Recipients.** The contact card: name, email, last seen, their portal activity (posts, comments, upvotes), and a **Contact details** button that jumps to their full profile in the Users module.
+
+- **Linked posts.** Attach the feedback or roadmap post this conversation is really about; links are visible from the post side too.
+
+- **Conversation attributes.** Your own typed fields per conversation — plan, deal size, anything — defined once and reusable everywhere.
+
+- **Recent conversations & page views.** The contact's other threads and the pages they visited before writing in.
+
+- **Similar conversations.** AI-matched resolved threads — "how did we solve this last time."
+
+- **AI summary.** One click produces a handover summary with sentiment and a suggested priority; it caches until new messages arrive.
+
+- **CSAT.** This conversation's rating and the contact's average.
+
+- **Context.** Browser, OS, device, current page, and IP.
+
+- **Company & attributes.** CRM fields (company, MRR, status, risk, renewal date) and custom user attributes — editable inline with the same permissions as the Users module.
+
+- **Actions.** Archive, Waiting for reply (sets pending), Show history, Forward conversation, and Delete.
+
+{/* SCREENSHOT PLACEHOLDER — images/support-chat/inbox-rail-actions.png
+    Capture: the details rail scrolled to show Context, Company, and the Actions card.
+    <Image src="https://raw.githubusercontent.com/hvemasan/documentationai-starter-kit/main/images/support-chat/inbox-rail-actions.png" width="1865" height="940" alt="The details rail with context, company attributes, and the stacked Actions card" /> */}
+
+## Table Mode
+
+The table icon in the list header switches to a dense, sortable table of conversations. Clicking a row opens the conversation in a **floating overlay** — thread on the left, the full details rail on the right, the table still visible behind. Your choice of list or table mode is remembered.
+
+{/* SCREENSHOT PLACEHOLDER — images/support-chat/inbox-table-overlay.png
+    Capture: table mode with the floating conversation overlay open.
+    <Image src="https://raw.githubusercontent.com/hvemasan/documentationai-starter-kit/main/images/support-chat/inbox-table-overlay.png" width="1865" height="940" alt="Table mode with a conversation open in the floating overlay" /> */}
+
+## Realtime
+
+New messages appear in the inbox as they happen over a live connection; if the connection degrades, an automatic polling fallback keeps everything current within seconds. A reconnect always re-syncs the thread rather than trusting the stream, so nothing is ever missed.
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **I can read but not reply.** Replying needs the `support:manage` permission — see [Members & Roles](/settings/members-and-roles).
+
+  - **A conversation disappeared from All.** Check **Spam** and **Archived** — both are excluded from the working views. Deleted conversations are removed from every view.
+
+  - **Mentions aren't notifying anyone.** Mentions only work inside internal notes, and only for members who are support agents.
+</Expandable>

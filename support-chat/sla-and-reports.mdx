@@ -1,0 +1,59 @@
+---
+title: SLA & Reports
+description: >-
+  Set response-time targets that show up as badges before they're missed, read
+  the reports view for volume and speed, and track customer satisfaction from
+  the built-in CSAT prompt.
+---
+
+## SLA Policies
+
+An SLA policy promises how fast conversations get a **first response** and how fast they get **resolved**. Define policies under **Settings → Support**; every policy needs at least one of the two targets.
+
+- **Scope policies by priority and inbox.** A policy can apply to everything (a catch-all), to a priority level, or to a priority within a specific inbox.
+
+- **The most specific policy wins.** For any conversation, a priority + inbox match beats a priority-only match, which beats the catch-all. There's no stacking — exactly one policy applies.
+
+- **Badges appear before the miss.** Conversations approaching a target show an **SLA due** badge in the list; missed targets switch to a breached badge. Agents see trouble while it can still be fixed.
+
+{/* SCREENSHOT PLACEHOLDER — images/support-chat/settings-support-bottom.png
+    Capture: the SLA policies card in Settings → Support.
+    <Image src="https://raw.githubusercontent.com/hvemasan/documentationai-starter-kit/main/images/support-chat/settings-support-bottom.png" width="1865" height="940" alt="SLA policy configuration with first-response and resolution targets" /> */}
+
+## Reports
+
+Open **Reports** at the bottom of the inbox's views rail.
+
+- **Conversation volume.** New conversations over time — spot the spike after a release before it spikes you.
+
+- **Median first response.** How long customers wait for a human answer. Median, not average, so one forgotten thread doesn't distort the story.
+
+- **Median resolution.** How long conversations take to close.
+
+- **CSAT.** The average satisfaction score across rated conversations.
+
+{/* SCREENSHOT PLACEHOLDER — images/support-chat/inbox-reports.png
+    Capture: the Reports view with the volume chart and metric tiles.
+    <Image src="https://raw.githubusercontent.com/hvemasan/documentationai-starter-kit/main/images/support-chat/inbox-reports.png" width="1865" height="940" alt="The support reports view with conversation volume and response-time metrics" /> */}
+
+## CSAT
+
+Satisfaction ratings come from the customer, right where the conversation happened:
+
+- **The prompt appears on resolve.** When an agent resolves a thread, the customer sees a short rating prompt inside that thread in the messenger — once per conversation, and answering it (or dismissing it) is the end of it.
+
+- **Scores follow the contact.** Each conversation's score appears in the details rail alongside the contact's **average across all their rated conversations** — context for how this person's experience has been trending.
+
+- **Scores roll up.** The organization-wide average lands in Reports.
+
+<Callout kind="info" collapsed="false">
+  CSAT runs on ProductBridge's survey engine — the same one behind [Surveys](/core-concepts) — so responses are stored as survey data and no extra setup is needed.
+</Callout>
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **No SLA badge on a conversation that should have one.** Check the policy's scope — a priority-scoped policy only applies to conversations *with* that priority set.
+
+  - **CSAT shows no data.** Scores only exist after agents resolve conversations and customers respond to the prompt; freshly enabled workspaces start empty.
+
+  - **Median metrics look empty for a period.** Medians need at least one qualifying conversation in the window — first-response needs an agent reply, resolution needs a resolve.
+</Expandable>

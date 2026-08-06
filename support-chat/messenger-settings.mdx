@@ -1,0 +1,142 @@
+---
+title: Messenger Settings
+description: >-
+  Style the messenger, choose what each audience sees, control who can start
+  conversations, and install it on your site — with a live preview that
+  repaints as you type.
+---
+
+## Overview
+
+Open **Settings → Messenger**. The page has three tabs — **Customization**, **Conversations**, and **Installation** — with a **live preview** beside them: the real messenger, repainted on every keystroke, with a Light/Dark toggle so you can check both themes before saving. Nothing ships until you press **Save Changes**.
+
+{/* SCREENSHOT PLACEHOLDER — images/support-chat/settings-customization.png
+    Capture: Settings → Messenger, Customization tab, live preview visible.
+    <Image src="https://raw.githubusercontent.com/hvemasan/documentationai-starter-kit/main/images/support-chat/settings-customization.png" width="1865" height="940" alt="Messenger settings with the Customization tab and live preview" /> */}
+
+## Audiences: Visitors vs. Users
+
+Most content and behavior settings exist **twice** — once for anonymous **Visitors**, once for identified **Users**. A segmented control at the top of each relevant card switches which audience you're editing, so you can, say, show the Roadmap tab to signed-in users only, or greet known customers by name while visitors get a generic welcome.
+
+## Customization
+
+- **Appearance.** Default theme (**Light**, **Dark**, or **System**), launcher position (bottom right or bottom left), launcher color, and brand colors — one for light, one for dark. Leave brand colors empty to inherit your organization's brand color.
+
+- **Languages.** Pick a default language and enable additional locales. Every text field below carries a language switcher so you can localize content per locale.
+
+- **Content.** Greeting and introduction for the Home tab — type `{{name}}` to insert the customer's name where it's known — plus the start-conversation button text.
+
+- **Tabs.** Enable or disable Home, Messages, News, Roadmap, and Help per audience. Messages is always on — it's the point.
+
+- **Home cards.** Compose the Home tab from cards: the ask-a-question card, quick-action chips, a news preview, and more, ordered how you like.
+
+## Conversations
+
+- **Allow starting conversations.** Turn off to stop an audience from opening *new* threads — existing threads keep working. New-conversation attempts are refused at the API level, not just hidden in the UI.
+
+- **Prevent replying to resolved conversations.** When on, a resolved thread is read-only for the customer; they must start a new conversation instead. Useful for keeping metrics honest.
+
+- **Reply expectations.** Show or hide the "we typically reply in…" line, and set its text. Outside [office hours](/support-chat/teams-macros-labels#office-hours) the messenger automatically switches to "back on Monday"-style messaging.
+
+{/* SCREENSHOT PLACEHOLDER — images/support-chat/settings-conversations.png
+    Capture: the Conversations tab with the inbound-volume toggles.
+    <Image src="https://raw.githubusercontent.com/hvemasan/documentationai-starter-kit/main/images/support-chat/settings-conversations.png" width="1865" height="940" alt="Conversation controls: allow starting conversations and prevent replying to resolved threads" /> */}
+
+## Installation
+
+The messenger ships as a single script. Grab the snippet from the Installation tab — it's pre-filled with your organization id:
+
+<CodeGroup tabs="HTML, React">
+
+```html title="index.html"
+<script src="https://app.productbridge.io/sdk/pb-messenger.js" async></script>
+<script>
+  window.pbMessengerReady = function () {
+    ProductBridgeMessenger.init({
+      organizationId: "YOUR_ORGANIZATION_ID",
+    });
+  };
+</script>
+```
+
+```jsx title="Messenger.jsx"
+import { useEffect } from "react";
+
+export function Messenger() {
+  useEffect(() => {
+    window.pbMessengerReady = () => {
+      window.ProductBridgeMessenger.init({
+        organizationId: "YOUR_ORGANIZATION_ID",
+      });
+    };
+    const script = document.createElement("script");
+    script.src = "https://app.productbridge.io/sdk/pb-messenger.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => script.remove();
+  }, []);
+  return null;
+}
+```
+
+</CodeGroup>
+
+`init` accepts a few options beyond the required `organizationId`:
+
+| Option | What it does |
+|---|---|
+| `userToken` | A signed identity token — see [Identity Verification](#identity-verification). |
+| `position` | `bottom-right` (default) or `bottom-left`. |
+| `buttonColor` | Launcher bubble color. |
+| `hideLauncher` | Hide the bubble and open the messenger yourself via `ProductBridgeMessenger.open()`. |
+| `hideOnMobileBelow` | Hide the launcher below this viewport width in pixels. |
+| `zIndex` | Stack the launcher above or below your own UI. |
+
+The SDK also exposes `open()`, `close()`, `openTab("news")`, `identify(token)`, and `logout()` for driving the messenger from your own UI, and emits an `unread` event so you can badge your own controls.
+
+<Callout kind="info" collapsed="false">
+  Settings you pass explicitly in the snippet win over dashboard settings — handy for per-page overrides, but remember that a hardcoded value in an old snippet keeps winning until the snippet is updated on your site.
+</Callout>
+
+<a id="identity-verification"></a>
+## Identity Verification
+
+Connect logged-in users of *your* product to the messenger so conversations are tied to real accounts.
+
+<Steps>
+  <Step title="Get your secret" icon="key" title-type="p">
+    Copy the identity secret from the Installation tab and store it server-side — never ship it to the browser.
+  </Step>
+
+  <Step title="Sign a token on your backend" icon="server" title-type="p">
+    Sign an HS256 JWT containing at minimum the user's `userId` and `email`. Add `name` and any custom fields — unknown claims automatically become user attributes on the contact, ready for segmentation.
+
+    ```js title="server.js"
+    import jwt from "jsonwebtoken";
+
+    const token = jwt.sign(
+      { userId: user.id, email: user.email, name: user.name },
+      process.env.PRODUCTBRIDGE_IDENTITY_SECRET,
+      { algorithm: "HS256" }
+    );
+    ```
+  </Step>
+
+  <Step title="Pass it to the messenger" icon="messages-square" title-type="p">
+    Provide the token as `userToken` in `init`, or call `ProductBridgeMessenger.identify(token)` after your own login flow.
+  </Step>
+</Steps>
+
+For prototyping, an **unsecure mode** toggle accepts a plain identity payload without a signature. Leave it off in production — with it off, unsigned identities are rejected.
+
+{/* SCREENSHOT PLACEHOLDER — images/support-chat/settings-installation.png
+    Capture: the Installation tab with the snippet and identity section.
+    <Image src="https://raw.githubusercontent.com/hvemasan/documentationai-starter-kit/main/images/support-chat/settings-installation.png" width="1865" height="940" alt="The Installation tab with the embed snippet and identity verification steps" /> */}
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **My changes don't show on the embedded site.** The messenger script and its configuration are CDN-cached; embedded sites can lag dashboard changes by several minutes (and script updates by up to a day).
+
+  - **`identify` seems ignored.** Check that the token is signed with the current secret and includes `userId` and `email`. If you rotated the secret, older tokens stop validating immediately.
+
+  - **The preview looks right but the live messenger doesn't.** You may have unsaved changes — the preview shows your draft; press **Save Changes** to publish it.
+</Expandable>

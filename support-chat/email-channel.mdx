@@ -1,0 +1,83 @@
+---
+title: Email Channel
+description: >-
+  Route your support email address into the same agent inbox as live chat —
+  by simple forwarding or a direct IMAP/SMTP connection — so every channel
+  works one way.
+---
+
+## Overview
+
+Email is a first-class channel: messages sent to your support address become conversations in the [Agent Inbox](/support-chat/agent-inbox), threaded with the customer's other activity, and your replies go back out **as email** from the same thread. Agents don't change how they work — the channel travels with the conversation.
+
+Add an email inbox under **Settings → Support** in the channels section.
+
+{/* SCREENSHOT PLACEHOLDER — images/support-chat/settings-support.png
+    Capture: Settings → Support with the email channel card visible.
+    <Image src="https://raw.githubusercontent.com/hvemasan/documentationai-starter-kit/main/images/support-chat/settings-support.png" width="1865" height="940" alt="Support settings with the email channel configuration" /> */}
+
+## Two Ways to Connect
+
+### Forwarding
+
+The zero-credentials option. ProductBridge generates a unique inbound address for your inbox; you add a forwarding rule at your email provider so `support@yourcompany.com` forwards to it.
+
+<Steps>
+  <Step title="Create the inbox" icon="mail-plus" title-type="p">
+    In **Settings → Support**, add an email channel, pick **Forwarding**, and enter the public address customers write to (for example `support@yourcompany.com`).
+  </Step>
+
+  <Step title="Copy the inbound address" icon="copy" title-type="p">
+    ProductBridge shows the generated forwarding target the moment the inbox is created — copy it.
+  </Step>
+
+  <Step title="Add a forwarding rule" icon="forward" title-type="p">
+    In Google Workspace, Microsoft 365, or your mail host, forward your support address to the generated address. New mail starts appearing as conversations right away.
+  </Step>
+</Steps>
+
+### IMAP / SMTP
+
+Connect a mailbox directly with its credentials — ProductBridge reads incoming mail over IMAP and sends replies over SMTP as your address.
+
+<Steps>
+  <Step title="Gather credentials" icon="key" title-type="p">
+    You'll need the IMAP host and login, the SMTP host and login, and an app password if your provider requires one. Credentials are stored encrypted.
+  </Step>
+
+  <Step title="Test the connection" icon="plug-zap" title-type="p">
+    Use **Test connection** before saving — it verifies both IMAP and SMTP up front, so a typo'd password fails here rather than silently later.
+  </Step>
+
+  <Step title="Save the inbox" icon="check" title-type="p">
+    Once the test passes, save. Incoming mail flows into the inbox; agent replies are sent through your SMTP server.
+  </Step>
+</Steps>
+
+<Callout kind="tip" collapsed="false">
+  Not sure which to pick? **Forwarding** is faster to set up and needs no passwords. Choose **IMAP/SMTP** when replies must come from your own mail server for deliverability or compliance reasons.
+</Callout>
+
+## How Email Conversations Behave
+
+- **The subject sticks.** The original subject line is stored on the conversation and shown in the inbox; agents can edit it later from the thread's actions menu.
+
+- **Replies warn before you send.** Email threads show a caution line with the exact address your reply will go to — check the recipient before sending anything sensitive.
+
+- **Contacts auto-link.** If the sender's address matches an existing portal user, the conversation attaches to that person — their posts, votes, and previous conversations appear in the details rail. Unknown senders become new contacts.
+
+- **Attachments work both ways.** Inbound attachments appear in the thread; agents can attach images and PDFs to replies.
+
+## Limitations
+
+- **One direction of truth.** Deleting an email inbox in ProductBridge stops the flow, but re-creating a channel with a previously used address may be rejected while the old registration ages out — use a fresh address or wait briefly.
+
+- **Forwarding depends on your provider.** Delivery delays at the forwarding hop are outside ProductBridge's control; IMAP mode polls the mailbox directly and avoids that hop.
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **New emails aren't showing up.** For forwarding: send a test mail directly to the generated inbound address — if that appears, the problem is your provider's forwarding rule. For IMAP: re-run **Test connection**; expired app passwords are the usual culprit.
+
+  - **Replies land in spam.** Use IMAP/SMTP mode so replies originate from your own mail server, and make sure that domain has SPF and DKIM configured.
+
+  - **The channel creation fails with a gateway error.** The address may already be registered to another inbox (including a recently deleted one). Try a different address.
+</Expandable>

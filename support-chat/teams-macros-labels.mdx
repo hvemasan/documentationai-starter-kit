@@ -1,0 +1,68 @@
+---
+title: Teams, Macros & Labels
+description: >-
+  Organize the support workspace — route conversations to teams, answer common
+  questions with one keystroke, and label threads so nothing gets lost. Plus
+  office hours, which drive the messenger's availability messaging.
+---
+
+## Overview
+
+These are the workspace-organization tools, all managed under **Settings → Support**. Teams route work, macros speed up answers, labels classify threads, and office hours tell customers when you're really around.
+
+{/* SCREENSHOT PLACEHOLDER — images/support-chat/settings-support-mid.png
+    Capture: Settings → Support scrolled to teams / macros / labels cards.
+    <Image src="https://raw.githubusercontent.com/hvemasan/documentationai-starter-kit/main/images/support-chat/settings-support-mid.png" width="1865" height="940" alt="Support settings showing teams, macros, and labels management" /> */}
+
+## Teams
+
+Group agents into teams — Billing, Technical, Success — and route conversations to a team instead of a person.
+
+- **Every team gets a view.** Teams appear in the inbox's left rail with live counts, so "what's waiting on Billing" is one click.
+
+- **Assign either-or.** A conversation can have an assignee, a team, or both. Assigning a teammate (other than yourself) sends them a notification with a short grace window, so a quick reassign doesn't spam anyone.
+
+- **Manage under Settings → Support.** Create teams and pick their members from your support agents.
+
+## Macros
+
+Macros are saved replies your whole team can reuse.
+
+- **Two scopes.** **Shared** macros belong to the team; **personal** macros are yours alone. Editing another agent's personal macro isn't allowed.
+
+- **Insert from the composer.** Type `/` and start typing the macro's name, or open the ⚡ picker. The macro's text drops into the composer for editing before send — macros never auto-send.
+
+- **Variables personalize.** `{{contact.name}}` and `{{contact.first_name}}` substitute the customer's name at insert time, falling back to a friendly generic when the name is unknown.
+
+<Callout kind="tip" collapsed="false">
+  Build macros for your ten most common answers first — password reset, billing address, "it's on the roadmap" — and link the relevant docs page inside each one. Most teams cover half their volume with a dozen macros.
+</Callout>
+
+## Labels
+
+Labels are colored tags for classifying conversations — `bug`, `billing`, `churn-risk`, whatever your taxonomy needs.
+
+- **Apply from the thread.** Use the add-tag control in the details rail; a conversation can hold any number of labels.
+
+- **Filter everywhere.** The conversation list's label filter narrows any view to one label, and label dots appear on list rows.
+
+- **Full-color management.** Create, rename, recolor, and delete labels under **Settings → Support**. Deleting a label removes it from every conversation.
+
+<a id="office-hours"></a>
+## Office Hours
+
+Office hours drive the messenger's honesty about availability.
+
+- **Per-weekday windows.** Set open and close times for each day, in your support timezone.
+
+- **Inside hours** the messenger shows your reply expectation ("we typically reply in a few minutes").
+
+- **Outside hours** it computes when you're next open and says so — customers write with accurate expectations instead of waiting on an answer that isn't coming until Monday.
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **A macro variable printed literally.** Only `{{contact.name}}` and `{{contact.first_name}}` are substituted; anything else is left as typed.
+
+  - **A teammate can't see a macro.** It's probably personal, not shared — recreate it as a shared macro.
+
+  - **Off-hours message shows at the wrong times.** Check the timezone on your office hours; the schedule is evaluated in that timezone, not each visitor's.
+</Expandable>

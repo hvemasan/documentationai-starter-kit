@@ -1,0 +1,83 @@
+---
+title: The Messenger
+description: >-
+  The customer-facing chat panel: a floating launcher that opens Home,
+  Messages, News, Roadmap, and Help tabs — themable, multilingual, and open to
+  anonymous visitors when you want it to be.
+---
+
+## Overview
+
+The Messenger is what your customers see. It opens from a floating launcher bubble on your **public portal** and — once [installed](/support-chat/messenger-settings#installation) — on **any website** you embed it on. The same messenger, the same conversations, wherever the customer happens to be.
+
+{/* SCREENSHOT PLACEHOLDER — images/support-chat/messenger-home.png
+    Capture: the messenger Home tab (420×760) with the hero, ask card, and pill navigation.
+    <Image src="https://raw.githubusercontent.com/hvemasan/documentationai-starter-kit/main/images/support-chat/messenger-home.png" width="420" height="760" alt="The messenger Home tab with greeting, Send us a message card, and bottom navigation" /> */}
+
+## The Five Tabs
+
+Which tabs appear — and for whom — is up to you: every tab can be enabled or disabled separately for visitors and for identified users in [Messenger Settings](/support-chat/messenger-settings). When only one tab is enabled, the bottom navigation hides entirely.
+
+- **Home.** A branded welcome: your logo, a greeting (personalized with the customer's name when known), a **Send us a message** card showing your team's avatars and current reply expectation, quick-action chips, and configurable home cards such as a latest-news preview.
+
+- **Messages.** The customer's conversation list and threads. Customers can hold **multiple parallel conversations**; each thread shows delivery of your replies in real time, supports image and PDF attachments, and includes a typing indicator when an agent is writing.
+
+- **News.** Your published [changelog](/core-concepts/changelog) entries as rich cards — image, title, and excerpt — with a full reading view.
+
+- **Roadmap.** Your public roadmap with sorting, status filtering, and **voting from inside the messenger**, plus a "Request a feature" action that starts a conversation.
+
+- **Help.** Your [help center](/help-center) collections and articles with search and article voting. This tab is disabled by default — enable it once your help center has content.
+
+## Guests and Identified Customers
+
+The messenger works for three kinds of people, in escalating order of identity:
+
+| Visitor type | How they're identified | What agents see |
+|---|---|---|
+| Anonymous guest | A per-browser identity minted silently on their first action | "Guest 1234" with browser context |
+| Portal user | Their ProductBridge portal login | Real name, email, and full activity history |
+| Verified user | A [signed identity token](/support-chat/messenger-settings#identity-verification) from your app | Your app's user record, plus any custom attributes you pass |
+
+- **Guests need zero friction.** When anonymous participation is enabled for your organization, a visitor's first message just works — no sign-up wall. A quiet one-time notice tells them they're chatting as a guest.
+
+- **Guests become customers.** If a guest later signs in, their conversations, votes, and reactions **merge into their real account** automatically. Agents keep the full history.
+
+<Callout kind="info" collapsed="false">
+  Anonymous participation is controlled by your organization's portal access settings. When it's off, visitors must sign in before starting a conversation.
+</Callout>
+
+## Reply Expectations and Office Hours
+
+The Home tab and new conversations show an honest availability signal:
+
+- **Inside office hours** the messenger shows your configured reply expectation — for example, "We typically reply in a few minutes" — with a green presence dot.
+
+- **Outside office hours** it tells the customer when the team will be back, based on the [office hours](/support-chat/teams-macros-labels#office-hours) you set per weekday and timezone.
+
+## Appearance
+
+- **Theme.** The messenger follows the default theme you choose in settings — **Light**, **Dark**, or **System** (match the visitor's device). Your brand color drives buttons, links, and the painterly Home gradient, with separate brand colors for light and dark.
+
+- **Languages.** Set a default language and enable any of the supported locales; greeting, introduction, and button text are editable per language, and the messenger picks the best match for each visitor's browser.
+
+{/* SCREENSHOT PLACEHOLDER — images/support-chat/messenger-thread.png
+    Capture: an open conversation thread in the messenger with an agent reply.
+    <Image src="https://raw.githubusercontent.com/hvemasan/documentationai-starter-kit/main/images/support-chat/messenger-thread.png" width="420" height="760" alt="A messenger conversation thread with customer and agent messages" /> */}
+
+## Satisfaction Ratings
+
+When an agent resolves a conversation, the customer sees a short **satisfaction prompt** inside that thread — once, and only for that conversation. Scores feed the CSAT numbers in [SLA & Reports](/support-chat/sla-and-reports) and appear on the contact's profile in the agent inbox.
+
+## Limitations
+
+- **Realtime with a safety net.** Message delivery uses a live connection with an automatic polling fallback — if the socket can't connect, messages still arrive within a few seconds.
+
+- **Roadmap sorting is per-page.** The Roadmap tab sorts the loaded window of posts client-side; extremely long roadmaps may not show a strict global ordering.
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **The launcher doesn't appear on my site.** Check that the embed snippet is installed and that the messenger isn't disabled in **Settings → Messenger**. Snippets are cached by CDNs — allow up to a day for script updates to propagate to embedded sites.
+
+  - **A visitor says they can't start a conversation.** You've likely turned off **Allow starting conversations** for their audience in **Settings → Messenger → Conversations**, or anonymous participation is disabled and they aren't signed in.
+
+  - **The greeting shows the wrong language.** The messenger matches the visitor's browser language against your *enabled* languages, falling back to the default. Enable the locale and provide translated content for it.
+</Expandable>
