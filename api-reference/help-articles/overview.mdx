@@ -1,0 +1,173 @@
+---
+title: "Help articles"
+description: "Articles are the content your users read. Use the API to list, search, retrieve, create, update, and delete them."
+---
+
+An **article** is the content unit customers read on your help center — a how-to, an FAQ answer, a troubleshooting guide. Articles carry an HTML body, a draft/published status, and per-visitor helpfulness and view counts.
+
+<Callout kind="alert">
+  **Every Help Center endpoint requires the `knowledgebase` feature on your plan** — reads included, not just writes. Calls from an organization without it return `403`.
+</Callout>
+
+## One parent, never two
+
+Every article is filed under **exactly one** parent:
+
+- a **category**, via `category_id` — the usual case, and
+- a **collection**, via `collection_id` — for a standalone topic that doesn't need a category.
+
+Sending both, or neither, is a `422`. The rule is enforced in the database itself, so an article can never end up in an ambiguous state.
+
+Because nothing is denormalized, moving a category between collections can never leave an article's breadcrumbs stale — the collection is always resolved through whichever parent is set.
+
+## Public visibility
+
+An article is visible on your public help center and in-app widget only when **both** conditions hold:
+
+| Field | Required value |
+|---|---|
+| `status_code` | `"published"` |
+| `show_on_portal` | `true` |
+
+A published article with `show_on_portal: false` is effectively unlisted — useful for content you link to directly but don't want browsable.
+
+## The help article object
+
+Returned by [List](/api-reference/help-articles/list). [Retrieve](/api-reference/help-articles/retrieve) returns these fields **plus** `content`, `author_id`, `collection`, `category`, and `related_articles`.
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  A unique identifier for the article (UUID).
+</ResponseField>
+
+<ResponseField name="collection_id" field-type="string" required="false" deprecated="false">
+  UUID of the parent collection when the article is filed directly in one. `null` otherwise.
+</ResponseField>
+
+<ResponseField name="category_id" field-type="string" required="false" deprecated="false">
+  UUID of the parent category. `null` when the article is filed directly in a collection.
+</ResponseField>
+
+<ResponseField name="title" field-type="string" required="true" deprecated="false">
+  The article's title.
+</ResponseField>
+
+<ResponseField name="slug" field-type="string" required="true" deprecated="false">
+  URL-safe identifier, unique within your organization. The last segment of the public URL.
+</ResponseField>
+
+<ResponseField name="excerpt" field-type="string" required="false" deprecated="false">
+  Short summary shown in listings and search results. May be `null`.
+</ResponseField>
+
+<ResponseField name="status_code" field-type="string" required="true" deprecated="false">
+  Either `"draft"` or `"published"`.
+</ResponseField>
+
+<ResponseField name="show_on_portal" field-type="boolean" required="true" deprecated="false">
+  Whether the article may appear on your public help center and widget. Must be `true` *and* `status_code` must be `"published"` for it to be visible.
+</ResponseField>
+
+<ResponseField name="favourite" field-type="boolean" required="true" deprecated="false">
+  An internal star for your team. **Never shown to customers** and never exposed on the public portal.
+</ResponseField>
+
+<ResponseField name="seq_number" field-type="string" required="false" deprecated="false">
+  The article's curated position, as a decimal string. **Read-only** — reorder by drag-and-drop in the dashboard.
+</ResponseField>
+
+<ResponseField name="helpful_count" field-type="integer" required="true" deprecated="false">
+  How many distinct visitors voted "yes" on "was this helpful?". Derived, not a stored counter.
+</ResponseField>
+
+<ResponseField name="not_helpful_count" field-type="integer" required="true" deprecated="false">
+  How many distinct visitors voted "no".
+</ResponseField>
+
+<ResponseField name="view_count" field-type="integer" required="true" deprecated="false">
+  How many distinct people have read the article. A visitor re-opening it never inflates this.
+</ResponseField>
+
+<ResponseField name="published_at" field-type="string" required="false" deprecated="false">
+  ISO 8601 timestamp of first publication. `null` while the article is still a draft.
+</ResponseField>
+
+<ResponseField name="created_at" field-type="string" required="true" deprecated="false">
+  ISO 8601 timestamp at which the article was created.
+</ResponseField>
+
+<ResponseField name="updated_at" field-type="string" required="true" deprecated="false">
+  ISO 8601 timestamp of the most recent change.
+</ResponseField>
+
+## Example help article object
+
+```json
+{
+  "id": "aa1c3ef8-b8cd-cd15-01ba-77bb77bb77bb",
+  "collection_id": null,
+  "category_id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+  "title": "Reset your password",
+  "slug": "reset-your-password",
+  "excerpt": "How to reset your password from the sign-in screen.",
+  "status_code": "published",
+  "show_on_portal": true,
+  "favourite": false,
+  "seq_number": "1000.0000",
+  "helpful_count": 42,
+  "not_helpful_count": 3,
+  "view_count": 512,
+  "published_at": "2026-08-02T11:00:00Z",
+  "created_at": "2026-08-01T10:20:00",
+  "updated_at": "2026-08-05T14:02:00"
+}
+```
+
+## Engagement metrics
+
+`helpful_count`, `not_helpful_count`, and `view_count` are **derived** from the underlying vote and view records rather than stored as counters, and all three count **distinct people**:
+
+- A visitor can vote helpful, switch to not-helpful, or retract — but never stack votes.
+- A visitor re-reading an article never increments `view_count` twice.
+
+These are read-only through the API. Votes and views are visitor actions recorded by the portal and widget; there is no endpoint to write them.
+
+## Related articles
+
+Each article can carry a **curated, ordered** list of related articles, shown beneath it on the portal. Set the whole list at once with `related_article_ids` on [create](/api-reference/help-articles/create) or [update](/api-reference/help-articles/update):
+
+- The order you send is the order displayed.
+- Every id must be an article in your organization, or the call fails with `400`.
+- On update, the field **replaces** the entire set. Send `[]` to clear it; omit it to leave it alone.
+- Links to drafts and unlisted articles are kept but simply not surfaced publicly.
+
+## Content format
+
+`content` is HTML — the same format the dashboard's rich-text editor produces. Send well-formed markup (`<p>`, `<h2>`, `<ul>`, `<a>`, `<img>`, `<code>`, and so on). There is no Markdown conversion; if you author in Markdown, render it to HTML before sending.
+
+## What you can do
+
+<Columns cols="2">
+  <Card title="Retrieve an article" href="/api-reference/help-articles/retrieve" icon="search" horizontal="false">
+    Get one article in full — body, breadcrumbs, and related links.
+  </Card>
+
+  <Card title="List articles" href="/api-reference/help-articles/list" icon="list" horizontal="false">
+    Page through articles with collection, category, and status filters.
+  </Card>
+
+  <Card title="Search articles" href="/api-reference/help-articles/search" icon="text-search" horizontal="false">
+    Keyword search across title, content, and excerpt, with breadcrumbs.
+  </Card>
+
+  <Card title="Create an article" href="/api-reference/help-articles/create" icon="plus" horizontal="false">
+    Publish a new article under a category or collection.
+  </Card>
+
+  <Card title="Update an article" href="/api-reference/help-articles/update" icon="pencil" horizontal="false">
+    Edit, publish, re-file, or change an article's related links.
+  </Card>
+
+  <Card title="Delete an article" href="/api-reference/help-articles/delete" icon="trash-2" horizontal="false">
+    Soft-delete an article, preserving its votes and view history.
+  </Card>
+</Columns>

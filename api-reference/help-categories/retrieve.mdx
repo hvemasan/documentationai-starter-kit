@@ -1,0 +1,100 @@
+---
+title: "Retrieve a help category"
+description: "Look up a single help category by its UUID, including its parent collection and article count."
+---
+
+Returns a single help category, scoped to the authenticated organization. A category belonging to another organization returns `404`, identically to one that doesn't exist.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/help-categories/retrieve
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="category_id" param-type="string" required="true" deprecated="false">
+  UUID of the category to retrieve.
+</ParamField>
+
+## Returns
+
+A [help category object](/api-reference/help-categories/overview#the-help-category-object).
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/help-categories/retrieve \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "category_id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/help-categories/retrieve",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        category_id: "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const category = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/help-categories/retrieve",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "category_id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+      },
+  )
+  resp.raise_for_status()
+  category = resp.json()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+  "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+  "name": "Account",
+  "slug": "account",
+  "description": "Profile, password, and two-factor authentication.",
+  "icon": "user",
+  "color": "#4E938A",
+  "seq_number": "1000.0000",
+  "article_count": 7,
+  "created_at": "2026-08-01T10:14:00",
+  "updated_at": "2026-08-01T10:14:00"
+}
+```
+
+Only the parent's UUID is returned. To resolve its name and slug, call [Retrieve a collection](/api-reference/help-collections/retrieve) with `collection_id` — or [retrieve an article](/api-reference/help-articles/retrieve), which embeds both parents for breadcrumbs.
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `403` | `{"detail":{"error":"The Help Center is not enabled on your current plan..."}}` | Your plan does not include the `knowledgebase` feature. |
+| `404` | `{"detail":{"error":"help category not found"}}` | No such category, or it belongs to another organization. |
+| `422` | Validation error envelope | `category_id` missing or not a valid UUID. |
+
+See [Errors](/api-reference/errors) for the full envelope shape and a recommended client-side handler.

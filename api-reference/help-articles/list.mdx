@@ -1,0 +1,189 @@
+---
+title: "List help articles"
+description: "Paginated list of help articles with collection, category, status, and favourite filters."
+---
+
+Returns a paginated list of help articles for the authenticated organization. Filterable by parent, status, and a substring search over title and content.
+
+Items omit the article `content` — call [Retrieve](/api-reference/help-articles/retrieve) for the body.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/help-articles/list
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="collection_id" param-type="string" required="false" deprecated="false">
+  Return everything in this collection — articles filed directly in it **plus** every article inside its categories. Ignored when `category_id` is also given.
+</ParamField>
+
+<ParamField body="category_id" param-type="string" required="false" deprecated="false">
+  Return only articles in this category. Takes precedence over `collection_id`.
+</ParamField>
+
+<ParamField body="status_code" param-type="string" required="false" deprecated="false">
+  Filter to `"draft"` or `"published"` articles. Omit for both.
+</ParamField>
+
+<ParamField body="favourite" param-type="boolean" required="false" deprecated="false">
+  Pass `true` to return only articles your team has starred. Omit for all.
+</ParamField>
+
+<ParamField body="search" param-type="string" required="false" deprecated="false">
+  Case-insensitive substring match against article **title and content**. For a wider lookup that also covers excerpts and returns breadcrumbs, use [Search](/api-reference/help-articles/search).
+</ParamField>
+
+<ParamField body="sort" param-type="string" required="false" deprecated="false">
+  One of `newest` (default), `oldest`, `last_modified`, or `manual`. `manual` uses the curated order shown on your help center.
+</ParamField>
+
+<ParamField body="limit" param-type="integer" required="false" deprecated="false">
+  Number of items per page. Min 1, max 100. Defaults to 25.
+</ParamField>
+
+<ParamField body="cursor" param-type="string" required="false" deprecated="false">
+  Opaque pagination cursor returned by the previous page. Omit for the first page.
+</ParamField>
+
+<Callout kind="info">
+  `collection_id` is a **deep** filter, not a shallow one — it returns the whole subtree, which is what you want when counting or exporting a collection's content. Use `category_id` to narrow to one level.
+</Callout>
+
+## Sort options
+
+| Value | Order |
+|---|---|
+| `newest` (default) | Most recently created first |
+| `oldest` | Oldest created first |
+| `last_modified` | Most recently updated first |
+| `manual` | The curated order shown on your help center |
+
+## Returns
+
+The standard [cursor-paginated envelope](/api-reference/pagination), whose `items` are [help article objects](/api-reference/help-articles/overview#the-help-article-object) without `content`.
+
+```json
+{
+  "items": [ /* help article objects */ ],
+  "has_next_page": true,
+  "cursor": "MjU"
+}
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/help-articles/list \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+      "status_code": "published",
+      "sort": "last_modified",
+      "limit": 50
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/help-articles/list",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        collection_id: "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+        status_code: "published",
+        sort: "last_modified",
+        limit: 50,
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { items, has_next_page, cursor } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/help-articles/list",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+          "status_code": "published",
+          "sort": "last_modified",
+          "limit": 50,
+      },
+  )
+  resp.raise_for_status()
+  page = resp.json()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "items": [
+    {
+      "id": "aa1c3ef8-b8cd-cd15-01ba-77bb77bb77bb",
+      "collection_id": null,
+      "category_id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+      "title": "Reset your password",
+      "slug": "reset-your-password",
+      "excerpt": "How to reset your password from the sign-in screen.",
+      "status_code": "published",
+      "show_on_portal": true,
+      "favourite": false,
+      "seq_number": "1000.0000",
+      "helpful_count": 42,
+      "not_helpful_count": 3,
+      "view_count": 512,
+      "published_at": "2026-08-02T11:00:00Z",
+      "created_at": "2026-08-01T10:20:00",
+      "updated_at": "2026-08-05T14:02:00"
+    }
+  ],
+  "has_next_page": false,
+  "cursor": null
+}
+```
+
+## Finding your least helpful articles
+
+Because every item carries its engagement counts, one paged sweep is enough to rank content that needs rewriting:
+
+```javascript
+const articles = await listAllArticles(apiKey, { status_code: "published" });
+
+const needsWork = articles
+  .filter((a) => a.helpful_count + a.not_helpful_count >= 10)
+  .map((a) => ({
+    title: a.title,
+    ratio: a.helpful_count / (a.helpful_count + a.not_helpful_count),
+    views: a.view_count,
+  }))
+  .sort((a, b) => a.ratio - b.ratio);
+```
+
+<Callout kind="alert">
+  Keep `limit` constant while walking pages. Cursors are minted against the `limit` that produced them, so changing it mid-walk can return overlapping items.
+</Callout>
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `403` | `{"detail":{"error":"The Help Center is not enabled on your current plan..."}}` | Your plan does not include the `knowledgebase` feature. |
+| `422` | Validation error envelope | `limit` outside 1–100, `status_code` not `"draft"` / `"published"`, `sort` not a listed value, or an id is not a valid UUID. |
+
+See [Errors](/api-reference/errors) for the full envelope shape and a recommended client-side handler.

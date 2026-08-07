@@ -1,0 +1,147 @@
+---
+title: "List help collections"
+description: "Paginated list of every help collection in your organization, in the order they appear on your help center."
+---
+
+Returns a paginated list of help collections for the authenticated organization, in the same order users see them on your help center: curated position first, then name.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/help-collections/list
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="limit" param-type="integer" required="false" deprecated="false">
+  Number of items per page. Min 1, max 100. Defaults to 25.
+</ParamField>
+
+<ParamField body="cursor" param-type="string" required="false" deprecated="false">
+  Opaque pagination cursor returned by the previous page. Omit for the first page.
+</ParamField>
+
+<Callout kind="tip">
+  Most organizations have fewer than 25 collections, so the default page size usually returns all of them in one call. Still check `has_next_page` rather than assuming.
+</Callout>
+
+## Returns
+
+The standard [cursor-paginated envelope](/api-reference/pagination), whose `items` are [help collection objects](/api-reference/help-collections/overview#the-help-collection-object).
+
+```json
+{
+  "items": [ /* help collection objects */ ],
+  "has_next_page": false,
+  "cursor": null
+}
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/help-collections/list \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "limit": 50
+    }'
+  ```
+
+  ```javascript
+  // Walk every page and collect all collections.
+  async function listAllCollections(apiKey) {
+    const all = [];
+    let cursor = null;
+
+    do {
+      const res = await fetch(
+        "https://api.productbridge.io/api/external/v1/help-collections/list",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ api_key: apiKey, limit: 50, cursor }),
+        }
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const page = await res.json();
+      all.push(...page.items);
+      cursor = page.has_next_page ? page.cursor : null;
+    } while (cursor);
+
+    return all;
+  }
+  ```
+
+  ```python
+  import os, httpx
+
+  def list_all_collections(api_key: str) -> list[dict]:
+      collections, cursor = [], None
+      while True:
+          resp = httpx.post(
+              "https://api.productbridge.io/api/external/v1/help-collections/list",
+              json={"api_key": api_key, "limit": 50, "cursor": cursor},
+          )
+          resp.raise_for_status()
+          page = resp.json()
+          collections.extend(page["items"])
+          if not page["has_next_page"]:
+              return collections
+          cursor = page["cursor"]
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "items": [
+    {
+      "id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+      "name": "Getting Started",
+      "slug": "getting-started",
+      "description": "Set up your account and learn the basics.",
+      "icon": "rocket",
+      "color": "#4E938A",
+      "seq_number": "1000.0000",
+      "category_count": 4,
+      "created_at": "2026-08-01T10:12:00",
+      "updated_at": "2026-08-04T09:30:00"
+    },
+    {
+      "id": "773c3ef8-b8cd-cd15-01ba-99bb99bb99bb",
+      "name": "Billing & Plans",
+      "slug": "billing-plans",
+      "description": "Invoices, upgrades, and receipts.",
+      "icon": "credit-card",
+      "color": "#F59E0B",
+      "seq_number": "2000.0000",
+      "category_count": 2,
+      "created_at": "2026-08-02T14:05:00",
+      "updated_at": "2026-08-02T14:05:00"
+    }
+  ],
+  "has_next_page": false,
+  "cursor": null
+}
+```
+
+<Callout kind="alert">
+  Keep `limit` constant while walking pages. Cursors are minted against the `limit` that produced them, so changing it mid-walk can return overlapping items.
+</Callout>
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `403` | `{"detail":{"error":"The Help Center is not enabled on your current plan..."}}` | Your plan does not include the `knowledgebase` feature. |
+| `422` | Validation error envelope | `limit` outside 1–100, or a field has the wrong type. |
+
+See [Errors](/api-reference/errors) for the full envelope shape and a recommended client-side handler.

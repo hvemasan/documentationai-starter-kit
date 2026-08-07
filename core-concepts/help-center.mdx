@@ -112,3 +112,28 @@ The Help Center is **off by default** on both your portal and your widget, so yo
 <Callout kind="tip">
   You can author collections, categories, and articles programmatically — including from AI assistants — through the [MCP Server](/integrations/ai-assistants/mcp-server), which exposes tools to create, update, search, and delete Help Center content.
 </Callout>
+
+## Manage via API
+
+Everything you can author in the dashboard is also available over the public API, so you can migrate content from another help desk, keep articles in sync with a docs repository, or surface your articles inside your own product.
+
+<Columns cols="3">
+  <Card title="Help collections" href="/api-reference/help-collections/overview" icon="library" horizontal="false">
+    Create, update, and delete the top-level topic areas of your Help Center.
+  </Card>
+
+  <Card title="Help categories" href="/api-reference/help-categories/overview" icon="folder-tree" horizontal="false">
+    Group articles inside a collection, and move categories between collections.
+  </Card>
+
+  <Card title="Help articles" href="/api-reference/help-articles/overview" icon="file-text" horizontal="false">
+    Write, publish, search, and re-file articles, with their helpfulness and view counts.
+  </Card>
+</Columns>
+
+Two behaviors are worth knowing before you start:
+
+- **Every Help Center endpoint requires the Help Center on your plan** — reads as well as writes, unlike the dashboard, which keeps existing content readable after a downgrade.
+- **Ordering is dashboard-only.** New collections, categories, and articles are appended to the end; rearranging them uses drag-and-drop, which has no API equivalent.
+
+Authoring through the API behaves exactly like authoring in the dashboard — the same slug rules, the same publish timestamps, and the same cascading deletes.

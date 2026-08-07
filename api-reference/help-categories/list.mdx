@@ -1,0 +1,159 @@
+---
+title: "List help categories"
+description: "Paginated list of help categories, optionally scoped to a single collection."
+---
+
+Returns a paginated list of help categories for the authenticated organization, ordered by curated position then name. Pass `collection_id` to scope the list to one collection.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/help-categories/list
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="collection_id" param-type="string" required="false" deprecated="false">
+  Return only categories inside this [collection](/api-reference/help-collections/overview). Omit to return every category in the organization.
+</ParamField>
+
+<ParamField body="limit" param-type="integer" required="false" deprecated="false">
+  Number of items per page. Min 1, max 100. Defaults to 25.
+</ParamField>
+
+<ParamField body="cursor" param-type="string" required="false" deprecated="false">
+  Opaque pagination cursor returned by the previous page. Omit for the first page.
+</ParamField>
+
+<Callout kind="info">
+  A `collection_id` belonging to another organization simply matches nothing and returns an empty page — the query is organization-scoped, so this filter can't be used to probe for other organizations' ids.
+</Callout>
+
+## Returns
+
+The standard [cursor-paginated envelope](/api-reference/pagination), whose `items` are [help category objects](/api-reference/help-categories/overview#the-help-category-object).
+
+```json
+{
+  "items": [ /* help category objects */ ],
+  "has_next_page": false,
+  "cursor": null
+}
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/help-categories/list \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+      "limit": 50
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/help-categories/list",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        collection_id: "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+        limit: 50,
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { items } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/help-categories/list",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+          "limit": 50,
+      },
+  )
+  resp.raise_for_status()
+  categories = resp.json()["items"]
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "items": [
+    {
+      "id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+      "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+      "name": "Account",
+      "slug": "account",
+      "description": "Profile, password, and two-factor authentication.",
+      "icon": "user",
+      "color": "#4E938A",
+      "seq_number": "1000.0000",
+      "article_count": 7,
+      "created_at": "2026-08-01T10:14:00",
+      "updated_at": "2026-08-01T10:14:00"
+    },
+    {
+      "id": "995c3ef8-b8cd-cd15-01ba-55bb55bb55bb",
+      "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+      "name": "Installation",
+      "slug": "installation",
+      "description": null,
+      "icon": null,
+      "color": null,
+      "seq_number": "2000.0000",
+      "article_count": 3,
+      "created_at": "2026-08-01T10:16:00",
+      "updated_at": "2026-08-03T08:41:00"
+    }
+  ],
+  "has_next_page": false,
+  "cursor": null
+}
+```
+
+## Rebuilding your full taxonomy
+
+Combine this with [List collections](/api-reference/help-collections/list) to mirror the whole tree in two calls, then group client-side by `collection_id`:
+
+```javascript
+const [collections, categories] = await Promise.all([
+  listAllCollections(apiKey),
+  listAllCategories(apiKey),
+]);
+
+const tree = collections.map((collection) => ({
+  ...collection,
+  categories: categories.filter((c) => c.collection_id === collection.id),
+}));
+```
+
+<Callout kind="alert">
+  Keep `limit` constant while walking pages. Cursors are minted against the `limit` that produced them, so changing it mid-walk can return overlapping items.
+</Callout>
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `403` | `{"detail":{"error":"The Help Center is not enabled on your current plan..."}}` | Your plan does not include the `knowledgebase` feature. |
+| `422` | Validation error envelope | `limit` outside 1–100, `collection_id` not a valid UUID, or a field has the wrong type. |
+
+See [Errors](/api-reference/errors) for the full envelope shape and a recommended client-side handler.

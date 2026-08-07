@@ -835,6 +835,122 @@
                 "icon": "list"
               }
             ]
+          },
+          {
+            "group": "Help collections",
+            "icon": "library",
+            "expandable": true,
+            "pages": [
+              {
+                "title": "Overview",
+                "path": "api-reference/help-collections/overview",
+                "icon": "info"
+              },
+              {
+                "title": "Retrieve",
+                "path": "api-reference/help-collections/retrieve",
+                "icon": "search"
+              },
+              {
+                "title": "List",
+                "path": "api-reference/help-collections/list",
+                "icon": "list"
+              },
+              {
+                "title": "Create",
+                "path": "api-reference/help-collections/create",
+                "icon": "plus"
+              },
+              {
+                "title": "Update",
+                "path": "api-reference/help-collections/update",
+                "icon": "pencil"
+              },
+              {
+                "title": "Delete",
+                "path": "api-reference/help-collections/delete",
+                "icon": "trash-2"
+              }
+            ]
+          },
+          {
+            "group": "Help categories",
+            "icon": "folder-tree",
+            "expandable": true,
+            "pages": [
+              {
+                "title": "Overview",
+                "path": "api-reference/help-categories/overview",
+                "icon": "info"
+              },
+              {
+                "title": "Retrieve",
+                "path": "api-reference/help-categories/retrieve",
+                "icon": "search"
+              },
+              {
+                "title": "List",
+                "path": "api-reference/help-categories/list",
+                "icon": "list"
+              },
+              {
+                "title": "Create",
+                "path": "api-reference/help-categories/create",
+                "icon": "plus"
+              },
+              {
+                "title": "Update",
+                "path": "api-reference/help-categories/update",
+                "icon": "pencil"
+              },
+              {
+                "title": "Delete",
+                "path": "api-reference/help-categories/delete",
+                "icon": "trash-2"
+              }
+            ]
+          },
+          {
+            "group": "Help articles",
+            "icon": "file-text",
+            "expandable": true,
+            "pages": [
+              {
+                "title": "Overview",
+                "path": "api-reference/help-articles/overview",
+                "icon": "info"
+              },
+              {
+                "title": "Retrieve",
+                "path": "api-reference/help-articles/retrieve",
+                "icon": "search"
+              },
+              {
+                "title": "List",
+                "path": "api-reference/help-articles/list",
+                "icon": "list"
+              },
+              {
+                "title": "Search",
+                "path": "api-reference/help-articles/search",
+                "icon": "text-search"
+              },
+              {
+                "title": "Create",
+                "path": "api-reference/help-articles/create",
+                "icon": "plus"
+              },
+              {
+                "title": "Update",
+                "path": "api-reference/help-articles/update",
+                "icon": "pencil"
+              },
+              {
+                "title": "Delete",
+                "path": "api-reference/help-articles/delete",
+                "icon": "trash-2"
+              }
+            ]
           }
         ]
       },

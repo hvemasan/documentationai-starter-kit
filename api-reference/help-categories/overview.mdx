@@ -1,0 +1,114 @@
+---
+title: "Help categories"
+description: "Categories group related articles inside a collection. Use the API to list, retrieve, create, update, and delete them."
+---
+
+A **category** is the middle level of your Help Center. It belongs to exactly one [collection](/api-reference/help-collections/overview) and groups related [articles](/api-reference/help-articles/overview) — for example an "Account" category inside a "Getting Started" collection.
+
+Categories are optional. An article can be filed directly in a collection when it doesn't need sub-grouping.
+
+<Callout kind="alert">
+  **Every Help Center endpoint requires the `knowledgebase` feature on your plan** — reads included, not just writes. Calls from an organization without it return `403`.
+</Callout>
+
+## The help category object
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  A unique identifier for the category (UUID).
+</ResponseField>
+
+<ResponseField name="collection_id" field-type="string" required="true" deprecated="false">
+  UUID of the parent collection. Every category has exactly one.
+</ResponseField>
+
+<ResponseField name="name" field-type="string" required="true" deprecated="false">
+  The display name shown inside the collection.
+</ResponseField>
+
+<ResponseField name="slug" field-type="string" required="true" deprecated="false">
+  URL-safe identifier, unique within your organization. Forms the middle segment of an article's public URL: `/help/{collection_slug}/{category_slug}/{article_slug}`
+</ResponseField>
+
+<ResponseField name="description" field-type="string" required="false" deprecated="false">
+  Optional supporting text shown beneath the category name. May be `null`.
+</ResponseField>
+
+<ResponseField name="icon" field-type="string" required="false" deprecated="false">
+  Optional icon identifier rendered next to the category. May be `null`.
+</ResponseField>
+
+<ResponseField name="color" field-type="string" required="false" deprecated="false">
+  Optional hex color string (e.g. `"#4E938A"`) used as an accent. May be `null`.
+</ResponseField>
+
+<ResponseField name="seq_number" field-type="string" required="false" deprecated="false">
+  The category's position within its collection, as a decimal string. **Read-only** — reorder by drag-and-drop in the dashboard.
+</ResponseField>
+
+<ResponseField name="article_count" field-type="integer" required="true" deprecated="false">
+  How many active articles this category contains.
+</ResponseField>
+
+<ResponseField name="created_at" field-type="string" required="true" deprecated="false">
+  ISO 8601 timestamp at which the category was created.
+</ResponseField>
+
+<ResponseField name="updated_at" field-type="string" required="true" deprecated="false">
+  ISO 8601 timestamp of the most recent change.
+</ResponseField>
+
+## Example help category object
+
+```json
+{
+  "id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+  "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+  "name": "Account",
+  "slug": "account",
+  "description": "Profile, password, and two-factor authentication.",
+  "icon": "user",
+  "color": "#4E938A",
+  "seq_number": "1000.0000",
+  "article_count": 7,
+  "created_at": "2026-08-01T10:14:00",
+  "updated_at": "2026-08-01T10:14:00"
+}
+```
+
+## Moving a category between collections
+
+Pass a new `collection_id` to [Update](/api-reference/help-categories/update). The category's articles move with it — nothing is denormalized, so their breadcrumbs and public URLs follow the new parent automatically.
+
+Ordering is scoped to the collection, so a moved category takes a position within its new parent.
+
+## Slugs
+
+Slugs are unique per organization, not per collection. Omit `slug` on create and one is derived from `name`, with a unique suffix appended if it collides. On update, an explicit slug already in use is rejected with `400`.
+
+## Deleting
+
+Deletes are **soft and cascade**: deleting a category also soft-deletes every article inside it. The slug is freed for reuse.
+
+## What you can do
+
+<Columns cols="2">
+  <Card title="Retrieve a category" href="/api-reference/help-categories/retrieve" icon="search" horizontal="false">
+    Look up a single category by its UUID, including its article count.
+  </Card>
+
+  <Card title="List categories" href="/api-reference/help-categories/list" icon="list" horizontal="false">
+    Page through categories, optionally scoped to one collection.
+  </Card>
+
+  <Card title="Create a category" href="/api-reference/help-categories/create" icon="plus" horizontal="false">
+    Add a category under an existing collection.
+  </Card>
+
+  <Card title="Update a category" href="/api-reference/help-categories/update" icon="pencil" horizontal="false">
+    Rename a category or move it to a different collection.
+  </Card>
+
+  <Card title="Delete a category" href="/api-reference/help-categories/delete" icon="trash-2" horizontal="false">
+    Soft-delete a category along with its articles.
+  </Card>
+</Columns>

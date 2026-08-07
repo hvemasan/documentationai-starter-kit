@@ -1,0 +1,171 @@
+---
+title: "Create a help article"
+description: "Publish a new help article under a category or directly in a collection. Returns the new article id."
+---
+
+Creates a help article. Supply **exactly one** parent — `category_id` or `collection_id`.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/help-articles/create
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="category_id" param-type="string" required="false" deprecated="false">
+  File the article in this [category](/api-reference/help-categories/overview). Required unless `collection_id` is given — supply exactly one of the two.
+</ParamField>
+
+<ParamField body="collection_id" param-type="string" required="false" deprecated="false">
+  File the article directly in this [collection](/api-reference/help-collections/overview), with no category. Required unless `category_id` is given.
+</ParamField>
+
+<ParamField body="title" param-type="string" required="true" deprecated="false">
+  The article's title. 1–512 characters.
+</ParamField>
+
+<ParamField body="content" param-type="string" required="false" deprecated="false">
+  The article body as HTML. See [Content format](/api-reference/help-articles/overview#content-format).
+</ParamField>
+
+<ParamField body="slug" param-type="string" required="false" deprecated="false">
+  URL-safe identifier, unique within your organization. Derived from `title` when omitted, with a unique suffix appended on collision. Max 512 characters.
+</ParamField>
+
+<ParamField body="excerpt" param-type="string" required="false" deprecated="false">
+  Short summary shown in listings and search results. Max 512 characters.
+</ParamField>
+
+<ParamField body="status_code" param-type="string" required="false" deprecated="false">
+  Either `"draft"` or `"published"`. Defaults to `"draft"`.
+</ParamField>
+
+<ParamField body="show_on_portal" param-type="boolean" required="false" deprecated="false">
+  Whether the article may appear publicly. Defaults to `true`. Visibility also requires `status_code: "published"`.
+</ParamField>
+
+<ParamField body="favourite" param-type="boolean" required="false" deprecated="false">
+  Internal star for your team. Defaults to `false`. Never shown to customers.
+</ParamField>
+
+<ParamField body="related_article_ids" param-type="array" required="false" deprecated="false">
+  Ordered list of article UUIDs to show as "related" beneath this one. Every id must be an article in your organization.
+</ParamField>
+
+<ParamField body="author_id" param-type="string" required="false" deprecated="false">
+  UUID of the article's author. Defaults to the user who created the API key, so API-authored articles still attribute to a real person.
+</ParamField>
+
+<ParamField body="published_at" param-type="string" required="false" deprecated="false">
+  ISO 8601 publication timestamp. Stamped automatically with the current time when creating with `status_code: "published"` and no explicit value.
+</ParamField>
+
+<Callout kind="info">
+  Creating with `status_code: "published"` and the default `show_on_portal: true` makes the article **live on your public help center immediately**. Create as a draft first if you want to review it in the dashboard.
+</Callout>
+
+## Returns
+
+A JSON object with the new article's `id`.
+
+```json
+{ "id": "aa1c3ef8-b8cd-cd15-01ba-77bb77bb77bb" }
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/help-articles/create \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "category_id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+      "title": "Reset your password",
+      "content": "<p>From the sign-in screen, choose <strong>Forgot password</strong> and follow the emailed link.</p>",
+      "excerpt": "How to reset your password from the sign-in screen.",
+      "status_code": "published"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/help-articles/create",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        category_id: "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+        title: "Reset your password",
+        content:
+          "<p>From the sign-in screen, choose <strong>Forgot password</strong> and follow the emailed link.</p>",
+        excerpt: "How to reset your password from the sign-in screen.",
+        status_code: "published",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { id } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/help-articles/create",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "category_id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+          "title": "Reset your password",
+          "content": "<p>From the sign-in screen, choose <strong>Forgot password</strong> "
+                     "and follow the emailed link.</p>",
+          "excerpt": "How to reset your password from the sign-in screen.",
+          "status_code": "published",
+      },
+  )
+  resp.raise_for_status()
+  new_id = resp.json()["id"]
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "id": "aa1c3ef8-b8cd-cd15-01ba-77bb77bb77bb"
+}
+```
+
+Fetch the generated `slug` and `published_at` via [Retrieve](/api-reference/help-articles/retrieve).
+
+## Filing directly in a collection
+
+Omit `category_id` and send `collection_id` instead. The article's public URL then drops the category segment: `/help/{collection_slug}/{article_slug}`.
+
+```json
+{
+  "api_key": "pb_YOUR_PUBLIC_API_KEY",
+  "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+  "title": "What's new in v3",
+  "status_code": "published"
+}
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `400` | `{"detail":{"error":"related article ... not found in this organization"}}` | A `related_article_ids` entry doesn't exist or belongs to another organization. |
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `403` | `{"detail":{"error":"The Help Center is not enabled on your current plan..."}}` | Your plan does not include the `knowledgebase` feature. |
+| `404` | `{"detail":{"error":"help category not found"}}` | The `category_id` doesn't exist, or belongs to another organization. |
+| `404` | `{"detail":{"error":"help collection not found"}}` | The `collection_id` doesn't exist, or belongs to another organization. |
+| `422` | Validation error envelope | Both parents sent, neither sent, `title` missing or out of bounds (1–512), or `status_code` not `"draft"` / `"published"`. |
+
+See [Errors](/api-reference/errors) for the full envelope shape and a recommended client-side handler.

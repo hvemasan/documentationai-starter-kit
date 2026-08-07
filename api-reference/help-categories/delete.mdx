@@ -1,0 +1,96 @@
+---
+title: "Delete a help category"
+description: "Soft-delete a help category. Cascades to every article inside it."
+---
+
+Soft-deletes a help category. It disappears from your dashboard and public help center, but the row is retained and its slug is freed for reuse.
+
+<Callout kind="danger">
+  **This cascades.** Deleting a category also soft-deletes every article inside it. There is no undo through the API.
+</Callout>
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/help-categories/delete
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="category_id" param-type="string" required="true" deprecated="false">
+  UUID of the category to delete. Must belong to your organization.
+</ParamField>
+
+## Returns
+
+```json
+{ "success": true }
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/help-categories/delete \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "category_id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/help-categories/delete",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        category_id: "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/help-categories/delete",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "category_id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+      },
+  )
+  resp.raise_for_status()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "success": true
+}
+```
+
+## Keeping the articles
+
+To empty a category before deleting it, [list its articles](/api-reference/help-articles/list) with this `category_id`, then [update each one](/api-reference/help-articles/update) with a different `category_id` — or a `collection_id`, to file it directly in a collection instead.
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `403` | `{"detail":{"error":"The Help Center is not enabled on your current plan..."}}` | Your plan does not include the `knowledgebase` feature. |
+| `404` | `{"detail":{"error":"help category not found"}}` | No such category, it was already deleted, or it belongs to another organization. |
+| `422` | Validation error envelope | `category_id` missing or not a valid UUID. |
+
+See [Errors](/api-reference/errors) for the full envelope shape and a recommended client-side handler.

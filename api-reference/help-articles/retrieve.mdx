@@ -1,0 +1,213 @@
+---
+title: "Retrieve a help article"
+description: "Get one help article in full — HTML body, breadcrumbs, engagement counts, and curated related links."
+---
+
+Returns a single help article with its complete content. This is the **only** endpoint that returns the article body — [List](/api-reference/help-articles/list) and [Search](/api-reference/help-articles/search) omit `content` so a page response can't grow unbounded.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/help-articles/retrieve
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="article_id" param-type="string" required="true" deprecated="false">
+  UUID of the article to retrieve.
+</ParamField>
+
+## Returns
+
+A [help article object](/api-reference/help-articles/overview#the-help-article-object) plus the following detail-only fields:
+
+<ResponseField name="content" field-type="string" required="false" deprecated="false">
+  The article body as HTML. May be `null` for an article created without one.
+</ResponseField>
+
+<ResponseField name="author_id" field-type="string" required="false" deprecated="false">
+  UUID of the article's author. May be `null`.
+</ResponseField>
+
+<ResponseField name="collection" field-type="object" required="false" deprecated="false">
+  The article's collection, for breadcrumbs. **Always present**, whether the article is filed directly in a collection or inside one of its categories.
+
+  <Expandable title="Collection properties" default-open="false">
+    <ResponseField name="id" field-type="string" required="true" deprecated="false">
+      UUID of the collection.
+    </ResponseField>
+
+    <ResponseField name="name" field-type="string" required="true" deprecated="false">
+      Display name of the collection.
+    </ResponseField>
+
+    <ResponseField name="slug" field-type="string" required="true" deprecated="false">
+      Slug of the collection — the first segment of the article's public URL.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="category" field-type="object" required="false" deprecated="false">
+  The article's category, for breadcrumbs. `null` when the article is filed directly in a collection.
+
+  <Expandable title="Category properties" default-open="false">
+    <ResponseField name="id" field-type="string" required="true" deprecated="false">
+      UUID of the category.
+    </ResponseField>
+
+    <ResponseField name="name" field-type="string" required="true" deprecated="false">
+      Display name of the category.
+    </ResponseField>
+
+    <ResponseField name="slug" field-type="string" required="true" deprecated="false">
+      Slug of the category — the middle segment of the article's public URL.
+    </ResponseField>
+
+    <ResponseField name="collection_id" field-type="string" required="true" deprecated="false">
+      UUID of the category's parent collection.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="related_articles" field-type="array" required="true" deprecated="false">
+  The curated related-article links, in their display order. Empty array when none are set.
+
+  <Expandable title="Related article properties" default-open="false">
+    <ResponseField name="id" field-type="string" required="true" deprecated="false">
+      UUID of the related article.
+    </ResponseField>
+
+    <ResponseField name="title" field-type="string" required="true" deprecated="false">
+      Title of the related article.
+    </ResponseField>
+
+    <ResponseField name="slug" field-type="string" required="true" deprecated="false">
+      Slug of the related article.
+    </ResponseField>
+
+    <ResponseField name="status_code" field-type="string" required="true" deprecated="false">
+      `"draft"` or `"published"`. Links to drafts are kept but never surfaced publicly.
+    </ResponseField>
+
+    <ResponseField name="show_on_portal" field-type="boolean" required="true" deprecated="false">
+      Whether the related article may appear publicly.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/help-articles/retrieve \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "article_id": "aa1c3ef8-b8cd-cd15-01ba-77bb77bb77bb"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/help-articles/retrieve",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        article_id: "aa1c3ef8-b8cd-cd15-01ba-77bb77bb77bb",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const article = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/help-articles/retrieve",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "article_id": "aa1c3ef8-b8cd-cd15-01ba-77bb77bb77bb",
+      },
+  )
+  resp.raise_for_status()
+  article = resp.json()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "id": "aa1c3ef8-b8cd-cd15-01ba-77bb77bb77bb",
+  "collection_id": null,
+  "category_id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+  "title": "Reset your password",
+  "content": "<p>From the sign-in screen, choose <strong>Forgot password</strong> and follow the emailed link.</p>",
+  "slug": "reset-your-password",
+  "excerpt": "How to reset your password from the sign-in screen.",
+  "status_code": "published",
+  "show_on_portal": true,
+  "favourite": false,
+  "seq_number": "1000.0000",
+  "helpful_count": 42,
+  "not_helpful_count": 3,
+  "view_count": 512,
+  "author_id": "3f2c3ef8-b8cd-cd15-01ba-11bb11bb11bb",
+  "published_at": "2026-08-02T11:00:00Z",
+  "created_at": "2026-08-01T10:20:00",
+  "updated_at": "2026-08-05T14:02:00",
+  "collection": {
+    "id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+    "name": "Getting Started",
+    "slug": "getting-started"
+  },
+  "category": {
+    "id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+    "name": "Account",
+    "slug": "account",
+    "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb"
+  },
+  "related_articles": [
+    {
+      "id": "bb2c3ef8-b8cd-cd15-01ba-88bb88bb88bb",
+      "title": "Change your email address",
+      "slug": "change-your-email-address",
+      "status_code": "published",
+      "show_on_portal": true
+    }
+  ]
+}
+```
+
+## Building the public URL
+
+The embedded `collection` and `category` give you every segment without extra calls:
+
+```javascript
+function helpArticleUrl(article, portalOrigin) {
+  const parts = [article.collection.slug];
+  if (article.category) parts.push(article.category.slug);
+  parts.push(article.slug);
+  return `${portalOrigin}/help/${parts.join("/")}`;
+}
+// → https://feedback.acme.com/help/getting-started/account/reset-your-password
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `403` | `{"detail":{"error":"The Help Center is not enabled on your current plan..."}}` | Your plan does not include the `knowledgebase` feature. |
+| `404` | `{"detail":{"error":"help article not found"}}` | No such article, or it belongs to another organization. |
+| `422` | Validation error envelope | `article_id` missing or not a valid UUID. |
+
+See [Errors](/api-reference/errors) for the full envelope shape and a recommended client-side handler.

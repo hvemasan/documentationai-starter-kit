@@ -1,0 +1,123 @@
+---
+title: "Create a help category"
+description: "Add a category under an existing help collection. Returns the new category id."
+---
+
+Creates a help category inside a collection. New categories are appended to the end of that collection's order.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/help-categories/create
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="collection_id" param-type="string" required="true" deprecated="false">
+  UUID of the parent [collection](/api-reference/help-collections/overview). Must belong to your organization.
+</ParamField>
+
+<ParamField body="name" param-type="string" required="true" deprecated="false">
+  The display name shown inside the collection. 1–512 characters.
+</ParamField>
+
+<ParamField body="slug" param-type="string" required="false" deprecated="false">
+  URL-safe identifier, unique within your organization. Derived from `name` when omitted, with a unique suffix appended on collision. Max 512 characters.
+</ParamField>
+
+<ParamField body="description" param-type="string" required="false" deprecated="false">
+  Supporting text shown beneath the category name. Max 512 characters.
+</ParamField>
+
+<ParamField body="icon" param-type="string" required="false" deprecated="false">
+  Icon identifier rendered next to the category. Max 512 characters.
+</ParamField>
+
+<ParamField body="color" param-type="string" required="false" deprecated="false">
+  Hex color string used as an accent (e.g. `"#4E938A"`). Max 50 characters.
+</ParamField>
+
+## Returns
+
+A JSON object with the new category's `id`.
+
+```json
+{ "id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb" }
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/help-categories/create \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+      "name": "Account",
+      "description": "Profile, password, and two-factor authentication.",
+      "icon": "user"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/help-categories/create",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        collection_id: "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+        name: "Account",
+        description: "Profile, password, and two-factor authentication.",
+        icon: "user",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { id } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/help-categories/create",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+          "name": "Account",
+          "description": "Profile, password, and two-factor authentication.",
+          "icon": "user",
+      },
+  )
+  resp.raise_for_status()
+  new_id = resp.json()["id"]
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb"
+}
+```
+
+You can now [create articles](/api-reference/help-articles/create) with this `category_id`.
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `403` | `{"detail":{"error":"The Help Center is not enabled on your current plan..."}}` | Your plan does not include the `knowledgebase` feature. |
+| `404` | `{"detail":{"error":"help collection not found"}}` | The `collection_id` doesn't exist, or belongs to another organization. |
+| `422` | Validation error envelope | Missing `collection_id` or `name`, `name` out of length bounds (1–512), or a field has the wrong type. |
+
+See [Errors](/api-reference/errors) for the full envelope shape and a recommended client-side handler.

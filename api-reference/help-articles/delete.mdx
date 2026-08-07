@@ -1,0 +1,106 @@
+---
+title: "Delete a help article"
+description: "Soft-delete a help article. Its helpfulness votes and view history are preserved."
+---
+
+Soft-deletes a help article. It disappears from your dashboard and public help center, but the row is retained and its slug is freed for reuse.
+
+The article's "was this helpful?" votes and view records are **not** removed, so restoring it in the database preserves its history.
+
+<Callout kind="info">
+  Unlike collections and categories, deleting an article cascades to nothing — an article is a leaf. Curated links pointing *at* it from other articles simply stop being surfaced.
+</Callout>
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/help-articles/delete
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="article_id" param-type="string" required="true" deprecated="false">
+  UUID of the article to delete. Must belong to your organization.
+</ParamField>
+
+## Returns
+
+```json
+{ "success": true }
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/help-articles/delete \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "article_id": "aa1c3ef8-b8cd-cd15-01ba-77bb77bb77bb"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/help-articles/delete",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        article_id: "aa1c3ef8-b8cd-cd15-01ba-77bb77bb77bb",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/help-articles/delete",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "article_id": "aa1c3ef8-b8cd-cd15-01ba-77bb77bb77bb",
+      },
+  )
+  resp.raise_for_status()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "success": true
+}
+```
+
+## Consider unpublishing instead
+
+If you only want an article off your public help center while keeping it in the dashboard, [update](/api-reference/help-articles/update) it rather than deleting:
+
+```json
+{
+  "api_key": "pb_YOUR_PUBLIC_API_KEY",
+  "article_id": "aa1c3ef8-b8cd-cd15-01ba-77bb77bb77bb",
+  "show_on_portal": false
+}
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `403` | `{"detail":{"error":"The Help Center is not enabled on your current plan..."}}` | Your plan does not include the `knowledgebase` feature. |
+| `404` | `{"detail":{"error":"help article not found"}}` | No such article, it was already deleted, or it belongs to another organization. |
+| `422` | Validation error envelope | `article_id` missing or not a valid UUID. |
+
+See [Errors](/api-reference/errors) for the full envelope shape and a recommended client-side handler.

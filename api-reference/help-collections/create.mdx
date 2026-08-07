@@ -1,0 +1,122 @@
+---
+title: "Create a help collection"
+description: "Add a new top-level collection to your Help Center. Returns the new collection id."
+---
+
+Creates a help collection — the top level of your Help Center taxonomy. New collections are appended to the end of the curated order.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/help-collections/create
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="name" param-type="string" required="true" deprecated="false">
+  The display name shown on your help center home page. 1–512 characters.
+</ParamField>
+
+<ParamField body="slug" param-type="string" required="false" deprecated="false">
+  URL-safe identifier, unique within your organization. Derived from `name` when omitted. If the slug is already taken, a unique suffix is appended automatically. Max 512 characters.
+</ParamField>
+
+<ParamField body="description" param-type="string" required="false" deprecated="false">
+  Supporting text shown beneath the collection name. Max 512 characters.
+</ParamField>
+
+<ParamField body="icon" param-type="string" required="false" deprecated="false">
+  Icon identifier rendered next to the collection. Max 512 characters.
+</ParamField>
+
+<ParamField body="color" param-type="string" required="false" deprecated="false">
+  Hex color string used as an accent (e.g. `"#4E938A"`). Max 50 characters.
+</ParamField>
+
+<Callout kind="info">
+  `seq_number` cannot be set here. New collections are appended to the end of the order; reorder them by drag-and-drop in the dashboard. See [Ordering](/api-reference/help-collections/overview#ordering).
+</Callout>
+
+## Returns
+
+A JSON object with the new collection's `id`.
+
+```json
+{ "id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb" }
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/help-collections/create \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "name": "Billing & Plans",
+      "description": "Invoices, upgrades, and receipts.",
+      "icon": "credit-card",
+      "color": "#F59E0B"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/help-collections/create",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        name: "Billing & Plans",
+        description: "Invoices, upgrades, and receipts.",
+        icon: "credit-card",
+        color: "#F59E0B",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { id } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/help-collections/create",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "name": "Billing & Plans",
+          "description": "Invoices, upgrades, and receipts.",
+          "icon": "credit-card",
+          "color": "#F59E0B",
+      },
+  )
+  resp.raise_for_status()
+  new_id = resp.json()["id"]
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "id": "773c3ef8-b8cd-cd15-01ba-99bb99bb99bb"
+}
+```
+
+Fetch the full object — including the generated `slug` and `created_at` — via [Retrieve](/api-reference/help-collections/retrieve).
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `403` | `{"detail":{"error":"The Help Center is not enabled on your current plan..."}}` | Your plan does not include the `knowledgebase` feature. |
+| `422` | Validation error envelope | Missing `name`, `name` out of length bounds (1–512), or a field has the wrong type. |
+
+See [Errors](/api-reference/errors) for the full envelope shape and a recommended client-side handler.

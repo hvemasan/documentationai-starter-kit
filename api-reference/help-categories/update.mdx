@@ -1,0 +1,128 @@
+---
+title: "Update a help category"
+description: "Patch a help category's fields, or move it to a different collection. Only present fields are applied."
+---
+
+Updates a help category. The endpoint is patch-style: any subset of the optional body fields may be present, and only those fields are applied. Omitted fields keep their current values.
+
+Passing `collection_id` **moves the category to that collection**, taking its articles with it.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/help-categories/update
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="category_id" param-type="string" required="true" deprecated="false">
+  UUID of the category to update. Must belong to your organization.
+</ParamField>
+
+<ParamField body="collection_id" param-type="string" required="false" deprecated="false">
+  Move the category to this collection. Must belong to your organization. Omit to leave the parent unchanged.
+</ParamField>
+
+<ParamField body="name" param-type="string" required="false" deprecated="false">
+  New display name. 1–512 characters.
+</ParamField>
+
+<ParamField body="slug" param-type="string" required="false" deprecated="false">
+  New URL-safe identifier. A slug already in use is **rejected with `400`** rather than auto-suffixed. Max 512 characters.
+</ParamField>
+
+<ParamField body="description" param-type="string" required="false" deprecated="false">
+  New supporting text. Max 512 characters.
+</ParamField>
+
+<ParamField body="icon" param-type="string" required="false" deprecated="false">
+  New icon identifier. Max 512 characters.
+</ParamField>
+
+<ParamField body="color" param-type="string" required="false" deprecated="false">
+  New hex color string. Max 50 characters.
+</ParamField>
+
+<Callout kind="alert">
+  Moving a category or changing its `slug` changes the public URL of every article inside it. Existing links to those articles will break.
+</Callout>
+
+## Returns
+
+```json
+{ "success": true }
+```
+
+## Example request
+
+Moving a category to a different collection:
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/help-categories/update \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "category_id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+      "collection_id": "773c3ef8-b8cd-cd15-01ba-99bb99bb99bb",
+      "name": "Account & Security"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/help-categories/update",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        category_id: "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+        collection_id: "773c3ef8-b8cd-cd15-01ba-99bb99bb99bb",
+        name: "Account & Security",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/help-categories/update",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "category_id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+          "collection_id": "773c3ef8-b8cd-cd15-01ba-99bb99bb99bb",
+          "name": "Account & Security",
+      },
+  )
+  resp.raise_for_status()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "success": true
+}
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `400` | `{"detail":"Slug already exists"}` | The explicit `slug` is already used by another category in your organization. |
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `403` | `{"detail":{"error":"The Help Center is not enabled on your current plan..."}}` | Your plan does not include the `knowledgebase` feature. |
+| `404` | `{"detail":{"error":"help category not found"}}` | No such category, or it belongs to another organization. |
+| `404` | `{"detail":{"error":"help collection not found"}}` | The target `collection_id` doesn't exist, or belongs to another organization. |
+| `422` | Validation error envelope | `category_id` missing or not a valid UUID, or a field has the wrong type. |
+
+See [Errors](/api-reference/errors) for the full envelope shape and a recommended client-side handler.

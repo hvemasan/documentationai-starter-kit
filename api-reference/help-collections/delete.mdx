@@ -1,0 +1,98 @@
+---
+title: "Delete a help collection"
+description: "Soft-delete a help collection. Cascades to its categories and every article inside them."
+---
+
+Soft-deletes a help collection. The collection disappears from your dashboard and public help center, but the row is retained and its slug is freed for reuse.
+
+<Callout kind="danger">
+  **This cascades.** Deleting a collection also soft-deletes every category inside it, and every article inside those categories — plus any article filed directly in the collection. There is no undo through the API.
+</Callout>
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/help-collections/delete
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="collection_id" param-type="string" required="true" deprecated="false">
+  UUID of the collection to delete. Must belong to your organization.
+</ParamField>
+
+## Returns
+
+```json
+{ "success": true }
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/help-collections/delete \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/help-collections/delete",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        collection_id: "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/help-collections/delete",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+      },
+  )
+  resp.raise_for_status()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "success": true
+}
+```
+
+## Checking the blast radius first
+
+Because the cascade is silent, call [List categories](/api-reference/help-categories/list) scoped to the collection, and [List articles](/api-reference/help-articles/list) with the same `collection_id`, before deleting. The article list with `collection_id` covers everything in the collection — articles filed directly in it *and* those in its categories — so it gives you the full count in one call.
+
+To keep the content, move it first: [update each category](/api-reference/help-categories/update) with a different `collection_id`, and [re-file direct articles](/api-reference/help-articles/update) elsewhere.
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `403` | `{"detail":{"error":"The Help Center is not enabled on your current plan..."}}` | Your plan does not include the `knowledgebase` feature. |
+| `404` | `{"detail":{"error":"help collection not found"}}` | No such collection, it was already deleted, or it belongs to another organization. |
+| `422` | Validation error envelope | `collection_id` missing or not a valid UUID. |
+
+See [Errors](/api-reference/errors) for the full envelope shape and a recommended client-side handler.

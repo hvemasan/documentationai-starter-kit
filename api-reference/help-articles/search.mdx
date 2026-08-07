@@ -1,0 +1,217 @@
+---
+title: "Search help articles"
+description: "Keyword search across help article titles, content, and excerpts, returning breadcrumbs with every hit."
+---
+
+Searches your help articles by keyword across **title, content, and excerpt**, returning each hit with its collection and category so you can link straight to it.
+
+Searches every article in your organization by default — **drafts and unlisted articles included** — because an API key is workspace-level access. Set `published_only` to restrict results to what a portal visitor would actually see.
+
+## Search vs. the list filter
+
+Both accept a query string, but they are not the same:
+
+| | `/help-articles/search` | `/help-articles/list` with `search` |
+|---|---|---|
+| Fields matched | title, content, **excerpt** | title, content |
+| Returns breadcrumbs | Yes — `collection` and `category` | No |
+| Other filters | `published_only` | collection, category, status, favourite, sort |
+| Engagement counts | No | Yes |
+
+Use **search** to find and link to an article. Use **list** when you need filtering and metrics.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/help-articles/search
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="query" param-type="string" required="true" deprecated="false">
+  The search term. 1–512 characters. Matched case-insensitively as a substring of the title, content, or excerpt.
+</ParamField>
+
+<ParamField body="published_only" param-type="boolean" required="false" deprecated="false">
+  When `true`, return only articles a visitor could see — `status_code: "published"` **and** `show_on_portal: true`. Defaults to `false`, which searches everything.
+</ParamField>
+
+<ParamField body="limit" param-type="integer" required="false" deprecated="false">
+  Number of items per page. Min 1, max 100. Defaults to 25.
+</ParamField>
+
+<ParamField body="cursor" param-type="string" required="false" deprecated="false">
+  Opaque pagination cursor returned by the previous page. Omit for the first page.
+</ParamField>
+
+<Callout kind="info">
+  This is **keyword matching, not semantic search** — the same engine that powers your customer-facing help center search. Results carry no relevance score and are ordered by most recently updated. A query of `"reset"` matches `"password reset"` but not `"forgot my login"`.
+</Callout>
+
+## Returns
+
+The standard [cursor-paginated envelope](/api-reference/pagination). Each item is a search hit:
+
+<ResponseField name="id" field-type="string" required="true" deprecated="false">
+  UUID of the matching article.
+</ResponseField>
+
+<ResponseField name="title" field-type="string" required="true" deprecated="false">
+  The article's title.
+</ResponseField>
+
+<ResponseField name="slug" field-type="string" required="true" deprecated="false">
+  The article's slug — the last segment of its public URL.
+</ResponseField>
+
+<ResponseField name="excerpt" field-type="string" required="false" deprecated="false">
+  Short summary suitable for a result row. May be `null`.
+</ResponseField>
+
+<ResponseField name="status_code" field-type="string" required="true" deprecated="false">
+  `"draft"` or `"published"` — so you can flag hits that aren't live.
+</ResponseField>
+
+<ResponseField name="show_on_portal" field-type="boolean" required="true" deprecated="false">
+  Whether the article may appear publicly.
+</ResponseField>
+
+<ResponseField name="collection" field-type="object" required="false" deprecated="false">
+  The hit's collection — `id`, `name`, `slug`. Always present.
+</ResponseField>
+
+<ResponseField name="category" field-type="object" required="false" deprecated="false">
+  The hit's category — `id`, `name`, `slug`, `collection_id`. `null` for an article filed directly in a collection.
+</ResponseField>
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/help-articles/search \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "query": "reset password",
+      "published_only": true,
+      "limit": 10
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/help-articles/search",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        query: "reset password",
+        published_only: true,
+        limit: 10,
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const { items } = await res.json();
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/help-articles/search",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "query": "reset password",
+          "published_only": True,
+          "limit": 10,
+      },
+  )
+  resp.raise_for_status()
+  hits = resp.json()["items"]
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "items": [
+    {
+      "id": "aa1c3ef8-b8cd-cd15-01ba-77bb77bb77bb",
+      "title": "Reset your password",
+      "slug": "reset-your-password",
+      "excerpt": "How to reset your password from the sign-in screen.",
+      "status_code": "published",
+      "show_on_portal": true,
+      "collection": {
+        "id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+        "name": "Getting Started",
+        "slug": "getting-started"
+      },
+      "category": {
+        "id": "884c3ef8-b8cd-cd15-01ba-44bb44bb44bb",
+        "name": "Account",
+        "slug": "account",
+        "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb"
+      }
+    }
+  ],
+  "has_next_page": false,
+  "cursor": null
+}
+```
+
+## Suggesting articles inside your own product
+
+A common use: when a user opens your support form, search the Help Center for their subject line and offer the top hits before they file a ticket. Set `published_only: true` so drafts never leak to end users.
+
+```javascript
+async function suggestArticles(subject, apiKey, portalOrigin) {
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/help-articles/search",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: apiKey,
+        query: subject,
+        published_only: true,
+        limit: 3,
+      }),
+    }
+  );
+  if (!res.ok) return [];
+
+  const { items } = await res.json();
+  return items.map((hit) => {
+    const parts = [hit.collection.slug];
+    if (hit.category) parts.push(hit.category.slug);
+    parts.push(hit.slug);
+    return {
+      title: hit.title,
+      excerpt: hit.excerpt,
+      url: `${portalOrigin}/help/${parts.join("/")}`,
+    };
+  });
+}
+```
+
+<Callout kind="alert">
+  Never call this from browser code with `published_only` unset — an unrestricted search returns drafts and unlisted articles, and the request also carries your API key. Proxy it through your own backend.
+</Callout>
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `403` | `{"detail":{"error":"The Help Center is not enabled on your current plan..."}}` | Your plan does not include the `knowledgebase` feature. |
+| `422` | Validation error envelope | `query` missing or empty, `query` longer than 512 characters, or `limit` outside 1–100. |
+
+See [Errors](/api-reference/errors) for the full envelope shape and a recommended client-side handler.

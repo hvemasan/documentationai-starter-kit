@@ -1,0 +1,123 @@
+---
+title: "Update a help collection"
+description: "Patch a help collection's name, slug, description, icon, or color. Only present fields are applied."
+---
+
+Updates a help collection. The endpoint is patch-style: any subset of the optional body fields may be present, and only those fields are applied. Omitted fields keep their current values.
+
+<Callout kind="info">
+  This endpoint sets values — it cannot clear them. Passing `null` for a field is treated the same as omitting it, so there is no way to unset `description`, `icon`, or `color` via the API.
+</Callout>
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/help-collections/update
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="collection_id" param-type="string" required="true" deprecated="false">
+  UUID of the collection to update. Must belong to your organization.
+</ParamField>
+
+<ParamField body="name" param-type="string" required="false" deprecated="false">
+  New display name. 1–512 characters.
+</ParamField>
+
+<ParamField body="slug" param-type="string" required="false" deprecated="false">
+  New URL-safe identifier. Unlike create, a slug already in use is **rejected with `400`** rather than auto-suffixed — a rename means that exact slug. Max 512 characters.
+</ParamField>
+
+<ParamField body="description" param-type="string" required="false" deprecated="false">
+  New supporting text. Max 512 characters.
+</ParamField>
+
+<ParamField body="icon" param-type="string" required="false" deprecated="false">
+  New icon identifier. Max 512 characters.
+</ParamField>
+
+<ParamField body="color" param-type="string" required="false" deprecated="false">
+  New hex color string. Max 50 characters.
+</ParamField>
+
+<Callout kind="alert">
+  Changing a collection's `slug` changes the public URL of **every article inside it** — help center URLs are built as `/help/{collection_slug}/{category_slug?}/{article_slug}`. Existing links to those articles will break.
+</Callout>
+
+## Returns
+
+```json
+{ "success": true }
+```
+
+## Example request
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/help-collections/update \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+      "name": "Billing, Plans & Invoices",
+      "color": "#4E938A"
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/help-collections/update",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        collection_id: "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+        name: "Billing, Plans & Invoices",
+        color: "#4E938A",
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/help-collections/update",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb",
+          "name": "Billing, Plans & Invoices",
+          "color": "#4E938A",
+      },
+  )
+  resp.raise_for_status()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "success": true
+}
+```
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `400` | `{"detail":"Slug already exists"}` | The explicit `slug` is already used by another collection in your organization. |
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `403` | `{"detail":{"error":"The Help Center is not enabled on your current plan..."}}` | Your plan does not include the `knowledgebase` feature. |
+| `404` | `{"detail":{"error":"help collection not found"}}` | No such collection, or it belongs to another organization. |
+| `422` | Validation error envelope | `collection_id` is not a valid UUID, or a field has the wrong type. |
+
+See [Errors](/api-reference/errors) for the full envelope shape and a recommended client-side handler.

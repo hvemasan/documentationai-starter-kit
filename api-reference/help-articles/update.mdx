@@ -1,0 +1,177 @@
+---
+title: "Update a help article"
+description: "Patch a help article — edit content, publish it, re-file it under a different parent, or replace its related links."
+---
+
+Updates a help article. The endpoint is patch-style: any subset of the optional body fields may be present, and only those fields are applied. Omitted fields keep their current values.
+
+## Endpoint
+
+```
+POST https://api.productbridge.io/api/external/v1/help-articles/update
+```
+
+## Arguments
+
+<ParamField body="api_key" param-type="string" required="true" deprecated="false">
+  Your organization's public API key. See [Authentication](/api-reference/authentication).
+</ParamField>
+
+<ParamField body="article_id" param-type="string" required="true" deprecated="false">
+  UUID of the article to update. Must belong to your organization.
+</ParamField>
+
+<ParamField body="category_id" param-type="string" required="false" deprecated="false">
+  Re-file the article under this category, clearing any `collection_id` parent. Send at most one of `category_id` / `collection_id`; omit both to leave the parent unchanged.
+</ParamField>
+
+<ParamField body="collection_id" param-type="string" required="false" deprecated="false">
+  Re-file the article directly under this collection, clearing any `category_id` parent.
+</ParamField>
+
+<ParamField body="title" param-type="string" required="false" deprecated="false">
+  New title. 1–512 characters.
+</ParamField>
+
+<ParamField body="content" param-type="string" required="false" deprecated="false">
+  New body as HTML. Replaces the existing body entirely.
+</ParamField>
+
+<ParamField body="slug" param-type="string" required="false" deprecated="false">
+  New URL-safe identifier. A slug already in use is **rejected with `400`** rather than auto-suffixed. Max 512 characters.
+</ParamField>
+
+<ParamField body="excerpt" param-type="string" required="false" deprecated="false">
+  New summary for listings and search results. Max 512 characters.
+</ParamField>
+
+<ParamField body="status_code" param-type="string" required="false" deprecated="false">
+  Either `"draft"` or `"published"`. Moving to `"published"` for the first time stamps `published_at`.
+</ParamField>
+
+<ParamField body="show_on_portal" param-type="boolean" required="false" deprecated="false">
+  Whether the article may appear publicly.
+</ParamField>
+
+<ParamField body="favourite" param-type="boolean" required="false" deprecated="false">
+  Internal star for your team. Never shown to customers.
+</ParamField>
+
+<ParamField body="related_article_ids" param-type="array" required="false" deprecated="false">
+  **Replaces** the curated related-article list, in the order given. Send `[]` to clear it; omit the field to leave it untouched. Every id must be an article in your organization.
+</ParamField>
+
+<Callout kind="info">
+  Apart from `related_article_ids` (where `[]` clears the list), this endpoint sets values rather than clearing them. Passing `null` for a field is treated the same as omitting it.
+</Callout>
+
+## Publishing and unpublishing
+
+| Goal | Send |
+|---|---|
+| Publish a draft | `{"status_code": "published"}` |
+| Revert to draft | `{"status_code": "draft"}` |
+| Unlist without unpublishing | `{"show_on_portal": false}` |
+| Relist | `{"show_on_portal": true}` |
+
+`published_at` is stamped the **first** time an article becomes published and is not reset by later draft/publish cycles, so it keeps meaning "when this was first published".
+
+## Returns
+
+```json
+{ "success": true }
+```
+
+## Example request
+
+Publishing a draft and setting its related articles:
+
+<CodeGroup show-lines="true" tabs="curl,JavaScript,Python">
+  ```bash
+  curl -X POST https://api.productbridge.io/api/external/v1/help-articles/update \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "api_key": "pb_YOUR_PUBLIC_API_KEY",
+      "article_id": "aa1c3ef8-b8cd-cd15-01ba-77bb77bb77bb",
+      "status_code": "published",
+      "related_article_ids": [
+        "bb2c3ef8-b8cd-cd15-01ba-88bb88bb88bb",
+        "cc3c3ef8-b8cd-cd15-01ba-99bb99bb99bb"
+      ]
+    }'
+  ```
+
+  ```javascript
+  const res = await fetch(
+    "https://api.productbridge.io/api/external/v1/help-articles/update",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: process.env.PRODUCTBRIDGE_API_KEY,
+        article_id: "aa1c3ef8-b8cd-cd15-01ba-77bb77bb77bb",
+        status_code: "published",
+        related_article_ids: [
+          "bb2c3ef8-b8cd-cd15-01ba-88bb88bb88bb",
+          "cc3c3ef8-b8cd-cd15-01ba-99bb99bb99bb",
+        ],
+      }),
+    }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  ```
+
+  ```python
+  import os, httpx
+
+  resp = httpx.post(
+      "https://api.productbridge.io/api/external/v1/help-articles/update",
+      json={
+          "api_key": os.environ["PRODUCTBRIDGE_API_KEY"],
+          "article_id": "aa1c3ef8-b8cd-cd15-01ba-77bb77bb77bb",
+          "status_code": "published",
+          "related_article_ids": [
+              "bb2c3ef8-b8cd-cd15-01ba-88bb88bb88bb",
+              "cc3c3ef8-b8cd-cd15-01ba-99bb99bb99bb",
+          ],
+      },
+  )
+  resp.raise_for_status()
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "success": true
+}
+```
+
+## Re-filing an article
+
+Sending a parent switches it and clears the other, so an article never has two:
+
+```json
+{
+  "api_key": "pb_YOUR_PUBLIC_API_KEY",
+  "article_id": "aa1c3ef8-b8cd-cd15-01ba-77bb77bb77bb",
+  "collection_id": "553c3ef8-b8cd-cd15-01ba-12bb12bb12bb"
+}
+```
+
+The article is now filed directly in the collection and its `category_id` becomes `null`. Sending both parents in one call is a `422`.
+
+## Errors
+
+| Status | Body | Cause |
+|---|---|---|
+| `400` | `{"detail":"Slug already exists"}` | The explicit `slug` is already used by another article in your organization. |
+| `400` | `{"detail":{"error":"related article ... not found in this organization"}}` | A `related_article_ids` entry doesn't exist or belongs to another organization. |
+| `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
+| `403` | `{"detail":{"error":"The Help Center is not enabled on your current plan..."}}` | Your plan does not include the `knowledgebase` feature. |
+| `404` | `{"detail":{"error":"help article not found"}}` | No such article, or it belongs to another organization. |
+| `404` | `{"detail":{"error":"help category not found"}}` | The target `category_id` doesn't exist, or belongs to another organization. |
+| `422` | Validation error envelope | Both parents sent, `article_id` not a valid UUID, or `status_code` not `"draft"` / `"published"`. |
+
+See [Errors](/api-reference/errors) for the full envelope shape and a recommended client-side handler.
