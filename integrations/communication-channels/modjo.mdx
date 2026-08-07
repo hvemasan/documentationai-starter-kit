@@ -1,0 +1,183 @@
+---
+title: Modjo Integration
+description: >-
+  Connect ProductBridge to Modjo to automatically turn call transcripts into
+  feedback — capturing product requests and pain points from your sales and
+  customer-success calls, in real time.
+---
+
+## Overview
+
+Modjo is a conversation-intelligence platform that records and transcribes your sales and customer-success calls. The Modjo integration connects your Modjo workspace to ProductBridge and automatically turns the product feedback voiced on those calls into feedback posts — so insights from customer conversations never get lost.
+
+Once connected, ProductBridge reads your call transcripts (read-only) and runs each conversation through an AI pipeline. When a customer mentions a feature request, a missing capability, a limitation, or a UX complaint, ProductBridge extracts it, deduplicates it against your existing feedback, and creates a new post or consolidates it into a matching one. Pure sales talk — pricing, scheduling, and rapport — is ignored.
+
+This is a **one-way ingestion** integration: feedback flows from Modjo into ProductBridge, and nothing is written back to Modjo. Unlike Gong, Modjo supports webhooks, so calls are analyzed **the moment Modjo finishes transcribing them**, with a scheduled sync every 6 hours as a safety net.
+
+## Prerequisites
+
+<Callout kind="info" collapsed="false">
+  - A Modjo account with **Administrator** or **Manager** permissions (required to create an API key)
+
+  - A ProductBridge organization with at least one feedback board configured
+
+  Modjo does not offer an OAuth app for its REST API, so you connect with a workspace API key. It takes about a minute to create.
+</Callout>
+
+## Step 1 — Create a Modjo API key
+
+<Steps>
+  <Step title="Sign in to Modjo" icon="log-in" title-type="p">
+    Go to [app.modjo.ai](https://app.modjo.ai) and sign in with an account that has **Administrator** or **Manager** permissions. Without one of those roles, the API key option is not available.
+  </Step>
+
+  <Step title="Open the Public API card" icon="key" title-type="p">
+    Go to **Settings → Integrations**, then open the **Public API** card. You can jump straight there: [app.modjo.ai/settings/integrations/modjo_api_key](https://app.modjo.ai/settings/integrations/modjo_api_key)
+  </Step>
+
+  <Step title="Create a new API key" icon="plus" title-type="p">
+    Click **Create a new API key**. There is nothing to fill in — Modjo generates the key for you.
+  </Step>
+
+  <Step title="Copy the key immediately" icon="clipboard-copy" title-type="p">
+    **Copy the key before closing the dialog.** Modjo does not store it and cannot show it to you again. If you lose it, delete the key and generate a new one.
+  </Step>
+</Steps>
+
+## Step 2 — Connect in ProductBridge
+
+<Steps>
+  <Step title="Open the Integrations catalog" icon="layout-dashboard" title-type="p">
+    Sign in to your ProductBridge dashboard, click **Connect Sources** in the sidebar, and select **Modjo**.
+  </Step>
+
+  <Step title="Paste your API key" icon="key" title-type="p">
+    Paste the key from Step 1 into the **API Key** field. ProductBridge validates it against Modjo before saving.
+  </Step>
+
+  <Step title="Choose a Historical Sync Window" icon="history" title-type="p">
+    Optionally enable **Import historical data** and pick a lookback window between **1 and 30 days**. When enabled, ProductBridge backfills your existing call transcripts from that window right after you connect.
+  </Step>
+
+  <Step title="Confirm Connection" icon="check-circle" title-type="p">
+    Click **Connect Modjo**. ProductBridge encrypts your key, registers a webhook in your Modjo workspace automatically, and the status updates to **Connected**. If you enabled historical sync, the backfill begins immediately in the background.
+  </Step>
+</Steps>
+
+## Step 3 — Enable realtime sync (if prompted)
+
+Modjo assigns every webhook a security token and sends it with each delivery, but it does not return that token through its API. ProductBridge can create the webhook for you, but it cannot read the token — so you copy it across once.
+
+<Callout kind="info" collapsed="false">
+  **Skip this step unless ProductBridge asks for it.** If the integration page shows **Enable realtime sync**, follow the steps below. Otherwise you're already done.
+</Callout>
+
+<Steps>
+  <Step title="Open the Webhook card in Modjo" icon="webhook" title-type="p">
+    In Modjo, go to **Settings → Integrations** and open the **Webhook** card: [app.modjo.ai/settings/integrations/modjo_webhook](https://app.modjo.ai/settings/integrations/modjo_webhook)
+  </Step>
+
+  <Step title="Find the ProductBridge webhook" icon="search" title-type="p">
+    Look for the webhook named **ProductBridge**, subscribed to the `call_transcribed` and `call_summarized` events. ProductBridge already created it — **do not create a second one**.
+  </Step>
+
+  <Step title="Copy the security token" icon="clipboard-copy" title-type="p">
+    Copy the security token shown for that webhook.
+  </Step>
+
+  <Step title="Paste it into ProductBridge" icon="check-circle" title-type="p">
+    Back in **Connect Sources → Modjo**, paste it into the **Webhook secret** field and click **Save**. Realtime sync activates immediately and the prompt disappears.
+  </Step>
+</Steps>
+
+<Callout kind="info" collapsed="false">
+  This step is **optional**. Until you complete it, ProductBridge rejects unverified webhook deliveries and imports your calls on the scheduled sync every 6 hours instead. You lose realtime latency, not data.
+</Callout>
+
+## What Happens After Connect
+
+Immediately after connection, ProductBridge:
+
+- Encrypts and stores your Modjo API key
+
+- Registers a webhook in your Modjo workspace for the `call_transcribed` and `call_summarized` events
+
+- Runs a **historical backfill** over your chosen lookback window (if historical sync was enabled), queuing each call's transcript for AI analysis
+
+- Begins listening for **realtime webhook events**, with a **sync every 6 hours** as a reconciliation net
+
+Each call becomes a single item that flows through ProductBridge's AI pipeline. Calls that contain product feedback become posts; the rest are discarded.
+
+## How Feedback Is Processed
+
+Every Modjo call runs through the same AI pipeline used across ProductBridge's communication-channel integrations:
+
+| Stage           | What Happens                                                                                                                                                                  |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Normalize**   | The transcript and call participants are combined into a structured format. Modjo **contacts** (external participants) are labelled as the customer; Modjo **users** are your internal team |
+| **Detect**      | An LLM decides whether the call contains actionable product feedback. Sales and commercial talk — pricing, scheduling, rapport — is treated as not feedback                    |
+| **Extract**     | An LLM extracts a title, description, sentiment, priority, feature area, and the specific pain points the customer raised                                                       |
+| **Deduplicate** | Semantic search (Voyage AI + Qdrant) checks for similar existing posts. If similarity is high enough (≥ 0.85), the call is consolidated into the existing post — no duplicate  |
+| **Organize**    | An LLM assigns the right board, category, and tags                                                                                                                             |
+
+<Callout kind="info" collapsed="false">
+  Modjo feedback is tagged with `source: modjo` and `source_type: integration`. The original Modjo call link is stored in the post's metadata, so you can jump from a feedback post back to the source call.
+</Callout>
+
+Modjo transcribes calls in many languages. ProductBridge analyzes the transcript in its original language and always writes the resulting feedback post in English.
+
+## Privacy & Security
+
+- **Workspace-scoped API key** — One Administrator or Manager creates a key that covers the whole workspace. The integration keeps working when individual team members change roles or leave.
+
+- **Only completed calls are ingested** — ProductBridge skips calls still processing, calls that failed to process, and calls whose transcript was removed by your Modjo data-retention policy.
+
+- **Read-only** — The integration only reads call data. It never modifies calls or writes any data back to Modjo, apart from registering (and later removing) its own webhook.
+
+- **Encrypted credentials** — Your API key is encrypted at rest using Fernet symmetric encryption with a server-managed key.
+
+- **Verified webhooks** — Every delivery must present the security token Modjo issued for the webhook. Unverified deliveries are rejected; the scheduled sync still imports those calls.
+
+- **Organization-scoped access** — Ingested feedback lives inside the single ProductBridge organization that connected the integration and is governed by role-based access control. Each Modjo workspace can be linked to exactly one organization.
+
+## Limitations
+
+- **Transcript required** — Only calls that have a transcript in Modjo are analyzed. Calls awaiting transcription are picked up once Modjo finishes, or on a later sync.
+
+- **Backfill window** — Historical backfill covers only your chosen lookback window (1–30 days). Older calls are not imported retroactively.
+
+- **One Modjo workspace per organization** — Connect a different ProductBridge organization for each Modjo workspace.
+
+- **API key, not OAuth** — Modjo's OAuth support currently applies only to its MCP server, not to the REST API that serves calls, transcripts, and webhooks. Connecting therefore requires an API key.
+
+- **Rate limits** — Modjo allows 100 API requests per minute per key. Large backfills are paced to stay within that budget and may take a few minutes.
+
+## Disconnect
+
+To disconnect Modjo, open **Connect Sources > Modjo** and click **Disconnect**. ProductBridge:
+
+- Deletes the webhook it registered in your Modjo workspace
+
+- Marks the integration as `disconnected`
+
+- Removes the stored Modjo API key
+
+- Stops syncing new calls
+
+Existing feedback posts remain in ProductBridge — only the live connection is removed. You can also delete the API key in Modjo afterwards.
+
+<Expandable title="Troubleshooting" default-open="false">
+  - **"Invalid Modjo API key"** — Confirm you copied the whole key and that it hasn't been deleted in Modjo. Keys are only shown once at creation; if you're unsure, generate a new one and reconnect.
+
+  - **ProductBridge keeps asking for the webhook secret** — This is expected when Modjo doesn't return the secret through its API. Copy it from **Settings → Integrations → Webhook** in Modjo and paste it in. Until then, calls still arrive on the 6-hour sync.
+
+  - **New calls appear slowly rather than instantly** — Realtime requires the webhook secret (Step 3). Without it, calls arrive on the scheduled sync instead.
+
+  - **A call didn't create feedback** — Not every call contains product feedback. The AI pipeline only creates posts when it detects actionable product input; pure sales, pricing, and scheduling conversations are discarded by design.
+
+  - **Duplicate feedback** — ProductBridge deduplicates automatically using semantic similarity. When a similar post already exists, the call is consolidated into it instead of creating a duplicate.
+
+  - **A call is missing entirely** — Check its status in Modjo. Calls that are still processing, that failed to process, or whose transcript was deleted under a retention policy are intentionally skipped.
+
+  - **Connection stopped working** — If the API key was revoked in Modjo, reconnect from **Connect Sources > Modjo** with a fresh key.
+</Expandable>
