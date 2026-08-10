@@ -3,7 +3,7 @@ title: Targeting & Triggers
 description: >-
   Control exactly who sees a survey, on which pages, when it fires, and how
   often it can reappear — with audience segments, identity restrictions, URL
-  rules, auto and event triggers, and frequency caps.
+  rules, auto, event, and manual triggers, and frequency caps.
 ---
 
 ## The Eligibility Model
@@ -50,12 +50,15 @@ When you choose specific pages, add one or more rules. Each rule is either a **S
 
 The **Trigger** setting decides *when* an eligible survey appears.
 
-<Columns cols="2">
+<Columns cols="3">
   <Card title="Auto" icon="timer" href="#auto-trigger" horizontal={false}>
     Shows on page load, after an optional delay. Best for broad, always-on surveys like a recurring NPS.
   </Card>
   <Card title="Event" icon="zap" href="#event-trigger" horizontal={false}>
     Shows when your app fires a named event. Best for moment-based surveys like CSAT after a ticket closes.
+  </Card>
+  <Card title="Manual" icon="mouse-pointer-click" href="#manual-trigger" horizontal={false}>
+    Never shown automatically — appears only when your app calls `startSurvey()`. Best for a "Give feedback" button or a custom moment in your UI.
   </Card>
 </Columns>
 
@@ -75,6 +78,24 @@ ProductBridgeSurveys.track('ticket_closed');
 ```
 
 The **Delay (seconds)** field still applies — it's the wait *after* the event fires before the survey shows. See [Installation & SDK](/core-concepts/surveys/installation) for the full runtime API.
+
+<a id="manual-trigger"></a>
+### Manual trigger
+
+The survey is **never shown automatically** — it appears only when your app explicitly asks for it by ID. Choose **Manual** in the editor, then call `startSurvey()` from your own code at the moment you want it:
+
+```javascript
+// Show this specific survey on demand — e.g. from a "Give feedback" button
+ProductBridgeSurveys.startSurvey('SURVEY_ID');
+```
+
+Use it for surveys you want to fire from your own UI — a "Give feedback" button, the end of a custom flow, or any moment that isn't a simple page load or a named event. Find the survey's ID in the editor's **Survey ID** section (or next to **Share by link** in a survey's analytics).
+
+<Callout kind="info">
+  A manual survey still honors **every other eligibility rule** — audience, the identified-users restriction, location, and frequency caps all apply. `startSurvey()` only opens the door; it doesn't bypass targeting. The **Delay (seconds)** field is the wait *after* `startSurvey()` is called before the card appears.
+</Callout>
+
+See [Installation & SDK](/core-concepts/surveys/installation#runtime-api) for the full runtime API, including `identify()` and `reset()`.
 
 ## Frequency
 
@@ -99,7 +120,7 @@ A recurring window (for example, "show again after 90 days") is what turns a one
     Leave it on all pages, or add show/hide URL rules for specific parts of your app.
   </Step>
   <Step title="Choose the trigger" icon="zap" title-type="h3">
-    Auto for always-on surveys, or event for moment-based ones — with a delay if needed.
+    Auto for always-on surveys, event for moment-based ones, or manual to fire it yourself with `startSurvey()` — with a delay if needed.
   </Step>
   <Step title="Cap the frequency" icon="repeat" title-type="h3">
     Decide what happens after a user responds or closes, so nobody is over-surveyed.

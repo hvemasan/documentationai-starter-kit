@@ -54,9 +54,9 @@ Controls how the survey displays and when it can reappear.
 |---|---|
 | Display | **Popover** (a card in the bottom corner) or **Modal** (centered, dims the page). |
 | Status | **Draft**, **Published**, or **Archived**. Only published surveys are shown to users. |
-| Trigger | **Auto** (on page load) or **Event** (when your app fires a named event). |
-| Event name | The event that triggers the survey — used with the SDK's `track()` call. |
-| Delay (seconds) | How long to wait after load or the event before showing the survey. `0` shows it immediately. |
+| Trigger | **Auto** (on page load), **Event** (when your app fires a named event), or **Manual** (only when your app calls `startSurvey()`). See [Targeting & Triggers](/core-concepts/surveys/targeting-and-triggers#triggers). |
+| Event name | The event that triggers the survey — used with the SDK's `track()` call. Applies to the **Event** trigger. |
+| Delay (seconds) | How long to wait after load, the event, or the `startSurvey()` call before showing the survey. `0` shows it immediately. |
 
 The **Frequency** controls decide how often a user can see the survey after they interact with it:
 
