@@ -3,6 +3,19 @@ title: Custom Email & SMTP
 description: Send ProductBridge emails from your own domain by connecting your SMTP server — so notifications, assignments, and changelog announcements reach your customers from your brand.
 ---
 
+
+## Where to find it
+
+<Card title="Open SMTP settings" href="https://app.productbridge.io/dashboard/settings/brand?tab=email" icon="mail" horizontal="true">
+  Sidebar → **Settings** → Organization → **Brand Settings** → **SMTP** tab
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/brand?tab=email](https://app.productbridge.io/dashboard/settings/brand?tab=email)
+
+**In-app path:** Sidebar → **Settings** → Organization → **Brand Settings** → **SMTP** tab
+
+**Requires:** `organization:manage`, and a plan that includes the `email_notifications` feature.
+
 ## Send Email From Your Own Domain
 
 By default, ProductBridge sends emails through our shared system mailer. To send from your own domain, connect your own SMTP server (Google Workspace, Amazon SES, Postmark, SendGrid, Mailgun, etc.) under **Custom SMTP**.
@@ -23,7 +36,7 @@ Use this option to route ProductBridge emails through your own SMTP server. Choo
 
 <Steps>
   <Step title="Open SMTP settings" icon="server">
-    Go to **Settings → Brand Settings**, open the **SMTP** tab, and turn on the **Custom SMTP** switch.
+    Go to [**Settings → Brand Settings → SMTP**](https://app.productbridge.io/dashboard/settings/brand?tab=email) and turn on the **Custom SMTP** switch. Brand Settings has three tabs — **General**, **SEO**, and **SMTP** — and the SMTP tab carries a status badge showing whether your connection is active.
   </Step>
   <Step title="Enter your SMTP credentials" icon="key">
     Provide:

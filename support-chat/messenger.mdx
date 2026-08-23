@@ -6,6 +6,28 @@ description: >-
   anonymous visitors when you want it to be.
 ---
 
+
+## Where to find it
+
+<Card title="Open Messenger settings" href="https://app.productbridge.io/dashboard/settings/messenger" icon="message-circle" horizontal="true">
+  Sidebar → **Settings** → Modules → **Messenger**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/messenger](https://app.productbridge.io/dashboard/settings/messenger)
+
+**In-app path:** Sidebar → **Settings** → Modules → **Messenger**
+
+**Your standalone messenger:** `https://app.productbridge.io/messenger/{organizationId}`
+
+**Requires:** a plan that includes the `support` feature, plus `support:view` to read conversations and `support:manage` to configure them.
+
+| Goal | Direct link |
+|------|-------------|
+| Answer conversations (the inbox) | [`/dashboard/support`](https://app.productbridge.io/dashboard/support) |
+| Support setup — agents, teams, labels, macros, SLA, email channels | [`/dashboard/settings/support`](https://app.productbridge.io/dashboard/settings/support) |
+| Messenger look, behaviour, and install snippet | [`/dashboard/settings/messenger`](https://app.productbridge.io/dashboard/settings/messenger) |
+| The AI agent that answers for you | [`/dashboard/support/workflows/agent`](https://app.productbridge.io/dashboard/support/workflows/agent) |
+
 ## Overview
 
 The Messenger is what your customers see. It opens from a floating launcher bubble on your **public portal** and — once [installed](/support-chat/messenger-settings#installation) — on **any website** you embed it on. The same messenger, the same conversations, wherever the customer happens to be.
@@ -75,7 +97,7 @@ When an agent resolves a conversation, the customer sees a short **satisfaction 
 - **Roadmap sorting is per-page.** The Roadmap tab sorts the loaded window of posts client-side; extremely long roadmaps may not show a strict global ordering.
 
 <Expandable title="Troubleshooting" default-open="false">
-  - **The launcher doesn't appear on my site.** Check that the embed snippet is installed and that the messenger isn't disabled in **Settings → Messenger**. Snippets are cached by CDNs — allow up to a day for script updates to propagate to embedded sites.
+  - **The launcher doesn't appear on my site.** Check that the embed snippet is installed and that the messenger isn't disabled in [**Settings → Messenger**](https://app.productbridge.io/dashboard/settings/messenger). Snippets are cached by CDNs — allow up to a day for script updates to propagate to embedded sites.
 
   - **A visitor says they can't start a conversation.** You've likely turned off **Allow starting conversations** for their audience in **Settings → Messenger → Conversations**, or anonymous participation is disabled and they aren't signed in.
 

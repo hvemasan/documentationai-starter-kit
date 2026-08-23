@@ -5,6 +5,19 @@ description: "Verify that webhook deliveries actually came from ProductBridge us
 
 ProductBridge signs every webhook delivery with HMAC-SHA256. **Always verify the signature on incoming requests before trusting the payload** — without this check, anyone who learns or guesses your webhook URL could forge events and trigger your downstream automation.
 
+
+## Where to find it
+
+<Card title="Open API & Webhooks" href="https://app.productbridge.io/dashboard/settings/api-webhooks" icon="key" horizontal="true">
+  Sidebar → **Settings** → Connect → **API & Webhooks**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/api-webhooks](https://app.productbridge.io/dashboard/settings/api-webhooks)
+
+**In-app path:** Sidebar → **Settings** → Connect → **API & Webhooks**
+
+**Requires:** `api_key:view` / `api_key:manage` for API keys, `webhook:view` / `webhook:manage` for webhook endpoints.
+
 ## How it works
 
 When ProductBridge dispatches a webhook, it computes:
@@ -13,7 +26,7 @@ When ProductBridge dispatches a webhook, it computes:
 signature = "sha256=" + HMAC-SHA256(signing_secret, raw_request_body).hex()
 ```
 
-…and sends it in the `X-ProductBridge-Signature` header. The signing secret is the per-webhook value returned exactly once when you registered the webhook (the **Signing secret** modal shown when you add an endpoint under **Settings → Connect → API & Webhooks → Webhook endpoints**).
+…and sends it in the `X-ProductBridge-Signature` header. The signing secret is the per-webhook value returned exactly once when you registered the webhook (the **Signing secret** modal shown when you add an endpoint under [**Settings → Connect → API & Webhooks → Webhook endpoints**](https://app.productbridge.io/dashboard/settings/api-webhooks)).
 
 Your receiver verifies by computing the same HMAC with its locally-stored copy of the secret and comparing the two strings in **constant time**.
 
@@ -32,19 +45,19 @@ Your receiver verifies by computing the same HMAC with its locally-stored copy o
 ## Verification — what your code must do
 
 <Steps>
-  <Step title="Read the raw request body" icon="binary" titleType="p">
+  <Step title="Read the raw request body" icon="binary" title-type="p">
     Capture the unparsed bytes — not a re-serialized JSON object. Most frameworks parse JSON before reaching your handler; you need the original bytes the request arrived with.
   </Step>
 
-  <Step title="Compute the expected signature" icon="key" titleType="p">
+  <Step title="Compute the expected signature" icon="key" title-type="p">
     `expected = "sha256=" + HMAC-SHA256(your_stored_secret, raw_body).hex()`
   </Step>
 
-  <Step title="Compare in constant time" icon="shield-check" titleType="p">
+  <Step title="Compare in constant time" icon="shield-check" title-type="p">
     Use `crypto.timingSafeEqual` (Node.js), `hmac.compare_digest` (Python), `hmac.Equal` (Go), or `hash_equals` (PHP) to avoid timing attacks. Never use `==` for signature comparison.
   </Step>
 
-  <Step title="Reject mismatches with HTTP 401" icon="x" titleType="p">
+  <Step title="Reject mismatches with HTTP 401" icon="x" title-type="p">
     If the signature doesn't match, return 401 immediately. Don't process the body, don't log it, don't retry — treat it as a forgery attempt.
   </Step>
 </Steps>
@@ -174,15 +187,15 @@ Your receiver verifies by computing the same HMAC with its locally-stored copy o
 If a signing secret leaks, **revoke the webhook and create a new one**. There is no in-place rotation:
 
 <Steps>
-  <Step title="Revoke the compromised webhook" icon="trash-2" titleType="p">
+  <Step title="Revoke the compromised webhook" icon="trash-2" title-type="p">
     In the dashboard, click **Revoke** on the affected row. Delivery stops immediately; ProductBridge will not POST to that URL again.
   </Step>
 
-  <Step title="Create a fresh webhook with the same URL" icon="plus" titleType="p">
+  <Step title="Create a fresh webhook with the same URL" icon="plus" title-type="p">
     Add a new webhook subscription pointing at the same URL. The dashboard will return a new signing secret in the create modal.
   </Step>
 
-  <Step title="Update your receiver's stored secret" icon="key" titleType="p">
+  <Step title="Update your receiver's stored secret" icon="key" title-type="p">
     Replace the old `PRODUCTBRIDGE_WEBHOOK_SECRET` value with the new one in your secrets manager / env vars and redeploy.
   </Step>
 </Steps>

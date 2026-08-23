@@ -3,6 +3,19 @@ title: Members & Roles
 description: Add your team to ProductBridge, assign roles to control who can do what, and manage workspace membership over time.
 ---
 
+
+## Where to find it
+
+<Card title="Open Team Members" href="https://app.productbridge.io/dashboard/settings/team" icon="users" horizontal="true">
+  Sidebar → **Settings** → Organization → **Team Members**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/team](https://app.productbridge.io/dashboard/settings/team)
+
+**In-app path:** Sidebar → **Settings** → Organization → **Team Members**
+
+**Requires:** `member:view` to see the list, `member:manage` to add, remove, or change a role.
+
 ## Workspace Membership
 
 Every ProductBridge workspace has a set of **team members** — your internal users who manage feedback, integrations, and the public portal. Team members are distinct from [end users](/setup/end-users), who are the customers submitting feedback through your portal.
@@ -11,12 +24,14 @@ Each team member has one of four roles, granting different levels of access.
 
 ## Roles
 
-| Role | What They Can Do |
-|------|-------------------|
-| **Owner** | Full access to everything. |
-| **Admin** | Manage members and settings. Cannot manage billing. |
-| **Editor** | Create and edit content. Cannot manage team or settings. |
-| **Viewer** | Read-only access to all content. |
+ProductBridge ships four built-in roles. Each is a named set of permission codes, and the permission code is what the backend actually checks.
+
+| Role | What They Can Do | Permission set |
+|------|-------------------|----------------|
+| **Owner** | Full access to everything, including billing. | Every permission |
+| **Admin** | Everything an Owner can do except change the plan or buy credits. | Every permission except `billing:manage` |
+| **Editor** | Create and edit content — feedback, roadmap, changelog, help articles, comments — plus vote and react. Cannot change organization settings, members, roles, integrations, or billing. | Every `:view`, plus `:manage` on content domains only |
+| **Viewer** | Read-only across the whole workspace. | Every `:view` |
 
 <Callout kind="info">
   Every workspace has an Owner — the user who created it. Owner is not an assignable role: you can't select it when adding a member or changing someone's role.
@@ -26,7 +41,7 @@ Each team member has one of four roles, granting different levels of access.
 
 <Steps>
   <Step title="Open Team Members settings" icon="users">
-    Go to **Settings → Organization → Team Members**.
+    Go to [**Settings → Organization → Team Members**](https://app.productbridge.io/dashboard/settings/team).
   </Step>
   <Step title="Click Add Member" icon="user-plus">
     In the **Add Team Member** modal, enter the person's email address and select their role (Admin, Editor, or Viewer).
@@ -66,7 +81,7 @@ Team members with member-management permission (Owners and Admins) can change an
 
 <Steps>
   <Step title="Open the member" icon="user">
-    Go to **Settings → Team Members** and find the team member in the list.
+    Go to [**Settings → Team Members**](https://app.productbridge.io/dashboard/settings/team) and find the team member in the list.
   </Step>
   <Step title="Update the role" icon="shield">
     Click the role dropdown next to their name and select the new role. Changes take effect immediately.
@@ -75,14 +90,14 @@ Team members with member-management permission (Owners and Admins) can change an
 
 A few rules:
 
-- Assignable roles are **Admin**, **Editor**, and **Viewer** — Owner can't be assigned from the dashboard
+- The role dropdown lists every role that exists for your organization **except Owner** — Owner can't be assigned from the dashboard, and an Owner's own row has no actions menu
 - Role changes require member-management permission, so Editors and Viewers can't change roles
 
 ## Deactivate or Remove a Member
 
 Owners can temporarily suspend a member's access without removing them:
 
-1. Go to **Settings → Team Members** and open the member's actions menu
+1. Go to [**Settings → Team Members**](https://app.productbridge.io/dashboard/settings/team) and open the member's actions menu
 2. Click **Deactivate Member** and confirm
 3. To restore access later, use **Activate Member**
 
@@ -105,7 +120,7 @@ A few capabilities you might expect that don't exist today:
 - **Bulk invite** — members are added one at a time
 - **Resending invites** — a pending invite can only be canceled; add the member again to send a fresh one
 - **Per-board or per-project role scoping** — roles are workspace-wide; an Editor is an Editor everywhere in the workspace
-- **Custom roles** — only Owner / Admin / Editor / Viewer; no custom permission sets
+- **Creating custom roles from the dashboard** — the platform supports custom roles with their own permission sets, and any that exist for your organization appear in the role dropdown and can be assigned. There is no screen for creating or editing one yet; contact `help@productbridge.io` if you need a custom role set up
 
 <Callout kind="info">
   Team members **can** control their own notification delivery. Open the bell inbox, click the gear icon, and use **Channel preferences** to switch each notification event on or off per channel (In-app / Email). See [In-App Notifications](/notifications/in-app).

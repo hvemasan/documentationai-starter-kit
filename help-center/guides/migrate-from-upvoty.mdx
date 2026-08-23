@@ -3,6 +3,28 @@ title: Migrating from Upvoty
 description: Step-by-step guide to export your Upvoty feedback and import it into ProductBridge using the CSV import tool.
 ---
 
+
+## Where to find it
+
+<Card title="Open Import Data" href="https://app.productbridge.io/dashboard/settings/import" icon="file-spreadsheet" horizontal="true">
+  Sidebar → **Settings** → Connect → **Import Data**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/import](https://app.productbridge.io/dashboard/settings/import)
+
+**In-app path:** Sidebar → **Settings** → Connect → **Import Data**
+
+**Requires:** `organization:manage`, and a plan that includes Import Data. Check your plan at [Billing](https://app.productbridge.io/dashboard/billing).
+
+Set these up before importing, so you have somewhere to map your data to:
+
+| Prerequisite | Direct link |
+|--------------|-------------|
+| Feedback boards | [`/dashboard/settings/feedback`](https://app.productbridge.io/dashboard/settings/feedback) |
+| Statuses | [`/dashboard/settings/statuses`](https://app.productbridge.io/dashboard/settings/statuses) |
+| Categories | [`/dashboard/settings/categories`](https://app.productbridge.io/dashboard/settings/categories) |
+| Tags | [`/dashboard/settings/tags`](https://app.productbridge.io/dashboard/settings/tags) |
+
 ## Overview
 
 Upvoty allows you to export your feedback posts as a CSV file. Once you have that file, ProductBridge's import wizard guides you through column mapping so your posts, votes, statuses, and author details transfer cleanly.
@@ -29,7 +51,7 @@ Upvoty allows you to export your feedback posts as a CSV file. Once you have tha
 
 ## Step 2 — Upload to ProductBridge
 
-Navigate to **Settings → Connect → Import Data** in ProductBridge, select the **CSV import** tab, and drop your Upvoty CSV onto the upload zone.
+Navigate to [**Settings → Connect → Import Data**](https://app.productbridge.io/dashboard/settings/import) in ProductBridge, select the **CSV import** tab, and drop your Upvoty CSV onto the upload zone.
 
 <Callout kind="info">
   Import Data availability depends on your plan. If you don't see the Import Data tab under **Settings → Connect**, check your plan on the Billing page.
@@ -70,7 +92,7 @@ After column mapping, ProductBridge shows every unique status and board value fr
 | `done` / `completed` | Completed |
 | `closed` | Closed |
 
-Create any missing statuses in **Settings → Statuses** before starting the import if you want an exact match.
+Create any missing statuses in [**Settings → Statuses**](https://app.productbridge.io/dashboard/settings/statuses) before starting the import if you want an exact match.
 
 ## Step 5 — Start importing
 
@@ -94,7 +116,7 @@ Click **Start Importing**. ProductBridge processes your posts in the background.
 
 ## After the import
 
-- Review auto-created tags in **Settings → Tags**.
+- Review auto-created tags in [**Settings → Tags**](https://app.productbridge.io/dashboard/settings/tags).
 - Check that board and status mappings look correct on the feedback board.
 - Imported posts appear immediately and are fully searchable.
 

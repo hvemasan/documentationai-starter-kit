@@ -6,6 +6,23 @@ description: >-
   start a specific survey, and reset on sign-out.
 ---
 
+
+## Where to find it
+
+<Card title="Open Survey settings" href="https://app.productbridge.io/dashboard/settings/survey" icon="code" horizontal="true">
+  Sidebar → **Settings** → Modules → **Survey**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/survey](https://app.productbridge.io/dashboard/settings/survey)
+
+**In-app path:** Sidebar → **Settings** → Modules → **Survey**
+
+**Requires:** a plan that includes the `app_surveys` feature. Without it the **Surveys** item does not appear in the sidebar. Installing the script also needs `organization:manage`.
+
+<Callout kind="info">
+  The install snippet lives in **Settings → Survey**, not on the Surveys page. Build surveys at [`/dashboard/surveys`](https://app.productbridge.io/dashboard/surveys); install the script that shows them at [`/dashboard/settings/survey`](https://app.productbridge.io/dashboard/settings/survey).
+</Callout>
+
 ## Overview
 
 Surveys load through a standalone script, `pb-surveys.js`, that exposes a global `ProductBridgeSurveys` object. It's decoupled from the feedback widget — a surveys-only customer never ships the widget bundle. Add the script once, and any published survey reveals itself whenever a visitor is eligible.

@@ -5,6 +5,26 @@ description: >-
   Configure a JWT redirect flow so ProductBridge hands off authentication to
   your app — no password required on the ProductBridge side.
 ---
+
+## Where to find it
+
+<Card title="Open SSO settings" href="https://app.productbridge.io/dashboard/settings/sso" icon="lock" horizontal="true">
+  Sidebar → **Settings** → Connect → **SSO**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/sso](https://app.productbridge.io/dashboard/settings/sso)
+
+**In-app path:** Sidebar → **Settings** → Connect → **SSO**
+
+**Requires:** `organization:view` to read the configuration, `organization:manage` to change it.
+
+The page has two tabs:
+
+| Tab | Direct link | What it holds |
+|------|-------------|---------------|
+| **SSO Redirect** | [`/dashboard/settings/sso`](https://app.productbridge.io/dashboard/settings/sso) | The three-step redirect setup — configure the login URL, test the round trip, turn it on |
+| **API Keys** | [`/dashboard/settings/sso?tab=api-keys`](https://app.productbridge.io/dashboard/settings/sso?tab=api-keys) | The private key used to sign SSO and widget identity JWTs |
+
 ## Overview
 
 ProductBridge SSO uses a **redirect-based JWT flow**. When a user visits your portal and clicks Sign In, ProductBridge sends them to your login page. After they authenticate, your server generates a signed JWT and redirects them back. ProductBridge verifies the token and creates an authenticated session.
@@ -58,7 +78,7 @@ sequenceDiagram
 
 ## Configure SSO Redirect
 
-Go to **Settings → SSO → SSO Redirect** to configure the three steps below.
+Go to the [**SSO Redirect** tab](https://app.productbridge.io/dashboard/settings/sso) to configure the three steps below. Each step is a card that shows its own status chip — **Set**, **Passed**, **Live** — so you can see how far the setup has got at a glance.
 
 <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778333244052-xe6bebhaft-pasted-image-1778333234935.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
 
@@ -124,7 +144,7 @@ Your login page must generate a signed JWT and redirect back to ProductBridge. S
 
 ### Get Your API Secret
 
-Go to **Settings → SSO → API Keys**. If no key exists yet, click **Generate Private Key**.
+Go to the [**API Keys** tab](https://app.productbridge.io/dashboard/settings/sso?tab=api-keys). If no key exists yet, click **Generate key** — the button reads **Regenerate** once a key is active.
 
 <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778333390435-8spl3kjektt-pasted-image-1778333380692.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
 
@@ -409,24 +429,26 @@ PRODUCTBRIDGE_WIDGET_SECRET=your_64_char_hex_secret
 
 ---
 
-## Widget Auth Settings
+## Widget Identity Settings
 
-Go to **Settings → SSO → Widget Auth** to control how the in-app widget handles user identity.
+<Callout kind="alert">
+  **The Widget Auth tab has been removed from the dashboard.** The SSO settings page now has only two tabs — **SSO Redirect** and **API Keys**. To set up widget identity verification, go to [**Settings → Connect → Widget & Embeds**](https://app.productbridge.io/dashboard/settings/widget-embeds), where the **User Identity Verification** section shows the JWT snippet to use.
+
+  The behaviors described below are still enforced by the identity endpoint, but there is no longer a screen for changing them. Contact `help@productbridge.io` if you need one of these changed for your organization.
+</Callout>
 
 <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778333495547-g6d0gidb7qt-pasted-image-1778333485351.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
-
-### Require identify() for widget
-
-When **Require identify() for widget** is enabled, anonymous users see a locked state in the widget instead of the default feedback form. The widget only accepts submissions from users who have been identified via `ProductBridge.init({ userToken })` or `ProductBridge.identify(token)`.
-
-Use this when you want every piece of widget feedback linked to a verified user account.
 
 ### Require User Hash for Identify Calls
 
 When **Require user hash for identify calls** is enabled, ProductBridge additionally validates a `user_hash` — an HMAC-SHA256 hash of the user ID — sent as a **separate parameter alongside** the JWT (not inside the JWT payload). The JWT must also include a `sub` claim carrying the user ID being hashed.
 
 <Callout kind="alert" collapsed="false">
-  The current ProductBridge widget SDK does not send a `user_hash` parameter with identify calls. Enabling this setting will cause identify calls made through the shipped SDK to be rejected. Leave it off unless you're integrating against the verify-identity API directly and sending `user_hash` yourself.
+  The current ProductBridge widget SDK does not send a `user_hash` parameter with identify calls. Turning this on will cause identify calls made through the shipped SDK to be rejected. Leave it off unless you're calling the verify-identity API directly and sending `user_hash` yourself.
+</Callout>
+
+<Callout kind="info">
+  This check is still enforced, but it is off by default and there is no dashboard control for it.
 </Callout>
 
 ### Identify Mode
@@ -442,7 +464,9 @@ Controls what happens when the widget receives an `identify()` call for a user w
 
 ## Portal Auth Methods
 
-Go to **Settings → SSO → Portal** to see the SSO callback URL and your portal URL.
+<Callout kind="info">
+  The **Portal** tab that used to display these two values has been removed. You no longer need to copy the callback URL by hand — ProductBridge appends it to your login URL automatically as the `redirect` parameter. The values below are still what the flow uses.
+</Callout>
 
 <Image src="https://blob-cdn.documentation.ai/org-6d15960a-f17b-4433-b5fa-97a7529e5a1e/doc-b4e5d932-0b09-4a99-99af-e9279cdd4ad6/1778333544514-byi6q6m7usa-pasted-image-1778333535456.png?fm=auto&auto=compress%2Cformat" width="1940" height="1100" alt="" />
 
@@ -451,7 +475,7 @@ Go to **Settings → SSO → Portal** to see the SSO callback URL and your porta
 | **Portal URL**       | Your public portal address (subdomain or custom domain)                                     |
 | **SSO Callback URL** | The URL your login page redirects back to — always `/api/redirects/sso` on your portal host |
 
-Copy the **SSO Callback URL** and allowlist it on your OAuth provider or CSRF whitelist if your login system enforces origin checking.
+Allowlist the **SSO Callback URL** on your OAuth provider or CSRF whitelist if your login system enforces origin checking.
 
 ---
 
@@ -459,7 +483,7 @@ Copy the **SSO Callback URL** and allowlist it on your OAuth provider or CSRF wh
 
 <ExpandableGroup>
   <Expandable title="Test says 'Token verification failed'" default-open="false">
-    The JWT signature did not match. Check that the secret used to sign the token matches the API key displayed in **Settings → SSO → API Keys**. The key is only shown once — if you are unsure, generate a new one and update your server environment variable.
+    The JWT signature did not match. Check that the secret used to sign the token matches the API key displayed in [**Settings → SSO → API Keys**](https://app.productbridge.io/dashboard/settings/sso?tab=api-keys). The key is only shown once — if you are unsure, generate a new one and update your server environment variable.
   </Expandable>
 
   <Expandable title="SSO redirect loop — users keep getting sent back to my login page" default-open="false">
@@ -485,7 +509,7 @@ Copy the **SSO Callback URL** and allowlist it on your OAuth provider or CSRF wh
   </Expandable>
 
   <Expandable title="Widget shows 'Please log in' even after passing a userToken" default-open="false">
-    The most common cause is a signature mismatch. Verify that `PRODUCTBRIDGE_WIDGET_SECRET` on your server matches the key in **Settings → SSO → API Keys**. Also confirm you are using the `HS256` algorithm — other algorithms are not accepted.
+    The most common cause is a signature mismatch. Verify that `PRODUCTBRIDGE_WIDGET_SECRET` on your server matches the key in [**Settings → SSO → API Keys**](https://app.productbridge.io/dashboard/settings/sso?tab=api-keys). Also confirm you are using the `HS256` algorithm — other algorithms are not accepted.
   </Expandable>
 </ExpandableGroup>
 

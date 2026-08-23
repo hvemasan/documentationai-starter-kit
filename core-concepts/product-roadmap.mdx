@@ -3,6 +3,29 @@ title: Product Roadmap
 description: Learn how ProductBridge helps you plan, prioritize, and share your product roadmap with feedback-backed insights and public or private visibility.
 ---
 
+
+## Where to find it
+
+<Card title="Open Roadmap" href="https://app.productbridge.io/dashboard/roadmap" icon="map" horizontal="true">
+  Sidebar → **Roadmap**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/roadmap](https://app.productbridge.io/dashboard/roadmap)
+
+**In-app path:** Sidebar → **Roadmap**
+
+**Requires:** `roadmap:view` to read, `roadmap:manage` to create or edit items.
+
+| Goal | Direct link |
+|------|-------------|
+| The roadmap itself | [`/dashboard/roadmap`](https://app.productbridge.io/dashboard/roadmap) |
+| Scoring and ranking items | [`/dashboard/prioritization`](https://app.productbridge.io/dashboard/prioritization) |
+| Open one roadmap board | `/dashboard/roadmap?rb={boardId}` |
+| Open one roadmap post | `/dashboard/roadmap?post={postId}` |
+| Create or edit roadmap boards | [`/dashboard/settings/roadmap`](https://app.productbridge.io/dashboard/settings/roadmap) |
+| Customize statuses | [`/dashboard/settings/statuses`](https://app.productbridge.io/dashboard/settings/statuses) |
+| Your public roadmap | `https://{your-subdomain}.productbridge.io/roadmap` |
+
 ## Plan with Confidence
 
 The Product Roadmap in ProductBridge is where insights become action. You create roadmap items, link them to real user feedback, and prioritize based on demand — not assumptions. Share your roadmap publicly to build transparency, or keep it internal for team alignment.
@@ -17,7 +40,7 @@ The Product Roadmap in ProductBridge is where insights become action. You create
     Attach related feedback items to the roadmap entry. You can search by keyword, category, or feedback ID. ProductBridge also suggests relevant feedback based on the item's title and description.
   </Step>
   <Step title="Prioritize" icon="arrow-up">
-    Open the **Prioritization** view from the Roadmap header, pick a framework (RICE, ICE, Impact/Effort, or MoSCoW), and score the item — see [Prioritization](#prioritization) below.
+    Open the [**Prioritization** view](https://app.productbridge.io/dashboard/prioritization) from the Roadmap header, pick a framework (RICE, ICE, Impact/Effort, or MoSCoW), and score the item — see [Prioritization](#prioritization) below.
   </Step>
 </Steps>
 
@@ -33,7 +56,7 @@ Organize your roadmap with clear status columns that communicate progress:
 | Completed | Shipped and available to users |
 
 <Callout kind="tip">
-  Customize status labels and add your own stages in **Settings → Modules → Statuses** (Manage Statuses) to match your team's workflow. Roadmap boards are configured under **Settings → Modules → Roadmap**.
+  Customize status labels and add your own stages in [**Settings → Modules → Statuses**](https://app.productbridge.io/dashboard/settings/statuses) (Manage Statuses) to match your team's workflow. Roadmap boards are configured under [**Settings → Modules → Roadmap**](https://app.productbridge.io/dashboard/settings/roadmap).
 </Callout>
 
 ## Linking Feedback to Roadmap Items
@@ -48,7 +71,7 @@ When a roadmap item's status changes, users who submitted linked feedback can be
 
 ## Prioritization
 
-Click the **Prioritization** button in the Roadmap header to open the prioritization table. Every roadmap item appears as a row; pick a framework, enter its parameters for each item, and ProductBridge computes the score and ranks the list.
+Click the **Prioritization** button in the Roadmap header — or go straight to [https://app.productbridge.io/dashboard/prioritization](https://app.productbridge.io/dashboard/prioritization) — to open the prioritization table. Every roadmap item appears as a row; pick a framework, enter its parameters for each item, and ProductBridge computes the score and ranks the list.
 
 Four frameworks are available:
 

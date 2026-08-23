@@ -3,12 +3,34 @@ title: Migrating from Canny
 description: Connect your Canny workspace with an API key and import your boards, posts, votes, and comments directly into ProductBridge.
 ---
 
+
+## Where to find it
+
+<Card title="Open Import Data" href="https://app.productbridge.io/dashboard/settings/import" icon="file-spreadsheet" horizontal="true">
+  Sidebar → **Settings** → Connect → **Import Data**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/import](https://app.productbridge.io/dashboard/settings/import)
+
+**In-app path:** Sidebar → **Settings** → Connect → **Import Data**
+
+**Requires:** `organization:manage`, and a plan that includes Import Data. Check your plan at [Billing](https://app.productbridge.io/dashboard/billing).
+
+Set these up before importing, so you have somewhere to map your data to:
+
+| Prerequisite | Direct link |
+|--------------|-------------|
+| Feedback boards | [`/dashboard/settings/feedback`](https://app.productbridge.io/dashboard/settings/feedback) |
+| Statuses | [`/dashboard/settings/statuses`](https://app.productbridge.io/dashboard/settings/statuses) |
+| Categories | [`/dashboard/settings/categories`](https://app.productbridge.io/dashboard/settings/categories) |
+| Tags | [`/dashboard/settings/tags`](https://app.productbridge.io/dashboard/settings/tags) |
+
 ## Overview
 
 ProductBridge imports directly from Canny over the Canny API — there is no CSV export to wrangle. You connect your Canny workspace with its secret API key, and ProductBridge pulls your users, boards, categories, tags, posts, votes, and comments in one background job. Original boards, tags, and dates are preserved.
 
 <Callout kind="info">
-  The importer lives at **Settings → Connect → Import Data**. Availability depends on your plan — if you don't see the Import Data tab, check your plan on the Billing page.
+  The importer lives at [**Settings → Connect → Import Data**](https://app.productbridge.io/dashboard/settings/import). Availability depends on your plan — if you don't see the Import Data tab, check your plan on the Billing page.
 </Callout>
 
 ## Step 1 — Find your Canny API key
@@ -19,7 +41,7 @@ ProductBridge imports directly from Canny over the Canny API — there is no CSV
   </Step>
 
   <Step title="Go to the API section" icon="key">
-    Navigate to **Settings → API** and copy the **Secret key**.
+    In **Canny** (not ProductBridge), navigate to **Settings → API** and copy the **Secret key**.
 
     <Callout kind="alert">
       Treat this key like a password — it grants full access to your Canny data. Don't share it or commit it anywhere.
@@ -35,7 +57,7 @@ ProductBridge imports directly from Canny over the Canny API — there is no CSV
 
 <Steps>
   <Step title="Open the Third Party importer" icon="upload">
-    In ProductBridge, go to **Settings → Connect → Import Data** and switch to the **Third Party import** (API) tab.
+    In ProductBridge, go to [**Settings → Connect → Import Data**](https://app.productbridge.io/dashboard/settings/import) and switch to the **Third Party import** (API) tab.
   </Step>
 
   <Step title="Enter your Canny credentials" icon="key-round">
@@ -72,9 +94,9 @@ ProductBridge imports directly from Canny over the Canny API — there is no CSV
 
 ## After the import
 
-- Review **Settings → Statuses** and update imported posts to the statuses you use — the importer places every post on your default status and keeps the original Canny status in the post's metadata.
-- Review **Settings → Feedback** to confirm your imported boards look correct.
-- Check **Settings → Categories** and **Settings → Tags** for the imported items.
+- Review [**Settings → Statuses**](https://app.productbridge.io/dashboard/settings/statuses) and update imported posts to the statuses you use — the importer places every post on your default status and keeps the original Canny status in the post's metadata.
+- Review [**Settings → Feedback**](https://app.productbridge.io/dashboard/settings/feedback) to confirm your imported boards look correct.
+- Check [**Settings → Categories**](https://app.productbridge.io/dashboard/settings/categories) and [**Settings → Tags**](https://app.productbridge.io/dashboard/settings/tags) for the imported items.
 - Imported posts appear on your boards immediately.
 
 <Callout kind="tip">

@@ -9,18 +9,31 @@ ProductBridge authenticates public API requests using a per-organization secret 
   Public API keys grant access to all data in your organization. Treat them like passwords: store them in a secrets manager, never commit them to source control, and rotate them immediately if they leak.
 </Callout>
 
+
+## Where to find it
+
+<Card title="Open API & Webhooks" href="https://app.productbridge.io/dashboard/settings/api-webhooks" icon="key" horizontal="true">
+  Sidebar → **Settings** → Connect → **API & Webhooks**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/api-webhooks](https://app.productbridge.io/dashboard/settings/api-webhooks)
+
+**In-app path:** Sidebar → **Settings** → Connect → **API & Webhooks**
+
+**Requires:** `api_key:view` / `api_key:manage` for API keys, `webhook:view` / `webhook:manage` for webhook endpoints.
+
 ## Get your API key
 
 <Steps>
-  <Step title="Open the dashboard" icon="settings" titleType="p">
-    Sign in and go to **Settings → Connect → API & Webhooks**, then find the **API key** section.
+  <Step title="Open the dashboard" icon="settings" title-type="p">
+    Sign in and go to [**Settings → Connect → API & Webhooks**](https://app.productbridge.io/dashboard/settings/api-webhooks), then find the **API key** section.
   </Step>
 
-  <Step title="Generate the key" icon="key-round" titleType="p">
+  <Step title="Generate the key" icon="key-round" title-type="p">
     Click **Generate API key** if you don't have one yet. Each organization holds at most one active public API key — it's shared by every admin in the org.
   </Step>
 
-  <Step title="Copy the raw key" icon="copy" titleType="p">
+  <Step title="Copy the raw key" icon="copy" title-type="p">
     The key starts with `pb_` followed by ~43 URL-safe characters (e.g. `pb_rcbcKubT0rEilFd9haG5JoPaMwIEx6G9nRjNdTYXSIM`). Copy it into your application's secrets manager — for example as an environment variable named `PRODUCTBRIDGE_API_KEY`.
 
     <Callout kind="tip">
@@ -91,15 +104,15 @@ For comparison, ProductBridge's other surfaces use different conventions:
 If you suspect the key has leaked, rotate it from the dashboard:
 
 <Steps>
-  <Step title="Open Settings → Connect → API & Webhooks" icon="settings" titleType="p">
+  <Step title="Open Settings → Connect → API & Webhooks" icon="settings" title-type="p">
     The **API key** section shows your current key prefix (`pb_xxxxx`) and a "Rotate" button.
   </Step>
 
-  <Step title="Click Rotate" icon="refresh-cw" titleType="p">
+  <Step title="Click Rotate" icon="refresh-cw" title-type="p">
     A confirmation dialog warns that the existing key will be invalidated immediately. Confirm.
   </Step>
 
-  <Step title="Copy the new key" icon="copy" titleType="p">
+  <Step title="Copy the new key" icon="copy" title-type="p">
     The new raw key is shown in the modal. Update your secrets manager and redeploy any service that calls the API.
 
     <Callout kind="alert">

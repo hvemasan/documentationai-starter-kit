@@ -1,0 +1,82 @@
+---
+title: Tools
+description: >-
+  Let the AI agent call your own API mid-conversation — look up an order,
+  issue a refund, reset a password — reaching only the endpoints you configure
+  with only the inputs you declare.
+---
+
+## Where to find it
+
+<Card title="Open Tools" href="https://app.productbridge.io/dashboard/support/workflows/agent/tools" icon="wrench" horizontal="true">
+  Sidebar → **AI Agents** → **Tools**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/support/workflows/agent/tools](https://app.productbridge.io/dashboard/support/workflows/agent/tools)
+
+**In-app path:** Sidebar → **AI Agents** → **Tools**
+
+**Requires:** `workflow:manage` to add, edit, or delete a tool.
+
+## What a Tool Is
+
+A tool is one of your own HTTP endpoints, described to the agent so it knows when to call it and what to send. The agent only ever reaches the endpoints you configure here, with the inputs you declare — nothing else.
+
+| Tool type | What it's for | Example |
+|-----------|---------------|---------|
+| **API data source** | The agent fetches content from your API and answers from it | An order status, a subscription, an account detail |
+| **API action** | The agent changes something on your side | Issue a refund, reset a password, update a record |
+
+<Callout kind="alert">
+  An **API action** lets the agent change real data on your systems. Scope the endpoint tightly, authenticate it, and make it idempotent where you can — the agent decides when to call it.
+</Callout>
+
+## Add a Tool
+
+<Steps>
+  <Step title="Open Tools" icon="wrench" title-type="p">
+    Go to [**AI Agents → Tools**](https://app.productbridge.io/dashboard/support/workflows/agent/tools).
+  </Step>
+
+  <Step title="Choose the type" icon="plus" title-type="p">
+    Click **Add tool** and pick **API data source** or **API action**.
+  </Step>
+
+  <Step title="Describe the endpoint" icon="code" title-type="p">
+    Give the tool a name, the URL and method, any authentication headers, and declare each input the agent may supply. The description you write is what the agent reads to decide whether the tool fits the question — make it specific.
+  </Step>
+
+  <Step title="Set access" icon="shield" title-type="p">
+    Choose whether agents may use the tool directly, or whether it is **Workflows only** — reachable from a [workflow](/ai-agents/workflows) step but never picked by an agent on its own.
+  </Step>
+</Steps>
+
+## Access Levels
+
+The catalog shows each tool's **Access**:
+
+| Access | Meaning |
+|--------|---------|
+| **Off** | Nothing can call it |
+| **Workflows only** | Only a workflow step that explicitly selects it |
+| (available) | Agents may reach it, subject to each agent's own [tool selection](/ai-agents/agents#tool-access) |
+
+<Callout kind="info">
+  Two layers gate a tool: the org-wide **Access** setting here, and each agent's own tool list. An agent that lists no tools gets everything marked usable directly.
+</Callout>
+
+## Deleting a Tool
+
+Deleting a tool stops the agent using it immediately. Workflow steps that had picked only that tool fall back to the default tool set rather than breaking.
+
+## Next Steps
+
+<Columns cols="2">
+  <Card title="Agents" href="/ai-agents/agents" icon="bot" horizontal="false">
+    Choose which tools each agent may reach.
+  </Card>
+
+  <Card title="Workflows" href="/ai-agents/workflows" icon="git-branch" horizontal="false">
+    Call a tool from a scripted step instead of leaving it to the agent.
+  </Card>
+</Columns>

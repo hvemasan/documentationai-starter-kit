@@ -1,0 +1,106 @@
+---
+title: Content
+description: >-
+  Everything the AI agent is allowed to answer from — snippets you write,
+  websites it crawls, and files you upload — all managed under Content in the
+  AI Agents hub.
+---
+
+## Where to find it
+
+<Card title="Open Content" href="https://app.productbridge.io/dashboard/support/workflows/agent/snippets" icon="book-open" horizontal="true">
+  Sidebar → **AI Agents** → **Content**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/support/workflows/agent/snippets](https://app.productbridge.io/dashboard/support/workflows/agent/snippets)
+
+**In-app path:** Sidebar → **AI Agents** → **Content** (a collapsible group in the hub's left rail)
+
+**Requires:** `workflow:manage` to add or remove content, `document:manage` for file uploads.
+
+| Content type | Direct link |
+|--------------|-------------|
+| **Snippets** | [`/agent/snippets`](https://app.productbridge.io/dashboard/support/workflows/agent/snippets) |
+| **Websites** | [`/agent/websites`](https://app.productbridge.io/dashboard/support/workflows/agent/websites) |
+| **Files** | [`/agent/files`](https://app.productbridge.io/dashboard/support/workflows/agent/files) |
+
+<Callout kind="info">
+  Two more sources feed the agent without living under Content: your published [Help Center articles](/core-concepts/help-center) and video transcripts. Turn each on per agent under [knowledge scope](/ai-agents/agents#knowledge-scope).
+</Callout>
+
+## Adding Content
+
+Every Content tab shares one **Add content** button, which offers all four types in a single picker — so you never have to switch tabs first.
+
+| Option | What it is |
+|--------|-----------|
+| **Snippet** | A question and its answer, written by you. Not published anywhere — the agent just knows it. |
+| **File upload** | A document your team already answers from: PDF, Word, PowerPoint, Excel, or Markdown. |
+| **Website** | Point it at a public site and it reads what it finds. One URL, or a sitemap. |
+| **YouTube** | A video's captions become searchable text, timestamped so answers can cite the moment. |
+
+<Callout kind="alert">
+  YouTube import is currently switched off. YouTube refuses caption requests coming from cloud-provider IP ranges, so the import fails on every deployed server. The option is hidden rather than removed — nothing you have already imported is affected.
+</Callout>
+
+## Snippets
+
+A snippet is the fastest way to teach the agent something. Write the question the way a customer would ask it, and the answer you want given.
+
+<Steps>
+  <Step title="Open Snippets" icon="message-square-text" title-type="p">
+    Go to [**AI Agents → Content → Snippets**](https://app.productbridge.io/dashboard/support/workflows/agent/snippets).
+  </Step>
+
+  <Step title="Add the snippet" icon="plus" title-type="p">
+    Click **Add content** and choose **Snippet**. Enter the question and the answer.
+  </Step>
+
+  <Step title="Wait a moment" icon="clock" title-type="p">
+    The agent picks up new snippets within a few minutes. Test it in the agent's [Test pane](/ai-agents/agents) to confirm.
+  </Step>
+</Steps>
+
+<Callout kind="tip">
+  Snippets are private. Use them for answers you don't want on your public Help Center — internal policy details, workarounds for a known bug, or the phrasing you'd rather the agent used.
+</Callout>
+
+Deleting a snippet removes it from the agent's knowledge within a few minutes. This cannot be undone.
+
+## Websites
+
+Point the agent at a public site and it crawls what it finds.
+
+| Crawl mode | What it does |
+|------------|--------------|
+| **Single page** | Reads exactly the URL you gave it |
+| **Sitemap** | Follows the site's sitemap and reads the pages listed |
+
+Each website row offers:
+
+- **View pages** — see exactly which pages were captured
+- **Recrawl** — re-read the site after you've published changes
+- **Crawl settings** — adjust the crawl, including custom request headers
+- **Remove website** — its pages leave the agent's knowledge within a few minutes
+
+<Callout kind="info">
+  Custom headers let you crawl a site behind a simple header-based gate. Anything requiring an interactive login won't crawl.
+</Callout>
+
+## Files
+
+Files are the old **Knowledge Hub**, rehomed here because uploaded documents are agent food. The old Settings URL redirects to this page, so existing bookmarks still work.
+
+Upload PDFs, Word documents, PowerPoint decks, Excel sheets, or Markdown. See [Knowledge Hub](/setup/knowledge-hub) for guidance on what's worth uploading.
+
+## Next Steps
+
+<Columns cols="2">
+  <Card title="Agents" href="/ai-agents/agents" icon="bot" horizontal="false">
+    Choose which of this content each agent may answer from.
+  </Card>
+
+  <Card title="Deploy" href="/ai-agents/deploy" icon="rocket" horizontal="false">
+    Put the agent in front of customers.
+  </Card>
+</Columns>

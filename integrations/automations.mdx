@@ -3,6 +3,23 @@ title: Automations
 description: Connect ProductBridge to Zapier, Make, and Pabbly Connect to automate feedback workflows across thousands of apps — or build custom automations with outbound webhooks.
 ---
 
+
+## Where to find it
+
+<Card title="Open Connect Sources" href="https://app.productbridge.io/dashboard/settings/integrations" icon="plug" horizontal="true">
+  Sidebar → **Connect Sources**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/integrations](https://app.productbridge.io/dashboard/settings/integrations)
+
+**In-app path:** Sidebar → **Connect Sources**
+
+**Requires:** `integration:view` to browse, `integration:manage` to connect or disconnect.
+
+<Callout kind="tip">
+  Each integration has its own page at `/dashboard/settings/integrations/{code}` — for example [`/slack`](https://app.productbridge.io/dashboard/settings/integrations/slack), [`/intercom`](https://app.productbridge.io/dashboard/settings/integrations/intercom), or [`/jira`](https://app.productbridge.io/dashboard/settings/integrations/jira).
+</Callout>
+
 ## Automate Your Feedback Workflow
 
 ProductBridge connects to the major no-code automation platforms so events in your workspace — new posts, comments, votes, status changes — can trigger actions in thousands of other apps without writing code.
@@ -25,7 +42,7 @@ Each platform page walks you through generating credentials from **Connect Sourc
 
 ## Custom Automations with Webhooks
 
-Prefer to build your own? ProductBridge exposes generic **outbound webhooks** that deliver workspace events to any URL. Configure endpoints, choose which events to subscribe to, and verify deliveries with per-endpoint signing secrets at **Settings → Connect → API & Webhooks**.
+Prefer to build your own? ProductBridge exposes generic **outbound webhooks** that deliver workspace events to any URL. Configure endpoints, choose which events to subscribe to, and verify deliveries with per-endpoint signing secrets at [**Settings → Connect → API & Webhooks**](https://app.productbridge.io/dashboard/settings/api-webhooks).
 
 Combine outbound webhooks with the [REST API](/api-reference/introduction) to build integrations with internal tools or platforms that aren't listed above.
 

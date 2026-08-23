@@ -3,6 +3,23 @@ title: User Segments
 description: Group your end users into reusable audiences — Enterprise, At-Risk Renewals, Acme Team — then use those segments to gate board visibility and filter your user list.
 ---
 
+
+## Where to find it
+
+<Card title="Open Users" href="https://app.productbridge.io/dashboard/users" icon="users-round" horizontal="true">
+  Sidebar → **Users** → left rail → **Segments**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/users](https://app.productbridge.io/dashboard/users)
+
+**In-app path:** Sidebar → **Users** → left rail → **Segments** → **New segment**
+
+**Requires:** `user_segment:view` to read, `user_segment:manage` to create or edit.
+
+<Callout kind="info">
+  Segments are not in Settings — they live in the left rail of the [Users](https://app.productbridge.io/dashboard/users) page. Open a segment directly with `/dashboard/users?segment={segmentId}`.
+</Callout>
+
 ## What Is a User Segment?
 
 A user segment is a saved group of [end users](/setup/end-users) defined by a set of rules. Instead of repeatedly filtering by "users where MRR > 5000 AND status is Active," you define that group once as **Enterprise Customers** and reuse it everywhere.
@@ -30,7 +47,7 @@ Segments live on the **Users** page, not in Settings.
 
 <Steps>
   <Step title="Open Segments" icon="users-round">
-    Go to **Users** in the dashboard sidebar. In the left rail, find the **Segments** section and click **New segment**.
+    Go to [**Users**](https://app.productbridge.io/dashboard/users) in the dashboard sidebar. In the left rail, find the **Segments** section and click **New segment**.
   </Step>
   <Step title="Name your segment" icon="type">
     Enter a **Segment name** (e.g., "Enterprise Customers").

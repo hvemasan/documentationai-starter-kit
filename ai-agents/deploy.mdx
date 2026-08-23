@@ -1,0 +1,81 @@
+---
+title: Deploy
+description: >-
+  Turn the AI agent on for real customers, choose whether it replies in the
+  Messenger, over email, or both, and see which workflows are routing to it.
+---
+
+## Where to find it
+
+<Card title="Open Deploy" href="https://app.productbridge.io/dashboard/support/workflows/agent/deploy" icon="rocket" horizontal="true">
+  Sidebar → **AI Agents** → **Deploy**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/support/workflows/agent/deploy](https://app.productbridge.io/dashboard/support/workflows/agent/deploy)
+
+**In-app path:** Sidebar → **AI Agents** → **Deploy**
+
+**Requires:** `workflow:manage` to change deployment.
+
+## Two Ways an Agent Reaches Customers
+
+<Columns cols="2">
+  <Card title="Simple deploy" href="#simple-deploy" icon="toggle-right" horizontal="false">
+    Let the agent answer customer questions directly, with no workflow involved. One switch.
+  </Card>
+
+  <Card title="From a workflow" href="/ai-agents/workflows" icon="git-branch" horizontal="false">
+    A scripted flow runs first and hands the conversation to the agent at a chosen step.
+  </Card>
+</Columns>
+
+## Simple Deploy
+
+The Deploy panel's main control reads *"Let `<agent name>` answer customer questions"*. Turn it on and the agent starts replying to conversations that no workflow has claimed. The badge beside it shows **Live** or **Off**.
+
+<Callout kind="alert">
+  This puts the agent in front of real customers. Test it first in the agent's [Test pane](/ai-agents/agents), and confirm its [per-conversation limits](/ai-agents/agents#limits) are set where you want them.
+</Callout>
+
+## Channels
+
+Choose where the agent replies:
+
+| Channel | What it covers | Extra setup |
+|---------|----------------|-------------|
+| **Messenger** | The in-app messenger and widget | None — on by default |
+| **Email** | Your connected support inbox | Needs an [email channel connected in Support settings](https://app.productbridge.io/dashboard/settings/support) |
+
+<Callout kind="info">
+  Email replies need an email inbox connected first. If the option looks inert, set the inbox up under [Settings → Support → Channels](https://app.productbridge.io/dashboard/settings/support) and come back — see [Email Channel](/support-chat/email-channel).
+</Callout>
+
+The default, if you never touch the channel settings, is **Messenger only, email off**.
+
+## Workflows Using the Agent
+
+The Deploy panel also lists every [workflow](/ai-agents/workflows) that routes to the AI agent, each marked **Live** or **Draft**. From there you can jump to **Manage workflows** or **Create a workflow**.
+
+If the list is empty it says so — that just means no workflow hands off to the agent, not that anything is wrong. With simple deploy on, the agent still answers.
+
+## Handoff to a Human
+
+The agent hands a conversation to a person when:
+
+- It hits the conversation's **credit budget** or **reply limit**
+- A workflow reaches a **Human handoff** step
+- It cannot answer from the content it has
+
+Handed-off conversations land in the [Support inbox](/support-chat/agent-inbox) like any other.
+
+## Next Steps
+
+<Columns cols="2">
+  <Card title="Agent Inbox" href="/support-chat/agent-inbox" icon="inbox" horizontal="false">
+    Where handed-off conversations arrive.
+  </Card>
+
+  <Card title="Workflows" href="/ai-agents/workflows" icon="git-branch" horizontal="false">
+    Script the conversation before the agent takes over.
+  </Card>
+</Columns>

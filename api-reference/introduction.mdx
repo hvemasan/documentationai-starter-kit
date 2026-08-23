@@ -12,6 +12,19 @@ ProductBridge exposes a public REST API that lets your servers, integrations, an
 
 Pair the API with [webhooks](/api-reference/webhooks/overview) to receive push notifications when posts, comments, or votes change — instead of polling.
 
+
+## Where to find it
+
+<Card title="Open API & Webhooks" href="https://app.productbridge.io/dashboard/settings/api-webhooks" icon="key" horizontal="true">
+  Sidebar → **Settings** → Connect → **API & Webhooks**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/api-webhooks](https://app.productbridge.io/dashboard/settings/api-webhooks)
+
+**In-app path:** Sidebar → **Settings** → Connect → **API & Webhooks**
+
+**Requires:** `api_key:view` / `api_key:manage` for API keys, `webhook:view` / `webhook:manage` for webhook endpoints.
+
 ## Base URL
 
 ```
@@ -60,12 +73,12 @@ A successful response:
 }
 ```
 
-If you get a `401` with `{"detail": {"error": "invalid api_key"}}`, double-check the key in the **API key** section of your dashboard's **Settings → Connect → API & Webhooks** page.
+If you get a `401` with `{"detail": {"error": "invalid api_key"}}`, double-check the key in the **API key** section of your dashboard's [**Settings → Connect → API & Webhooks**](https://app.productbridge.io/dashboard/settings/api-webhooks) page.
 
 ## What's next
 
 <Steps>
-  <Step title="Authenticate" icon="lock" titleType="p">
+  <Step title="Authenticate" icon="lock" title-type="p">
     Mint a public API key from the dashboard and learn how to pass it on every request.
 
     <Card title="Authentication" href="/api-reference/authentication" icon="key-round" horizontal="false">
@@ -73,7 +86,7 @@ If you get a `401` with `{"detail": {"error": "invalid api_key"}}`, double-check
     </Card>
   </Step>
 
-  <Step title="Understand pagination" icon="list" titleType="p">
+  <Step title="Understand pagination" icon="list" title-type="p">
     List endpoints use a cursor pattern; some return unpaginated arrays. Know which is which before you build.
 
     <Card title="Pagination" href="/api-reference/pagination" icon="list" horizontal="false">
@@ -81,7 +94,7 @@ If you get a `401` with `{"detail": {"error": "invalid api_key"}}`, double-check
     </Card>
   </Step>
 
-  <Step title="Handle errors" icon="alert-triangle" titleType="p">
+  <Step title="Handle errors" icon="alert-triangle" title-type="p">
     The error envelope is consistent across every endpoint — implement it once, use it everywhere.
 
     <Card title="Errors" href="/api-reference/errors" icon="alert-triangle" horizontal="false">
@@ -89,7 +102,7 @@ If you get a `401` with `{"detail": {"error": "invalid api_key"}}`, double-check
     </Card>
   </Step>
 
-  <Step title="Pick a resource" icon="folder" titleType="p">
+  <Step title="Pick a resource" icon="folder" title-type="p">
     Start with [Categories](/api-reference/categories/overview) for a complete CRUD walkthrough, or jump straight to a resource group in the sidebar.
   </Step>
 </Steps>

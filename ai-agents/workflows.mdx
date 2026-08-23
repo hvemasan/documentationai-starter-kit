@@ -1,0 +1,96 @@
+---
+title: Workflows
+description: >-
+  Script a support conversation on a visual canvas — send a message, collect a
+  reply, branch on a condition, hand off to the AI agent or to a person — and
+  publish it when it's ready.
+---
+
+## Where to find it
+
+<Card title="Open Workflows" href="https://app.productbridge.io/dashboard/support/workflows" icon="git-branch" horizontal="true">
+  Sidebar → **AI Agents** → **Workflows**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/support/workflows](https://app.productbridge.io/dashboard/support/workflows)
+
+**In-app path:** Sidebar → **AI Agents** → **Workflows**
+
+**Requires:** `workflow:view` to read, `workflow:manage` to build and publish. Needs the `support_workflows` feature on your plan.
+
+<Callout kind="info">
+  Workflows used to be a separate sidebar item. They now live as a tab inside the AI Agents hub, because a flow is built out of an agent's [content](/ai-agents/content) and [tools](/ai-agents/tools) — they are one feature reached from two sides.
+</Callout>
+
+## What a Workflow Is
+
+A workflow is a scripted conversation: a graph of steps connected on a canvas. When a conversation matches a live workflow, the workflow runs instead of the agent answering straight away — and it can hand over to the agent at whatever point you choose.
+
+The builder opens in place, so the URL stays on `/dashboard/support/workflows` while you edit.
+
+## Step Types
+
+| Step | What it does | Key settings |
+|------|--------------|--------------|
+| **Send message** | Posts a message to the customer | Message body |
+| **Collect reply** | Waits for the customer to answer | Save answer as, give up after (seconds) |
+| **Buttons** | Offers the customer a set of choices | Prompt |
+| **Conditions** | Branches on a saved value | Rules, set on the canvas |
+| **Set attribute** | Stores a value on the conversation | Attribute code, value or copy from a saved answer |
+| **Delay** | Pauses the run | Wait (seconds) |
+| **AI agent** | Hands the question to your [agent](/ai-agents/agents) | Max model requests, answer a saved value instead of the last message |
+| **Human handoff** | Passes the conversation to a person | Message to the customer, wait for a human (seconds) |
+| **End** | Finishes the run | Final status |
+
+<Callout kind="tip">
+  **Collect reply → Save answer as** is what makes conditions useful. Name the answer, then read that name in a later **Conditions** step to branch on it.
+</Callout>
+
+## Building a Flow
+
+<Steps>
+  <Step title="Open Workflows" icon="git-branch" title-type="p">
+    Go to [**AI Agents → Workflows**](https://app.productbridge.io/dashboard/support/workflows) and create a workflow.
+  </Step>
+
+  <Step title="Add steps to the canvas" icon="plus" title-type="p">
+    Drop the steps you need onto the canvas and connect them. Connections are made by dragging on the canvas — there is no text field for naming a target step, so a flow can't point at a step that doesn't exist.
+  </Step>
+
+  <Step title="Configure each step" icon="settings" title-type="p">
+    Select a step to open the inspector on the right and fill in its settings.
+  </Step>
+
+  <Step title="Publish" icon="rocket" title-type="p">
+    Publish the workflow to make it **Live**. Until then it stays a **Draft** and never runs for customers.
+
+    <Callout kind="alert">
+      A workflow with a dangling connection won't publish. Connect or remove the loose step and try again.
+    </Callout>
+  </Step>
+</Steps>
+
+## Watching a Run
+
+Each run is recorded step by step, so you can open a conversation and see exactly which path it took, what was saved at each **Collect reply**, and where it ended or handed off. Use this when a flow behaves differently from how you drew it.
+
+## Workflow or Simple Deploy?
+
+| Use | When |
+|-----|------|
+| [**Simple deploy**](/ai-agents/deploy#simple-deploy) | You want the agent to answer whatever comes in |
+| **A workflow** | You need to ask qualifying questions first, route by answer, collect details before a handoff, or guarantee a scripted opening |
+
+Both can be on at once: workflows claim the conversations they match, and the agent answers the rest.
+
+## Next Steps
+
+<Columns cols="2">
+  <Card title="Deploy" href="/ai-agents/deploy" icon="rocket" horizontal="false">
+    See which workflows route to the agent, and turn simple deploy on or off.
+  </Card>
+
+  <Card title="Tools" href="/ai-agents/tools" icon="wrench" horizontal="false">
+    Give a workflow step access to one of your own API endpoints.
+  </Card>
+</Columns>

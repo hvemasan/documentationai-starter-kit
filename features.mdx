@@ -7,6 +7,34 @@ description: >-
   server.
 ---
 
+
+## Where everything lives in the app
+
+Every page below is a direct link into [app.productbridge.io](https://app.productbridge.io). Sign in first — you land on the page you clicked.
+
+| Module | Direct link |
+|--------|-------------|
+| Analytics | [`/dashboard/overview`](https://app.productbridge.io/dashboard/overview) |
+| Insights — themes, observations, strengths | [`/dashboard/themes`](https://app.productbridge.io/dashboard/themes) |
+| Ask AI | [`/dashboard/ask-ai`](https://app.productbridge.io/dashboard/ask-ai) |
+| Feedback | [`/dashboard/feedback`](https://app.productbridge.io/dashboard/feedback) |
+| Roadmap | [`/dashboard/roadmap`](https://app.productbridge.io/dashboard/roadmap) |
+| Changelog | [`/dashboard/changelog`](https://app.productbridge.io/dashboard/changelog) |
+| Surveys | [`/dashboard/surveys`](https://app.productbridge.io/dashboard/surveys) |
+| Help Center | [`/dashboard/help-center`](https://app.productbridge.io/dashboard/help-center) |
+| Moderation queue | [`/dashboard/moderation`](https://app.productbridge.io/dashboard/moderation) |
+| Support inbox | [`/dashboard/support`](https://app.productbridge.io/dashboard/support) |
+| AI Agents | [`/dashboard/support/workflows/agent`](https://app.productbridge.io/dashboard/support/workflows/agent) |
+| Users | [`/dashboard/users`](https://app.productbridge.io/dashboard/users) |
+| Settings | [`/dashboard/settings/brand`](https://app.productbridge.io/dashboard/settings/brand) |
+| Connect Sources | [`/dashboard/settings/integrations`](https://app.productbridge.io/dashboard/settings/integrations) |
+| **Billing & Plans** | [`/dashboard/billing`](https://app.productbridge.io/dashboard/billing) |
+| My Organizations | [`/dashboard/myorganizations`](https://app.productbridge.io/dashboard/myorganizations) |
+
+<Callout kind="info">
+  **Billing** and **My Organizations** are not in Settings — they sit behind your avatar at the bottom of the sidebar.
+</Callout>
+
 ## Everything You Need to Close the Feedback Loop
 
 ProductBridge covers the full lifecycle of customer feedback: collect it from every channel, make sense of it with AI, prioritize what to build, and tell users what shipped. This page maps out each capability and where to learn more.
@@ -47,8 +75,12 @@ ProductBridge covers the full lifecycle of customer feedback: collect it from ev
   </Card>
 </Columns>
 
+<Card title="AI Agents" href="/ai-agents" icon="sparkles" horizontal="false">
+  Build an AI agent that answers customers from your own content, calls your own APIs, and hands off to a human. Configure it at [**AI Agents**](https://app.productbridge.io/dashboard/support/workflows/agent).
+</Card>
+
 <Card title="Knowledge Hub" href="/setup/knowledge-hub" icon="book-open" horizontal="false">
-  Upload product docs, guides, and internal documents at **Settings → Organization → Knowledge Hub** to power AI answers with your own content.
+  Upload product docs, guides, and internal documents at [**AI Agents → Content → Files**](https://app.productbridge.io/dashboard/support/workflows/agent/files) to power AI answers with your own content. This used to be a Settings tab called Knowledge Hub.
 </Card>
 
 ## Plan and Communicate
@@ -71,15 +103,15 @@ ProductBridge covers the full lifecycle of customer feedback: collect it from ev
   </Card>
 
   <Card title="Public API & Webhooks" href="/api-reference/introduction" icon="braces" horizontal="false">
-    Manage posts, boards, comments, votes, and changelog entries programmatically. Subscribe to signed webhook events at **Settings → Connect → API & Webhooks**.
+    Manage posts, boards, comments, votes, and changelog entries programmatically. Subscribe to signed webhook events at [**Settings → Connect → API & Webhooks**](https://app.productbridge.io/dashboard/settings/api-webhooks).
   </Card>
 
   <Card title="MCP Server" href="/integrations/ai-assistants/mcp-server" icon="bot" horizontal="false">
-    Connect Claude and other MCP clients to ProductBridge. 22 tools cover feedback, roadmap, and changelog. Set it up at **Settings → Connect → MCP Server**.
+    Connect Claude and other MCP clients to ProductBridge. 22 tools cover feedback, roadmap, and changelog. Set it up at [**Settings → Connect → MCP Server**](https://app.productbridge.io/dashboard/settings/mcp-server).
   </Card>
 
   <Card title="Import Your Data" href="/help-center/guides/import-data" icon="upload" horizontal="false">
-    Migrate from Canny via its API or bring data from any tool with the generic CSV importer at **Settings → Connect → Import Data**.
+    Migrate from Canny via its API or bring data from any tool with the generic CSV importer at [**Settings → Connect → Import Data**](https://app.productbridge.io/dashboard/settings/import).
   </Card>
 </Columns>
 

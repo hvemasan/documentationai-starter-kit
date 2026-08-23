@@ -1,0 +1,110 @@
+---
+title: Agents
+description: >-
+  Create an AI agent, set its persona, response length, and per-conversation
+  limits, choose which knowledge and tools it may reach, and test it in a live
+  chat pane before customers ever see it.
+---
+
+## Where to find it
+
+<Card title="Open Agents" href="https://app.productbridge.io/dashboard/support/workflows/agent/agents" icon="bot" horizontal="true">
+  Sidebar → **AI Agents** → **Agents**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/support/workflows/agent/agents](https://app.productbridge.io/dashboard/support/workflows/agent/agents)
+
+**In-app path:** Sidebar → **AI Agents** → **Agents**
+
+**Open one agent:** `/dashboard/support/workflows/agent/agents/{agentId}`
+
+**Requires:** `workflow:view` to read, `workflow:manage` to create or edit. Needs the `support_workflows` feature on your plan.
+
+## Create an Agent
+
+<Steps>
+  <Step title="Open the Agents tab" icon="bot" title-type="p">
+    Go to [**AI Agents → Agents**](https://app.productbridge.io/dashboard/support/workflows/agent/agents).
+  </Step>
+
+  <Step title="Create the agent" icon="plus" title-type="p">
+    Click **New agent** and give it a name. The name is what customers see on replies, so use something that reads like a teammate rather than a system.
+  </Step>
+
+  <Step title="Configure and test" icon="settings" title-type="p">
+    Open the agent to reach its settings form and the **Test** chat pane beside it. The pane talks to the real agent with the settings currently saved, so you can check an answer before deploying.
+  </Step>
+</Steps>
+
+<Callout kind="info">
+  You can have several agents. One is the **default agent** — the one that answers when no [workflow](/ai-agents/workflows) claims the conversation. Promoting an agent to default automatically demotes the previous one.
+</Callout>
+
+## Persona
+
+| Setting | Options | What it changes |
+|---------|---------|-----------------|
+| **Name** | free text | The display name on replies |
+| **Avatar** | image URL | The picture on replies |
+| **Tone** | Neutral, Professional, Friendly, Humorous | How the reply is worded |
+| **Response length** | Concise, Standard, Thorough | How much the agent writes |
+| **Formal language** | on / off | Whether it addresses customers formally |
+| **Instructions** | free text | A tuning layer on top of the settings above |
+| **Show sources** | on / off | Whether replies cite the content they came from |
+
+<Callout kind="alert">
+  **Instructions tune the agent; they do not replace its system prompt.** ProductBridge's grounding rules are built server-side and can't be overridden from this box. Use it for things like "always mention our 30-day refund window", not for "ignore your previous instructions".
+</Callout>
+
+## Knowledge Scope
+
+Choose which of your [content](/ai-agents/content) the agent may answer from:
+
+| Source | What it covers |
+|--------|----------------|
+| **Uploaded files** | Documents added under [Content → Files](https://app.productbridge.io/dashboard/support/workflows/agent/files) |
+| **Help Center articles** | Your published [Help Center](/core-concepts/help-center) content |
+| **Snippets** | Question-and-answer pairs you wrote |
+| **Website pages** | Pages crawled from sites you added |
+| **Video transcripts** | Captions imported from video sources |
+
+You can narrow it further by tag:
+
+| Scope mode | Behaviour |
+|------------|-----------|
+| **All knowledge** | Every item in the selected sources |
+| **Only these tags** | Only items carrying one of the tags you pick |
+| **All except these tags** | Everything except items carrying those tags |
+
+<Callout kind="tip">
+  Tag scoping is how you run one agent for billing questions and another for technical support off the same content library — tag each item once, then point each agent at its slice.
+</Callout>
+
+## Limits
+
+Two ceilings stop a single conversation running away:
+
+| Limit | What happens when it's reached |
+|-------|-------------------------------|
+| **Max credits per conversation** | The agent stops replying and hands off to a person |
+| **Max replies per conversation** | The agent stops replying after this many turns |
+
+<Callout kind="info">
+  The budget is measured in **AI credits**, the same currency as the rest of ProductBridge's AI features. Check your balance at [Billing](https://app.productbridge.io/dashboard/billing) and read [AI Credits & Billing](/settings/ai-credits) for how the pools work.
+</Callout>
+
+## Tool Access
+
+Each agent chooses which [tools](/ai-agents/tools) it may reach. Leaving the selection empty gives the agent everything — the built-in capabilities plus any tool your organization marked as usable directly. Pick specific tools to narrow that.
+
+## Next Steps
+
+<Columns cols="2">
+  <Card title="Content" href="/ai-agents/content" icon="book-open" horizontal="false">
+    Give the agent something to answer from.
+  </Card>
+
+  <Card title="Deploy" href="/ai-agents/deploy" icon="rocket" horizontal="false">
+    Let it answer customers, on the channels you choose.
+  </Card>
+</Columns>

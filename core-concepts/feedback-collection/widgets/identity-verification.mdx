@@ -7,6 +7,25 @@ description: >-
   Python, PHP, Ruby, Go, React, Vue, and Angular.
 ---
 
+
+## Where to find it
+
+<Card title="Open Widget & Embeds" href="https://app.productbridge.io/dashboard/settings/widget-embeds" icon="shield-check" horizontal="true">
+  Sidebar → **Settings** → Connect → **Widget & Embeds** → **User Identity Verification**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/widget-embeds](https://app.productbridge.io/dashboard/settings/widget-embeds)
+
+**In-app path:** Sidebar → **Settings** → Connect → **Widget & Embeds** → **Embed Code** tab → **User Identity Verification** section
+
+**Signing key:** [https://app.productbridge.io/dashboard/settings/sso?tab=api-keys](https://app.productbridge.io/dashboard/settings/sso?tab=api-keys) — Settings → Connect → **SSO** → **API Keys**
+
+**Requires:** `organization:manage`.
+
+<Callout kind="alert">
+  The **Widget Auth** tab that used to hold these toggles has been removed from the SSO settings page. The JWT snippet now lives in the **User Identity Verification** section of the Widget & Embeds page, and the signing key stays on [SSO → API Keys](https://app.productbridge.io/dashboard/settings/sso?tab=api-keys).
+</Callout>
+
 ## Why Identify Users?
 
 By default, users are prompted to sign in inside the widget before they can post. When you add identity verification:
@@ -43,7 +62,7 @@ The JWT is signed server-side so the widget can trust its contents. Your Widget 
 
 <Steps>
   <Step title="Open Widget Settings" icon="settings" title-type="p">
-    In your ProductBridge dashboard go to **Settings → Connect → Widget & Embeds** and open the **API Keys** tab.
+    In your ProductBridge dashboard go to [**Settings → Connect → Widget & Embeds**](https://app.productbridge.io/dashboard/settings/widget-embeds) and open the **API Keys** tab.
   </Step>
 
   <Step title="Generate a new key" icon="key" title-type="p">
@@ -532,7 +551,7 @@ async function onLoginSuccess() {
 <Expandable title="Troubleshooting" default-open="false">
   **Widget shows "Please log in" even though I passed a token**
 
-  The most common cause is a signature mismatch — the secret used to sign the JWT doesn't match the Widget API Secret stored in ProductBridge. Double-check that `PRODUCTBRIDGE_WIDGET_SECRET` on your server matches the key in the **API Keys** tab of **Settings → Connect → Widget & Embeds**.
+  The most common cause is a signature mismatch — the secret used to sign the JWT doesn't match the Widget API Secret stored in ProductBridge. Double-check that `PRODUCTBRIDGE_WIDGET_SECRET` on your server matches the key in the **API Keys** tab of [**Settings → Connect → Widget & Embeds**](https://app.productbridge.io/dashboard/settings/widget-embeds).
 
   **Token rejected: expired**
 

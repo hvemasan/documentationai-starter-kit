@@ -3,6 +3,31 @@ title: "AI Credits & Billing"
 description: "Understand how AI credits meter Ask AI and other AI features, check your balance and usage history, and buy top-up credit packs."
 ---
 
+## Where to find it
+
+<Card title="Open Billing & Plans" href="https://app.productbridge.io/dashboard/billing" icon="credit-card" horizontal="true">
+  Sidebar → your avatar (bottom-left) → **Billing**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/billing](https://app.productbridge.io/dashboard/billing)
+
+**In-app path:** Sidebar → your avatar (bottom-left) → **Billing**
+
+**Requires:** `billing:view` to see the page, `billing:manage` to change a plan or buy credits. Owners have both; Admins have `billing:view` only.
+
+<Callout kind="info">
+  Billing is **not** under Settings. It moved out to its own top-level page because it is a per-user, cross-organization concern — one balance covers every organization you own.
+</Callout>
+
+The page has three tabs:
+
+| Tab | Direct link | What it holds |
+|------|-------------|---------------|
+| **Current Plan** | [`/dashboard/billing`](https://app.productbridge.io/dashboard/billing) | Your plan, renewal date, seat and usage meters, and the **AI credits available** tile |
+| **Plans** | [`/dashboard/billing?tab=plans`](https://app.productbridge.io/dashboard/billing?tab=plans) | The full plan comparison table — toggle monthly/yearly with `?interval=monthly` |
+| **Top up credits** | [`/dashboard/billing?tab=topup`](https://app.productbridge.io/dashboard/billing?tab=topup) | One-time credit packs. Only appears when top-up packs are available for your account |
+
+
 ## What AI Credits Are
 
 AI credits meter your AI usage across ProductBridge. Every AI operation debits credits from your account, including:
@@ -37,39 +62,45 @@ Your available balance is: `remaining monthly allocation + top-up balance`.
 
 <Steps>
   <Step title="Open Billing" icon="credit-card" title-type="p">
-    Click your avatar in the bottom-left of the sidebar and choose **Billing**.
+    Click your avatar in the bottom-left of the sidebar and choose **Billing**, or go straight to [https://app.productbridge.io/dashboard/billing](https://app.productbridge.io/dashboard/billing).
   </Step>
 
   <Step title="Read the credits tile" icon="gauge" title-type="p">
-    The **AI credits available** tile shows your headline spendable balance, broken down into the monthly and top-up pools. The monthly pool resets at the end of your current 30-day period.
+    On the **Current Plan** tab, the **AI credits available** tile shows your headline spendable balance, broken down into the monthly, bonus, and top-up pools. The monthly pool resets at the end of your current 30-day period.
   </Step>
 </Steps>
 
 <Callout kind="info">
-  Viewing balance and usage requires the billing permission on your role. Owners always have it.
+  Viewing the balance requires `billing:view` on your role. Buying credits or changing plan requires `billing:manage`, which only Owners have by default.
 </Callout>
 
 ## View Usage History
 
-The Billing page includes a usage ledger — one row per AI operation, newest first. Each entry records the operation type, credits charged (split by pool), the organization it ran for, and when it happened. You can filter by organization, operation type, and date range.
+Every credit charge is recorded — the operation type, credits charged (split by pool), the organization it ran for, and when it happened.
 
-Use the ledger to understand where credits go — for example, whether most spend comes from the feedback pipeline or from Ask AI sessions.
+<Callout kind="info">
+  The usage ledger is currently available through the admin API only (`GET /credits/usage`, filterable by organization, operation type, and date range). The Billing page shows your current balance, not the per-operation history. If you need a usage breakdown, contact `help@productbridge.io`.
+</Callout>
 
 ## Buy More Credits
 
 When you need more than your monthly allocation:
 
 <Steps>
-  <Step title="Open the credit packs section" icon="package" title-type="p">
-    On the Billing page, find **Need more AI credits?** — it lists the available one-time top-up packs.
+  <Step title="Open the Top up credits tab" icon="package" title-type="p">
+    Go to [https://app.productbridge.io/dashboard/billing?tab=topup](https://app.productbridge.io/dashboard/billing?tab=topup). The tab lists every one-time pack available to you, each showing the credit amount, price, and price per credit.
+
+    <Callout kind="info">
+      The **Top up credits** tab only appears when top-up packs are configured for your account. If you don't see it, the packs aren't available — contact `help@productbridge.io`.
+    </Callout>
   </Step>
 
   <Step title="Buy a pack" icon="shopping-cart" title-type="p">
-    Click **Buy credits** on a pack to open the secure checkout.
+    Click **Buy credits** on a pack to open the secure checkout. Every pack is marked **Never expires**.
   </Step>
 
   <Step title="Wait for the balance to update" icon="refresh-cw" title-type="p">
-    Credits are added right after payment is confirmed. This can take a few seconds — refresh the Billing page if the balance hasn't updated yet.
+    Credits are added right after payment is confirmed. This can take a few seconds — reload [the Billing page](https://app.productbridge.io/dashboard/billing) if the balance hasn't updated yet.
   </Step>
 </Steps>
 
@@ -79,7 +110,7 @@ Top-up credits never expire, and you can buy packs even without an active subscr
 
 When your balance reaches zero:
 
-- AI features pause — Ask AI and other AI operations show an **Out of AI credits** prompt instead of running
+- AI features pause — [Ask AI](https://app.productbridge.io/dashboard/ask-ai) and other AI operations show an **Out of AI credits** prompt instead of running, with a shortcut to [buy more](https://app.productbridge.io/dashboard/billing?tab=topup)
 - Everything else keeps working — feedback boards, roadmap, changelog, portal, and integrations are unaffected (only the AI analysis of incoming items waits)
 - You can either buy a top-up pack immediately or wait for your monthly allocation to reset
 

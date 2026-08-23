@@ -346,6 +346,42 @@
             ]
           },
           {
+            "group": "AI Agents",
+            "icon": "sparkles",
+            "pages": [
+              {
+                "title": "Overview",
+                "path": "ai-agents",
+                "icon": "sparkles"
+              },
+              {
+                "title": "Agents",
+                "path": "ai-agents/agents",
+                "icon": "bot"
+              },
+              {
+                "title": "Content",
+                "path": "ai-agents/content",
+                "icon": "book-open"
+              },
+              {
+                "title": "Tools",
+                "path": "ai-agents/tools",
+                "icon": "wrench"
+              },
+              {
+                "title": "Deploy",
+                "path": "ai-agents/deploy",
+                "icon": "rocket"
+              },
+              {
+                "title": "Workflows",
+                "path": "ai-agents/workflows",
+                "icon": "git-branch"
+              }
+            ]
+          },
+          {
             "group": "Integrations",
             "icon": "plug",
             "pages": [

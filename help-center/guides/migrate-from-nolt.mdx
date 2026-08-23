@@ -3,6 +3,28 @@ title: Migrating from Nolt
 description: Step-by-step guide to export your Nolt feedback and import it into ProductBridge using the CSV import tool.
 ---
 
+
+## Where to find it
+
+<Card title="Open Import Data" href="https://app.productbridge.io/dashboard/settings/import" icon="file-spreadsheet" horizontal="true">
+  Sidebar → **Settings** → Connect → **Import Data**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/import](https://app.productbridge.io/dashboard/settings/import)
+
+**In-app path:** Sidebar → **Settings** → Connect → **Import Data**
+
+**Requires:** `organization:manage`, and a plan that includes Import Data. Check your plan at [Billing](https://app.productbridge.io/dashboard/billing).
+
+Set these up before importing, so you have somewhere to map your data to:
+
+| Prerequisite | Direct link |
+|--------------|-------------|
+| Feedback boards | [`/dashboard/settings/feedback`](https://app.productbridge.io/dashboard/settings/feedback) |
+| Statuses | [`/dashboard/settings/statuses`](https://app.productbridge.io/dashboard/settings/statuses) |
+| Categories | [`/dashboard/settings/categories`](https://app.productbridge.io/dashboard/settings/categories) |
+| Tags | [`/dashboard/settings/tags`](https://app.productbridge.io/dashboard/settings/tags) |
+
 ## Overview
 
 Nolt provides a CSV export of all your feedback posts from the board settings. Once you have that file, ProductBridge's import wizard maps each column so your posts, votes, statuses, and authors transfer cleanly.
@@ -29,7 +51,7 @@ Nolt provides a CSV export of all your feedback posts from the board settings. O
 
 ## Step 2 — Upload to ProductBridge
 
-Navigate to **Settings → Connect → Import Data** in ProductBridge, select the **CSV import** tab, and drop your Nolt CSV onto the upload zone.
+Navigate to [**Settings → Connect → Import Data**](https://app.productbridge.io/dashboard/settings/import) in ProductBridge, select the **CSV import** tab, and drop your Nolt CSV onto the upload zone.
 
 ## Step 3 — Map Nolt columns to ProductBridge fields
 
@@ -77,7 +99,7 @@ Because Nolt exports per board, repeat the full import process for each board:
 
 1. Export the board from Nolt.
 2. Add a `board` column to the file with the same value in every row.
-3. Go to **Settings → Connect → Import Data** and upload that file.
+3. Go to [**Settings → Connect → Import Data**](https://app.productbridge.io/dashboard/settings/import) and upload that file.
 4. In the column mapping step, map all the same columns as before, including the `board` column.
 5. In the value mapping step, point the board value to the corresponding ProductBridge board.
 6. Click **Start Importing**.
@@ -102,7 +124,7 @@ Because Nolt exports per board, repeat the full import process for each board:
 ## After the import
 
 - If you imported multiple boards, verify that each board received the correct posts.
-- Check **Settings → Tags** and **Settings → Categories** for any auto-created items.
+- Check [**Settings → Tags**](https://app.productbridge.io/dashboard/settings/tags) and [**Settings → Categories**](https://app.productbridge.io/dashboard/settings/categories) for any auto-created items.
 - Imported posts appear immediately and are fully searchable.
 
 <Callout kind="tip">

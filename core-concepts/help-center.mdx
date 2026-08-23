@@ -3,6 +3,35 @@ title: Help Center
 description: Learn how to build a self-serve Help Center in ProductBridge — organize articles into collections and categories, publish them to your public portal and in-app widget, and measure how helpful they are.
 ---
 
+
+## Where to find it
+
+<Card title="Open Help Center" href="https://app.productbridge.io/dashboard/help-center" icon="book" horizontal="true">
+  Sidebar → **Help Center**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/help-center](https://app.productbridge.io/dashboard/help-center)
+
+**In-app path:** Sidebar → **Help Center**
+
+**Requires:** `helpcenter:view` to read, `helpcenter:manage` to author, and a plan that includes the knowledge base feature.
+
+| Goal | Direct link |
+|------|-------------|
+| Write and organize articles | [`/dashboard/help-center`](https://app.productbridge.io/dashboard/help-center) |
+| Article analytics dashboard | [`/dashboard/help-center?view=dashboard`](https://app.productbridge.io/dashboard/help-center?view=dashboard) |
+| Starred articles only | [`/dashboard/help-center?favourites=1`](https://app.productbridge.io/dashboard/help-center?favourites=1) |
+| Search your articles | `/dashboard/help-center?q={search+term}` |
+| Filter to one collection | `/dashboard/help-center?collection={collectionId}` |
+| Filter to one category | `/dashboard/help-center?category={categoryId}` |
+| Filter by publish status | `/dashboard/help-center?status=draft` |
+| Turn the Help tab on for your portal | [`/dashboard/settings/public-portal`](https://app.productbridge.io/dashboard/settings/public-portal) |
+| Your public help center | `https://{your-subdomain}.productbridge.io/help` |
+
+<Callout kind="info">
+  Published articles live at `https://{your-subdomain}.productbridge.io/help/{collection}/{category}/{article}`. The category segment is omitted for articles filed straight under a collection.
+</Callout>
+
 ## Self-Serve Support for Your Users
 
 The Help Center is your customer-facing knowledge base. Publish how-to guides, FAQs, and product documentation so users can answer their own questions before they ever open a support ticket. It deflects repetitive support volume, and it lives on the same public portal and in-app widget as your feedback, roadmap, and changelog — so everything your users need sits in one place.
@@ -102,7 +131,7 @@ The Help Center is **off by default** on both your portal and your widget, so yo
 
 <Tabs>
   <Tab title="Public Portal" icon="globe">
-    Go to **Settings → Public Portal** and toggle **Help Center** on. The **Help** tab then appears in your portal navigation.
+    Go to [**Settings → Public Portal**](https://app.productbridge.io/dashboard/settings/public-portal) and toggle **Help Center** on. The **Help** tab then appears in your portal navigation.
   </Tab>
   <Tab title="In-App Widget" icon="code">
     In your widget's **Configuration** settings, enable the **Help Center** tab. It then appears inside the embedded widget alongside your other tabs. You can also deep-link the widget straight to it with `defaultTab: 'helpcenter'`. See the [in-app widget](/core-concepts/feedback-collection/widgets) docs for embedding details.

@@ -5,6 +5,19 @@ description: "Receive real-time notifications when posts, comments, and votes ch
 
 By setting up webhooks, your server will be notified of ProductBridge events as they happen. For example, when a user creates a new post, ProductBridge sends a `POST` request to your registered URL with the post details — your code can react instantly without polling.
 
+
+## Where to find it
+
+<Card title="Open API & Webhooks" href="https://app.productbridge.io/dashboard/settings/api-webhooks" icon="key" horizontal="true">
+  Sidebar → **Settings** → Connect → **API & Webhooks**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/api-webhooks](https://app.productbridge.io/dashboard/settings/api-webhooks)
+
+**In-app path:** Sidebar → **Settings** → Connect → **API & Webhooks**
+
+**Requires:** `api_key:view` / `api_key:manage` for API keys, `webhook:view` / `webhook:manage` for webhook endpoints.
+
 ## How it works
 
 Each organization can register one or more outbound webhook URLs. Every event delivered to ProductBridge from any source — public API, dashboard, integrations, or AI processing pipelines — is fanned out to every active webhook on the organization. There is no per-webhook event filter; every webhook receives every event.
@@ -17,15 +30,15 @@ Each webhook delivery includes:
 ## Set up a webhook
 
 <Steps>
-  <Step title="Open the API & Webhooks page" icon="settings" titleType="p">
-    In your ProductBridge dashboard, go to **Settings → Connect → API & Webhooks** and find the **Webhook endpoints** section.
+  <Step title="Open the API & Webhooks page" icon="settings" title-type="p">
+    In your ProductBridge dashboard, go to [**Settings → Connect → API & Webhooks**](https://app.productbridge.io/dashboard/settings/api-webhooks) and find the **Webhook endpoints** section.
   </Step>
 
-  <Step title="Add a new webhook" icon="plus" titleType="p">
+  <Step title="Add a new webhook" icon="plus" title-type="p">
     Click **Add webhook**, paste the HTTPS URL on your server that will receive event deliveries, and give it a label (e.g. `production-server` or `analytics-pipeline`).
   </Step>
 
-  <Step title="Save the signing secret" icon="key" titleType="p">
+  <Step title="Save the signing secret" icon="key" title-type="p">
     The dashboard shows a **signing secret** in a modal. Copy it and store it on your receiver — for example as an environment variable named `PRODUCTBRIDGE_WEBHOOK_SECRET`.
 
     <Callout kind="alert">
@@ -33,11 +46,11 @@ Each webhook delivery includes:
     </Callout>
   </Step>
 
-  <Step title="Implement signature verification" icon="shield-check" titleType="p">
+  <Step title="Implement signature verification" icon="shield-check" title-type="p">
     On every incoming request, compute `HMAC-SHA256(secret, raw_body)` and compare it (in constant time) to the `X-ProductBridge-Signature` header. Reject the request if they don't match. See [Webhook signatures](/api-reference/webhooks/signatures) for code samples in Node.js, Python, Go, and PHP.
   </Step>
 
-  <Step title="Handle the events you care about" icon="filter" titleType="p">
+  <Step title="Handle the events you care about" icon="filter" title-type="p">
     Switch on the `event` field in the JSON body. The 11 supported event types are listed on the [Event types](/api-reference/webhooks/event-types) page.
   </Step>
 </Steps>

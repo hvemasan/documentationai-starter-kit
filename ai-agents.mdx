@@ -1,0 +1,94 @@
+---
+title: AI Agents
+description: >-
+  Build an AI agent that answers your customers from your own content, calls
+  your own APIs, and hands off to a human when it should — configured, tested,
+  and deployed from one hub in the dashboard.
+---
+
+## Where to find it
+
+<Card title="Open the AI Agents hub" href="https://app.productbridge.io/dashboard/support/workflows/agent" icon="sparkles" horizontal="true">
+  Sidebar → **AI Agents**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/support/workflows/agent](https://app.productbridge.io/dashboard/support/workflows/agent)
+
+**In-app path:** Sidebar → **AI Agents**
+
+**Requires:** `workflow:view` to open the hub, `workflow:manage` to change anything, and a plan that includes the `support_workflows` feature. Without that feature the **AI Agents** item does not appear in the sidebar.
+
+Every section of the hub has its own direct link:
+
+| Hub section | What it is | Direct link |
+|-------------|-----------|-------------|
+| **Overview** | Agents at a glance, content counts, quick add | [`/agent`](https://app.productbridge.io/dashboard/support/workflows/agent) |
+| **Agents** | Create agents, set persona, limits, and tool access | [`/agent/agents`](https://app.productbridge.io/dashboard/support/workflows/agent/agents) |
+| **Content → Snippets** | Question-and-answer pairs you write | [`/agent/snippets`](https://app.productbridge.io/dashboard/support/workflows/agent/snippets) |
+| **Content → Websites** | Public pages the agent crawls and reads | [`/agent/websites`](https://app.productbridge.io/dashboard/support/workflows/agent/websites) |
+| **Content → Files** | Uploaded documents (formerly the Knowledge Hub) | [`/agent/files`](https://app.productbridge.io/dashboard/support/workflows/agent/files) |
+| **Deploy** | Let the agent answer customers, and on which channels | [`/agent/deploy`](https://app.productbridge.io/dashboard/support/workflows/agent/deploy) |
+| **Tools** | Your own API endpoints the agent may call | [`/agent/tools`](https://app.productbridge.io/dashboard/support/workflows/agent/tools) |
+| **Workflows** | Scripted conversation flows that route to an agent | [`/workflows`](https://app.productbridge.io/dashboard/support/workflows) |
+
+## What the Hub Is For
+
+The AI Agents hub is where you build the assistant that answers conversations in your [Support inbox](/support-chat/agent-inbox) and [Messenger](/support-chat/messenger). Four things make up an agent, and each has its own section in the hub:
+
+<Steps>
+  <Step title="The agent" icon="bot" title-type="p">
+    Its name, avatar, tone, response length, and the free-text instructions that tune how it replies. Configure it under [**Agents**](https://app.productbridge.io/dashboard/support/workflows/agent/agents).
+  </Step>
+
+  <Step title="Its content" icon="book-open" title-type="p">
+    What it is allowed to answer *from* — snippets, crawled website pages, uploaded files, Help Center articles, and video transcripts. Manage it under **Content**.
+  </Step>
+
+  <Step title="Its tools" icon="wrench" title-type="p">
+    Your own API endpoints, so the agent can look up an order or issue a refund mid-conversation. Configure them under [**Tools**](https://app.productbridge.io/dashboard/support/workflows/agent/tools).
+  </Step>
+
+  <Step title="Its deployment" icon="rocket" title-type="p">
+    Whether it may answer customers on its own, and on which channels. Turn it on under [**Deploy**](https://app.productbridge.io/dashboard/support/workflows/agent/deploy).
+  </Step>
+</Steps>
+
+<Callout kind="info">
+  The order of the sidebar follows that order: build the agent, give it something to answer from, then put it in front of customers.
+</Callout>
+
+## Grounding
+
+The agent answers from the content you give it. The rules that stop it inventing answers live in ProductBridge's backend, not in your configuration — nothing you type into an agent's instructions can remove them.
+
+<Callout kind="tip">
+  If the agent won't answer a question, that is usually a content gap rather than a configuration problem. Add a [snippet](/ai-agents/content#snippets) covering the question and it will pick it up within a few minutes.
+</Callout>
+
+## Where It Fits
+
+<Columns cols="2">
+  <Card title="Agents" href="/ai-agents/agents" icon="bot" horizontal="false">
+    Create an agent, set its persona and limits, choose which tools it may reach, and test it in a live chat pane.
+  </Card>
+
+  <Card title="Content" href="/ai-agents/content" icon="book-open" horizontal="false">
+    Snippets, websites, and file uploads — everything the agent is allowed to answer from.
+  </Card>
+
+  <Card title="Tools" href="/ai-agents/tools" icon="wrench" horizontal="false">
+    Let the agent call your own API mid-conversation, with only the inputs you declare.
+  </Card>
+
+  <Card title="Deploy" href="/ai-agents/deploy" icon="rocket" horizontal="false">
+    Turn the agent on for customers and pick the channels it replies on.
+  </Card>
+
+  <Card title="Workflows" href="/ai-agents/workflows" icon="git-branch" horizontal="false">
+    Scripted conversation flows — send a message, collect a reply, branch on a condition, hand to the agent or a human.
+  </Card>
+
+  <Card title="Support Chat" href="/support-chat" icon="headset" horizontal="false">
+    The inbox and Messenger the agent answers into.
+  </Card>
+</Columns>

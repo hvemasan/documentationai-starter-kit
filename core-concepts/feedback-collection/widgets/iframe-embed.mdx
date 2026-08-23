@@ -6,6 +6,28 @@ description: >-
   HTML page.
 ---
 
+
+## Where to find it
+
+<Card title="Open iFrame setup" href="https://app.productbridge.io/dashboard/settings/widget-embeds?embed=iframe" icon="frame" horizontal="true">
+  Sidebar → **Settings** → Connect → **Widget & Embeds** → **iFrame**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/widget-embeds?embed=iframe](https://app.productbridge.io/dashboard/settings/widget-embeds?embed=iframe)
+
+**In-app path:** Sidebar → **Settings** → Connect → **Widget & Embeds** → **iFrame** in the left rail
+
+**Requires:** `organization:manage` to view the embed code and manage widget API keys.
+
+The Widget & Embeds page has four tabs, each deep-linkable:
+
+| Tab | Direct link |
+|------|-------------|
+| **Embed Code** | [`?tab=embed`](https://app.productbridge.io/dashboard/settings/widget-embeds?tab=embed&embed=iframe) |
+| **Configuration** | [`?tab=config`](https://app.productbridge.io/dashboard/settings/widget-embeds?tab=config) |
+| **API Keys** | [`?tab=keys`](https://app.productbridge.io/dashboard/settings/widget-embeds?tab=keys) |
+| **Preview** | [`?tab=preview`](https://app.productbridge.io/dashboard/settings/widget-embeds?tab=preview) |
+
 ## Overview
 
 The iFrame embed uses a standard `<iframe>` tag to load the ProductBridge widget. There is no SDK to load, no JavaScript to write — just an HTML tag with a URL. This makes it the most compatible option: it works in environments where you cannot run arbitrary JavaScript, such as Notion embeds, Webflow rich text, Framer, CMSs, and static HTML files.
@@ -20,7 +42,7 @@ Your widget iFrame URL follows this pattern:
 https://app.productbridge.io/widget/YOUR_ORGANIZATION_ID
 ```
 
-Find your **Organization ID** in **Settings → Connect → Widget & Embeds**.
+Find your **Organization ID** in [**Settings → Connect → Widget & Embeds**](https://app.productbridge.io/dashboard/settings/widget-embeds).
 
 An optional query parameter lets you set the default tab:
 

@@ -3,6 +3,23 @@ title: MCP Server
 description: Connect Claude — or any MCP-compatible AI assistant — to ProductBridge with a bearer token, capability URL, or OAuth 2.1. Let Claude read your feedback, search semantically, create posts, and update the roadmap from any conversation.
 ---
 
+
+## Where to find it
+
+<Card title="Open MCP Server settings" href="https://app.productbridge.io/dashboard/settings/mcp-server" icon="server" horizontal="true">
+  Sidebar → **Settings** → Connect → **MCP Server**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/mcp-server](https://app.productbridge.io/dashboard/settings/mcp-server)
+
+**In-app path:** Sidebar → **Settings** → Connect → **MCP Server**
+
+**Requires:** `mcp:view` to see the credentials, `mcp:manage` to regenerate them.
+
+<Callout kind="info">
+  The MCP server is configured under **Settings**, not under Connect Sources — it exposes ProductBridge to an AI assistant rather than pulling feedback in from another tool.
+</Callout>
+
 ## What Is the MCP Server?
 
 ProductBridge ships an **MCP (Model Context Protocol) Server** that exposes your workspace to AI assistants. Once connected, Claude can:
@@ -46,7 +63,7 @@ Claude calls a tool, the MCP server verifies your bearer token, scopes the call 
 
 <Steps>
   <Step title="Generate your connection config" icon="key">
-    In the ProductBridge admin, go to **Settings → Connect → MCP Server** and click **Generate MCP Config**.
+    In the ProductBridge admin, go to [**Settings → Connect → MCP Server**](https://app.productbridge.io/dashboard/settings/mcp-server) and click **Generate MCP Config**.
 
     ProductBridge generates:
 
@@ -202,7 +219,7 @@ Claude reads the tool descriptions, decides which ones it needs, and composes th
 
 If your token is exposed or you want to refresh it:
 
-1. Go to **Settings → Connect → MCP Server**
+1. Go to [**Settings → Connect → MCP Server**](https://app.productbridge.io/dashboard/settings/mcp-server)
 2. Click **Regenerate**
 
 The old token — and the capability URL derived from it — is invalidated immediately. You'll need to update your Claude config with the new credential.

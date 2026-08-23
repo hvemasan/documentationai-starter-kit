@@ -3,9 +3,26 @@ title: Moderation
 description: Keep your public portal clean — review posts and comments before they go live, park AI-processed integration posts for review, and anonymize users when needed.
 ---
 
+
+## Where to find it
+
+<Card title="Open Moderation settings" href="https://app.productbridge.io/dashboard/settings/moderation" icon="shield" horizontal="true">
+  Sidebar → **Settings** → Organization → **Moderation**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/moderation](https://app.productbridge.io/dashboard/settings/moderation)
+
+**In-app path:** Sidebar → **Settings** → Organization → **Moderation** (the page is titled **Moderation & Permissions**)
+
+**Requires:** `organization:manage` to change the toggles.
+
+<Callout kind="tip">
+  This page is where you turn moderation **on**. The queue where you approve or reject items is a different page: [https://app.productbridge.io/dashboard/moderation](https://app.productbridge.io/dashboard/moderation) (Sidebar → **Moderation**).
+</Callout>
+
 ## Why Moderation Matters
 
-A public feedback portal is a magnet for everything from genuine product ideas to spam, off-topic complaints, and the occasional sensitive customer story. ProductBridge gives you four independent moderation controls — found at **Settings → Organization → Moderation** (the page is titled **Moderation & Permissions**) — so you can pick exactly how much friction is appropriate for your community.
+A public feedback portal is a magnet for everything from genuine product ideas to spam, off-topic complaints, and the occasional sensitive customer story. ProductBridge gives you four independent moderation controls — found at [**Settings → Organization → Moderation**](https://app.productbridge.io/dashboard/settings/moderation) (the page is titled **Moderation & Permissions**) — so you can pick exactly how much friction is appropriate for your community.
 
 | Control | What It Does | Default |
 |---------|--------------|---------|
@@ -13,8 +30,13 @@ A public feedback portal is a magnet for everything from genuine product ideas t
 | **Require approval for comments** | New comments and comment edits require admin approval before going public | Off |
 | **Enable AI moderation queue** | Parks posts arriving from integrations (Intercom, Zendesk, Trustpilot, etc.) for manual review before publishing or auto-merging | Off |
 | **Hide user identities** | Replace user names and avatars with random ones on the public portal | Off |
+| **Generating Insights from feedback** | Automatically turn new feedback into insights, observations, themes, and strengths | On |
 
-The settings page groups these under **Posts**, **Comments**, **User Details**, and **AI Integration Moderation**. Toggle any of them independently — they don't depend on each other.
+The settings page groups these under five headings — **Posts**, **Comments**, **User Details**, **AI Integration Moderation**, and **Feedback Intelligence**. Toggle any of them independently; they don't depend on each other.
+
+<Callout kind="info">
+  **Feedback Intelligence → Generating Insights from feedback** controls whether new feedback is turned into [insights, themes, observations, and strengths](/core-concepts/insights). Turning it off stops extraction on future posts — it does **not** delete anything already generated. It requires an Insights-enabled plan.
+</Callout>
 
 ## Moderation States
 
@@ -32,7 +54,7 @@ When **Require approval for posts** is enabled, every new post (and post edit) l
 
 <Steps>
   <Step title="Enable post approval" icon="shield">
-    Go to **Settings → Moderation** and turn on **Require approval for posts**.
+    Go to [**Settings → Moderation**](https://app.productbridge.io/dashboard/settings/moderation) and turn on **Require approval for posts**.
   </Step>
   <Step title="Review the queue" icon="inbox">
     Open **Moderation** from the dashboard sidebar. New posts appear here with full context — title, description, submitter, source.

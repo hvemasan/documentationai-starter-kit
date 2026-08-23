@@ -5,6 +5,28 @@ description: >-
   public-facing page where users submit feedback, vote on requests, and engage
   with your product roadmap.
 ---
+
+## Where to find it
+
+<Card title="Open Public Portal settings" href="https://app.productbridge.io/dashboard/settings/public-portal" icon="monitor-smartphone" horizontal="true">
+  Sidebar → **Settings** → Organization → **Public Portal**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/public-portal](https://app.productbridge.io/dashboard/settings/public-portal)
+
+**In-app path:** Sidebar → **Settings** → Organization → **Public Portal**
+
+**Requires:** `organization_public_portal:view` to read, `organization_public_portal:manage` to change.
+
+**Your live portal:** `https://{your-subdomain}.productbridge.io` — or your own domain once a [custom domain](/settings/branding-and-custom-domain) is active. You can also open it from the sidebar, using the **Open Public portal** button next to your organization name.
+
+| What you want to change | Direct link |
+|--------------------------|-------------|
+| Portal tabs, landing tab, theme, brand colors | [`/dashboard/settings/public-portal`](https://app.productbridge.io/dashboard/settings/public-portal) |
+| Your own domain | [`/dashboard/settings/custom-domain`](https://app.productbridge.io/dashboard/settings/custom-domain) |
+| Search-engine indexing, title, description | [`/dashboard/settings/brand?tab=seo`](https://app.productbridge.io/dashboard/settings/brand?tab=seo) |
+| Who may post, comment, and vote | [`/dashboard/settings/moderation`](https://app.productbridge.io/dashboard/settings/moderation) |
+
 ## Your Public Feedback Hub
 
 The Public Portal is a dedicated, branded page where users can submit feedback, vote on existing requests, and leave comments. It gives your users a transparent space to share ideas and see what others are requesting — building community and trust around your product.
@@ -19,7 +41,7 @@ The Public Portal is a dedicated, branded page where users can submit feedback, 
   <Step title="Find Your Portal" icon="globe" title-type="p">
     Your portal is on by default at `https://{your-subdomain}.productbridge.io`.
 
-    Configure it under **Settings → Organization → Public Portal**. To take the portal offline, use the **Disable Public Portal** toggle under **Portal access**.
+    Configure it under [**Settings → Organization → Public Portal**](https://app.productbridge.io/dashboard/settings/public-portal). To take the portal offline, use the **Disable Public Portal** toggle under **Portal access**.
   </Step>
 
   <Step title="Customize Appearance" icon="palette" title-type="p">
@@ -29,9 +51,9 @@ The Public Portal is a dedicated, branded page where users can submit feedback, 
 
     - **Brand colors** — Set colors for light and dark mode, plus the default theme
 
-    - **Custom domain** — Optionally map your own domain (e.g., `feedback.yourproduct.com`) via a CNAME record under **Settings → Custom Domain**
+    - **Custom domain** — Optionally map your own domain (e.g., `feedback.yourproduct.com`) via a CNAME record under [**Settings → Custom Domain**](https://app.productbridge.io/dashboard/settings/custom-domain)
 
-    Your logo is managed under **Settings → Organization → Brand Settings**.
+    Your logo is managed under [**Settings → Organization → Brand Settings**](https://app.productbridge.io/dashboard/settings/brand).
   </Step>
 
   <Step title="Configure Categories" icon="tag" title-type="p">
@@ -71,7 +93,7 @@ When a feedback post's status changes (e.g., from "Under Review" to "Planned"), 
 
 ## Customization Options
 
-Configure these under **Settings → Organization → Public Portal**:
+Configure these under [**Settings → Organization → Public Portal**](https://app.productbridge.io/dashboard/settings/public-portal):
 
 | Setting             | Description                                                          |
 | ------------------- | -------------------------------------------------------------------- |
@@ -83,7 +105,7 @@ Configure these under **Settings → Organization → Public Portal**:
 | Analytics           | Portal analytics settings                                            |
 | Support             | Support contact settings for your portal                             |
 
-Your logo lives under **Settings → Organization → Brand Settings**, and custom domains are mapped via CNAME under **Settings → Organization → Custom Domain**. To let your own users sign in automatically, configure [SSO](/settings/sso).
+Your logo lives under [**Settings → Organization → Brand Settings**](https://app.productbridge.io/dashboard/settings/brand), and custom domains are mapped via CNAME under [**Settings → Organization → Custom Domain**](https://app.productbridge.io/dashboard/settings/custom-domain). To let your own users sign in automatically, configure [SSO](/settings/sso).
 
 <Callout kind="info" collapsed="false">
   The public portal is fully responsive and works on mobile, tablet, and desktop browsers.

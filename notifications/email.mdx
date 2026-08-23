@@ -3,6 +3,25 @@ title: Email Notifications
 description: Reach team members and customers outside the app — comment activity, assignment alerts, status updates, and changelog announcements sent straight to their inbox.
 ---
 
+
+## Where to find it
+
+<Card title="Open Notification settings" href="https://app.productbridge.io/dashboard/settings/notifications" icon="mail" horizontal="true">
+  Sidebar → **Settings** → Organization → **Notifications**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/settings/notifications](https://app.productbridge.io/dashboard/settings/notifications)
+
+**In-app path:** Sidebar → **Settings** → Organization → **Notifications** → **Email Templates**
+
+**Requires:** `notification:manage` to edit templates and org-wide settings.
+
+| Goal | Direct link |
+|------|-------------|
+| Choose which events send email, edit templates | [`/dashboard/settings/notifications`](https://app.productbridge.io/dashboard/settings/notifications) |
+| Send from your own domain | [`/dashboard/settings/brand?tab=email`](https://app.productbridge.io/dashboard/settings/brand?tab=email) |
+| Your own per-event channel preferences | bell icon → gear icon → **Channel preferences** |
+
 ## What ProductBridge Emails
 
 ProductBridge can send email for every notification event, plus account lifecycle messages:
@@ -95,7 +114,7 @@ Recipients can switch comment emails off (and keep in-app only) via Channel pref
 
 ## Email Templates
 
-Every event email's subject and body is an **admin-editable template**. Go to **Settings → Organization → Notifications** and open the **Email Templates** section to customize them per event. Templates support `{{placeholder}}` tokens — for example `{{post_title}}`, `{{actor_name}}`, `{{new_status}}`, `{{post_url}}`, and (for changelog) `{{organization_name}}`, `{{post_content}}`, `{{brand_color}}`. The available placeholders are listed alongside each template in the editor.
+Every event email's subject and body is an **admin-editable template**. Go to [**Settings → Organization → Notifications**](https://app.productbridge.io/dashboard/settings/notifications) and open the **Email Templates** section to customize them per event. Templates support `{{placeholder}}` tokens — for example `{{post_title}}`, `{{actor_name}}`, `{{new_status}}`, `{{post_url}}`, and (for changelog) `{{organization_name}}`, `{{post_content}}`, `{{brand_color}}`. The available placeholders are listed alongside each template in the editor.
 
 ## How ProductBridge Sends Email
 
