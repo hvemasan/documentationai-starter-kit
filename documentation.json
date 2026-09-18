@@ -365,6 +365,11 @@
                 "icon": "book-open"
               },
               {
+                "title": "Website Sources",
+                "path": "ai-agents/website-sources",
+                "icon": "globe"
+              },
+              {
                 "title": "Tools",
                 "path": "ai-agents/tools",
                 "icon": "wrench"

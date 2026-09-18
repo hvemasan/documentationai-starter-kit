@@ -1,0 +1,436 @@
+---
+title: Website Sources
+description: >-
+  Every field in the website crawl dialog, what each one does to the crawl, and
+  worked examples for the common shapes of site — help centre, docs, blog,
+  multilingual, staging, and single page.
+---
+
+## Where to find it
+
+<Card title="Open Websites" href="https://app.productbridge.io/dashboard/support/workflows/agent/websites" icon="globe" horizontal="true">
+  Sidebar → **AI Agents** → **Content** → **Websites**
+</Card>
+
+**Direct link:** [https://app.productbridge.io/dashboard/support/workflows/agent/websites](https://app.productbridge.io/dashboard/support/workflows/agent/websites)
+
+**Requires:** `workflow:manage`
+
+Click **Add content** → **Website** to open the dialog. This page walks through
+every field in it. For the wider picture of what the agent can answer from, see
+[Content](/ai-agents/content).
+
+## Start here: URL or Sitemap
+
+The first choice is a pair of tabs at the top of the dialog, and it decides
+which other fields you get.
+
+| Tab | How pages are found | Filters available |
+|-----|--------------------|-------------------|
+| **URL** | Starts at your address and follows links from page to page | Include paths, exclude paths, page cap |
+| **Sitemap** | Reads exactly the URLs the sitemap lists | None |
+
+<Callout kind="tip">
+  **Prefer URL mode unless you have a reason not to.** It is the only mode with
+  filters, so it is the only one where you can exclude a section. Sitemap mode
+  indexes every URL the file lists — including translations and archives — and
+  gives you no way to narrow it.
+</Callout>
+
+Choose **Sitemap** when the site has pages that nothing links to, or when link
+following misses content behind search-only navigation. Choose **URL** for
+everything else.
+
+## The URL field
+
+The only required field. Type the full address including the scheme:
+
+```
+https://support.example.com/
+```
+
+<Callout kind="info">
+  **What gets crawled is the domain, not the path.** A URL of
+  `https://example.com/docs/` does not restrict the crawl to `/docs`. It sets
+  where the crawl *starts* and which domain it may never leave. Use **Include
+  paths** to restrict the section.
+</Callout>
+
+Rules the crawler applies to this field:
+
+- **`http` or `https` only.** Anything else is rejected with *"Only http and
+  https URLs can be crawled."*
+- **Public addresses only.** Private and internal hosts (`localhost`,
+  `10.x`, `192.168.x`, `.internal`) are refused before any row is created.
+- **`www.` and the apex are the same site.** A crawl seeded at
+  `https://example.com/` will follow links to `https://www.example.com/faq`, and
+  the reverse. Any other host is off-limits.
+- **Subdomains are a different site.** `https://docs.example.com` is not
+  reachable from a crawl seeded at `https://example.com` — add it as its own
+  website.
+- **Fragments are dropped.** `/pricing#enterprise` and `/pricing` are one page.
+- **The starting page is always fetched**, even if your include paths would not
+  match it. Filters apply to the links discovered from it, not to the seed.
+
+In **Sitemap** mode the label changes to **Sitemap URL** and you point it at the
+XML file itself:
+
+```
+https://support.example.com/sitemap.xml
+```
+
+A `<sitemapindex>` — a sitemap of sitemaps — is followed **one level**. Nothing
+deeper, and no links inside the pages themselves.
+
+## Tags
+
+Comma-separated labels attached to every page this site produces.
+
+```
+product-docs, public
+```
+
+Tags are how you scope content to particular agents. Tag a site `internal` and
+you can keep it away from a customer-facing agent while a support-desk agent
+still uses it. See [knowledge scope](/ai-agents/agents#knowledge-scope).
+
+## Follow links
+
+**URL mode only.** On by default. This switch is what turns one address into a
+crawl — turn it off and exactly one page is read.
+
+Opening it reveals three fields.
+
+### Exclude paths
+
+Comma-separated path patterns that are never crawled.
+
+```
+/blog/*, /careers/*, /ja/*
+```
+
+### Include paths
+
+Comma-separated path patterns that are the *only* ones crawled.
+
+```
+/docs/*, /guides/*
+```
+
+Leave it empty to allow everything the exclude list does not remove.
+
+### How the patterns match
+
+Both fields use the same rules, and both match against the **path only** — never
+the domain or the query string.
+
+| You type | It matches | It does not match |
+|----------|-----------|-------------------|
+| `/docs/*` | `/docs/`, `/docs/setup`, `/docs/a/b/c` | `/documentation` |
+| `/docs` | `/docs`, `/docs/setup`, `/docs/a/b/c` | `/documentation` |
+| `/blog/2024-*` | `/blog/2024-01-launch` | `/blog/2023-recap` |
+| `docs/*` | `/docs/setup` — a leading `/` is added for you | — |
+
+Three rules worth committing to memory:
+
+1. **A pattern with no `*` is treated as a prefix.** `/docs` means everything
+   under `/docs`, because that is almost always what people mean.
+2. **`*` crosses slashes.** `/docs/*` reaches `/docs/a/b/c`, not just one level.
+3. **Exclude wins over include.** A URL matching both is excluded. This lets you
+   write "all of `/docs` except the changelog" as
+   include `/docs/*`, exclude `/docs/changelog/*`.
+
+### Pages per crawl
+
+The ceiling on how many pages this crawl fetches. The field is capped at the
+limit your workspace is configured with, and the error *"Pages per crawl must be
+between 1 and …"* names it.
+
+Pages are crawled **closest-first** from your starting URL, and pages under the
+starting URL's own directory are preferred over the rest of the site. A low cap
+on `https://example.com/docs/` therefore still covers `/docs` before it spends
+budget on the marketing pages.
+
+<Callout kind="tip">
+  Set this to roughly the number of pages you expect, plus headroom — not to the
+  maximum. A cap that matches the site is the cheapest way to notice that a crawl
+  wandered somewhere you did not intend.
+</Callout>
+
+## Advanced options
+
+Closed by default. It reopens automatically when you edit a site that has
+anything set inside it.
+
+<Callout kind="alert">
+  **A closed Advanced section sends nothing.** If you turn a setting on here,
+  save, and later reopen the dialog with the section collapsed, saving again
+  clears it. The section reopens on its own whenever a setting inside it is
+  active, which is what normally prevents this.
+</Callout>
+
+### Include tags and exclude tags
+
+CSS selectors deciding which part of each page is treated as content. These are
+about *page structure*, not which pages are visited.
+
+```
+Include tags:  article, #content, main
+Exclude tags:  nav, footer, .sidebar, .cookie-banner
+```
+
+Reach for these when a site repeats its navigation and footer on every page.
+Without them, every page shares a large block of identical text, which makes
+pages look alike to the agent and dilutes the part that actually answers the
+question. Include is applied first, then exclude removes from what is left.
+
+### Ignore query parameters
+
+Treats `/page?utm_source=newsletter` and `/page` as the same page.
+
+**Turn it on** when a site decorates its own internal links with tracking
+parameters — otherwise one page can be fetched dozens of times and eat the whole
+page cap.
+
+**Leave it off** when query strings mean genuinely different pages, such as
+`/article?id=42`. With it on, every `?id=` would collapse into one.
+
+### Ignore robots.txt
+
+Crawls the site without consulting `robots.txt`.
+
+<Callout kind="danger">
+  Only for sites you own or have written permission to crawl. This setting
+  overrides a site's stated crawler policy.
+</Callout>
+
+The common reason to need it is not a site that decided to exclude you. It is a
+**whitelist-style `robots.txt`** — a long list of named search bots each given
+`Disallow:`, then `User-agent: *` / `Disallow: /` for everyone else. Those
+templates get copied once and rarely revisited, so our crawler is blocked by
+omission. Your own marketing site may well be shaped this way, and the file is
+often owned by a team that cannot edit it quickly.
+
+This does **not** change how the crawler identifies itself — it still sends its
+own User-Agent with a contact URL, so your logs show exactly who crawled.
+
+<Callout kind="info">
+  A crawl blocked this way fails with a message naming `robots.txt` and the
+  number of pages refused. Adding a custom `User-Agent` header does **not** fix
+  it — the robots decision is made against our own crawler identity, not the
+  header you send.
+</Callout>
+
+### Add custom headers
+
+One or more HTTP headers sent with every request of the crawl.
+
+| Header key | Header value | Use |
+|-----------|-------------|-----|
+| `Authorization` | `Bearer <token>` | A staging site behind a token |
+| `X-Preview-Key` | `<key>` | A preview environment gate |
+| `User-Agent` | `<agent string>` | A site that only answers a known agent |
+
+Header names accept letters, numbers and hyphens. Each needs a name, and two
+headers cannot share one.
+
+<Callout kind="info">
+  **Values are encrypted and never shown again.** When you reopen the dialog the
+  value box is blank and reads *"Leave blank to keep"* — leaving it blank keeps
+  the stored value. Type something only to replace it.
+</Callout>
+
+This covers header-based gates only. A site requiring an interactive login form
+will not crawl.
+
+## Automatic recrawl
+
+On by default, **Monthly**. Choose **Weekly** or **Monthly**.
+
+The clock runs from *this site's own last crawl*, not from a shared schedule, so
+sites added on different days recrawl on different days.
+
+Turn it off for a site that does not change, or one you are indexing once for a
+specific purpose — each crawl costs credits.
+
+## What a crawl costs
+
+**10 credits per crawl**, flat — the same whether it reads 5 pages or 500. A
+recrawl costs the same as the first crawl. Retrying only the failed pages of a
+crawl is free.
+
+## Worked examples
+
+<ExpandableGroup>
+  <Expandable title="A help centre, English only" default-open="true">
+    A hosted help centre whose sitemap also lists translated copies of every
+    article. URL mode excludes the translations; sitemap mode could not.
+
+    | Field | Value |
+    |-------|-------|
+    | Tab | **URL** |
+    | URL | `https://support.example.com/` |
+    | Tags | `help-centre` |
+    | Follow links | **On** |
+    | Exclude paths | `/ja/*, /pt-br/*, /de/*` |
+    | Include paths | *(empty)* |
+    | Pages per crawl | `80` |
+    | Automatic recrawl | **On**, Monthly |
+
+    Leave include paths empty rather than typing `/articles/*` — the starting
+    page `/` would not match it, and you would be relying on the seed exemption
+    for no benefit.
+  </Expandable>
+
+  <Expandable title="Product docs only, on a mixed marketing site">
+    The docs live under `/docs` on the same domain as pricing, careers and a
+    blog. Include paths keep the crawl on the documentation.
+
+    | Field | Value |
+    |-------|-------|
+    | Tab | **URL** |
+    | URL | `https://example.com/docs/` |
+    | Tags | `product-docs` |
+    | Follow links | **On** |
+    | Include paths | `/docs/*` |
+    | Exclude paths | `/docs/changelog/*` |
+    | Pages per crawl | `300` |
+
+    Starting at `/docs/` rather than `/` matters: pages under the starting
+    directory are crawled first, so the budget goes to documentation even before
+    the include filter is considered.
+  </Expandable>
+
+  <Expandable title="One page, nothing else">
+    A single pricing or policy page whose content you want verbatim, with no
+    interest in the rest of the site.
+
+    | Field | Value |
+    |-------|-------|
+    | Tab | **URL** |
+    | URL | `https://example.com/pricing` |
+    | Tags | `pricing` |
+    | Follow links | **Off** |
+
+    Turning **Follow links** off collapses the crawl to exactly that address.
+    The path filters and page cap disappear with it, because nothing else will
+    be visited.
+  </Expandable>
+
+  <Expandable title="A blog, recent posts only">
+    A blog with years of archives where only the current year is worth indexing.
+
+    | Field | Value |
+    |-------|-------|
+    | Tab | **URL** |
+    | URL | `https://example.com/blog/` |
+    | Follow links | **On** |
+    | Include paths | `/blog/2026-*` |
+    | Pages per crawl | `100` |
+    | Ignore query parameters | **On** |
+
+    `Ignore query parameters` earns its place here: blogs habitually link their
+    own posts with `?ref=` and `?utm_source=`, and without it the cap is spent
+    re-reading the same posts.
+  </Expandable>
+
+  <Expandable title="A sitemap, when links are not enough">
+    A knowledge base where articles are reachable only through an on-site search
+    box, so link following finds almost nothing.
+
+    | Field | Value |
+    |-------|-------|
+    | Tab | **Sitemap** |
+    | Sitemap URL | `https://kb.example.com/sitemap.xml` |
+    | Tags | `knowledge-base` |
+
+    Every URL the sitemap lists is indexed, and a sitemap index is followed one
+    level. URLs pointing at another domain are dropped. There are no path
+    filters in this mode — if the sitemap contains sections you do not want, use
+    URL mode instead.
+  </Expandable>
+
+  <Expandable title="A staging site behind a token">
+    Documentation for an unreleased version, on a preview host that requires a
+    header.
+
+    | Field | Value |
+    |-------|-------|
+    | Tab | **URL** |
+    | URL | `https://staging.example.com/docs/` |
+    | Tags | `internal, unreleased` |
+    | Follow links | **On** |
+    | Include paths | `/docs/*` |
+    | Advanced → Custom headers | `Authorization` = `Bearer <token>` |
+    | Automatic recrawl | **Off** |
+
+    Tag it `internal` and scope your customer-facing agent to exclude that tag,
+    or the agent will answer questions about a version nobody can use yet.
+    Recrawl off, because a token that expires turns every scheduled crawl into a
+    failure.
+  </Expandable>
+
+  <Expandable title="Your own site that blocks crawlers">
+    Your marketing site's `robots.txt` is a template that allows named search
+    engines and blocks everyone else.
+
+    | Field | Value |
+    |-------|-------|
+    | Tab | **URL** |
+    | URL | `https://example.com/` |
+    | Follow links | **On** |
+    | Exclude paths | `/careers/*` |
+    | Advanced → **Ignore robots.txt** | **On** |
+
+    Only do this for a site you own or have permission to crawl. If the first
+    crawl failed with a message naming `robots.txt`, this is the setting that
+    was missing — not a custom `User-Agent` header.
+  </Expandable>
+</ExpandableGroup>
+
+## After the crawl
+
+Each website row on the Websites page offers:
+
+- **View pages** — every URL the crawl touched, with its outcome
+- **Recrawl** — re-read the site after publishing changes
+- **Crawl settings** — reopen this dialog
+- **Remove website** — its pages leave the agent's knowledge within a few minutes
+
+### Reading the page list
+
+| Status | Meaning |
+|--------|---------|
+| **Indexed** | Read and added to the agent's knowledge |
+| **Skipped** | Deliberately not indexed — `robots.txt` refused it, or it had no readable text |
+| **Failed** | Could not be read — see the reason on the row |
+| **Queued** | Still in progress |
+
+### Common failure reasons
+
+| Reason | What to do |
+|--------|-----------|
+| *"robots.txt disallows this page"* | Allow our crawler in `robots.txt`, or turn on **Ignore robots.txt** if you own the site |
+| *"Redirected off this site"* | The page redirects to another domain. Add that domain as its own website |
+| *"Not an HTML page"* | A PDF or other file. Upload it under [Files](/ai-agents/content#files) instead |
+| *"The page had no readable text"* | A nav-only index, an image gallery, or a page that renders entirely in the browser |
+| *"That sitemap could not be used"* | The sitemap URL 404s or could not be reached — open it in a browser to confirm the address |
+
+<Callout kind="tip">
+  A crawl that finished with far fewer pages than you expected is usually one of
+  three things: the page cap, an include path that excludes the links the site
+  actually uses, or a `robots.txt` refusal. **View pages** distinguishes them —
+  a short list of indexed pages is the cap, a list of skipped pages is robots.
+</Callout>
+
+## Next Steps
+
+<Columns cols="2">
+  <Card title="Content" href="/ai-agents/content" icon="book-open" horizontal="false">
+    The other sources an agent answers from.
+  </Card>
+
+  <Card title="Agents" href="/ai-agents/agents" icon="bot" horizontal="false">
+    Scope which of this content each agent may use.
+  </Card>
+</Columns>

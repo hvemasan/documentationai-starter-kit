@@ -36,7 +36,7 @@ Every Content tab shares one **Add content** button, which offers all four types
 |--------|-----------|
 | **Snippet** | A question and its answer, written by you. Not published anywhere — the agent just knows it. |
 | **File upload** | A document your team already answers from: PDF, Word, PowerPoint, Excel, or Markdown. |
-| **Website** | Point it at a public site and it reads what it finds. One URL, or a sitemap. |
+| **Website** | Point it at a public site and it reads what it finds. A URL it crawls from, or a sitemap it follows. See [Website Sources](/ai-agents/website-sources). |
 | **YouTube** | A video's captions become searchable text, timestamped so answers can cite the moment. |
 
 <Callout kind="alert">
@@ -73,8 +73,13 @@ Point the agent at a public site and it crawls what it finds.
 
 | Crawl mode | What it does |
 |------------|--------------|
-| **Single page** | Reads exactly the URL you gave it |
-| **Sitemap** | Follows the site's sitemap and reads the pages listed |
+| **URL** | Starts at the address you gave and follows links across the site. Turn **Follow links** off to read that one page only. |
+| **Sitemap** | Reads exactly the URLs the site's sitemap lists. No path filters in this mode. |
+
+<Card title="Filling in the crawl form" href="/ai-agents/website-sources" icon="globe" horizontal="true">
+  Every field in the dialog, the path-pattern rules, and worked examples for a
+  help centre, docs, a blog, a sitemap, a staging site and a single page.
+</Card>
 
 Each website row offers:
 
