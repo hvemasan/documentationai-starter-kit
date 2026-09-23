@@ -22,7 +22,7 @@ POST https://api.productbridge.io/api/external/v1/changelog/list
 </ParamField>
 
 <ParamField body="type" param-type="string" required="false" deprecated="false">
-  Filter to entries with this single classification. One of `"fixed"`, `"new"`, `"improved"`.
+  Filter to entries with this single classification. One of `"fixed"`, `"new"`, `"improvement"`.
 </ParamField>
 
 <ParamField body="label_ids" param-type="array of strings" required="false" deprecated="false">
@@ -129,6 +129,6 @@ The standard cursor-paginated envelope.
 | Status | Body | Cause |
 |---|---|---|
 | `401` | `{"detail":{"error":"invalid api_key"}}` | Missing / unknown / inactive `api_key`. |
-| `422` | Validation error envelope | `type` not in `{"fixed","new","improved"}`, `limit` out of range, malformed UUIDs in `label_ids`. |
+| `422` | Validation error envelope | `type` is not a recognised classification, `limit` out of range, malformed UUIDs in `label_ids`. |
 
 See [Errors](/api-reference/errors) and [Pagination](/api-reference/pagination).
